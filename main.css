@@ -1,0 +1,13 @@
+
+/*
+	This stylesheet is for learning CSS from the ground up.
+	So I can make a pretty website, if I want to.
+*/
+body {
+	background-color: lightblue;
+}
+
+h1 {
+	color: navy;
+	margin-left: 20px;
+}
