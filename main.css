@@ -16,6 +16,15 @@ p
 	
 }
 
+pre.sh_sourceCode
+{
+  background-color: lightgreen;
+  color: black;
+  font-style: normal;
+  font-weight: normal;
+}
+
+
 #footer
 {
 	height: 500px;

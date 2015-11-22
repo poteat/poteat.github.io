@@ -2,13 +2,20 @@
 <html>
 	<head>
 		<title>Michael's Lab</title>
+
+		<link type="text/css" rel="stylesheet" href="shjs/sh_style.min.css">
+
 		<link rel = stylesheet href = "main.css" type = "text/css">
+
+		<script type="text/javascript" src="shjs/sh_main.min.js"></script>
+
+		<script type="text/javascript" src="shjs/sh_javascript.min.js"></script>
 
 		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 		</script>
 	</head>
 
-	<body>
+	<body onload="sh_highlightDocument();">
 
 		<h1>Michael's Lab</h1>
 		<ul>
@@ -26,7 +33,7 @@
 		<h3>Description</h3>
 
 		<p>
-		This pendulum is a an accurate, not-physically-interactive single pendulum.  By 'accurate', I mean it's motion does not assume the small-angle approximation, which is necessary for analytic solutions of movement.  Even so, this simulation assumes the rod is rigid and massless.
+		This pendulum is an accurate, not-physically-interactive single pendulum.  By 'accurate', I mean it's motion does not assume the small-angle approximation, which is necessary for analytic solutions of movement.  Even so, this simulation assumes the rod is rigid and massless.
 		</p>
 
 		<p>
@@ -238,11 +245,28 @@
 		</p>
 
 		<p>
-		Beyond that, the most basic part of any simulation code is a numerical integrator, that calculates \(Z_{n+1}\) from \(Z_n\), for a given time-step.  The most popular numerical integrator is RK4, the fourth-order Runge Kutta method.
+		Beyond that, the most basic part of any simulation code is a numerical integrator, that calculates \(Z_{n+1}\) from \(Z_n\), for a given time-step.  The most popular numerical integrator is RK4, the fourth-order Runge Kutta method.  I use the following formulation, which is a little different than you normally see it, because it doesn't have any support for time-variant systems.  That is, time is completely invariant - the future state only depends on the current state, and not time.
+		</p>
+
+<pre class="sh_javascript">
+function rk4(Z, diff, h)
+{ 
+	var k1 = diff(Z);
+	var k2 = diff(addWeightedZ(1,Z,h/2,k1));
+	var k3 = diff(addWeightedZ(1,Z,h/2,k2));
+	var k4 = diff(addWeightedZ(1,Z,h,k3));
+
+	Z = addWeightedZ(1,Z,h/6,k1,h/3,k2,h/3,k3,h/6,k4);
+
+	return Z;
+}
+</pre>
+
+		<p>
+		The RK4 function takes in \(Z\) - the current state, \(h\), which is the time-step to use, and \(\operatorname{diff}\), which is a function that gives \(\dot{Z}\) as a function of \(Z\).
 		</p>
 
 		<div id = "footer"></div>
-
 
 		<script type="text/javascript" src="pendulum.js"></script>
 	</body>
