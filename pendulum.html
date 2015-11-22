@@ -3,6 +3,9 @@
 	<head>
 		<title>Michael's Lab</title>
 		<link rel = stylesheet href = "main.css" type = "text/css">
+
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		</script>
 	</head>
 
 	<body>
@@ -16,6 +19,12 @@
 
 		<h2>Accurate (Nonlinear) Pendulum.</h2>
 
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<div id="fps"></div>
+
+		<h3>Description</h3>
+
 		<p>
 		This pendulum is a an accurate, not-physically-interactive single pendulum.  By 'accurate', I mean it's motion does not assume the small-angle approximation, which is necessary for analytic solutions of movement.  Even so, this simulation assumes the rod is rigid and massless.
 		</p>
@@ -25,9 +34,216 @@
 		</p>
 
 		<p>
-		The rigidity of the rod appears naturally from our choice of coordinates:  The system is generalized in terms of angle, so it is impossible for the rod to extend or contract due to numerical drift or inaccuracy.  This is an fundamental example of how clever choice of coordinates can naturally resolve constraints without any extra computation.
+		The rigidity of the rod appears naturally from our choice of coordinates:  The system is generalized in terms of angle, so it is impossible for the rod to extend or contract due to numerical drift or inaccuracy.  This is a fundamental example of how a clever choice of coordinates can naturally resolve constraints without any extra computation.
 		</p>
 
-		
+		<h3>Mathematics</h3>
+		<p>
+			<em>Prereqs: Basic Physics, Calculus</em>
+		</p>
+
+		<p>
+		We refer to the state vector as \(Z\), which is a two-tuple in this case: One coordinate for the angular position of the bob relative to the pivot, and one coordinate for the angular velocity:
+		</p>
+
+		$$
+		Z = \left[\begin{array}{c}
+		\theta \\
+		\dot{\theta} \\
+		\end{array}\right]
+		$$
+
+		<p>
+		It is also reasonable to formulate this problem in terms of angular position and angular momentum, and that method is indeed useful when considering the moment of inertia.  Here, though, that's not necessary, since the rod is taken as weightless.
+		</p>
+
+		<p>
+		Our goal now is to find the equations of motion, in the form of \(\dot{Z}\), the time-derivative of our state vector.  You can do this simply using Newtonian mechanics, but here I will use the Lagrangian, as it's useful for more complicated problems.
+		</p>
+
+		<p>
+		We will begin by first figuring out the kinetic and potential energies in Cartesian space, and then transforming this to our generalized coordinates.  We will write down the \(x\) and \(y\) positions in terms of our generalized coordinates (The coordinates of our state vector) first:
+		</p>
+
+		$$
+		x = \ell\sin{\theta}\\
+		y = -\ell\cos{\theta}
+		$$
+
+		<p>
+		Notice the negative from the y coordinate: Since I am taking up as \(+y\), and down as \(-y\), we need that there, since the angle is taken with respect to the \(-y\) axis.  I encourage you to reason through the trigonometry yourself: These decisions aren't arbitrary, if you get them wrong your system could have gravity working in the wrong direction!
+		</p>
+
+		<p>
+		We should also take the time-derivatives of these two relations, as it will be useful later.  In general, your first step is to specify the cartesian position and velocity in terms of your generalized position and velocity.
+		</p>
+
+		$$
+		\dot{x} = \ell\dot{\theta}\cos{\theta}\\
+		\dot{y} = \ell\dot{\theta}\sin{\theta}
+		$$
+
+		<p>
+		We did something interesting here: To differentiate the trigonometric functions, we had to utilize the chain rule:  i.e. differentiate the trig function, and multiply that by the derivative of the inside of the function.  Because we don't know what \(\dot{\theta}\) is, we wrote it as that: Still works.  Now we have enough information to begin the second step:
+		</p>
+
+		<p>
+		The Lagrangian is formulated by taking the difference between the kinetic energy \(T\) and the potential energy \(V\):
+		</p>
+
+		$$\mathcal{L} = T - U$$
+
+		<p>
+		Luckily, we know how kinetic energy in Cartesian space works, and we know how potential energy due to gravity in uniform gravitational fields work.  Let's start with kinetic energy:
+		</p>
+
+		$$T = \frac{1}{2}mv^2$$
+
+		<p>
+		\(v^2\) here refers to linear velocity, not angular.  However, we have some facts to say about \(v^2\)... namely, we can replace it with \(\dot{x}^2+\dot{y}^2\).  Because that's how geometry works in Cartesian space.  If we were working in, for example, Manhattan space, it would be different.
+		</p>
+
+		$$T = \frac{1}{2}m(\dot{x}^2+\dot{y}^2)$$
+
+		<p>
+		Now we can do some further replacements using our relations we found earlier.
+		</p>
+
+		$$
+		T = \frac{1}{2}m(\ell^2\dot{\theta}^2\cos^2{\theta}+\ell^2\dot{\theta}^2\sin^2{\theta})\\
+		T = \frac{1}{2}m\ell^2\dot{\theta}^2(\cos^2{\theta}+\sin^2{\theta})\\
+		T = \frac{1}{2}m\ell^2\dot{\theta}^2
+		$$
+
+		<p>
+		Using our relations from earlier, as well as the fact that \(\sin^2{x}+\cos^2{x}=1\) for any \(x\), we found a quite elegant formula for the kinetic energy, in our preferred coordinates.  It also looks like we expect: It is only a function of angular velocity, not angular position or time.
+		</p>
+
+		<p>
+		Now we can tackle potential energy, which is a bit more complicated, because we should take it relative to the equilibrium position, i.e. when the bob is at angle zero.  Note, though, that it isn't necessary - I myself prefer having all energies non-negative, because it's intuitive if the system is at zero energy if the bob is still and lowest.
+		</p>
+
+		<p>
+		From the definition of potential energy in a uniform gravitation field:
+		</p>
+
+		$$ U = mgh $$
+
+		$$ U = mg(\ell+y) $$
+
+		<p>
+		Because y is usually negative, the height (from the bottom position) has to be translated from those coordinates.  Translating downward involves adding a value, so that's what we do.  Drawing a picture helps.  We're not done, though, we still need to get rid of \(y\):
+		</p>
+
+		$$
+		U = mg(\ell-\ell\cos{\theta})\\
+		U = mg\ell(1-\cos{\theta})\\
+		U = mg\ell-mg\ell\cos{\theta}
+		$$
+
+		We now have everything we need for the Lagrangian.  It's best, at this point, to have nothing factored, to avoid using the product rule later on:
+
+		$$\mathcal{L} = \frac{1}{2}m\ell^2\dot{\theta}^2 - mg\ell + mg\ell\cos{\theta}$$
+
+		<p>
+		It should be said here, that this equation completely defines the system.  If we were not interested in numerically solving in terms of angular position as a function of time (i.e. simulating it), we would stop here.  As it is, we would like to continue on, so we now use the Euler-Lagrange equation, in hopes of finding equations of motion.  The Euler-Lagrange equation is as follows:
+		</p>
+
+		$$
+		\frac{\partial\mathcal{L}}{\partial\theta}-\frac{d}{d\theta}\left[\frac{\partial\mathcal{L}}{\partial\dot{\theta}}\right]=0
+		$$
+
+		<p>
+		Let's begin with \(\frac{\partial\mathcal{L}}{\partial\theta}\).  When you're taking the partial derivative, you treat every other symbol as if it were constant, including \(\dot{\theta}\), then you differentiate as normally.  So in effect, you only have to look at terms in the Lagrangian which directly involve \(\theta\):
+		</p>
+
+		$$
+		\frac{\partial\mathcal{L}}{\partial\theta} = \frac{d}{dt}\left[mg\ell\cos{\theta}\right]\\
+		\frac{\partial\mathcal{L}}{\partial\theta} = -mg\ell\sin(\theta)
+		$$
+
+		<p>
+		Now, we can move on to the \(\frac{\partial\mathcal{L}}{\partial\dot{\theta}}\) term.  This behaves exactly the same way, only with \(\dot{\theta}\) instead.  Remember, you are just manipulating the symbols.
+		</p>
+
+		$$
+		\frac{\partial\mathcal{L}}{\partial\dot{\theta}} = m\ell^2\dot{\theta}
+		$$
+
+		<p>
+		The \(\frac{1}{2}\) should be cancelled from the 2 coming down from the exponent.  You just use the power rule here.  But remember, we need to time-differentiate this expression now.  It turns out, all we need to do is add another dot to each \(\theta\) symbol in the expression:
+		</p>
+
+		$$
+		\frac{d}{dt}\left[\frac{\partial\mathcal{L}}{\partial\dot{\theta}}\right]=m\ell^2\ddot{\theta}
+		$$
+
+		<p>
+		Finally, we have an angular acceleration.  We're getting close.  Let's put the Euler-Lagrange equation together, and see what we get.
+		</p>
+
+		$$
+		-mg\ell\sin(\theta)-m\ell^2\ddot{\theta}=0\\
+		g\ell\sin(\theta)+\ell^2\ddot{\theta}=0\\
+		g\sin(\theta)+\ell\ddot{\theta}=0\\
+		\ell\ddot{\theta}=-g\sin(\theta)
+		$$
+		$$
+		\ddot{\theta}=\frac{-g}{\ell}\sin(\theta)
+		$$
+
+		<p>
+		This is, finally, our bonafide equation of motion, completely recognizable, and what you would get using the Newtonian way.  All we need to do now is clean it up a little.  Let's pull down our state vector notation from up above.
+		</p>
+
+		$$
+		Z = \left[\begin{array}{c}
+		\theta \\
+		\dot{\theta} \\
+		\end{array}\right]
+		$$
+
+		<p>
+		Remember, we wanted to find \(\dot{Z}\) in terms of \(Z\) and/or \(t\).  Well, we already know:
+		</p>
+
+		$$
+		\dot{Z} = \left[\begin{array}{c}
+		\dot{\theta} \\
+		\ddot{\theta} \\
+		\end{array}\right]
+		$$
+
+		<p>
+		And so through substitution:
+		</p>
+
+		$$
+		\frac{d}{dt}\left[\begin{array}{c}
+		\theta \\
+		\dot{\theta} \\
+		\end{array}\right] = \left[\begin{array}{c}
+		\dot{\theta} \\
+		\frac{-g}{\ell}\sin(\theta) \\
+		\end{array}\right]
+		$$
+
+		<h3>Simulating it on the browser</h3>
+		<p>
+			<em>Prereqs: HTML, Javascript</em>
+		</p>
+
+		<p>
+		Taking this from math, to actual javascript is non-trivial.  You are free to take a look at the source code of the above simulation <a href="view-source:pendulum.js">here</a>.  It uses object-oriented principles to maximize readability and organization.
+		</p>
+
+		<p>
+		Beyond that, the most basic part of any simulation code is a numerical integrator, that calculates \(Z_{n+1}\) from \(Z_n\), for a given time-step.  The most popular numerical integrator is RK4, the fourth-order Runge Kutta method.
+		</p>
+
+		<div id = "footer"></div>
+
+
+		<script type="text/javascript" src="pendulum.js"></script>
 	</body>
 </html>

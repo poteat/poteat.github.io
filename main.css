@@ -2,6 +2,8 @@
 body
 {
 	background-color: lightgreen;
+	font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	padding: 0 20% 0 20%;
 }
 
 h1
@@ -11,5 +13,17 @@ h1
 
 p
 {
-	padding: 20px;
+	
+}
+
+#footer
+{
+	height: 500px;
+}
+
+#canvas
+{
+	border: solid;
+	border-color: black;
+	border-width: 1px;
 }
