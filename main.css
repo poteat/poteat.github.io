@@ -1,7 +1,7 @@
 
 body
 {
-	background-color: white;
+	background-color: lightgrey;
 	font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	padding: 0 20% 0 20%;
 }
@@ -18,7 +18,7 @@ p
 
 pre.sh_sourceCode
 {
-  background-color: white;
+  background-color: lightgrey;
   color: black;
   font-style: normal;
   font-weight: normal;
