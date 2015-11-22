@@ -19,9 +19,9 @@
 
 		<h1>Michael's Lab</h1>
 		<ul>
-			<li><a href="http://mike.darksair.org/index.html">Home</a></li>
+			<li><a href="index.html">Home</a></li>
 			<li>Pendulum</li>
-			<li><a href="http://mike.darksair.org/page2.html">Double Pendulum</a></li>
+			<li><a href="doublependulum.html">Double Pendulum</a></li>
 		</ul>
 
 		<h2>Accurate (Nonlinear) Pendulum.</h2>
@@ -237,11 +237,11 @@
 
 		<h3>Simulating it on the browser</h3>
 		<p>
-			<em>Prereqs: HTML, Javascript</em>
+			<em>Prereqs: Html5 Canvas, Javascript</em>
 		</p>
 
 		<p>
-		Taking this from math, to actual javascript is non-trivial.  You are free to take a look at the source code of the above simulation <a href="view-source:pendulum.js">here</a>.  It uses object-oriented principles to maximize readability and organization.
+		Taking this from math to javascript is non-trivial.  You are free to take a look at the source code of the above simulation <a href="view-source:pendulum.js">here</a>.  It uses object-oriented principles to maximize readability and organization.
 		</p>
 
 		<p>
@@ -264,6 +264,155 @@ function rk4(Z, diff, h)
 
 		<p>
 		The RK4 function takes in \(Z\) - the current state, \(h\), which is the time-step to use, and \(\operatorname{diff}\), which is a function that gives \(\dot{Z}\) as a function of \(Z\).
+		</p>
+
+		<p>
+		The addWeightedZ function is there to perform column-matrix addition and scalar multiplication.  In other, words, the output of the first call above is 1*Z + h/2*k1.  Here is the implementation I use:
+		</p>
+
+<pre class="sh_javascript">
+// addWeightedZ(m1, k1, m2, k2 ...) = m1*k1+m2*k2...
+function addWeightedZ()
+{
+	var Z = [];
+
+	for (var i = 0; i < arguments[1].length; i++)
+	{
+		Z[i] = 0;
+	}
+
+	for (i = 0; i < arguments.length; i+=2)
+	{
+	    var m = arguments[i];
+	    var k = arguments[i+1];
+	    for (var j = 0; j < arguments[1].length; j++)
+	    {
+	    	Z[j] += m*k[j];
+	    }
+	}
+
+	return Z;
+}
+</pre>
+
+		<p>
+		A little complicated, since it has an arbitrary number of parameters.  It's built like this, because higher-order Runge Kutta methods have a large number of scalar-multiplications and column matrix additions.
+		</p>
+
+		<p>
+		The Pendulum object itself is divided into three member functions: The constructor, the differentiator, and the drawer.
+		</p>
+
+<pre class="sh_javascript">
+function Pendulum(x, y, L, M, ang)
+{
+	this.Z = [ang/180*Math.PI, 0];
+	this.x = x;
+	this.y = y;
+	this.L = L;
+	this.M = M;
+}
+
+Pendulum.prototype.diff = function(Z)
+{
+	ang = Z[0];
+	vang = Z[1];
+	L = P.L;
+
+	ang_accel = -g/L*Math.sin(ang);
+
+	return [vang, ang_accel];
+};
+
+Pendulum.prototype.draw = function()
+{
+	x = this.x;
+	y = this.y;
+	L = this.L;
+	M = this.M;
+	ang = this.Z[0];
+	vang = this.Z[1];
+
+	pivotx_draw = x*10+cvs.width/2;
+	pivoty_draw = -y*10+cvs.height/2;
+
+	bobx = L*Math.sin(ang);
+	boby = -L*Math.cos(ang);
+
+	bobx_draw = bobx*10+cvs.width/2;
+	boby_draw = -boby*10+cvs.width/2;
+
+	ctx.beginPath();
+	ctx.arc(pivotx_draw, pivoty_draw, 4, 0, Math.PI*2, true);
+	ctx.fill();
+
+	ctx.beginPath();
+	ctx.arc(bobx_draw, boby_draw, 4, 0, Math.PI*2, true);
+	ctx.fill();
+
+	ctx.beginPath();
+	ctx.moveTo(pivotx_draw, pivoty_draw);
+	ctx.lineTo(bobx_draw, boby_draw);
+	ctx.stroke();
+
+	KE = (1/2)*M*Math.pow(L,2)*Math.pow(vang,2);
+	PE = M*g*L*(1-Math.cos(ang));
+
+	ctx.fillText("Kinetic Energy: " + KE, 5, 15);
+	ctx.fillText("Potential Energy: " + PE, 5, 25);
+
+	ctx.fillText("Energy: " + (KE + PE), 5, 45);
+
+	ctx.fillText("FPS: " + (1000/frameTime).toFixed(1), 5, 65)
+};
+</pre>
+
+		<p>
+		Unsurprisingly, the Pendulum.diff function is rather simple, since it's just a programmatical representation of our equation of motion from earlier.  One note of importance: The pendulum constructor puts all of the dynamic state - everything which can possibly change - into its own array.  Constants, like length, are not considered to be a part of the state.
+		</p>
+
+		<p>
+		To be precise, a variable is not part of the state if it is constant <em> with respect to </em> time.  Since \(\dot{\ell}=0\), it is not part of the state.
+		</p>
+
+		<p>
+		The drawing function is conceptually simple, but involves a lot of intricate syntax relating to the Html5 Canvas, for which there are many helpful tutorials.
+		</p>
+
+		<p>
+		Finally, there is the main loop, which is called 60 times per second, a number chosen for smooth framerates.  It is scheduled to be called on that interval by a commonly used function, setInterval:
+		</p>
+
+<pre class="sh_javascript">
+var h = 1/60; // framerate
+setInterval("step();",h*1000);
+
+function step()
+{
+	var steps_per_frame = 10;
+	for (var i = 0; i < steps_per_frame; i++)
+	{
+		P.Z = rk4(P.Z, P.diff, h/steps_per_frame);
+	}
+
+	ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+	P.draw();
+}
+</pre>
+
+		<p>
+		That covers each of the important parts of this javascript simulation framework.  I added a few things in the production code, such as the fps-counter, and DOM variables for interaction with the webpage.  As well, the initialization is called globally.  To recap:
+		<ul>
+			<li>Runge-Kutta method</li>
+			<li>Column-matrix addition and multiplication</li>
+			<li>Pendulum class</li>
+			<li>Main loop</li>
+		</ul>
+		</p>
+
+		<p>
+		There are a few mathematics you can get into, with respect of how to numerically solve these sorts of systems.  The fourth-order Runge-Kutta method isn't always ideal, due to a weird problem called 'stiffness', which is where you need very small stepsizes, even with smooth, differentiable, and analytic curves.
 		</p>
 
 		<div id = "footer"></div>
