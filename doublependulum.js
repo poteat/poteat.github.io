@@ -227,10 +227,36 @@
     
     ax = 0;
     ay = 0;
+  
+    // Optimized code using subexpression finding in Mathematica:
+    // Experimental`OptimizeExpression[{e1,e2},OptimizationLevel -> 2]
+
+    var b1 = 1/L1;
+    var b2 = 2*M1;
+    var b3 = ang1; // Non-const
+    var b4 = ang2; // Non-const
+    var b5 = -b4; // NC
+    var b6 = b3+b5; // NC
+    var b7 = 2*b6; // NC
+    var b8 = Math.cos(b7);
+    var b9 = -M2*b8;
+    var b10 = b2+M2+b9;
+    var b11 = 1/b10;
+    var b22 = vang1;
+    var b23 = Math.pow(b22,2);
+    var b25 = vang2;
+    var b26 = Math.pow(b25,2);
+    var b32 = 1/L2;
+    var b20 = Math.sin(b6);
+    var b21 = Math.cos(b6);
+
+    ang1_accel = -b1*b11*(g*(b2+M2)*Math.sin(b3)+g*M2*Math.sin(b3-2*b4)+2*M2*b20*(L1*b21*b23+L2*b26));
+
+    ang2_accel = 2*b32*b11*b20*((M1+M2)*(g*Math.cos(b3)+L1*b23)+L2*M2*b21*b26);
+
+//    ang1_accel = -(g*(2*M1+M2)*Math.sin(ang1)+g*M2*Math.sin(ang1-2*ang2)+2*M2*(Math.pow(vang2,2)*L2+Math.pow(vang1,2)*L1*Math.cos(ang1-ang2))*Math.sin(ang1-ang2)) / (2*L1*(M1+M2-M2*Math.pow(Math.cos(ang1-ang2),2)));
     
-    ang1_accel = -(g*(2*M1+M2)*Math.sin(ang1)+g*M2*Math.sin(ang1-2*ang2)+2*M2*(Math.pow(vang2,2)*L2+Math.pow(vang1,2)*L1*Math.cos(ang1-ang2))*Math.sin(ang1-ang2)) / (2*L1*(M1+M2-M2*Math.pow(Math.cos(ang1-ang2),2)));
-    
-    ang2_accel = ((M1+M2)*(Math.pow(vang1,2)*L1+g*Math.cos(ang1))+Math.pow(vang2,2)*L2*M2*Math.cos(ang1-ang2))*Math.sin(ang1-ang2)/(L2*(M1+M2-M2*Math.pow(Math.cos(ang1-ang2),2)));
+//    ang2_accel = ((M1+M2)*(Math.pow(vang1,2)*L1+g*Math.cos(ang1))+Math.pow(vang2,2)*L2*M2*Math.cos(ang1-ang2))*Math.sin(ang1-ang2)/(L2*(M1+M2-M2*Math.pow(Math.cos(ang1-ang2),2)));
     
     return [vx, vy, ax, ay, vang1, ang1_accel, vang2, ang2_accel];
   };
@@ -305,7 +331,7 @@
     KE = (1/2)*(M1+M2)*Math.pow(L1,2)*Math.pow(vang1,2)+(1/2)*M2*Math.pow(L2,2)*Math.pow(vang2,2)+M2*L1*L2*vang1*vang2*Math.cos(ang1 - ang2);
     ctx.fillText("Kinetic Energy: " + (KE), 5, 15);
     
-    PE = -(M1+M2)*g*L1*Math.cos(ang1)-M2*g*L2*Math.cos(ang2);
+    PE = g*(L1*M1+(L1+L2)*M2-L1*(M1+M2)*Math.cos(ang1)-L2*M2*Math.cos(ang2));
     ctx.fillText("Potential Energy: " + (PE), 5, 25);
     
     ctx.fillText("Total Energy: " + (KE+PE), 5, 45);

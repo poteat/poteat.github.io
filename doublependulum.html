@@ -19,8 +19,30 @@
 		<canvas id="canvas" width="500" height="500"></canvas>
 
 		<p>
-		This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot.  In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
+		This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity.  In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
 		</p>
+
+		<p>
+		One challenge, is that when end mass is much larger than central mass, the problem becomes stiff, and the step-size must decrease quite a bit.  To counter this, we use a RK8 numerical integrator called Verner's Method.  In my experience, it is usually more efficient to have higher-order numerical integrators, rather than smaller step-sizes.  Note, this method is only necessary when dealing with systems with those parameters.
+		</p>
+
+		<p>
+		The biggest challenge, however, is the utter complexity of the controlling equations of motion.  As well, it's non-trivial to simplify the equations once you find them.  This is why knowledge of how to symbolically manipulate differential equations in Mathematica (or some other CAS) is very important.
+		</p>
+
+		<p>
+		As well, Mathematica can greatly simplify even very long expressions in short time, as well as find common subexpressions between multiple expressions to simplify code.  This is a very astonishing experimental utility of Mathematica, and although it doesn't give globally optimum results, it beats what I can do by hand.
+		</p>
+
+		<p>
+		To clarify, that function of Mathematica tells you to define interim variables for calculation, so you can re-use them in multiple expressions.  This is an astoundingly complicated problem.  The function is: Experimental`OptimizeExpression[].
+		</p>
+
+		<p>
+		It would take too long to comprehensively describe the derivation of this system here, and as such I will just post my results in the form of this <a href="doublependulum.pdf">Mathematica-generated pdf</a>.
+		</p>
+
+
 
 		<div id = "footer"></div>
 
