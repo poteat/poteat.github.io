@@ -22,10 +22,12 @@
   var h = 1/60; // framerate
   var g = 9.81*10;
 
-  var DP = new DoublePendulum(0, 0, 10, 10, 1, 1);
+  // ang1, vang1, ang2, vang2, x, y, L1, L2, M1, M2
+  var DP = new DoublePendulum(90, 0, 180, 0, 0, 0, 10, 10, 1, 1);
 
   var circlebounds = false;
   var cherrytracer = false;
+  var paused = false;
 
   var cvs = document.getElementById('canvas');
   var ctx = cvs.getContext('2d');
@@ -53,11 +55,15 @@
   function step()
   {
     var steps_per_frame = 4;
-    for (var i = 0; i < steps_per_frame; i++)
+
+    if (!paused)
     {
-        DP.Z = rk8(DP.Z, DP.diff, h/steps_per_frame);
+      for (var i = 0; i < steps_per_frame; i++)
+      {
+          DP.Z = rk8(DP.Z, DP.diff, h/steps_per_frame);
+      }
     }
-    
+
     ctx.clearRect(0, 0, cvs.width, cvs.height);
     
     DP.draw();
@@ -226,11 +232,11 @@
   // Double Pendulum object logic and drawing function.
   // ------------------------------------------------------------
   
-  function DoublePendulum(x, y, L1, L2, M1, M2)
+  function DoublePendulum(ang1, vang1, ang2, vang2, x, y, L1, L2, M1, M2)
   {
-    ang1 = 90/180*Math.PI;
-    ang2 = 180.001/180*Math.PI;
-    this.Z = [ang1, 0, ang2, 0];
+    ang1 = ang1/180*Math.PI;
+    ang2 = ang2/180*Math.PI;
+    this.Z = [ang1, vang1, ang2, vang2];
     this.x = x;
     this.y = y;
     this.L1 = L1;

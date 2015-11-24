@@ -18,11 +18,13 @@
 
 		<h2>Double Pendulum</h2>
 
-		<canvas id="canvas" width="500" height="500"></canvas>
+		<canvas id="canvas" width="500" height="500" style="position: absolute;"></canvas>
 		<canvas id="tracer" width="500" height="500"></canvas>
 		<div id="controls">
 			<input type="checkbox" id="circlebounds" onclick="circlebounds = document.getElementById('circlebounds').checked"> Draw circle bounds
 			<input type="checkbox" id="cherrytracer" onclick="cherrytracer = document.getElementById('cherrytracer').checked"> Draw cherry tracer
+			<input type="checkbox" id="connections" checked="true" onclick="connections = document.getElementById('connections').checked"> Draw connections
+			<input type="checkbox" id="paused" onclick="paused = document.getElementById('paused').checked"> Pause
 		</div>
 
 		<div id="fps"></div>
