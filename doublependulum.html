@@ -3,6 +3,8 @@
 	<head>
 		<title>Michael's Lab</title>
 		<link rel = stylesheet href = "main.css" type = "text/css">
+
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
 	</head>
 
 	<body>
@@ -17,6 +19,13 @@
 		<h2>Double Pendulum</h2>
 
 		<canvas id="canvas" width="500" height="500"></canvas>
+		<canvas id="tracer" width="500" height="500"></canvas>
+		<div id="controls">
+			<input type="checkbox" id="circlebounds" onclick="circlebounds = document.getElementById('circlebounds').checked"> Draw circle bounds
+			<input type="checkbox" id="cherrytracer" onclick="cherrytracer = document.getElementById('cherrytracer').checked"> Draw cherry tracer
+		</div>
+
+		<div id="fps"></div>
 
 		<p>
 		This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity.  In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.

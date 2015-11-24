@@ -24,9 +24,25 @@
 
   var DP = new DoublePendulum(0, 0, 10, 10, 1, 1);
 
+  var circlebounds = false;
+  var cherrytracer = false;
+
   var cvs = document.getElementById('canvas');
   var ctx = cvs.getContext('2d');
+
+  var cvs_tracer = document.getElementById('tracer');
+  var ctx_tracer = cvs_tracer.getContext('2d');
+
   var Mouse = new Mouse();
+
+
+  // FPS reporting variables
+  var filterStrength = 20;
+  var frameTime = 0, lastLoop = new Date, thisLoop;
+  var fpsOut = document.getElementById('fps');
+  setInterval(function(){
+    fpsOut.innerHTML = (1000/frameTime).toFixed(1) + " fps";
+  },1000);
 
   setInterval("step();",h*1000);
 
@@ -45,6 +61,17 @@
     ctx.clearRect(0, 0, cvs.width, cvs.height);
     
     DP.draw();
+
+    ctx_tracer.globalAlpha=0.05;
+    ctx_tracer.fillStyle = "lightgrey";
+    ctx_tracer.fillRect(0,0,cvs_tracer.width,cvs_tracer.height);
+    ctx_tracer.globalAlpha=1;
+    ctx_tracer.fillStyle = "#DD0000";
+
+    // Report how long this took
+    var thisFrameTime = (thisLoop=new Date) - lastLoop;
+    frameTime+= (thisFrameTime - frameTime) / filterStrength;
+    lastLoop = thisLoop;
   }
 
   // ------------------------------------------------------------
@@ -203,7 +230,9 @@
   {
     ang1 = 90/180*Math.PI;
     ang2 = 180.001/180*Math.PI;
-    this.Z = [x, y, 0, 0, ang1, 0, ang2, 0];
+    this.Z = [ang1, 0, ang2, 0];
+    this.x = x;
+    this.y = y;
     this.L1 = L1;
     this.L2 = L2;
     this.M1 = M1;
@@ -212,21 +241,14 @@
 
   DoublePendulum.prototype.diff = function(Z)
   {
-    x = Z[0];
-    y = Z[1];
-    vx = Z[2];
-    vy = Z[3];
-    ang1 = Z[4];
-    vang1 = Z[5];
-    ang2 = Z[6];
-    vang2 = Z[7];
+    ang1 = Z[0];
+    vang1 = Z[1];
+    ang2 = Z[2];
+    vang2 = Z[3];
     M1 = DP.M1;
     M2 = DP.M2;
     L1 = DP.L1;
     L2 = DP.L2;
-    
-    ax = 0;
-    ay = 0;
   
     // Optimized code using subexpression finding in Mathematica:
     // Experimental`OptimizeExpression[{e1,e2},OptimizationLevel -> 2]
@@ -258,66 +280,74 @@
     
 //    ang2_accel = ((M1+M2)*(Math.pow(vang1,2)*L1+g*Math.cos(ang1))+Math.pow(vang2,2)*L2*M2*Math.cos(ang1-ang2))*Math.sin(ang1-ang2)/(L2*(M1+M2-M2*Math.pow(Math.cos(ang1-ang2),2)));
     
-    return [vx, vy, ax, ay, vang1, ang1_accel, vang2, ang2_accel];
+    return [vang1, ang1_accel, vang2, ang2_accel];
   };
 
   DoublePendulum.prototype.draw = function()
   {
-    x = this.Z[0];
-    y = this.Z[1];
+    var x = this.x;
+    var y = this.y;
     
-    ang1 = this.Z[4];
-    vang1 = this.Z[5];
-    ang2 = this.Z[6];
-    vang2 = this.Z[7];
-    M1 = DP.M1;
-    M2 = DP.M2;
-    L1 = DP.L1;
-    L2 = DP.L2;   
+    var ang1 = this.Z[0];
+    var vang1 = this.Z[1];
+    var ang2 = this.Z[2];
+    var vang2 = this.Z[3];
+    var M1 = DP.M1;
+    var M2 = DP.M2;
+    var L1 = DP.L1;
+    var L2 = DP.L2;   
     
-    pivotx_draw = x*10+cvs.width/2;
-    pivoty_draw = -y*10+cvs.height/2;
-    length1 = this.L1;
-    length2 = this.L2;
-    ang1 = this.Z[4];
-    ang2 = this.Z[6];
+    var pivotx_draw = x*10+cvs.width/2;
+    var pivoty_draw = -y*10+cvs.height/2;
+    var length1 = this.L1;
+    var length2 = this.L2;
     
     // Center pivot dot
     ctx.beginPath();
     ctx.arc(pivotx_draw, pivoty_draw, 5, 0, Math.PI*2, true);
     ctx.fill();
 
-    joint1x = x + Math.sin(ang1)*length1;
-    joint1y = y - Math.cos(ang1)*length1;
+    var joint1x = x + Math.sin(ang1)*length1;
+    var joint1y = y - Math.cos(ang1)*length1;
     
-    joint1x_draw = joint1x*10+cvs.width/2;
-    joint1y_draw = -joint1y*10+cvs.width/2;
+    var joint1x_draw = joint1x*10+cvs.width/2;
+    var joint1y_draw = -joint1y*10+cvs.width/2;
     
     // Joint 1 dot
     ctx.beginPath();
     ctx.arc(joint1x_draw, joint1y_draw, 4, 0, Math.PI*2, true);
     ctx.fill();
     
-    joint2x = joint1x + Math.sin(ang2)*length2;
-    joint2y = joint1y - Math.cos(ang2)*length2;
+    var joint2x = joint1x + Math.sin(ang2)*length2;
+    var joint2y = joint1y - Math.cos(ang2)*length2;
     
-    joint2x_draw = joint2x*10+cvs.width/2;
-    joint2y_draw = -joint2y*10+cvs.width/2;
+    var joint2x_draw = joint2x*10+cvs.width/2;
+    var joint2y_draw = -joint2y*10+cvs.width/2;
     
     // End dot
     ctx.beginPath();
     ctx.arc(joint2x_draw, joint2y_draw, 4, 0, Math.PI*2, true);
     ctx.fill();
-    
-    // Inner circle
-    ctx.beginPath();
-    ctx.arc(pivotx_draw, pivoty_draw, 10*length1, 0, Math.PI*2, true);
-    ctx.stroke();
-    
-    // Outer circle
-    ctx.beginPath();
-    ctx.arc(pivotx_draw, pivoty_draw, 10*(length1+length2), 0, Math.PI*2, true);
-    ctx.stroke();
+
+    if (cherrytracer)
+    {
+      ctx_tracer.beginPath();
+      ctx_tracer.arc(joint2x_draw, joint2y_draw, 4, 0, Math.PI*2, true);
+      ctx_tracer.fill();
+    }
+
+    if (circlebounds)
+    {
+      // Inner circle
+      ctx.beginPath();
+      ctx.arc(pivotx_draw, pivoty_draw, 10*length1, 0, Math.PI*2, true);
+      ctx.stroke();
+
+      // Outer circle
+      ctx.beginPath();
+      ctx.arc(pivotx_draw, pivoty_draw, 10*(length1+length2), 0, Math.PI*2, true);
+      ctx.stroke();
+    }
     
     // Line connectors
     ctx.beginPath();
@@ -328,10 +358,10 @@
     
     ctx.stroke(); 
     
-    KE = (1/2)*(M1+M2)*Math.pow(L1,2)*Math.pow(vang1,2)+(1/2)*M2*Math.pow(L2,2)*Math.pow(vang2,2)+M2*L1*L2*vang1*vang2*Math.cos(ang1 - ang2);
+    var KE = (1/2)*(M1+M2)*Math.pow(L1,2)*Math.pow(vang1,2)+(1/2)*M2*Math.pow(L2,2)*Math.pow(vang2,2)+M2*L1*L2*vang1*vang2*Math.cos(ang1 - ang2);
     ctx.fillText("Kinetic Energy: " + (KE), 5, 15);
     
-    PE = g*(L1*M1+(L1+L2)*M2-L1*(M1+M2)*Math.cos(ang1)-L2*M2*Math.cos(ang2));
+    var PE = g*(L1*M1+(L1+L2)*M2-L1*(M1+M2)*Math.cos(ang1)-L2*M2*Math.cos(ang2));
     ctx.fillText("Potential Energy: " + (PE), 5, 25);
     
     ctx.fillText("Total Energy: " + (KE+PE), 5, 45);

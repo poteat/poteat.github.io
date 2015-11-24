@@ -32,7 +32,17 @@ pre.sh_sourceCode
 
 #canvas
 {
+	position: absolute;
 	border: solid;
 	border-color: black;
 	border-width: 1px;
+	z-index: 2;
+}
+
+#tracer
+{
+	position: relative;
+	border:solid;
+	border-width: 1px;
+	z-index: 1;
 }
