@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="pendulum.html">Pendulum</a></li>
+			<li><a href="doublependulum.html">Double Pendulum</a></li>
+			<li>Gallery of Degenerate Phenomena</li>
+		</ul>
+
+		<h2>Degenerate Phenomena of Double Pendulums</h2>
+		<p>
+		It turns out, double pendulum systems have really interesting, deep behavior when you give them strange parameters, like M2 being 1000 and M1 being zero, or vice versa, or turning gravity off, or ludicruously high gravity, or any of these possibilities of constraints.
+		</p>
+
+		<h3>Cyclic events</h3>
+		<a href="doublependulum.html?vang1=-5,l1=5,m1=2,g=0,cherry=true,connect=false"><img src="cyclic.png"></a>
+		<p>
+		Every six seconds, this system does something interesting.  To be precise, it will either create a spike, or a spiral, via its motion.  Then it will return to its normal motion, like a metronome.  This effect lasts infinitely, because the energy state is representable in exact form in floating point: There is no energy drift due to the numerical inaccuracy of floating point.
+		</p>
+
+		<h3>Energy boundary</h3>
+		<a href="doublependulum.html?l1=5,g=980000,step=1000,circle=true,cherry=true,connect=false"><img src="energyboundary.png"></a>
+		<p>
+		This quick-moving system demonstrates the cherry region: It lays out the region of positional state-space that the entity can possibly be in.  Here, we see that it is limited by height: In other words, the potential energy can only go so high, until the kinetic energy is depleted and it must fall again.  Leaving it on for a while, I get a shallow limacon-esque shape. (colloquially, a heart).
+		</p>
+
+		<p>
+		This system also demonstrates the numerical accuracy of the method: Even though it is moving too fast for proper rendering, the energy stays constant, and the cherry region is still valid.  If the region appeared outside of the normal constraints of pendulum motion, we would know something was wrong.
+		</p>
+
+		<h3>Five bouncing balls</h3>
+		<a href="doublependulum.html?ang1=90,l1=5,m1=1,m2=1,g=200000000,step=1500,circle=true,cherry=true,connect=false"><img src="fiveballs.png"></a>
+		<p>
+		This one is seriously strange: It appears as if there are five independently moving balls, bouncing on the floor.  The motion isn't exactly "bouncing", and they don't quite follow a uniform gravity motion path.  This effect is almost certainly caused by a coupling between the framerate and the frequency of the system, but I haven't been able to replicate it with other parameters.  The step-rate is as high as it will go without framerate slowdown on my machine.
+		</p>
+	</body>
+</html>
