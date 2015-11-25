@@ -19,7 +19,9 @@
   // doesn't affect the second bob.  So the only force on the second bob
   // is gravity.
 
-  var h = 1/60; // framerate
+  fps = 1/60; // framerate
+  var steps_per_frame = 100;
+
   var g = 9.81*10;
 
   // ang1, vang1, ang2, vang2, x, y, L1, L2, M1, M2
@@ -27,6 +29,7 @@
 
   var circlebounds = false;
   var cherrytracer = false;
+  var connections = true;
   var paused = false;
 
   var cvs = document.getElementById('canvas');
@@ -46,7 +49,31 @@
     fpsOut.innerHTML = (1000/frameTime).toFixed(1) + " fps";
   },1000);
 
-  setInterval("step();",h*1000);
+  var steploop = setInterval("step();",fps*1000);
+
+  function reinitialize()
+  {
+    var ang1 = Number(document.getElementById("ang1").value);
+    var vang1 = Number(document.getElementById("vang1").value);
+    var ang2 = Number(document.getElementById("ang2").value);
+    var vang2 = Number(document.getElementById("vang2").value);
+
+    var L1 = Number(document.getElementById("L1").value);
+    var L2 = Number(document.getElementById("L2").value);
+    var M1 = Number(document.getElementById("M1").value);
+    var M2 = Number(document.getElementById("M2").value);
+
+    g = Number(document.getElementById("g").value);
+    fps = 1/Number(document.getElementById("fps_in").value);
+    steps_per_frame = Number(document.getElementById("steps").value);
+
+    DP = new DoublePendulum(ang1, vang1, ang2, vang2, 0, 0, L1, L2, M1, M2);
+    ctx_tracer.clearRect(0, 0, cvs_tracer.width, cvs_tracer.height);
+//    DP = new DoublePendulum(90, 0, 180, 0, 0, 0, 10, 10, 1, 1);
+
+    clearInterval(steploop);
+    steploop = setInterval("step();",fps*1000);
+  }
 
   // ------------------------------------------------------------
   // Main loop: Invokes integration globally and redraws every step
@@ -54,13 +81,12 @@
   
   function step()
   {
-    var steps_per_frame = 4;
 
     if (!paused)
     {
       for (var i = 0; i < steps_per_frame; i++)
       {
-          DP.Z = rk8(DP.Z, DP.diff, h/steps_per_frame);
+          DP.Z = rk8(DP.Z, DP.diff, fps/steps_per_frame);
       }
     }
 
@@ -308,27 +334,41 @@
     var length1 = this.L1;
     var length2 = this.L2;
     
-    // Center pivot dot
-    ctx.beginPath();
-    ctx.arc(pivotx_draw, pivoty_draw, 5, 0, Math.PI*2, true);
-    ctx.fill();
+    // Drawing stuff:
 
     var joint1x = x + Math.sin(ang1)*length1;
     var joint1y = y - Math.cos(ang1)*length1;
     
     var joint1x_draw = joint1x*10+cvs.width/2;
     var joint1y_draw = -joint1y*10+cvs.width/2;
-    
-    // Joint 1 dot
-    ctx.beginPath();
-    ctx.arc(joint1x_draw, joint1y_draw, 4, 0, Math.PI*2, true);
-    ctx.fill();
-    
+
     var joint2x = joint1x + Math.sin(ang2)*length2;
     var joint2y = joint1y - Math.cos(ang2)*length2;
     
     var joint2x_draw = joint2x*10+cvs.width/2;
     var joint2y_draw = -joint2y*10+cvs.width/2;
+
+    if (connections)
+    {
+      // Center pivot dot
+      ctx.beginPath();
+      ctx.arc(pivotx_draw, pivoty_draw, 5, 0, Math.PI*2, true);
+      ctx.fill();
+      
+      // Joint 1 dot
+      ctx.beginPath();
+      ctx.arc(joint1x_draw, joint1y_draw, 4, 0, Math.PI*2, true);
+      ctx.fill();
+
+      // Line connectors
+      ctx.beginPath();
+      
+      ctx.moveTo(pivotx_draw, pivoty_draw);
+      ctx.lineTo(joint1x_draw, joint1y_draw);
+      ctx.lineTo(joint2x_draw, joint2y_draw);
+      
+      ctx.stroke(); 
+    }
     
     // End dot
     ctx.beginPath();
@@ -354,15 +394,6 @@
       ctx.arc(pivotx_draw, pivoty_draw, 10*(length1+length2), 0, Math.PI*2, true);
       ctx.stroke();
     }
-    
-    // Line connectors
-    ctx.beginPath();
-    
-    ctx.moveTo(pivotx_draw, pivoty_draw);
-    ctx.lineTo(joint1x_draw, joint1y_draw);
-    ctx.lineTo(joint2x_draw, joint2y_draw);
-    
-    ctx.stroke(); 
     
     var KE = (1/2)*(M1+M2)*Math.pow(L1,2)*Math.pow(vang1,2)+(1/2)*M2*Math.pow(L2,2)*Math.pow(vang2,2)+M2*L1*L2*vang1*vang2*Math.cos(ang1 - ang2);
     ctx.fillText("Kinetic Energy: " + (KE), 5, 15);
