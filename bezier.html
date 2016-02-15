@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="pendulum.html">Pendulum</a></li>
+			<li><a href="doublependulum.html">Double Pendulum</a></li>
+			<li><a href="degeneratedouble.html">Gallery of Degenerate Phenomena</a></li>
+			<li><a href="triplependulum.html">Triple Pendulum</a></li>
+			<li>Quadratic Bézier Curve</li>
+		</ul>
+
+		<h2>Quadratic Bézier Curve</h2>
+
+		<p>
+		Quadratic Bézier curves are explicit parametric functions, of the following form:
+		</p>
+
+		$$
+		x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\
+		y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\
+		t \in \mathbb R[0,1]
+		$$
+
+		<p>
+		These curves are perhaps the simplest class of parametric curves, but useful in their own right.  Here I display a simple, self-coded javascript demo of such curves.  Drag the control points around to see the curve change.
+		</p>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<p>
+		The general form of an nth order Bézier curve, with n+1 control points, can be represented explicitly with the following summation:
+		</p>
+
+		$$
+		\sum_{i=0}^{n} \binom{n}{i} (1-t)^{n-i} t^i P_i
+		$$
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="bezier.js"></script>
+	</body>
+</html>
