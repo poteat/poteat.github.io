@@ -47,6 +47,19 @@
 		\sum_{i=0}^{n} \binom{n}{i} (1-t)^{n-i} t^i P_i
 		$$
 
+		<p>
+		The tick marks in the demo correspond to the segment lines of intersection (related to the tangent line) at each point.  However, the placement of the tick marks along the curve is parameterized in terms of t, rather than arc-length.
+		</p>
+
+		<p>
+		It turns out reparameterizing the quadratic bezier curve in terms of arc-length is non-trivial.  There does exist a closed form solution of the
+		reparameterized curve, but it is quite unwieldy - and calculated by Mathematica, not any hand derivation.
+		</p>
+
+		<p>
+		The normal way to reparameterize in terms of arc-length is to use a general numerical method that calculates arc-length, and build a small table that maps t onto that length.  In your formula, you then divide your parameter t by the length it maps to.  This is a much neater solution than the complicated closed form solution, since you cannot 'exactly' reparameterize any higher-order Bézier curves.  This does not preclude a generalized, accurate estimate of the mapping between t and arc-length, the mapping approximation perhaps being in the form of a Bézier curve itself.
+		</p>
+
 		<div id = "footer"></div>
 
 		<script type="text/javascript" src="bezier.js"></script>
