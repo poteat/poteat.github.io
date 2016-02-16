@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Nth-order Bézier Curves</h2>
+
+		$$
+		\sum_{i=0}^{n} \binom{n}{i} (1-t)^{n-i} t^i P_i
+		$$
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="generalizedbezier.js"></script>
+	</body>
+</html>
