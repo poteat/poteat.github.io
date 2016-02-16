@@ -36,6 +36,9 @@ function QuadraticBezier(x1, y1, x2, y2, x3, y3)
 	this.controlPoint[1] = new Point(x2, y2);
 	this.controlPoint[2] = new Point(x3, y3);
 	this.numOfcontrolPoint = 3;
+
+	this.samples = 100;
+	this.arcLength = new Array(this.samples);
 }
 
 QuadraticBezier.prototype.draw = function()
@@ -45,27 +48,39 @@ QuadraticBezier.prototype.draw = function()
 		this.controlPoint[i].draw();
 	}
 
-	var n = 100; // # of drawing intervals
-
 	ctx.beginPath();
 	ctx.moveTo(this.controlPoint[0].x, this.controlPoint[0].y);
 
-	var p = new Point(0, 0);
+	var p = new Point(this.controlPoint[0].x, this.controlPoint[0].y);
+	var p_old = new Point(0, 0);
+	var totalLength = 0;
 
-	for (var i = 1; i <= n; i++)
+	for (var i = 1; i <= this.samples; i++)
 	{
-		this.calc(i/n, p);
+		p_old.x = p.x;
+		p_old.y = p.y;
+
+		this.calc(i/this.samples, p);
+
+		totalLength += p.dist(p_old.x, p_old.y);
+		this.arcLength[i] = totalLength;
+
 		ctx.lineTo(p.x, p.y);
 	}
 
 	ctx.stroke();
 
-	var n = 5; // # of t parameter ticks
+	var n = 7; // # of t parameter ticks
 
 	for (var i = 1; i <= n; i++)
 	{
 		this.drawTick(i/(n+1), 5, p);
 	}
+
+	var P = new Point(40, 40);
+	var P_old = P;
+
+	ctx.fillText("Arc Length: " + this.arcLength[100], 20, 20);
 };
 
 QuadraticBezier.prototype.calc = function(t, p)
