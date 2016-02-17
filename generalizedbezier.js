@@ -7,24 +7,39 @@ var ctx = cvs.getContext('2d');
 
 var Mouse = new Mouse();
 
-var QBCurve = new QuadraticBezier(100, 300, 250, 100, 400, 300);
+var BCurve;
 
 clearInterval(mainloop);
 var mainloop = setInterval("main();",1000/fps);
 
+init();
 
 
 
+// Initializes the bezier curve with 4 points, and a sampling rate
+// of 100 lines per draw.
+function init()
+{
+	var samplingRate = 100;
 
+	var p1 = new Point(100, 300);
+	var p2 = new Point(250, 100);
+	var p3 = new Point(400, 300);
+	var p4 = new Point(300, 400);
+	var p5 = new Point(100, 250);
+	var p6 = new Point(50, 50);
 
+	var points = [p1, p2, p3, p4, p5, p6];
 
-
+	BCurve = new Bezier(points, samplingRate);
+}
 
 function main()
 {
 	ctx.clearRect(0, 0, cvs.width, cvs.height);
 
-	QBCurve.draw();
+	BCurve.draw();
+//	ctx.fillText("10 choose 5 = " + binom(10, 5), 20, 20);
 
 
 
@@ -32,30 +47,37 @@ function main()
 }
 
 
-
-
-
-
-
-
-
-function QuadraticBezier(x1, y1, x2, y2, x3, y3)
+// Fast version of binomial coefficient, or "n choose k"
+function binom(n, k)
 {
-	this.controlPoint = [];
-	this.numOfcontrolPoint = 0;
+	var prod = 1;
+	for (i = 1; i <= k; i++)
+	{
+		prod *= (n + 1 - i)/i;
+	}
 
-	this.controlPoint[0] = new Point(x1, y1);
-	this.controlPoint[1] = new Point(x2, y2);
-	this.controlPoint[2] = new Point(x3, y3);
-	this.numOfcontrolPoint = 3;
+	return prod;
+}
 
-	this.samples = 100;
+
+
+
+
+
+// The Bezier curve as it is implemented has a dynamic number of control points,
+// a sampling rate, (for purposes of drawing and arc length), and an internal array
+// that maps the parameter t onto arc length.
+function Bezier(points, samples)
+{
+	this.controlPoint = points;
+	this.samples = samples;
 	this.arcLength = new Array(this.samples);
 }
 
-QuadraticBezier.prototype.draw = function()
+Bezier.prototype.draw = function()
 {
-	for (var i = 0; i < this.numOfcontrolPoint; i++)
+	// Draw each control point
+	for (var i = 0; i < this.controlPoint.length; i++)
 	{
 		this.controlPoint[i].draw();
 	}
@@ -82,25 +104,40 @@ QuadraticBezier.prototype.draw = function()
 
 	ctx.stroke();
 
+
+/* TODO: Fix drawTick code for generalized curves
 	var n = 7; // # of t parameter ticks
 
 	for (var i = 1; i <= n; i++)
 	{
 		this.drawTick(i/(n+1), 5, p);
 	}
+*/
 
-	var P = new Point(40, 40);
-	var P_old = P;
+	ctx.fillText("Arc Length: " + Math.round(totalLength) + "px", 20, 20);
 
-	ctx.fillText("Arc Length: " + this.arcLength[100], 20, 20);
 };
 
-QuadraticBezier.prototype.calc = function(t, p)
+Bezier.prototype.calc = function(t, p)
 {
-	p.x = Math.pow(1-t, 2) * this.controlPoint[0].x + 2*t*(1-t) * this.controlPoint[1].x + Math.pow(t, 2) * this.controlPoint[2].x;
-	p.y = Math.pow(1-t, 2) * this.controlPoint[0].y + 2*t*(1-t) * this.controlPoint[1].y + Math.pow(t, 2) * this.controlPoint[2].y;
+	var n = this.controlPoint.length - 1; // 1
+	var delta = 0;
+	var x = 0;
+	var y = 0;
+	for (var i = 0; i <= n; i++)
+	{
+		delta = binom(n, i)*Math.pow(1-t, n-i)*Math.pow(t, i);
+		x += delta * this.controlPoint[i].x;
+		y += delta * this.controlPoint[i].y;
+	}
+
+	p.x = x;
+	p.y = y;
 };
 
+
+
+/*
 QuadraticBezier.prototype.drawTick = function(t, l, p)
 {
 	this.calc(t, p);
@@ -124,16 +161,18 @@ QuadraticBezier.prototype.drawTick = function(t, l, p)
 	ctx.lineTo(x2, y2);
 	ctx.stroke();
 };
+*/
 
-
-QuadraticBezier.prototype.closest = function(x, y)
+// Used by the mouse interactivity code to find the closest
+// control point from any coordinates (mouse coordinates)
+Bezier.prototype.closest = function(x, y)
 {
 	var closestID = 0;
 	closestDistance = 99999;
 
 	currentDistance = 0;
 
-	for (var i = 0; i < this.numOfcontrolPoint; i++)
+	for (var i = 0; i < this.controlPoint.length; i++)
 	{
 		currentDistance = this.controlPoint[i].dist(x, y);
 		if (currentDistance < closestDistance)
@@ -216,15 +255,15 @@ cvs.addEventListener('mousemove', function(evt)
 {
 	Mouse.updatePos(evt)
 	if (Mouse.holding) {
-		QBCurve.controlPoint[Mouse.objHeld].moveTo(Mouse.x, Mouse.y);
+		BCurve.controlPoint[Mouse.objHeld].moveTo(Mouse.x, Mouse.y);
     }
 }, false);
 
 cvs.addEventListener('mousedown', function(evt)
 {
-    var cID = QBCurve.closest(Mouse.x, Mouse.y);
+    var cID = BCurve.closest(Mouse.x, Mouse.y);
 
-    if (QBCurve.controlPoint[cID].dist(Mouse.x, Mouse.y) < 20)
+    if (BCurve.controlPoint[cID].dist(Mouse.x, Mouse.y) < 20)
     {
         Mouse.holding = true;
         Mouse.objHeld = cID;
@@ -232,7 +271,7 @@ cvs.addEventListener('mousedown', function(evt)
 
     if (Mouse.holding)
     {
-    	QBCurve.controlPoint[cID].moveTo(Mouse.x, Mouse.y);
+    	BCurve.controlPoint[cID].moveTo(Mouse.x, Mouse.y);
     }
 }, false);
 
