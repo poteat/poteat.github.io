@@ -69,7 +69,7 @@ function binom(n, k)
 // that maps the parameter t onto arc length.
 function Bezier(points, samples)
 {
-	this.controlPoint = points;
+	this.controlPoint = points; // 'controlPoint' is an array
 	this.samples = samples;
 	this.arcLength = new Array(this.samples);
 }
@@ -186,8 +186,19 @@ Bezier.prototype.closest = function(x, y)
 };
 
 
+// Takes a point index as a parameter, and splices that
+// point away (It reindexes the point array).
+Bezier.prototype.removePoint = function(pID)
+{
+	this.controlPoint.splice(pID, 1);
+};
 
-
+// Takes a point as a parameter, and adds that to the
+// end of the controlPoint array.
+Bezier.prototype.appendPoint = function(p)
+{
+	this.controlPoint.push(p);
+};
 
 
 
@@ -285,4 +296,22 @@ cvs.addEventListener('mouseup', function(evt)
 {
 	Mouse.holding = false;
 	Mouse.objHeld = null;
+}, false);
+
+cvs.addEventListener('dblclick', function(evt)
+{
+	var mx = Mouse.x;
+	var my = Mouse.y;
+
+	var cID = BCurve.closest(mx, my);
+
+	if (BCurve.controlPoint[cID].dist(mx, my) < 20)
+	{
+		BCurve.removePoint(cID);
+	}
+	else
+	{
+		var p = new Point(mx, my);
+		BCurve.appendPoint(p);
+	}
 }, false);

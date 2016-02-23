@@ -16,6 +16,11 @@ p
 	
 }
 
+cmd
+{
+	font-style: italic;
+}
+
 pre.sh_sourceCode
 {
   background-color: lightgrey;
