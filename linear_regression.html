@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Simple Linear Regression</h2>
+
+		$$
+		\min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2
+		$$
+
+		<p>
+		The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem.  Here, I demonstrate the 2-dimensional case of simple linear regression.
+		</p>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<p>
+		What makes this form of regression 'simple', is the fact that the least-squared distance is only the vertical distance to the line.  If we don't consider there to be any difference between the axes (i.e. neither is dependent or independent), then this is an incorrect regression.
+		</p>
+
+		<p>
+		The better method minimizes the <i>actual</i> least-squared Euclidean distance between each point and our linear estimation.  It has a much more complicated closed-form solution.  This is called the "Deming regression" in some contexts.
+		</p>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="linear_regression.js"></script>
+	</body>
+</html>
