@@ -69,6 +69,10 @@ function LinearReg(points, samples)
 	this.avgy = 0;
 	this.alpha = 0;
 	this.beta = 0;
+
+	this.fitPoint = new Array(2);
+	this.fitPoint[0] = new Point(0, 0, "blue");
+	this.fitPoint[1] = new Point(0, 0, "blue");
 }
 
 
@@ -83,23 +87,19 @@ LinearReg.prototype.draw = function()
 
 
 
-	// Draw lines between each control point
-	ctx.beginPath();
-	ctx.moveTo(this.controlPoint[0].x, this.controlPoint[0].y);
-
-	// Look through all but the first control point
-	for (var i = 1; i < this.controlPoint.length; i++)
-	{
-		ctx.lineTo(this.controlPoint[i].x, this.controlPoint[i].y);
-	}
-
-	ctx.stroke();
-
-
-
 	this.updateLineParameters();
 
 
+	// Draw endpoints of line of best fit
+	this.fitPoint[0].draw();
+	this.fitPoint[1].draw();
+
+
+	ctx.beginPath();
+	ctx.strokeStyle = "black";
+	ctx.moveTo(this.fitPoint[0].x, this.fitPoint[0].y);
+	ctx.lineTo(this.fitPoint[1].x, this.fitPoint[1].y);
+	ctx.stroke();
 
 
 	// Draw average center
@@ -122,6 +122,7 @@ LinearReg.prototype.draw = function()
 // a point is added
 LinearReg.prototype.updateLineParameters = function()
 {
+	// Calculate average point.
 	var _avgx = 0;
 	var _avgy = 0;
 
@@ -136,7 +137,7 @@ LinearReg.prototype.updateLineParameters = function()
 
 
 
-
+	// Calculate slope and intersect of simple linear regression.
 	var numerator = 0;
 	var denom = 0;
 
@@ -146,8 +147,71 @@ LinearReg.prototype.updateLineParameters = function()
 		denom += Math.pow(this.controlPoint[i].x - this.avgx,  2);
 	}
 
-	this.beta = numerator/denom;
-	this.alpha = this.avgy - this.beta*this.avgx;
+	this.beta = numerator/denom; // Intersect
+	this.alpha = this.avgy - this.beta*this.avgx; // Slope
+
+
+
+	// Calculate the bounding points for the regression drawline.
+	var left_y = this.alpha;
+	var right_y = cvs.width * this.beta + this.alpha;
+	var top_x = -this.alpha / this.beta;
+	var bottom_x = (cvs.width-this.alpha) / this.beta;
+
+	var left = left_y >= 0 && left_y <= cvs.width;
+	var right = right_y >= 0 && right_y <= cvs.width;
+	var top = top_x >= 0 && top_x <= cvs.width;
+	var bottom = bottom_x >= 0 && bottom_x <= cvs.width;
+
+	if (top && right)
+	{
+		this.fitPoint[0].x = top_x;
+		this.fitPoint[0].y = 0;
+
+		this.fitPoint[1].x = cvs.width;
+		this.fitPoint[1].y = right_y;
+	}
+	else if (top && bottom)
+	{
+		this.fitPoint[0].x = top_x;
+		this.fitPoint[0].y = 0;
+
+		this.fitPoint[1].x = bottom_x;
+		this.fitPoint[1].y = cvs.height;
+	}
+	else if (top && left)
+	{
+		this.fitPoint[0].x = top_x;
+		this.fitPoint[0].y = 0;
+
+		this.fitPoint[1].x = 0;
+		this.fitPoint[1].y = left_y;
+	}
+	else if (right && bottom)
+	{
+		this.fitPoint[0].x = cvs.width;
+		this.fitPoint[0].y = right_y;
+
+		this.fitPoint[1].x = bottom_x;
+		this.fitPoint[1].y = cvs.height;
+	}
+	else if (right && left)
+	{
+		this.fitPoint[0].x = cvs.width;
+		this.fitPoint[0].y = right_y;
+
+		this.fitPoint[1].x = 0;
+		this.fitPoint[1].y = left_y;
+	}
+	else if (bottom && left)
+	{
+		this.fitPoint[0].x = bottom_x;
+		this.fitPoint[0].y = cvs.height;
+
+		this.fitPoint[1].x = 0;
+		this.fitPoint[1].y = left_y;
+	}
+
 };
 
 /*
