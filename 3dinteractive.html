@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Interactive 3D Viewer</h2>
+
+		<p>
+		<cmd>Click and drag</cmd> the mouse to move the orientation of the camera around the origin.  Use the <cmd>mouse wheel</cmd> to zoom in and out.
+		</p>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<p>
+		The "roll" of the 'camera' is clamped.  The reality of how that is done is more complicated, and has nothing to do with roll, hence the quotes.  In fact, the original 3D coordinates of the points are not saved; rotation and scaling transformations are simply performed on the only copy of the set of points.
+		</p>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="3dinteractive.js"></script>
+	</body>
+</html>

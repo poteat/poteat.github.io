@@ -9,5 +9,7 @@ document.write('\
 			<li><a href="generalizedbezier.html">Nth-order Bézier Curves</a></li>\
 			<li><a href="linear_regression.html">Simple Linear Regression</a></li>\
 			<li><a href="demingregression.html">Deming Regression</a></li>\
+			<li><a href="3dvisual.html">Simple 3D Visualization</a></li>\
+			<li><a href="3dinteractive.html">Interactive 3D View</a></li>\
 		</ul>\
 ');

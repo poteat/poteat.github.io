@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Simple 3D Visualization</h2>
+
+		<p>
+		This is a simple, by-scratch visualization of a set of 3000 points in 3D space.  The points were generated using the uniform random distribution U[-100, 100] on all three major axes.  Of note, this engine has no concept of a 'camera'.  In true 3D tradition, it simply rotates all of the points around the y-axis.
+		</p>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<p>
+		A more mathematically elegant way to do this is to have a 'Camera' object, that transforms 'World space' into 'Camera space', and then a 'View' object to transform 'Camera space' into 'View space', or the actual 2D projection.  As well, these transformations would be done using 'Matrix' objects.  Apparently, the "Introduction to 3D Visualization" course was not wasted on me.
+		</p>
+
+		<p>
+		Of note, I am not using WebGL, the web-based version of OpenGL, because I want to maintain capability with systems that don't have hardware acceleration.  Plus, I don't really need the power that GPUs would allow me; 3000 points is more than enough for my purposes.
+		</p>
+
+		<h3>Algorithmic pattern recognition of the above shape</h3>
+
+		<p>
+		How would an algorithm recognize a cube made of points?  To recognize any sort of arbitrary rectangular prism, with arbitrary orientation, it could do the following: Calculate the convex hull of the points, find local minima of some plane of best fit algorithm (perhaps total least distance, or otherwise) using a multi-agent hybrid algorithm (Hybrid in that it uses both Monte Carlo and traditional numerical derivatives to find local minima).
+		</p>
+
+		<p>
+		Specifically, this algorithm would assign multiple "searchers" to different places (stochastically) in the search space.  These searchers would individually search their local region for local minima, using numerical partial derivatives (or the 'gradient' of their local space).  If two searchers find the same local minima, remove one searcher.  You should pretty quickly have a list of planes of best fit, which should probably include the planes which correspond to the planes which make up the convex hull of the cube.
+		</p>
+
+		<p>
+		Perhaps that method would work on recognizing more than just cubes - perhaps most low-surface count 3D polygons.  The scoring function would have to be something other than orthogonal least squares, since I'm pretty sure that has no local minima in plane-of-best-fit.
+		</p>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="3dvisual.js"></script>
+	</body>
+</html>
