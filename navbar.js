@@ -11,5 +11,6 @@ document.write('\
 			<li><a href="demingregression.html">Deming Regression</a></li>\
 			<li><a href="3dvisual.html">Simple 3D Visualization</a></li>\
 			<li><a href="3dinteractive.html">Interactive 3D View</a></li>\
+			<li><a href="loadmrc.html">MRC Loader</a></li>\
 		</ul>\
 ');
