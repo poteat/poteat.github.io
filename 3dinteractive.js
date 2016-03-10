@@ -25,7 +25,7 @@ function init()
 
 	for (var i = 0; i < numPoints; i++)
 	{
-		p = new Point( (Math.random()*200)-100, (Math.random()*200)-100 , (Math.random()*200)-100 ); // -200 <= x <= 200
+		p = new Point( (Math.random()*200)-100, (Math.random()*200)-100 , (Math.random()*200)-100 ); // -100 <= x <= 100
 		points.push(p); 
 	}
 }
