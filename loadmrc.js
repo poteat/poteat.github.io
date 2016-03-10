@@ -7,49 +7,132 @@ var ctx = cvs.getContext('2d');
 
 var Mouse = new Mouse();
 
-
-clearInterval(mainloop);
-var mainloop = setInterval("main();",1000/fps);
+var DMap;
+var dataView;
 
 init();
 
+var mainloop;
+clearInterval(mainloop);
+
+
+
 function init()
 {
-	loadMRC();
-
-
+	loadMRC("density_map.mrc");
 }
 
 function main()
 {
 
+
+	Object.keys(DMap).forEach(function(key, i)
+	{
+		ctx.fillText(key + ": " + eval("DMap."+key), 15, 15 + i*15);
+	    // key: the name of the object key
+	    // index: the ordinal position of the key within the object 
+	});
+
+
+
 }
 
-function loadMRC()
+// Loads a MRC file (or any binary file) located on the web server.
+// It then populates a Density Map object with the corresponding data.
+function loadMRC(file)
 {
 	var oReq = new XMLHttpRequest();
-	oReq.open("GET", "/density_map.mrc", true);
+	oReq.open("GET", "/" + file, true);
 	oReq.responseType = "arraybuffer";
 
-	oReq.onload = function(oEvent)
+	oReq.onload = function (oEvent)
 	{
-  		blob = new Blob([oReq.response], {type: "application/octet-stream"});
-
-		reader = new FileReader();
-		reader.addEventListener("loadend", function()
+		var arrayBuffer = oReq.response; // Note: not oReq.responseText
+		if (arrayBuffer)
 		{
-			window.alert(reader.result[0]);
-		   // reader.result contains the contents of blob as a typed array
-		});
+			var byteArray = new Uint8Array(arrayBuffer);
 
-		reader.readAsArrayBuffer(blob);
+			dataView = new DataView(arrayBuffer);
+
+			DMap = new DensityMap();
+
+			mainloop = setInterval("main();",1000/fps);
+
+//			window.alert(DMap.gamma);
+
+//			for (var i = 0; i < byteArray.byteLength; i++)
+//			{
+//				window.alert(byteArray[i]);
+//	    	}
+		}
 	};
 
-	oReq.send();
+	oReq.send(null);
+}
+
+
+function readInt(i)
+{
+	i *= 4;
+	return dataView.getInt32(i, true);
+}
+
+function readFloat(i)
+{
+	i *= 4;
+	return dataView.getFloat32(i, true);
 }
 
 
 
+
+
+function DensityMap()
+{
+	this.nx = readInt(0);
+	this.ny = readInt(1);
+	this.nz = readInt(2);
+	this.mode = readInt(3);
+
+	this.nxstart = readInt(4);
+	this.nystart = readInt(5);
+	this.nzstart = readInt(6);
+
+	this.mx = readInt(7);
+	this.my = readInt(8);
+	this.mz = readInt(9);
+
+	this.xlength = readFloat(10);
+	this.ylength = readFloat(11);
+	this.zlength = readFloat(12);
+
+	this.alpha = readFloat(13);
+	this.beta = readFloat(14);
+	this.gamma = readFloat(15);
+
+	this.mapc = readInt(16);
+	this.mapr = readInt(17);
+	this.maps = readInt(18);
+
+	this.amin = readFloat(19);
+	this.amax = readFloat(20);
+	this.amean = readFloat(21);
+
+	this.ispg = readInt(22);
+	this.nsymbt = readInt(23);
+
+	// Extra 29 ints of storage space
+
+	this.xorigin = readFloat(23+29+1);
+	this.yorigin = readFloat(23+29+2);
+
+	this.nlabl = readInt(23+29+3);
+}
+
+DensityMap.prototype.draw = function()
+{
+
+};
 
 
 function Point(x, y, z, color = "black")
