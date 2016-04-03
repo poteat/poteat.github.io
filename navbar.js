@@ -13,5 +13,6 @@ document.write('\
 			<li><a href="3dinteractive.html">Interactive 3D View</a></li>\
 			<li><a href="loadmrc.html">MRC Loader</a></li>\
 			<li><a href="smoothbezier.html">Bézier Curve with Smoothing Parameter</a></li>\
+			<li><a href="imagestring.html">Image/String Converter</a></li>\
 		</ul>\
 ');

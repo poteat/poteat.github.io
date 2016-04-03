@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Wiremod Image/String Converter</h2>
+
+		<p>
+			Just a weekend project.  See the official <a href="https://github.com/wiremod/wire">Wiremod page</a> to get a little more info on what this is about.
+		</p>
+
+		<p>
+			<b>Drag an image onto the canvas to start.</b>
+		</p>
+
+		<p>
+			Zoom factor: <input type="text" value="4" id="zoom"></input>
+		</p>
+
+		<p>
+		<canvas id="canvas" width="256" height="256"></canvas>
+		</p>
+
+		<p>
+		<canvas id="zoom_canvas" width="0" height="0"></canvas>
+		</p>
+
+		<textarea cols="96" rows="32" font-size="5px" id="string_textarea"></textarea>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="imagestring.js"></script>
+	</body>
+</html>

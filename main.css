@@ -35,7 +35,14 @@ pre.sh_sourceCode
 	height: 500px;
 }
 
-#canvas
+textarea {
+	background-color: black;
+	color: lightgrey;
+	font-size: 5pt;
+	font-family: "Courier";
+} 
+
+canvas
 {
 	border: solid;
 	border-color: black;
