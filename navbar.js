@@ -14,5 +14,6 @@ document.write('\
 			<li><a href="loadmrc.html">MRC Loader</a></li>\
 			<li><a href="smoothbezier.html">Bézier Curve with Smoothing Parameter</a></li>\
 			<li><a href="imagestring.html">Image/String Converter</a></li>\
+			<li><a href="plane.html">Plane of Best Fit</a></li>\
 		</ul>\
 ');
