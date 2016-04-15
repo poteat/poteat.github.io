@@ -3,7 +3,7 @@ document.write('\
 			<li><a href="index.html">Home</a></li>\
 			<li><a href="pendulum.html">Pendulum</a></li>\
 			<li><a href="doublependulum.html">Double Pendulum</a></li>\
-			<li><a href="degeneratedouble.html">Gallery of Degenerate Phenomena</a></li>\
+			<li><a href="degeneratedouble.html">Pendulum Results</a></li>\
 			<li><a href="triplependulum.html">Triple Pendulum</a></li>\
 			<li><a href="bezier.html">Quadratic Bézier Curves</a></li>\
 			<li><a href="generalizedbezier.html">Nth-order Bézier Curves</a></li>\
@@ -15,5 +15,6 @@ document.write('\
 			<li><a href="smoothbezier.html">Bézier Curve with Smoothing Parameter</a></li>\
 			<li><a href="imagestring.html">Image/String Converter</a></li>\
 			<li><a href="plane.html">Plane of Best Fit</a></li>\
+			<li><a href="bspline.html">B-Splines</a></li>\
 		</ul>\
 ');
