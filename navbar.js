@@ -16,5 +16,6 @@ document.write('\
 			<li><a href="imagestring.html">Image/String Converter</a></li>\
 			<li><a href="plane.html">Plane of Best Fit</a></li>\
 			<li><a href="bspline.html">B-Splines</a></li>\
+			<li><a href="engine.html">Approximated Physics Engine</a></li>\
 		</ul>\
 ');

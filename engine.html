@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Approximated Physics Engine</h2>
+
+		<p>
+			Here, I am interested in developing a physical simulation framework whose goal is extensibility and interactivity, rather than theoretical accuracy.  However, it's not quite accurate enough for my tastes - Spring-pendulums do not approximate true pendulums well, even with high spring constants and small timesteps.  Even with no friction forces present in the simulation, energy is still lost due to approximation errors.
+		</p>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="engine.js"></script>
+	</body>
+</html>
