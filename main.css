@@ -29,6 +29,9 @@ pre.sh_sourceCode
   font-weight: normal;
 }
 
+table, th, td {
+    border: 1px solid black;
+}
 
 #footer
 {

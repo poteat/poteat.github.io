@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Multiple MRC Loader</h2>
+
+		<p>
+			<b>Click the 'Browse' button to upload and view your own MRC file.</b>
+		</p>
+
+		<table style="width:50%">
+			<tr>
+				<td>
+					Density File
+				</td>
+
+				<td>
+					Density Threshold
+				</td>
+
+				<td>
+					Draw Color
+				</td>
+
+				<td>
+					Del
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<input type="file" accept=".mrc" id="mrc_file_1"></input>
+				</td>
+
+				<td>
+					<input type="text" value="0.6" id="density_threshold_1"></input>
+				</td>
+
+				<td>
+					<input type="text" value="black" id="color_1">
+				</td>
+
+				<td>
+					<button>X</button>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<input type="file" accept=".mrc" id="mrc_file_2"></input>
+				</td>
+
+
+			</tr>
+		</table> 
+
+		<canvas id="canvas" width="700" height="700"></canvas>
+
+		<p>
+			Use the "density threshold" input to specify the minimum density necessary to draw the voxel.  Press 'enter' after specifying the number to update the visualization.
+		</p>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="multimrc.js"></script>
+	</body>
+</html>

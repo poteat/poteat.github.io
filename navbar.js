@@ -17,5 +17,6 @@ document.write('\
 			<li><a href="plane.html">Plane of Best Fit</a></li>\
 			<li><a href="bspline.html">B-Splines</a></li>\
 			<li><a href="engine.html">Approximated Physics Engine</a></li>\
+			<li><a href="multimrc.html">Multiple File MRC Viewer</a></li>\
 		</ul>\
 ');
