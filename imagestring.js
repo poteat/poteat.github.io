@@ -22,7 +22,10 @@ function init()
 	cvs.addEventListener("dragover", dragover, false);
 	cvs.addEventListener("drop", drop, false);
 
-	document.getElementById("string_textarea").value = "";
+	for (var i = 0, n = 8; i < n; i++)
+	{
+		document.getElementById("string_textarea" + i).value = "";
+	}
 }
 
 function main()
@@ -54,7 +57,11 @@ function main()
 		string += "" + R + "" + G + "" + B;
 	}
 
-	document.getElementById("string_textarea").value = string;
+	for (var i = 0, n = 8; i < n; i++)
+	{
+		document.getElementById("string_textarea" + i).value = string.substring(8091*i, 8091*(i+1));
+	}
+
 
 	var zoom_imgd = zoom_ctx.getImageData(0, 0, zoom_cvs.width, zoom_cvs.height);
 	var zoom_pix = zoom_imgd.data;
