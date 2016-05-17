@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>3D Surface Polynomial Rendering</h2>
+
+		<p>
+		Here, we parameterize a quadratic polynomial of three variables in such a way to simplify rendering.
+		</p>
+
+		<p>
+			<input type="file" accept=".mrc" id="mrc_file"></input>
+		</p>
+
+		<p>
+			Density threshold: <input type="text" value="0.8" id="density_threshold"></input>
+		</p>
+
+		<canvas id="canvas" width="600" height="600"></canvas>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="polynomial.js"></script>
+	</body>
+</html>
