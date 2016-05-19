@@ -338,6 +338,26 @@ Point.prototype.hasParent = function()
 
 
 
+function SelectButton(x, y, width, height, label)
+{
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+
+	
+}
+
+
+SelectButton.prototype.draw = function()
+{
+	ctx.beginPath();
+	ctx.rect(this.x, this.y, this.width, this.height);
+	ctx.stroke();
+};
+
+
+
 
 
 function Mouse()
@@ -433,6 +453,7 @@ cvs.addEventListener('mouseup', function(evt)
 cvs.addEventListener('dblclick', function(evt)
 {
 	var cID = Points.closest(Mouse);
+	var new_id = -1;
 
 	if (cID >= 0)
 	{
@@ -442,12 +463,21 @@ cvs.addEventListener('dblclick', function(evt)
 		}
 		else
 		{
-			Points.appendPoint(Mouse.x, Mouse.y);
+			new_id = Points.appendPoint(Mouse.x, Mouse.y);
 		}
 	}
 	else
 	{
-		Points.appendPoint(Mouse.x, Mouse.y);
+		new_id = Points.appendPoint(Mouse.x, Mouse.y);
+	}
+
+	if (new_id >= 0)
+	{
+		var closest = Points.closestToID(new_id);
+		if (Points.x[new_id].dist(Points.x[closest]) < 100)
+		{
+			Points.x[new_id].setParent(closest);
+		}
 	}
 }, false);
 

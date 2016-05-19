@@ -18,7 +18,7 @@ document.write('\
 			<li><a href="bspline.html">B-Splines</a></li>\
 			<li><a href="engine.html">Approximated Physics Engine</a></li>\
 			<li><a href="multimrc.html">Multiple File MRC Viewer</a></li>\
-			<li><a href="polynomial.html">Surface Polynomial Rendering</a></li>\
+			<li><a href="polynomial.html">Surface Polynomial Rendering and Optimization</a></li>\
 			<li><a href="tree.html">Tree Structures</a></li>\
 		</ul>\
 ');

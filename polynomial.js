@@ -27,7 +27,9 @@ function init()
 {
 	loadServerMRC("density_map.mrc");
 
-	var optimize_button_id = Create_ToggleButton(500, 20, 70, 25, "Optimize");
+	var optimize_button_id = Create_ToggleButton(450, 20, 120, 25, "Optimize Plane");
+	var optimize_button_id_2 = Create_ToggleButton(450, 50, 120, 25, "Optimize Curvature");
+
 
 	var A_x_id = Create_Slider(20, 20, 70, 20, "A_x", 10, -5, 5, 3);
 	var B_x_id = Create_Slider(100, 20, 70, 20, "B_x", 10, -5, 5, 3);
@@ -49,7 +51,7 @@ function init()
 
 	var array_of_sliders = [A_x_id, B_x_id, C_x_id, D_x_id, E_x_id, A_y_id, B_y_id, C_y_id, D_y_id, E_y_id, A_z_id, B_z_id, C_z_id, D_z_id, E_z_id];
 
-	Polynomial_Fit = new Polynomial("blue", optimize_button_id, array_of_sliders);
+	Polynomial_Fit = new Polynomial("blue", optimize_button_id, optimize_button_id_2, array_of_sliders);
 	Polynomial_Fit.generatePoints();
 }
 
@@ -352,7 +354,7 @@ DensityMap.prototype.draw = function()
 
 
 
-function Polynomial(color = "blue", optimize_button_id, array_of_sliders)
+function Polynomial(color = "blue", optimize_button_id, optimize_button_id_2, array_of_sliders)
 {
 	this.controlValues = [];
 
@@ -371,16 +373,15 @@ function Polynomial(color = "blue", optimize_button_id, array_of_sliders)
 
 	this.optimize_button_id = optimize_button_id; // This controls whether we do an automatic fit.
 
+	this.optimize_button_id_2 = optimize_button_id_2;
+
 	// These sliders control the current shape of the Polynomial.
 	this.sliders_array = array_of_sliders;
 }
 
 Polynomial.prototype.generatePoints = function()
 {
-	this.structure = this.structure.splice(0, 0);
-	this.points = this.points.splice(0, 0);
-
-	var size = 15;
+	var size = 10;
 	var step = 1;
 
 	var x_offset = 0;
@@ -390,6 +391,8 @@ Polynomial.prototype.generatePoints = function()
 	var x;
 	var y;
 	var z;
+
+	var p_i = 0;
 
 	var t_i = 0;
 
@@ -401,8 +404,10 @@ Polynomial.prototype.generatePoints = function()
 			y = this.controlValues[y_offset + 0]*t + this.controlValues[y_offset + 1]*u + this.controlValues[y_offset + 2] + this.controlValues[y_offset + 3]*Math.pow(t,2) + + this.controlValues[y_offset + 4]*Math.pow(u,2);
 			z = this.controlValues[z_offset + 0]*t + this.controlValues[z_offset + 1]*u + this.controlValues[z_offset + 2] + this.controlValues[z_offset + 3]*Math.pow(t,2) + + this.controlValues[z_offset + 4]*Math.pow(u,2);
 			var p = new Point(x, y, z, this.color);
-			this.structure.push(p);
-			this.points.push(p);
+			this.structure[p_i] = p;
+			this.points[p_i] = p;
+
+			p_i++;
 		}
 
 		t_i++;
@@ -416,6 +421,8 @@ Polynomial.prototype.draw = function()
 {
 	var active = ToggleButtons[this.optimize_button_id].isActivated();
 
+	var active_2 = ToggleButtons[this.optimize_button_id_2].isActivated();
+
 	for (var j = 0; j < this.sliders_array.length; j++)
 	{
 		Sliders[this.sliders_array[j]].setActive(active);
@@ -424,8 +431,11 @@ Polynomial.prototype.draw = function()
 	if (active)
 	{
 		this.optimize();
-
-
+	}
+	else if (active_2)
+	{
+		this.optimize_curve();
+		active = true;
 	}
 
 	var changed = false;
@@ -543,117 +553,85 @@ Polynomial.prototype.optimize = function()
 	var cut_off = 50;
 	var delta = .025;
 
+	var x_offset = 0;
+	var y_offset = 5;
+	var z_offset = 10;
 
-
-
-	var new_alpha = this.alpha;
-
-	this.alpha += delta;
-	var inc_score = base_score - this.score();
-	this.alpha -= delta;
-
-	this.alpha -= delta;
-	var dec_score = base_score - this.score();
-	this.alpha += delta;
-
-	if (inc_score > dec_score)
+	for (var i = x_offset; i < x_offset + 3; i++)
 	{
-		if (inc_score > cut_off)
-		{
-			new_alpha += delta;
-		}
-	}
-	else if (dec_score > inc_score)
-	{
-		if (dec_score > cut_off)
-		{
-			new_alpha -= delta;
-		}
+		this.optimizeParameter(i, base_score, cut_off, delta);
 	}
 
-
-
-	var new_beta = this.beta;
-
-	this.beta += delta;
-	var inc_score = base_score - this.score();
-	this.beta -= delta;
-
-	this.beta -= delta;
-	var dec_score = base_score - this.score();
-	this.beta += delta;
-
-	if (inc_score > dec_score)
+	for (var i = y_offset; i < y_offset + 3; i++)
 	{
-		if (inc_score > cut_off)
-		{
-			new_beta += delta;
-		}
-	}
-	else if (dec_score > inc_score)
-	{
-		if (dec_score > cut_off)
-		{
-			new_beta -= delta;
-		}
+		this.optimizeParameter(i, base_score, cut_off, delta);
 	}
 
-
-	var delta = .5;
-
-	var new_delta = this.delta;
-
-	this.delta += delta;
-	var inc_score = base_score - this.score();
-	this.delta -= delta;
-
-	this.delta -= delta;
-	var dec_score = base_score - this.score();
-	this.delta += delta;
-
-	if (inc_score > dec_score)
+	for (var i = z_offset; i < z_offset + 3; i++)
 	{
-		if (inc_score > cut_off)
-		{
-			new_delta += delta;
-		}
-	}
-	else if (dec_score > inc_score)
-	{
-		if (dec_score > cut_off)
-		{
-			new_delta -= delta;
-		}
+		this.optimizeParameter(i, base_score, cut_off, delta);
 	}
 
-
-
-
-	if (new_alpha > Math.PI)
-	{
-		new_alpha -= 2*Math.PI;
-	}
-	else if (new_alpha < -Math.PI)
-	{
-		new_alpha += 2*Math.PI;
-	}
-
-
-	if (new_beta > Math.PI)
-	{
-		new_beta -= 2*Math.PI;
-	}
-	else if (new_beta < -Math.PI)
-	{
-		new_beta += 2*Math.PI;
-	}
-
-
-	this.alpha = new_alpha;
-	this.beta = new_beta;
-	this.delta = new_delta;
 };
 
+Polynomial.prototype.optimize_curve = function()
+{
+	var base_score = this.score();
+	var cut_off = 50;
+	var delta = .01;
+
+	var x_offset = 0;
+	var y_offset = 5;
+	var z_offset = 10;
+
+	for (var i = x_offset + 3; i < x_offset + 5; i++)
+	{
+		this.optimizeParameter(i, base_score, cut_off, delta);
+	}
+
+	for (var i = y_offset + 3; i < y_offset + 5; i++)
+	{
+		this.optimizeParameter(i, base_score, cut_off, delta);
+	}
+
+	for (var i = z_offset + 3; i < z_offset + 5; i++)
+	{
+		this.optimizeParameter(i, base_score, cut_off, delta);
+	}
+
+};
+
+Polynomial.prototype.optimizeParameter = function(vector_index, base_score, cut_off, delta)
+{
+	this.controlValues[vector_index] += delta;
+
+	this.generatePoints();
+
+	var inc_score = this.score();
+
+	this.controlValues[vector_index] -= 2*delta;
+
+	this.generatePoints();
+
+	var dec_score = this.score();
+
+	this.controlValues[vector_index] += delta;
+
+	if (inc_score <= dec_score)
+	{
+		if (base_score - inc_score > cut_off)
+		{
+			this.controlValues[vector_index] += delta;
+		}
+	}
+	else if (dec_score < inc_score)
+	{
+		if (base_score - dec_score > cut_off)
+		{
+			this.controlValues[vector_index] -= delta;
+		}
+	}
+};
 
 
 
