@@ -341,6 +341,8 @@ LinearReg.prototype.score = function()
 	{
 		sum += Math.pow(this.fitLine.dist(this.controlPoint[i].x, this.controlPoint[i].y), 2);
 	}
+
+	return sum;
 }
 
 
