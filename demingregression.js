@@ -336,12 +336,11 @@ LinearReg.prototype.optimizeFit = function()
 LinearReg.prototype.score = function()
 {
 	var sum = 0;
-	alert(0);
-	/*
+	
 	for (var i = 0; i < this.controlPoint.length; i++)
 	{
 		sum += Math.pow(this.fitLine.dist(this.controlPoint[i].x, this.controlPoint[i].y), 2);
-	}*/
+	}
 }
 
 
