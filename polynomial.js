@@ -7,15 +7,10 @@ var yaw = 0;
 var pitch = 0;
 var zoom = 1;
 
-var density_threshold = 0.65;
-
 var cvs = document.getElementById('canvas');
 var ctx = cvs.getContext('2d');
 
 var Mouse = new Mouse();
-
-var DMap;
-var dataView;
 
 var Polynomial_Fit;
 
@@ -93,8 +88,20 @@ function main()
 
 }
 
-// Loads a MRC file (or any binary file) located on the web server.
-// It then populates a Density Map object with the corresponding data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function loadServerMRC(file)
 {
 	var oReq = new XMLHttpRequest();
@@ -113,56 +120,15 @@ function loadServerMRC(file)
 			DMap = new DensityMap();
 
 			mainloop = setInterval("main();",1000/fps);
-
-//			window.alert(DMap.gamma);
-
-//			for (var i = 0; i < byteArray.byteLength; i++)
-//			{
-//				window.alert(byteArray[i]);
-//	    	}
 		}
 	};
 
 	oReq.send(null);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+var DMap;
+var dataView;
+var density_threshold = 0.65;
 
 document.getElementById('density_threshold').addEventListener('change', changeDensity, false);
 
@@ -193,15 +159,6 @@ function loadLocalMRC(evt)
 			dataView = new DataView(arrayBuffer);
 
 			DMap = new DensityMap();
-
-//			mainloop = setInterval("main();",1000/fps);
-
-//			window.alert(DMap.gamma);
-
-//			for (var i = 0; i < byteArray.byteLength; i++)
-//			{
-//				window.alert(byteArray[i]);
-//	    	}
 		}
 	};
 }
@@ -330,15 +287,27 @@ function DensityMap()
 
 DensityMap.prototype.draw = function()
 {
-
-
 	for (var i = 0; i < this.points.length; i++)
 	{
 		this.points[i].draw();
 	}
-
-
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

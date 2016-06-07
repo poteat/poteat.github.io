@@ -16,6 +16,19 @@
 
 		<h2>Spline Surface</h2>
 
+		<p>
+		This applet allows one to interactively define spline surfaces that may fit arbitrary electron density maps (in the .mrc format).  A scoring function is provided, which tracks the current R^2 score of the chosen fit.  This is calculated from the sum of the minimum squared distance of every density point to the surface.
+		</p>
+
+		<p>
+		To increase the ease of manually defining splines, this applet automatically fits the chosen density map to the x-z plane.  This is done using a "plane of best fit" iterative optimization algorithm, that was previously discussed.
+		</p>
+
+		<input type="file" accept=".mrc" id="mrc_file"></input>
+		<input type="text" value="0.8" id="density_threshold"></input>
+
+		<p></p>
+
 		<canvas id="canvas" width="500" height="500"></canvas>
 
 		<div id = "footer"></div>
