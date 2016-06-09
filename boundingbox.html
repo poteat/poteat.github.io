@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Minimum-Area Oriented Bounding Box</h2>
+
+		<p>
+		The 2-dimensional minimum-area oriented bounding box problem is as follows:  Given a set of coplanar points, how can we efficiently find the smallest rectangle which encloses these points?  Additionally, that rectangle can be of any angle with respect to the coordinate system.
+		</p>
+
+		<p>
+		One interesting estimate for the solution, which guarantees "pretty good" results in O(n) time is a natural extension of orthogonal linear regression.  Specifically, we assume that the minimum rectangle is aligned to the orthogonal "line of best fit" of the point set.  The parameters for this fit can be found in O(n) time.
+		</p>
+
+		<p>
+		This method appears to work when points who are not members of the convex-set do not have much of an effect on the result.  Specifically, when the non-convex-set points are evenly distributed, the method generates acceptable boxes.
+		</p>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="boundingbox.js"></script>
+	</body>
+</html>
