@@ -1,6 +1,6 @@
 
 
-var fps = 60;
+var fps = 30;
 var fov = 250;
 var yaw = 10;
 var pitch = 0.7;
@@ -13,6 +13,7 @@ var Mouse = new Mouse();
 
 var BSurface;
 var BPlane;
+var DemingRegressor;
 
 clearInterval(mainloop);
 var mainloop = setInterval("main();",1000/fps);
@@ -22,12 +23,14 @@ var mainloop = setInterval("main();",1000/fps);
 function init()
 {
 	loadServerMRC("density_map.mrc");
-	BSurface = new Surface(4, 4, 20, 20);
+	BSurface = new Surface(2, 2, 20, 20);
 
 	worldTransformation()
 
 	BPlane = new Plane(1, -3, 1, 2);
 }
+
+var initial_fit = false;
 
 function main()
 {
@@ -39,11 +42,13 @@ function main()
 		DMap.draw();
 	}
 
+	ctx.fillStyle = "black";
+
 	ctx.fillText("Yaw:   " + yaw, 10, 10);
 	ctx.fillText("Pitch: " + pitch, 10, 20);
 	ctx.fillText("Zoom:  " + zoom, 10, 30);
 
-	if (DMap != undefined)
+	if (DMap != undefined && !initial_fit)
 	{
 		var score = DMap.score();
 
@@ -72,6 +77,10 @@ function main()
 				DMap.scaleFactor(zoom, true);
 				DMap.rotateY(yaw);
 				DMap.rotateX(pitch);
+
+				// Calculate bounding box
+				DMap.calculateBoundingBox();
+				initial_fit = true;
 			}
 
 			BPlane.draw();
@@ -83,18 +92,15 @@ function main()
 		}
 	}
 
+	if (initial_fit)
+	{
+		var score = DMap.softScore();
 
+		ctx.fillText("Score: " + score, 10, 50);
+	}
 }
 
-
-
-
-
-
-
-
-
-
+function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
 
 
 
@@ -393,6 +399,134 @@ DensityMap.prototype.score = function()
 	return sum_dist;
 };
 
+DensityMap.prototype.softScore = function()
+{
+	var sum_dist = 0;
+
+	for (var i = 0; i < this.structure.length; i++)
+	{
+		sum_dist += this.structure[i].refineProjection();
+	}
+
+	return sum_dist;
+}
+
+DensityMap.prototype.calculateBoundingBox = function()
+{
+	var avgx = 0;
+	var avgz = 0;
+	for (var i = 0; i < this.structure.length; i++)
+	{
+		avgx += this.structure[i].x;
+		avgz += this.structure[i].z;
+	}
+
+	avgx /= this.structure.length;
+	avgz /= this.structure.length;
+
+	var vr_x = 0; // Variance of x
+	var vr_z = 0; // Variance of z
+	var covr = 0; // Covariance of x and z
+	for (var i = 0; i < this.structure.length; i++)
+	{
+		var delta_x = this.structure[i].x - avgx;
+		var delta_z = this.structure[i].z - avgz;
+
+		vr_x += Math.pow(delta_x, 2);
+		vr_z += Math.pow(delta_z, 2);
+		covr = delta_x * delta_z;
+	}
+	vr_x /= (this.structure.length - 1);
+	vr_z /= (this.structure.length - 1);
+	covr /= (this.structure.length - 1);
+
+	slope = (vr_z - vr_x + Math.sqrt(Math.pow(vr_z-vr_x, 2) + 4*Math.pow(covr, 2)))/(2*covr);
+	intersect = avgz - slope*avgx;
+
+	var min_dist = 1;
+	var max_dist = -1;
+	var min_dist_id = -1;
+	var max_dist_id = -1;
+	var min_proj_dist = 1;
+	var max_proj_dist = -1;
+	var min_proj_dist_id = -1;
+	var max_proj_dist_id = -1;
+
+	var m = slope;
+	var b = intersect;
+
+	for (var i = 0; i < this.structure.length; i++)
+	{
+		var dist = this.structure[i].distFromLine(m, b);
+
+		if (dist < min_dist)
+		{
+			min_dist = dist;
+			min_dist_id = i;
+		}
+
+		if (dist > max_dist)
+		{
+			max_dist = dist;
+			max_dist_id = i;
+		}
+
+		var x = this.structure[i].x;
+		var z = this.structure[i].z;
+
+		var projection_x = (x + m*(z - b))/(Math.pow(m, 2) + 1);
+		var projection_z = (m*(x + m*z) + b)/(Math.pow(m, 2) + 1);
+
+		var direction = sign(projection_x - avgx);
+
+		var proj_dist = direction*Math.sqrt(Math.pow(projection_x - avgx,2) + Math.pow(projection_z - avgz, 2));
+
+		if (proj_dist < min_proj_dist)
+		{
+			min_proj_dist = proj_dist;
+			min_proj_dist_id = i;
+		}
+
+		if (proj_dist > max_proj_dist)
+		{
+			max_proj_dist = proj_dist;
+			max_proj_dist_id = i;
+		}
+
+		this.structure[i].color = "black";
+	}
+
+	
+	this.points[min_dist_id].color = "purple";
+	this.points[min_dist_id].size = 5;
+	this.points[max_dist_id].color = "purple";
+	this.points[max_dist_id].size = 5;
+
+	this.points[min_proj_dist_id].color = "green";
+	this.points[min_proj_dist_id].size = 5;
+	this.points[max_proj_dist_id].color = "green";
+	this.points[max_proj_dist_id].size = 5;
+
+	var p1 = this.structure[min_dist_id];
+	var p2 = this.structure[min_proj_dist_id];
+	var p3 = this.structure[max_dist_id];
+	var p4 = this.structure[max_proj_dist_id];
+
+	BSurface.setControlPoints(p1, p2, p3, p4);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -443,7 +577,6 @@ function binom(n, k)
 
 function Surface(X, Y, T, U)
 {
-
 	this.X = X;
 	this.Y = Y;
 	this.T = T;
@@ -512,11 +645,37 @@ function Surface(X, Y, T, U)
 		}
 	}
 
+	this.updatePoints();
+};
 
+// Given points define a square, with points either going in clockwise, or counter-clockwise, order.
+Surface.prototype.setControlPoints = function(p1, p2, p3, p4)
+{
+	X = 2;
+	Y = 2;
+
+	// Control points
+	this.array_of_ids = new Array(X); // Populate 'x' slots
+	this.array_of_transformed_ids = new Array(X);
+
+	for (var i = 0; i < X; i++)
+	{
+		this.array_of_ids[i] = new Array(Y);
+		this.array_of_transformed_ids[i] = new Array(Y);
+	}
+
+	this.array_of_ids[0][0] = Points.createPoint(p1.x, p1.y, p1.z, "black", 2);
+	this.array_of_ids[0][1] = Points.createPoint(p2.x, p2.y, p2.z, "black", 2);
+	this.array_of_ids[1][1] = Points.createPoint(p3.x, p3.y, p3.z, "black", 2);
+	this.array_of_ids[1][0] = Points.createPoint(p4.x, p4.y, p4.z, "black", 2);
+
+	this.array_of_transformed_ids[0][0] = Points.createPoint(p1.x, p1.y, p1.z, "black", 2);
+	this.array_of_transformed_ids[0][1] = Points.createPoint(p2.x, p2.y, p2.z, "black", 2);
+	this.array_of_transformed_ids[1][1] = Points.createPoint(p3.x, p3.y, p3.z, "black", 2);
+	this.array_of_transformed_ids[1][0] = Points.createPoint(p4.x, p4.y, p4.z, "black", 2);
 
 	this.updatePoints();
-
-
+	worldTransformation();
 };
 
 Surface.prototype.draw = function()
@@ -796,6 +955,7 @@ Surface.prototype.calc = function(x_i, y_i, t, u)
 
 };
 
+// Given surface parameters t and u, this function returns the xyz coordinates of that surface location.
 Surface.prototype.calc_coords = function(t, u)
 {
 	var sum_x = 0;
@@ -879,7 +1039,117 @@ Surface.prototype.parametersClosestToCoordinates = function(x_i, y_i, z_i)
 	}
 };
 
+Surface.prototype.optimize = function()
+{
+	//for (var i = 0; i < this.X; i++)
+	{
+		//for (var j = 0; j < this.Y; j++)
+		{
+			this.optimizeControlPoint(0, 0);
+		}
+	}
+};
 
+Surface.prototype.optimizeControlPoint = function(i, j)
+{
+	var base_score = DMap.softScore();
+	var cut_off = 2;
+	var delta = .1;
+
+	var p = Points.x[this.array_of_ids[i][j]];
+
+
+	var new_x = p.x;
+
+	p.x += delta;
+	this.updatePoints();
+	var inc_score = base_score - DMap.softScore();
+	//alert(DMap.softScore());
+	p.x -= delta;
+
+	p.x -= delta;
+	this.updatePoints();
+	var dec_score = base_score - DMap.softScore();
+	p.x += delta;
+
+//	alert(inc_score);
+
+	if (inc_score > dec_score)
+	{
+		if (inc_score > cut_off)
+		{
+			new_x += delta;
+		}
+	}
+	else if (dec_score > inc_score)
+	{
+		if (dec_score > cut_off)
+		{
+			new_x -= delta;
+		}
+	}
+
+
+
+	var new_y = p.y;
+
+	p.y += delta;
+	this.updatePoints();
+	var inc_score = base_score - DMap.softScore();
+	p.y -= delta;
+
+	p.y -= delta;
+	this.updatePoints();
+	var dec_score = base_score - DMap.softScore();
+	p.y += delta;
+
+	if (inc_score > dec_score)
+	{
+		if (inc_score > cut_off)
+		{
+			new_y += delta;
+		}
+	}
+	else if (dec_score > inc_score)
+	{
+		if (dec_score > cut_off)
+		{
+			new_y -= delta;
+		}
+	}
+
+
+	var new_z = p.z;
+
+	p.z += delta;
+	this.updatePoints();
+	var inc_score = base_score - DMap.softScore();
+	p.z -= delta;
+
+	p.z -= delta;
+	this.updatePoints();
+	var dec_score = base_score - DMap.softScore();
+	p.z += delta;
+
+	if (inc_score > dec_score)
+	{
+		if (inc_score > cut_off)
+		{
+			new_z += delta;
+		}
+	}
+	else if (dec_score > inc_score)
+	{
+		if (dec_score > cut_off)
+		{
+			new_z -= delta;
+		}
+	}
+
+	p.x = new_x;
+	p.y = new_y;
+	p.z = new_z;
+};
 
 
 
@@ -1354,9 +1624,13 @@ Point.prototype.rotateAxis = function(ang, ux, uy, uz)
 	this.z = z_new;
 };
 
+// This function does a brute-force shortest distance calculation of O(n) given a set of draw points of the surface.
 Point.prototype.closestSurfaceDistance = function()
 {
 	var mindist = 9999999999999;
+
+	var min_i = -1;
+	var min_j = -1;
 
 	for (var i = 0; i < BSurface.T; i++)
 	{
@@ -1368,15 +1642,52 @@ Point.prototype.closestSurfaceDistance = function()
 
 			if (dist < mindist)
 			{
+				min_i = i;
+				min_j = j;
 				mindist = dist;
 			}
 		}
 	}
 
+	this.t = min_i/(BSurface.T-1);
+	this.u = min_j/(BSurface.U-1);
+
 	return mindist;
 };
 
+// Using the Newton-Raphson numerical method, this function refines the point's T and U projection values.
+// It assumes that the current values are within the topological neighborhood of the point.
+Point.prototype.refineProjection = function()
+{
+	var h = .00001;
+	var t = this.t;
+	var u = this.u;
 
+	var t_change = h*h*(this.distToParameter(t+h,u)-this.distToParameter(t,u))/(this.distToParameter(t+2*h,u)-2*this.distToParameter(t+h,u)+this.distToParameter(t,u));
+	var u_change = h*h*(this.distToParameter(t,u+h)-this.distToParameter(t,u))/(this.distToParameter(t,u+2*h)-2*this.distToParameter(t,u+h)+this.distToParameter(t,u));
+
+	alert(t_change);
+
+	this.t += t_change;
+	this.u += u_change;
+
+	return this.distToParameter(this.t, this.u);
+};
+
+// Given surface parameters t and u, this function returns the distance to that surface location.
+Point.prototype.distToParameter = function(t, u)
+{
+	var coords = BSurface.calc_coords(t, u);
+	var x = coords[0];
+	var y = coords[1];
+	var z = coords[2];
+	return Math.sqrt(Math.pow(this.x-x, 2) + (this.y-y, 2) + (this.z-z, 2));
+};
+
+Point.prototype.distFromLine = function(slope, intersect)
+{
+	return (slope*this.x - this.z + intersect)/Math.sqrt(Math.pow(slope, 2) + 1);
+};
 
 
 

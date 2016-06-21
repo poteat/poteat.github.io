@@ -20,7 +20,7 @@ function init()
 	Points.createPoint(400, 300);
 	Points.createPoint(300, 400);
 	Points.createPoint(100, 250);
-	Points.createPoint(50, 50);
+	Points.createPoint(150, 150);
 }
 
 function main()
@@ -376,11 +376,9 @@ _Points.prototype.findEdgePoints = function()
 			var projection_x = (x + m*(y - b))/(Math.pow(m, 2) + 1);
 			var projection_y = (m*(x + m*y) + b)/(Math.pow(m, 2) + 1);
 
-			var direction = -sign(projection_x*this.avgx + projection_y*this.avgy);
+			var direction = sign(projection_x - this.avgx);
 
-			alert(direction);
-
-			var proj_dist = Math.sqrt(Math.pow(projection_x - this.avgx,2) + Math.pow(projection_y - this.avgy, 2));
+			var proj_dist = direction*Math.sqrt(Math.pow(projection_x - this.avgx,2) + Math.pow(projection_y - this.avgy, 2));
 
 			if (proj_dist < min_proj_dist)
 			{
@@ -398,11 +396,46 @@ _Points.prototype.findEdgePoints = function()
 		}
 	}
 
+	
 	this.x[min_dist_id].color = "purple";
 	this.x[max_dist_id].color = "purple";
 
-	//this.x[min_proj_dist_id].color = "green";
+	this.x[min_proj_dist_id].color = "green";
 	this.x[max_proj_dist_id].color = "green";
+	
+
+	// Calculating four "corner" box points.
+
+	var p1 = this.calculateBoxPoint(min_dist_id, min_proj_dist_id);
+	var p2 = this.calculateBoxPoint(min_dist_id, max_proj_dist_id);
+	var p3 = this.calculateBoxPoint(max_dist_id, max_proj_dist_id);
+	var p4 = this.calculateBoxPoint(max_dist_id, min_proj_dist_id);
+
+	ctx.beginPath();
+	ctx.strokeStyle = "black";
+	ctx.moveTo(p1.x, p1.y);
+	ctx.lineTo(p2.x, p2.y);
+	ctx.lineTo(p3.x, p3.y);
+	ctx.lineTo(p4.x, p4.y);
+	ctx.lineTo(p1.x, p1.y);
+	ctx.stroke();
+
+
+};
+
+_Points.prototype.calculateBoxPoint = function(p1_id, p2_id)
+{
+	var p1 = this.x[p1_id]; // First point has slope of m
+	var p2 = this.x[p2_id]; // Second point has slope of 1/m
+
+	var m1 = this.slope;
+	var m2 = -1/m1;
+
+	var x = (-m2*p2.x+p2.y+m1*p1.x-p1.y)/(m1-m2);
+	var y = m1*x-m1*p1.x+p1.y;
+
+	var p = new Point(x, y, "blue");
+	return p;
 };
 
 function Point(x, y, color = "black")
