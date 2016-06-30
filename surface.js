@@ -23,7 +23,7 @@ var mainloop = setInterval("main();",1000/fps);
 function init()
 {
 	loadServerMRC("density_map.mrc");
-	BSurface = new Surface(2, 2, 20, 20);
+	BSurface = new Surface(2, 2, 20, 20, 3, 3);
 
 	worldTransformation()
 
@@ -94,9 +94,9 @@ function main()
 
 	if (initial_fit)
 	{
-		var score = DMap.softScore();
+		var acc_score = DMap.score();
 
-		ctx.fillText("Score: " + score, 10, 50);
+		ctx.fillText("Hard Score: " + acc_score, 10, 60);
 	}
 }
 
@@ -405,7 +405,8 @@ DensityMap.prototype.softScore = function()
 
 	for (var i = 0; i < this.structure.length; i++)
 	{
-		sum_dist += this.structure[i].refineProjection();
+		this.structure[i].closestResolutionPoint();
+		sum_dist += Math.pow(this.structure[i].refineProjection(),2);
 	}
 
 	return sum_dist;
@@ -575,12 +576,14 @@ function binom(n, k)
 	return prod;
 }
 
-function Surface(X, Y, T, U)
+function Surface(X, Y, T, U, RX, RY)
 {
 	this.X = X;
 	this.Y = Y;
 	this.T = T;
 	this.U = U;
+	this.RX = RX;
+	this.RY = RY;
 
 	// Control points
 	this.array_of_ids = new Array(X); // Populate 'x' slots
@@ -621,6 +624,22 @@ function Surface(X, Y, T, U)
 
 
 
+
+	// Resolution points
+	this.array_of_resolution_ids = new Array(RX);
+
+	for (var i = 0; i < RX; i++)
+	{
+		this.array_of_resolution_ids[i] = new Array(RY);
+	}
+
+	for (var i = 0; i < RX; i++)
+	{
+		for (var j = 0; j < RY; j++)
+		{
+			this.array_of_resolution_ids[i][j] = Points.createPoint(0, 0, 0);
+		}
+	}
 
 
 	// Draw points
@@ -923,6 +942,29 @@ Surface.prototype.updatePoints = function()
 		}
 		t += delta_t;
 	}
+
+
+
+	// Update resolution points
+
+	var RX = this.RX;
+	var RY = this.RY;
+
+	for (var x = 0; x < RX; x++)
+	{
+		for (var y = 0; y < RY; y++)
+		{
+			var t = x/(RX-1);
+			var u = y/(RY-1);
+
+			var p = Points.x[this.array_of_resolution_ids[x][y]];
+
+			var r = this.calc_coords(t, u);
+			p.x = r[0];
+			p.y = r[1];
+			p.z = r[2];
+		}
+	}
 };
 
 Surface.prototype.calc = function(x_i, y_i, t, u)
@@ -1038,123 +1080,6 @@ Surface.prototype.parametersClosestToCoordinates = function(x_i, y_i, z_i)
 
 	}
 };
-
-Surface.prototype.optimize = function()
-{
-	//for (var i = 0; i < this.X; i++)
-	{
-		//for (var j = 0; j < this.Y; j++)
-		{
-			this.optimizeControlPoint(0, 0);
-		}
-	}
-};
-
-Surface.prototype.optimizeControlPoint = function(i, j)
-{
-	var base_score = DMap.softScore();
-	var cut_off = 2;
-	var delta = .1;
-
-	var p = Points.x[this.array_of_ids[i][j]];
-
-
-	var new_x = p.x;
-
-	p.x += delta;
-	this.updatePoints();
-	var inc_score = base_score - DMap.softScore();
-	//alert(DMap.softScore());
-	p.x -= delta;
-
-	p.x -= delta;
-	this.updatePoints();
-	var dec_score = base_score - DMap.softScore();
-	p.x += delta;
-
-//	alert(inc_score);
-
-	if (inc_score > dec_score)
-	{
-		if (inc_score > cut_off)
-		{
-			new_x += delta;
-		}
-	}
-	else if (dec_score > inc_score)
-	{
-		if (dec_score > cut_off)
-		{
-			new_x -= delta;
-		}
-	}
-
-
-
-	var new_y = p.y;
-
-	p.y += delta;
-	this.updatePoints();
-	var inc_score = base_score - DMap.softScore();
-	p.y -= delta;
-
-	p.y -= delta;
-	this.updatePoints();
-	var dec_score = base_score - DMap.softScore();
-	p.y += delta;
-
-	if (inc_score > dec_score)
-	{
-		if (inc_score > cut_off)
-		{
-			new_y += delta;
-		}
-	}
-	else if (dec_score > inc_score)
-	{
-		if (dec_score > cut_off)
-		{
-			new_y -= delta;
-		}
-	}
-
-
-	var new_z = p.z;
-
-	p.z += delta;
-	this.updatePoints();
-	var inc_score = base_score - DMap.softScore();
-	p.z -= delta;
-
-	p.z -= delta;
-	this.updatePoints();
-	var dec_score = base_score - DMap.softScore();
-	p.z += delta;
-
-	if (inc_score > dec_score)
-	{
-		if (inc_score > cut_off)
-		{
-			new_z += delta;
-		}
-	}
-	else if (dec_score > inc_score)
-	{
-		if (dec_score > cut_off)
-		{
-			new_z -= delta;
-		}
-	}
-
-	p.x = new_x;
-	p.y = new_y;
-	p.z = new_z;
-};
-
-
-
-
-
 
 
 
@@ -1524,6 +1449,11 @@ Point.prototype.dist2d = function(obj)
 	return Math.sqrt( Math.pow(this.x2d - obj.x, 2) + Math.pow(this.y2d - obj.y, 2) );
 };
 
+Point.prototype.distSquare = function(obj)
+{
+	return Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y, 2) + Math.pow(this.z - obj.z, 2);
+};
+
 Point.prototype.planeDist = function(A, B, C, D)
 {
 	return Math.abs(A*this.x + B*this.y + C*this.z + D)/Math.sqrt(A*A + B*B + C*C);
@@ -1624,6 +1554,40 @@ Point.prototype.rotateAxis = function(ang, ux, uy, uz)
 	this.z = z_new;
 };
 
+
+// From a set of N fixed initial res points, find the closest.
+// Initial condition from which to refine using gradient descent.
+Point.prototype.closestResolutionPoint = function()
+{
+	var min_dist = 99999999999;
+	var min_x = -1;
+	var min_y = -1;
+
+	for (var x = 0; x < BSurface.RX; x++)
+	{
+		for (var y = 0; y < BSurface.RY; y++)
+		{
+			var p = Points.x[BSurface.array_of_resolution_ids[x][y]];
+			var dist = this.distSquare(p);
+
+			if (dist < min_dist)
+			{
+				min_dist = dist;
+				min_x = x;
+				min_y = y;
+			}
+
+		}
+	}
+
+	this.t = min_x/(BSurface.RX - 1);
+	this.u = min_y/(BSurface.RY - 1);
+
+	return Math.sqrt(min_dist);
+};
+
+
+
 // This function does a brute-force shortest distance calculation of O(n) given a set of draw points of the surface.
 Point.prototype.closestSurfaceDistance = function()
 {
@@ -1655,23 +1619,63 @@ Point.prototype.closestSurfaceDistance = function()
 	return mindist;
 };
 
-// Using the Newton-Raphson numerical method, this function refines the point's T and U projection values.
-// It assumes that the current values are within the topological neighborhood of the point.
 Point.prototype.refineProjection = function()
 {
-	var h = .00001;
+	var delta = 1/(BSurface.RX*2);
+	var threshold = 0;
+
 	var t = this.t;
 	var u = this.u;
 
-	var t_change = h*h*(this.distToParameter(t+h,u)-this.distToParameter(t,u))/(this.distToParameter(t+2*h,u)-2*this.distToParameter(t+h,u)+this.distToParameter(t,u));
-	var u_change = h*h*(this.distToParameter(t,u+h)-this.distToParameter(t,u))/(this.distToParameter(t,u+2*h)-2*this.distToParameter(t,u+h)+this.distToParameter(t,u));
+	var dist = this.distToParameter(t, u);
 
-	alert(t_change);
+	var previous_state = 0;
 
-	this.t += t_change;
-	this.u += u_change;
+	for (var i = 0; i < 10; i++)
+	{
+		var dist_inc = this.distToParameter(t + delta, u);
+		var dist_dec = this.distToParameter(t - delta, u);
 
-	return this.distToParameter(this.t, this.u);
+		if (dist_inc < dist_dec)
+		{
+			if (dist - dist_inc > threshold)
+			{
+				t = t + delta;
+				dist = dist_inc;
+			}
+			else if (previous_state == 1)
+			{
+				delta /= 2;
+			}
+			previous_state = 1;
+		}
+		else if (dist_dec < dist_inc)
+		{
+			if (dist - dist_dec > threshold)
+			{
+				t = t - delta;
+				dist = dist_dec;
+			}
+			else if (previous_state == -1)
+			{
+				delta /= 2;
+			}
+			previous_state = -1;
+		}
+	}
+
+	if (t > 1)
+	{
+		t = 1;
+	}
+	else if (t < 0)
+	{
+		t = 0;
+	}
+
+	this.t = t;
+
+	return this.distToParameter(this.t, u);
 };
 
 // Given surface parameters t and u, this function returns the distance to that surface location.

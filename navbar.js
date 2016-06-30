@@ -23,5 +23,7 @@ document.write('\
 			<li><b><a href="surface.html">Surface Fitting Program v1</a></b></li>\
 			<li><a href="boundingbox.html">O(n) Minimum Oriented Bounding Box Heuristic</a></li>\
 			<li><a href="curveprojection.html">Point Projection onto Arbitrary Curves/Surfaces</a></li>\
+			<li><a href="surfaceprojection.html">Surface-Point Projection</a></li>\
+			<li><a href="autosurfacefit.html">Surface Fitting Program v2</a></li>\
 		</ul>\
 ');
