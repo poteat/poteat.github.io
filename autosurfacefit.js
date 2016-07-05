@@ -97,10 +97,21 @@ function main()
 
 			if (change < .000001)
 			{
+				//alert(Math.pow(BPlane.B,2) + Math.pow(BPlane.A,2));
+			}
+
+			if (change < .000001)
+			{
 				// Rotate DMap
 				BPlane.finished = true;
 
-				DMap.rotateAxis(Math.acos(BPlane.B), BPlane.C, 0, -BPlane.A);
+				var mag = Math.sqrt(Math.pow(BPlane.A,2) + Math.pow(BPlane.C,2));
+
+				var ux = BPlane.C / mag;
+				var uy = 0;
+				var uz = -BPlane.A / mag;
+
+				DMap.rotateAxis(Math.acos(BPlane.B), ux, uy, uz);
 
 				DMap.updateTransformedPoints();
 
@@ -407,7 +418,7 @@ DensityMap.prototype.updateTransformedPoints = function()
 };
 
 var t = 0;
-var lim = 10;
+var lim = 20;
 
 DensityMap.prototype.draw = function()
 {
@@ -418,43 +429,7 @@ DensityMap.prototype.draw = function()
 
 	if (t == lim)
 	{
-		var min_t = 0;
-		var max_t = 1;
-		var min_u = 0;
-		var max_u = 1;
-
-		for (var i = 0; i < this.points.length; i++)
-		{
-			var p = this.points[i];
-			p.findClosestResPoint();
-			p.refineProjection();
-
-			if (p.t < min_t)
-			{
-				min_t = p.t;
-			}
-
-			if (p.t > max_t)
-			{
-				max_t = p.t;
-			}
-
-			if (p.u < min_u)
-			{
-				min_u = p.u;
-			}
-
-			if (p.u > max_u)
-			{
-				max_u = p.u;
-			}
-
-			this.min_t = min_t;
-			this.max_t = max_t;
-			this.min_u = min_u;
-			this.max_u = max_u;
-		}
-		t = 0;
+		this.updateProjection();
 	}
 	else
 	{
@@ -479,6 +454,47 @@ DensityMap.prototype.draw = function()
 			ctx.stroke();
 	}
 };
+
+DensityMap.prototype.updateProjection = function()
+{
+	var min_t = 0;
+	var max_t = 1;
+	var min_u = 0;
+	var max_u = 1;
+
+	for (var i = 0; i < this.points.length; i++)
+	{
+		var p = this.points[i];
+		p.findClosestResPoint();
+		p.refineProjection();
+
+		if (p.t < min_t)
+		{
+			min_t = p.t;
+		}
+
+		if (p.t > max_t)
+		{
+			max_t = p.t;
+		}
+
+		if (p.u < min_u)
+		{
+			min_u = p.u;
+		}
+
+		if (p.u > max_u)
+		{
+			max_u = p.u;
+		}
+
+		this.min_t = min_t;
+		this.max_t = max_t;
+		this.min_u = min_u;
+		this.max_u = max_u;
+	}
+	t = 0;
+}
 
 DensityMap.prototype.rotateAxis = function(ang, ux, uy, uz)
 {
@@ -764,6 +780,9 @@ Surface.prototype.setControlPoints = function(array_of_points)
 		}
 	}
 
+	this.updatePoints();
+	DMap.updateProjection();
+
 //	this.points[0][0] = array_of_points[0][0];
 //	this.points[0][3] = array_of_points[0][1];
 //	this.points[3][0] = array_of_points[1][0];
@@ -824,10 +843,11 @@ Surface.prototype.updatePoints = function()
 };
 
 var opt_t = 0;
-var opt_lim = 10;
+var opt_lim = 20;
+var count = 0;
 
 Surface.prototype.draw = function()
-{
+{alert(Math.pow(BPlane.B,2) + Math.pow(BPlane.A,2));
 	if (!BPlane.finished || this.finished)
 	{
 		opt_t = 0;
@@ -852,7 +872,16 @@ Surface.prototype.draw = function()
 
 		if (score == new_score)
 		{
-			this.finished = true;
+			if (count > 5)
+			{
+				this.finished = true;
+				count = 0;
+			}
+			count++;
+		}
+		else
+		{
+			count = 0;
 		}
 
 		opt_t = 0;
@@ -1065,7 +1094,7 @@ Surface.prototype.optimizeControlPoint = function(p)
 	var delta_y = 1;
 	var delta_z = 1;
 
-	var threshold = 1;
+	var threshold = 5;
 
 	var score = DMap.score();
 
@@ -1328,10 +1357,10 @@ Plane.prototype.generatePoints = function()
 
 	if (max_i == 0)
 	{
-		var size = 100;
-		for (var y = -size; y <= size; y += 10)
+		var size = 20;
+		for (var y = -size; y <= size; y += 2)
 		{
-			for (var z = -size; z <= size; z += 10)
+			for (var z = -size; z <= size; z += 2)
 			{
 				var x = (-this.D - this.B*y - this.C*z)/this.A;
 				var p = new Point(x, y, z, this.color);
@@ -1343,10 +1372,10 @@ Plane.prototype.generatePoints = function()
 	}	
 	else if (max_i == 1) // If 'B' is the highest term, generate y-vals
 	{
-		var size = 100;
-		for (var x = -size; x <= size; x += 10)
+		var size = 20;
+		for (var x = -size; x <= size; x += 2)
 		{
-			for (var z = -size; z <= size; z += 10)
+			for (var z = -size; z <= size; z += 2)
 			{
 				var y = (-this.D - this.A*x - this.C*z)/this.B;
 				var p = new Point(x, y, z, this.color);
@@ -1358,10 +1387,10 @@ Plane.prototype.generatePoints = function()
 	}
 	else if (max_i == 2) // If 'C' is the highest term, generate z-vals
 	{
-		var size = 100;
-		for (var x = -size; x <= size; x += 10)
+		var size = 20;
+		for (var x = -size; x <= size; x += 2)
 		{
-			for (var y = -size; y <= size; y += 10)
+			for (var y = -size; y <= size; y += 2)
 			{
 				var z = (-this.D - this.A*x - this.B*y)/this.C;
 				var p = new Point(x, y, z, this.color);
@@ -1421,7 +1450,7 @@ Plane.prototype.score = function()
 Plane.prototype.optimize = function()
 {
 	var base_score = this.score();
-	var cut_off = 50;
+	var cut_off = 0;
 	var delta = .025;
 
 	var new_alpha = this.alpha;
@@ -1929,9 +1958,27 @@ Point.prototype.rotateZ = function(angle)
 
 Point.prototype.rotateAxis = function(ang, ux, uy, uz)
 {
-	var x_new = this.x*(Math.cos(ang) + Math.pow(ux, 2)*(1-Math.cos(ang))) + this.y*(uy*ux*(1-Math.cos(ang))+uz*Math.sin(ang)) + this.z*(uz*ux*(1-Math.cos(ang))-uy*Math.sin(ang));
-	var y_new = this.x*(ux*uy*(1-Math.cos(ang))-uz*Math.sin(ang)) + this.y*(Math.cos(ang)+Math.pow(uy,2)*(1-Math.cos(ang))) + this.z*(uz*uy*(1-Math.cos(ang))+ux*Math.sin(ang));
-	var z_new = this.x*(ux*uz*(1-Math.cos(ang))+uy*Math.sin(ang)) + this.y*(uy*uz*(1-Math.cos(ang))-ux*Math.sin(ang)) + this.z*(Math.cos(ang)+Math.pow(uz,2)*(1-Math.cos(ang)));
+	//var x_new = this.x*(Math.cos(ang) + Math.pow(ux, 2)*(1-Math.cos(ang))) + this.y*(uy*ux*(1-Math.cos(ang))+uz*Math.sin(ang)) + this.z*(uz*ux*(1-Math.cos(ang))-uy*Math.sin(ang));
+	//var y_new = this.x*(ux*uy*(1-Math.cos(ang))-uz*Math.sin(ang)) + this.y*(Math.cos(ang)+Math.pow(uy,2)*(1-Math.cos(ang))) + this.z*(uz*uy*(1-Math.cos(ang))+ux*Math.sin(ang));
+	//var z_new = this.x*(ux*uz*(1-Math.cos(ang))+uy*Math.sin(ang)) + this.y*(uy*uz*(1-Math.cos(ang))-ux*Math.sin(ang)) + this.z*(Math.cos(ang)+Math.pow(uz,2)*(1-Math.cos(ang)));
+
+	var m_11 = Math.cos(ang) + Math.pow(ux,2)*(1-Math.cos(ang));
+	var m_12 = ux*uy*(1-Math.cos(ang))-uz*Math.sin(ang);
+	var m_13 = ux*uz*(1-Math.cos(ang))+uy*Math.sin(ang);
+
+	var m_21 = uy*ux*(1-Math.cos(ang))+uz*(Math.sin(ang));
+	var m_22 = Math.cos(ang) + Math.pow(uy,2)*(1-Math.cos(ang));
+	var m_23 = uy*uz*(1-Math.cos(ang))-ux*Math.sin(ang);
+
+	var m_31 = uz*ux*(1-Math.cos(ang))-uy*Math.sin(ang);
+	var m_32 = uz*uy*(1-Math.cos(ang))+ux*Math.sin(ang);
+	var m_33 = Math.cos(ang) + Math.pow(uz,2)*(1-Math.cos(ang));
+
+	var x_new = this.x*m_11 + this.y*m_21 + this.z*m_31;
+	var y_new = this.x*m_12 + this.y*m_22 + this.z*m_32;
+	var z_new = this.x*m_13 + this.y*m_23 + this.z*m_33;
+
+	alert(x_new);
 
 	this.x = x_new;
 	this.y = y_new;
