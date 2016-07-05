@@ -604,7 +604,7 @@ Projection.prototype.refineProjection = function(i)
 
 	var gap = 1/(BSurface.RX - 1);
 
-	var iterations = 20;
+	var iterations = 30;
 
 	var delta_t = gap/iterations;
 	var delta_u = gap/iterations;
@@ -684,24 +684,6 @@ Projection.prototype.refineProjection = function(i)
 	}
 
 	ctx.fillText("Delta: " + delta_t, 20, 40);
-
-	if (t > 1)
-	{
-		t = 1;
-	}
-	else if (t < 0)
-	{
-		t = 0;
-	}
-
-	if (u > 1)
-	{
-		u = 1;
-	}
-	else if (u < 0)
-	{
-		u = 0;
-	}
 
 	p.t = t;
 	p.u = u;

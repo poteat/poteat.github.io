@@ -11,7 +11,7 @@
 	var fov = 250;
 	var yaw = 10;
 	var pitch = 0.7;
-	var zoom = 1;
+	var zoom = 4;
 
 	// Canvas and drawing DOM objects
 	var cvs = document.getElementById('canvas');
@@ -44,18 +44,20 @@ function init()
 
 	BProj = new Projection();
 
-	// BProj.appendPoint(0, 50, 0);
+//	BProj.appendPoint(0, 50, 0);
 
 	updateTransformedPoints();
 }
 
 
-
+var desired_control_points = 4;
 
 // Main program control loop, responsible for draw calls.
 function main()
 {
 	ctx.clearRect(0, 0, cvs.width, cvs.height);
+
+//	BProj.draw();
 
 	BSurface.draw();
 	if (DMap != undefined)
@@ -72,8 +74,10 @@ function main()
 		ctx.fillText("Normalized Score: " + normalized, 10, 30);
 		ctx.fillText("Number of points: " + DMap.points.length, 10, 40);
 
-		if (BSurface.finished)
+		if (BSurface.finished && BSurface.X < desired_control_points)
 		{
+			BSurface.incrementControlPoints();
+			BSurface.finished = false;
 			ctx.fillText("Surface-Fitting Completed", 10, 50);
 		}
 
@@ -252,6 +256,7 @@ function loadLocalMRC(evt)
 			if (BPlane != undefined)
 			{
 				BPlane = new Plane(1, -3, 1, 2);
+				BSurface.finished = false;
 				// Refit the new image
 			}
 		}
@@ -370,7 +375,7 @@ function DensityMap()
 				var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
 				if (density > density_threshold)
 				{
-					var scale = 5;
+					var scale = 1; // This was so hilariously stupid.  Used to be '5'.
 					var p = new Point((x - x_avg)*scale, (y - y_avg)*scale, (z - z_avg)*scale);
 					var p2 = new Point(0, 0, 0);
 					this.points.push(p);
@@ -380,6 +385,12 @@ function DensityMap()
 		}
 	}
 
+	// Min and max parameter projections of voxel data points
+	//  Used to decide how much of surface to draw.
+	this.min_t = 0;
+	this.max_t = 1;
+	this.min_u = 0;
+	this.max_u = 1;
 
 	this.updateTransformedPoints();
 }
@@ -407,13 +418,42 @@ DensityMap.prototype.draw = function()
 
 	if (t == lim)
 	{
+		var min_t = 0;
+		var max_t = 1;
+		var min_u = 0;
+		var max_u = 1;
+
 		for (var i = 0; i < this.points.length; i++)
 		{
 			var p = this.points[i];
 			p.findClosestResPoint();
 			p.refineProjection();
-		}
 
+			if (p.t < min_t)
+			{
+				min_t = p.t;
+			}
+
+			if (p.t > max_t)
+			{
+				max_t = p.t;
+			}
+
+			if (p.u < min_u)
+			{
+				min_u = p.u;
+			}
+
+			if (p.u > max_u)
+			{
+				max_u = p.u;
+			}
+
+			this.min_t = min_t;
+			this.max_t = max_t;
+			this.min_u = min_u;
+			this.max_u = max_u;
+		}
 		t = 0;
 	}
 	else
@@ -549,22 +589,26 @@ DensityMap.prototype.calculateBoundingBox = function()
 	}
 
 	
-	this.points[min_dist_id].color = "purple";
-	this.points[min_dist_id].size = 5;
-	this.points[max_dist_id].color = "purple";
-	this.points[max_dist_id].size = 5;
-
-	this.points[min_proj_dist_id].color = "green";
-	this.points[min_proj_dist_id].size = 5;
-	this.points[max_proj_dist_id].color = "green";
-	this.points[max_proj_dist_id].size = 5;
-
 	var p1 = this.points[min_dist_id];
 	var p2 = this.points[min_proj_dist_id];
 	var p3 = this.points[max_dist_id];
 	var p4 = this.points[max_proj_dist_id];
 
-	var array = [[p1,p2], [p4,p3]]
+	var p1_T = this.points_T[min_dist_id];
+	var p2_T = this.points_T[min_proj_dist_id];
+	var p3_T = this.points_T[max_dist_id];
+	var p4_T = this.points_T[max_proj_dist_id];
+
+	p1_T.color = "green";
+	p3_T.color = "green";
+	p2_T.color = "purple";
+	p4_T.color = "purple";
+	p1_T.size = 5;
+	p2_T.size = 5;
+	p3_T.size = 5;
+	p4_T.size = 5;
+
+	var array = [[p1,p2], [p4,p3]];
 
 	BSurface.setControlPoints(array);
 };
@@ -697,9 +741,6 @@ function Surface(X, Y, T, U)
 
 Surface.prototype.setControlPoints = function(array_of_points)
 {
-
-
-	/*
 	this.X = array_of_points.length;
 	this.Y = array_of_points[0].length;
 
@@ -716,20 +757,20 @@ Surface.prototype.setControlPoints = function(array_of_points)
 			var p_original = array_of_points[i][j]
 			var p = new Point(0, 0, 0);
 			p.moveTo(p_original);
-			var p2 = new Point(0, 0, 0);
+			var p2 = new Point(0, 0, 0, "black", 4);
 
 			this.controlPoints[i][j] = p;
 			this.controlPoints_T[i][j] = p2;
 		}
-	}*/
+	}
 
-	this.points[0][0] = array_of_points[0][0];
-	this.points[0][3] = array_of_points[0][1];
-	this.points[3][0] = array_of_points[1][0];
-	this.points[3][3] = array_of_points[1][1];
+//	this.points[0][0] = array_of_points[0][0];
+//	this.points[0][3] = array_of_points[0][1];
+//	this.points[3][0] = array_of_points[1][0];
+//	this.points[3][3] = array_of_points[1][1];
 
-	this.updatePoints();
-	this.updateTransformedPoints();
+//	this.updatePoints();
+//	this.updateTransformedPoints();
 }
 
 Surface.prototype.updatePoints = function()
@@ -738,8 +779,23 @@ Surface.prototype.updatePoints = function()
 	{
 		for (var j = 0; j < this.U; j++)
 		{
-			var t = 2*i/(this.T-1)-.5;
-			var u = 2*j/(this.U-1)-.5;
+			if (DMap != undefined)
+			{
+				var size_t = DMap.max_t - DMap.min_t;
+				var size_u = DMap.max_u - DMap.min_u;
+				var min_t = DMap.min_t;
+				var min_u = DMap.min_u;
+			}
+			else
+			{
+				var size_t = 1;
+				var size_u = 1;
+				var min_t = 0;
+				var min_u = 0;
+			}
+
+			var t = size_t*i/(this.T-1) + min_t;
+			var u = size_u*j/(this.U-1) + min_u;
 
 			var coords = this.calc(t, u);
 			var p = this.drawPoints[i][j];
@@ -796,7 +852,7 @@ Surface.prototype.draw = function()
 
 		if (score == new_score)
 		{
-			this.finished = false;
+			this.finished = true;
 		}
 
 		opt_t = 0;
@@ -1003,13 +1059,13 @@ Surface.prototype.basis = function(t, i, n)
 
 Surface.prototype.optimizeControlPoint = function(p)
 {
-	var iterations = 4;
+	var iterations = 7;
 
 	var delta_x = 1;
 	var delta_y = 1;
 	var delta_z = 1;
 
-	var threshold = 10;
+	var threshold = 1;
 
 	var score = DMap.score();
 
@@ -1158,7 +1214,36 @@ Surface.prototype.updateTransformedPoints = function()
 	}
 }
 
+Surface.prototype.incrementControlPoints = function()
+{
+	var x = this.X + 1;
+	var y = this.Y + 1;
 
+	var controlPoints = new Array(x);
+	var controlPoints_T = new Array(x);
+
+	for (var i = 0; i < x; i++)
+	{
+		controlPoints[i] = new Array(y);
+		controlPoints_T[i] = new Array(y);
+
+		for (var j = 0; j < y; j++)
+		{
+			var t = i/(x-1)
+			var u = j/(y-1)
+			
+			coords = this.calc(t, u);
+
+			controlPoints[i][j] = new Point(coords[0], coords[1], coords[2]);
+			controlPoints_T[i][j] = new Point(0, 0, 0, "black", 4);
+		}
+	}
+
+	this.X++;
+	this.Y++;
+	this.controlPoints = controlPoints;
+	this.controlPoints_T = controlPoints_T;
+}
 
 
 
@@ -1517,6 +1602,97 @@ Projection.prototype.draw = function()
 	}
 }
 
+Projection.prototype.refineProjection = function(i)
+{
+	var p = this.points[i];
+
+	var gap = 1/(BSurface.RX - 1);
+
+	var iterations = 30;
+
+	var delta_t = 2*gap/iterations;
+	var delta_u = 2*gap/iterations;
+
+	var threshold = 0;
+
+	var t = p.t;
+	var u = p.u;
+	var dist = p.distToParameter(t, u);
+
+	var previous_state_t = 0;
+	var previous_state_u = 0;
+
+	for (var i = 0; i < iterations; i++)
+	{
+		var dist_inc = p.distToParameter(t + delta_t, u);
+		var dist_dec = p.distToParameter(t - delta_t, u);
+
+		if (dist_inc < dist_dec)
+		{
+			if (dist - dist_inc > threshold)
+			{
+				t = t + delta_t;
+				dist = dist_inc;
+			}
+			else if (previous_state_t == 1)
+			{
+				delta_t /= 2;
+			}
+			previous_state_t = 1;
+		}
+		else if (dist_dec < dist_inc)
+		{
+			if (dist - dist_dec > threshold)
+			{
+				t = t - delta_t;
+				dist = dist_dec;
+			}
+			else if (previous_state_t == -1)
+			{
+				delta_t /= 2;
+			}
+			previous_state_t = -1;
+		}
+
+
+		var dist_inc = p.distToParameter(t, u + delta_u);
+		var dist_dec = p.distToParameter(t, u - delta_u);
+
+		if (dist_inc < dist_dec)
+		{
+			if (dist - dist_inc > threshold)
+			{
+				u = u + delta_u;
+				dist = dist_inc;
+			}
+			else if (previous_state_u == 1)
+			{
+				delta_u /= 2;
+			}
+			previous_state_u = 1;
+		}
+		else if (dist_dec < dist_inc)
+		{
+			if (dist - dist_dec > threshold)
+			{
+				u = u - delta_u;
+				dist = dist_dec;
+			}
+			else if (previous_state_u == -1)
+			{
+				delta_u /= 2;
+			}
+			previous_state_u = -1;
+		}
+
+	}
+
+	ctx.fillText("T, U: " + t + " " + u, 20, 100);
+
+	p.t = t;
+	p.u = u;
+}
+
 Projection.prototype.findClosestResPoint = function(i)
 {
 	var p = this.points[i];
@@ -1810,10 +1986,10 @@ Point.prototype.refineProjection = function()
 {
 	var gap = 1/(BSurface.RX - 1);
 
-	var iterations = 10;
+	var iterations = 20;
 
-	var delta_t = gap/iterations;
-	var delta_u = gap/iterations;
+	var delta_t = 10*gap/iterations;
+	var delta_u = 10*gap/iterations;
 
 	var threshold = 0;
 
@@ -1888,24 +2064,6 @@ Point.prototype.refineProjection = function()
 		}
 	}
 
-	if (t > 1)
-	{
-		//t = 1;
-	}
-	else if (t < 0)
-	{
-		//t = 0;
-	}
-
-	if (u > 1)
-	{
-		//u = 1;
-	}
-	else if (u < 0)
-	{
-		//u = 0;
-	}
-
 	this.t = t;
 	this.u = u;
 };
@@ -1968,6 +2126,7 @@ cvs.addEventListener('mousemove', function(evt)
 		{
 			if (Mouse.held_type == 0)
 			{
+				BSurface.finished = false;
 				BSurface.moveControlPointTo2D(Mouse.held_id[0], Mouse.held_id[1], Mouse.x, Mouse.y);
 				BSurface.updatePoints();
 			}
@@ -2004,6 +2163,7 @@ cvs.addEventListener('mousedown', function(evt)
 	var closest_dist = closest_control_point.dist2d(Mouse);
 	if (closest_dist < 15)
 	{
+		BSurface.finished = false;
 		Mouse.holding = true;
 		Mouse.held_id = closest_id;
 		Mouse.held_type = 0;
