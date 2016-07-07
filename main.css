@@ -38,7 +38,18 @@ table, th, td {
 	height: 500px;
 }
 
-textarea {
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: initial;
+
+    padding: 0 100px 0 100px;
+}
+
+textarea.imagestring {
 	background-color: black;
 	color: lightgrey;
 	font-size: 5pt;

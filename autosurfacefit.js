@@ -17,6 +17,8 @@
 	var cvs = document.getElementById('canvas');
 	var ctx = cvs.getContext('2d');
 
+	var dl = document.getElementById('surface_download_link');
+
 	// Global object declarations
 	var Mouse = new Mouse();
 	var BSurface;
@@ -50,7 +52,9 @@ function init()
 }
 
 
-var desired_control_points = 4;
+var desired_control_points = 1;
+
+var updated_pdb = false;
 
 // Main program control loop, responsible for draw calls.
 function main()
@@ -70,15 +74,75 @@ function main()
 		var score = DMap.score();
 		var normalized = Math.sqrt(score/DMap.points.length)
 
+		ctx.fillStyle = "black";
+
 		ctx.fillText("Score: " + score, 10, 20);
 		ctx.fillText("Normalized Score: " + normalized, 10, 30);
 		ctx.fillText("Number of points: " + DMap.points.length, 10, 40);
 
-		if (BSurface.finished && BSurface.X < desired_control_points)
+		if (BSurface.finished)
 		{
-			BSurface.incrementControlPoints();
-			BSurface.finished = false;
-			ctx.fillText("Surface-Fitting Completed", 10, 50);
+			if (BSurface.X < desired_control_points)
+			{
+				BSurface.incrementControlPoints();
+				BSurface.finished = false;
+				updated_pdb = false;
+			}
+			else
+			{
+				ctx.fillText("Surface-Fitting Completed", 10, 60);
+				dl.innerHTML = "Download Surface PDB";
+
+				if (updated_pdb == false)
+				{
+					var sample_points = DMap.generateCroppedSurface(200, 200);
+
+					// Undo plane and centering transformations
+					for (var i = 0; i < sample_points.length; i++)
+					{
+						sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz)
+						sample_points[i].x += DMap.x_avg - DMap.xorigin;
+						sample_points[i].y += DMap.y_avg - DMap.yorigin;
+						sample_points[i].z += DMap.z_avg - DMap.zorigin;
+					}
+
+					
+
+					var avg_x = 0
+					var avg_y = 0
+					var avg_z = 0
+
+					//alert(DMap.x_avg + " " + DMap.y_avg + " " + DMap.z_avg);
+
+					for (var i = 0; i < sample_points.length; i++)
+					{
+						avg_x += sample_points[i].x
+						avg_y += sample_points[i].y
+						avg_z += sample_points[i].z
+					}
+
+					avg_x /= sample_points.length;
+					avg_y /= sample_points.length;
+					avg_z /= sample_points.length;
+
+					alert(avg_x + " " + avg_y + " " + avg_z);
+
+					var string = generatePDBString(sample_points);
+
+					var file = generateTextFile(string);
+
+					dl.href = file;
+					dl.download = "points.pdb";
+
+					updated_pdb = true;
+				}
+			}
+		}
+		else
+		{
+			dl.innerHTML = "Waiting...";
+			dl.href = "";
+			updated_pdb = false;
 		}
 
 	}
@@ -97,21 +161,18 @@ function main()
 
 			if (change < .000001)
 			{
-				//alert(Math.pow(BPlane.B,2) + Math.pow(BPlane.A,2));
-			}
-
-			if (change < .000001)
-			{
 				// Rotate DMap
 				BPlane.finished = true;
 
 				var mag = Math.sqrt(Math.pow(BPlane.A,2) + Math.pow(BPlane.C,2));
 
-				var ux = BPlane.C / mag;
-				var uy = 0;
-				var uz = -BPlane.A / mag;
+				DMap.rot_ux = BPlane.C / mag;
+				DMap.rot_uy = 0;
+				DMap.rot_uz = -BPlane.A / mag;
 
-				DMap.rotateAxis(Math.acos(BPlane.B), ux, uy, uz);
+				DMap.rot_theta = Math.acos(BPlane.B);
+
+				DMap.rotateAxis(DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz);
 
 				DMap.updateTransformedPoints();
 
@@ -120,11 +181,6 @@ function main()
 			}
 
 			BPlane.draw();
-		}
-		else
-		{
-			ctx.fillText("Plane Score: " + BPlane.last_score, 10, 70);
-			ctx.fillText("Plane-Fitting Completed", 10, 80);
 		}
 	}
 }
@@ -152,9 +208,122 @@ function updateTransformedPoints()
 }
 
 
+function generatePDBString(points)
+{
+	var string = "";
 
+	for (var i = 0; i < points.length; i++)
+	{
+		if (i+1 < 10)
+		{
+			var space = "     ";
+		}
+		else if (i+1 < 100)
+		{
+			var space = "    ";
+		}
+		else if (i+1 < 1000)
+		{
+			var space = "   ";
+		}
+		else if (i+1 < 10000)
+		{
+			var space = "  ";
+		}
+		else
+		{
+			var space = " ";
+		}
 
+		var x = points[i].x;
+		var y = points[i].y;
+		var z = points[i].z;
 
+		var precision = 5;
+
+		if (x > -1 && x < 1)
+		{
+			var x = points[i].x.toPrecision(precision-1);
+
+			if (x > -.1 && x < .1)
+			{
+				var x = points[i].x.toPrecision(precision-2);
+			}
+		}
+		else
+		{
+			var x = points[i].x.toPrecision(precision);
+		}
+
+		if (x < 0)
+		{
+			var x_space = "";
+		}
+		else
+		{
+			var x_space = " ";
+		}
+
+		if (y > -1 && y < 1)
+		{
+			var y = points[i].y.toPrecision(precision-1);
+
+			if (y > -.1 && y < .1)
+			{
+				var y = points[i].y.toPrecision(precision-2);
+			}
+		}
+		else
+		{
+			var y = points[i].y.toPrecision(precision);
+		}
+
+		if (y < 0)
+		{
+			var y_space = "";
+		}
+		else
+		{
+			var y_space = " ";
+		}
+
+		if (z > -1 && z < 1)
+		{
+			var z = points[i].z.toPrecision(precision-1);
+
+			if (z > -.1 && z < .1)
+			{
+				var z = points[i].z.toPrecision(precision-2);
+			}
+		}
+		else
+		{
+			var z = points[i].z.toPrecision(precision);
+		}
+
+		if (z < 0)
+		{
+			var z_space = "";
+		}
+		else
+		{
+			var z_space = " ";
+		}
+
+		string += "ATOM " + space + (i+1) + "  H   HOH A   1     " + x_space + x + " " + y_space + y + " " + z_space + z + "                          \n";
+	}
+
+	return string;
+}
+
+function generateTextFile(string)
+{
+    var data = new Blob([string], {type: 'text/plain'});
+
+    file = window.URL.createObjectURL(data);
+
+    return file;
+}
 
 
 
@@ -180,7 +349,10 @@ function binomial(n, k)
 	return prod;
 }
 
-
+function clamp(num, min, max)
+{
+  return num < min ? min : num > max ? max : num;
+}
 
 
 
@@ -335,12 +507,13 @@ function DensityMap()
 	this.ispg = readInt(22);
 	this.nsymbt = readInt(23);
 
-	// Extra 29 ints of storage space
+	// Extra 25 ints of storage space
 
-	this.xorigin = readFloat(23+29+1);
-	this.yorigin = readFloat(23+29+2);
+	this.xorigin = readFloat(23+26);
+	this.yorigin = readFloat(23+27);
+	this.zorigin = readFloat(23+28);
 
-	this.nlabl = readInt(23+29+3);
+	//this.nlabl = readInt(23+29+3);
 
 	voxel = createArray(this.nx, this.ny, this.nz);
 
@@ -374,6 +547,10 @@ function DensityMap()
 	y_avg /= num;
 	z_avg /= num;
 
+	this.x_avg = x_avg;
+	this.y_avg = y_avg;
+	this.z_avg = z_avg;
+
 	this.points = new Array(); // Immutable data points
 	this.points_T = new Array(); // Points in camera space
 
@@ -386,7 +563,7 @@ function DensityMap()
 				var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
 				if (density > density_threshold)
 				{
-					var scale = 1; // This was so hilariously stupid.  Used to be '5'.
+					var scale = 1;
 					var p = new Point((x - x_avg)*scale, (y - y_avg)*scale, (z - z_avg)*scale);
 					var p2 = new Point(0, 0, 0);
 					this.points.push(p);
@@ -518,6 +695,64 @@ DensityMap.prototype.score = function()
 
 	return sum_dist;
 };
+
+DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
+{
+	this.updateProjection();
+
+	var size_t = this.max_t - this.min_t;
+	var delta_t = size_t/(num_X-1);
+
+	var size_u = this.max_u - this.min_u;
+	var delta_u = size_u/(num_Y-1);
+
+	// Instantiate a bit array of dimensions [num_x, num_y] to false.
+	var bit_array = new Array(num_X);
+	for (var i = 0; i < num_X; i++)
+	{
+		bit_array[i] = new Array(num_Y);
+
+		for (var j = 0; j < num_Y; j++)
+		{
+			bit_array[i][j] = false;
+		}
+	}
+
+	for (var i = 0; i < this.points.length; i++)
+	{
+		var p = this.points[i];
+		var t = p.t;
+		var u = p.u;
+
+		// Convert value to array coordinate
+		t = clamp(Math.round((t-this.min_t)/delta_t), 0, num_X-1);
+
+		u = clamp(Math.round((u-this.min_u)/delta_u), 0, num_Y-1);
+
+		bit_array[t][u] = true;
+	}
+
+	var points = new Array();
+
+	for (var i = 0; i < num_X; i++)
+	{
+		for (var j = 0; j < num_Y; j++)
+		{
+			if (bit_array[i][j] == true)
+			{
+				var t = i*delta_t + this.min_t;
+				var u = j*delta_u + this.min_u;
+
+				var coords = BSurface.calc(t, u);
+				var p = new Point(coords[0], coords[1], coords[2]);
+
+				points.push(p);
+			}
+		}
+	}
+
+	return points;
+}
 
 DensityMap.prototype.calculateBoundingBox = function()
 {
@@ -847,7 +1082,7 @@ var opt_lim = 20;
 var count = 0;
 
 Surface.prototype.draw = function()
-{alert(Math.pow(BPlane.B,2) + Math.pow(BPlane.A,2));
+{
 	if (!BPlane.finished || this.finished)
 	{
 		opt_t = 0;
@@ -872,7 +1107,7 @@ Surface.prototype.draw = function()
 
 		if (score == new_score)
 		{
-			if (count > 5)
+			if (count > 3)
 			{
 				this.finished = true;
 				count = 0;
@@ -1977,8 +2212,6 @@ Point.prototype.rotateAxis = function(ang, ux, uy, uz)
 	var x_new = this.x*m_11 + this.y*m_21 + this.z*m_31;
 	var y_new = this.x*m_12 + this.y*m_22 + this.z*m_32;
 	var z_new = this.x*m_13 + this.y*m_23 + this.z*m_33;
-
-	alert(x_new);
 
 	this.x = x_new;
 	this.y = y_new;
