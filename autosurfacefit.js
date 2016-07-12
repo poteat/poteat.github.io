@@ -52,7 +52,7 @@ function init()
 }
 
 
-var desired_control_points = 1;
+var desired_control_points = 4;
 
 var updated_pdb = false;
 
@@ -101,31 +101,11 @@ function main()
 					for (var i = 0; i < sample_points.length; i++)
 					{
 						sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz)
-						sample_points[i].x += DMap.x_avg - DMap.xorigin;
-						sample_points[i].y += DMap.y_avg - DMap.yorigin;
-						sample_points[i].z += DMap.z_avg - DMap.zorigin;
+
+						sample_points[i].x += DMap.x_avg
+						sample_points[i].y += DMap.y_avg
+						sample_points[i].z += DMap.z_avg
 					}
-
-					
-
-					var avg_x = 0
-					var avg_y = 0
-					var avg_z = 0
-
-					//alert(DMap.x_avg + " " + DMap.y_avg + " " + DMap.z_avg);
-
-					for (var i = 0; i < sample_points.length; i++)
-					{
-						avg_x += sample_points[i].x
-						avg_y += sample_points[i].y
-						avg_z += sample_points[i].z
-					}
-
-					avg_x /= sample_points.length;
-					avg_y /= sample_points.length;
-					avg_z /= sample_points.length;
-
-					alert(avg_x + " " + avg_y + " " + avg_z);
 
 					var string = generatePDBString(sample_points);
 
@@ -310,7 +290,7 @@ function generatePDBString(points)
 			var z_space = " ";
 		}
 
-		string += "ATOM " + space + (i+1) + "  H   HOH A   1     " + x_space + x + " " + y_space + y + " " + z_space + z + "                          \n";
+		string += "ATOM " + space + (i+1) + "  C   HOH A   1     " + x_space + x + " " + y_space + y + " " + z_space + z + "                          \n";
 	}
 
 	return string;
@@ -513,6 +493,13 @@ function DensityMap()
 	this.yorigin = readFloat(23+27);
 	this.zorigin = readFloat(23+28);
 
+	this.scale = this.xlength/this.mx; // The size of each voxel in Angstroms
+
+	if (this.scale != 1)
+	{
+		alert("PDB export of non-1 voxel size MRC's is unsupported");
+	}
+
 	//this.nlabl = readInt(23+29+3);
 
 	voxel = createArray(this.nx, this.ny, this.nz);
@@ -535,9 +522,9 @@ function DensityMap()
 				{
 					num++;
 
-					x_avg += x;
-					y_avg += y;
-					z_avg += z;
+					x_avg += (x + this.xorigin);
+					y_avg += (y + this.yorigin);
+					z_avg += (z + this.zorigin);
 				}
 			}
 		}
@@ -563,8 +550,8 @@ function DensityMap()
 				var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
 				if (density > density_threshold)
 				{
-					var scale = 1;
-					var p = new Point((x - x_avg)*scale, (y - y_avg)*scale, (z - z_avg)*scale);
+					var scale = this.scale;
+					var p = new Point(((x+this.xorigin) - x_avg)*scale, ((y+this.yorigin) - y_avg)*scale, ((z+this.zorigin) - z_avg)*scale);
 					var p2 = new Point(0, 0, 0);
 					this.points.push(p);
 					this.points_T.push(p2);
@@ -1323,13 +1310,13 @@ Surface.prototype.basis = function(t, i, n)
 
 Surface.prototype.optimizeControlPoint = function(p)
 {
-	var iterations = 7;
+	var iterations = 9;
 
 	var delta_x = 1;
 	var delta_y = 1;
 	var delta_z = 1;
 
-	var threshold = 5;
+	var threshold = .5;
 
 	var score = DMap.score();
 
