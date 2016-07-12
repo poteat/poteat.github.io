@@ -73,7 +73,7 @@ QuadraticBezier.prototype.draw = function()
 
 	if (ToggleButtons[this.optimize_button_id].activated)
 	{
-		for (var i = 0; i < 10; i++)
+		for (var i = 0; i < 20; i++)
 		{
 			this.findOptimalT();
 		}
@@ -105,9 +105,24 @@ QuadraticBezier.prototype.draw = function()
 
 	ctx.stroke();
 
+
+
+
+	ctx.stroke();
+
 	var arclength = this.arcLength();
 
 	ctx.fillText("Arc Length: " + arclength, 20, 20);
+
+
+
+	var subchord_arclength = this.arcLength(0, .5);
+	t_estimate = subchord_arclength/arclength;
+
+	//Sliders[this.smooth_slider_id].setValue(this.t);
+
+
+	ctx.fillText("Arc Estimate: " + t_estimate, 20, 30);
 };
 
 QuadraticBezier.prototype.updateControl = function()
@@ -128,20 +143,24 @@ QuadraticBezier.prototype.updateControl = function()
 	this.controlPoint[1].y = y;
 };
 
-QuadraticBezier.prototype.arcLength = function()
+QuadraticBezier.prototype.arcLength = function(min = 0, max = 1)
 {
-	var samples = 100;
-
-	var p = new Point(this.knot[0].x, this.knot[0].y);
-	var p_old = new Point(0, 0);
+	var samples = 10;
 	var totalLength = 0;
+
+	var p = new Point(0, 0);
+	var p_old = new Point(0, 0);
+
+	this.calc(min, p);
 
 	for (var i = 1; i <= samples; i++)
 	{
 		p_old.x = p.x;
 		p_old.y = p.y;
 
-		this.calc(i/samples, p);
+		var t = min + i*(max - min)/samples;
+
+		this.calc(t, p);
 
 		totalLength += p.dist(p_old.x, p_old.y);
 	}
@@ -167,7 +186,7 @@ QuadraticBezier.prototype.findOptimalT = function()
 	var score = this.arcLength();
 
 	var t = this.t;
-	var delta = .01;
+	var delta = .001;
 	var threshold = 0;
 
 	t += delta;
