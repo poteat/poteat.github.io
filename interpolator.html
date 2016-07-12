@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>3-Point Interpolator</h2>
+
+		<p>
+		<b>Problem Description:</b> Given a vector of N two-dimensional "knots", find the coordinates of the N Bézier control points that generates the shortest Bézier path which interpolates these knots.
+		</p>
+
+		<p>
+		The two exterior control points are always equal to the two exterior knots, since a Bézier curve is guaranteed to evaluate to the first and last control points at parameters t=0 and t=1 respectively.  In the quadratic case, there is only one more interior control point to find. 
+		</p>
+
+		<p>
+		In the quadratic case, there are an infinite amount of Bézier curves which pass through the interior knot.  However, there is only one such curve which has the shortest arc length.  We can generate all candidate Bézier curves by modifying our "t vector" which has only one element, exclusively between 0 and 1.
+		</p>
+
+		<p>
+		For a given "t" vector, we can calculate the positions of the interior control points by finding the inverse of a N by N matrix, where N is the total number of interior knots.  This matrix is guaranteed to have an inverse.  The matrix has no zero elements.  It is not yet known if there are any "clever" methods to solving these matrices.
+		</p>
+
+		<p>
+		For optimizing the "t vector", the program uses a simple 1-dimensional constant-delta gradient descent method, using the arc length as the scoring feature.  By inspection, for the quadratic case (at least), the optimal t value also minimizes the distance between the control point and the knot.
+		</p>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="interpolator.js"></script>
+	</body>
+</html>

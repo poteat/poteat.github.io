@@ -25,5 +25,6 @@ document.write('\
 			<li><a href="curveprojection.html">Point Projection onto Arbitrary Curves/Surfaces</a></li>\
 			<li><a href="surfaceprojection.html">Surface-Point Projection</a></li>\
 			<li><a href="autosurfacefit.html">Surface Fitting Program v2</a></li>\
+			<li><a href="interpolator.html">3-Point Interpolator</a></li>\
 		</ul>\
 ');
