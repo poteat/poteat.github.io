@@ -52,7 +52,7 @@ function init()
 }
 
 
-var desired_control_points = 4;
+var desired_control_points = 3;
 
 var updated_pdb = false;
 
@@ -112,7 +112,24 @@ function main()
 					var file = generateTextFile(string);
 
 					dl.href = file;
-					dl.download = "points.pdb";
+
+
+					// Build filename by appending "_SplineFit" to the end of the input file
+
+					var filename = DMap.filename;
+					var exploded_filename = filename.split(".");
+
+					var output_filename = "";
+
+					for (var i = 0; i < exploded_filename.length - 2; i++)
+					{
+						output_filename += (exploded_filename[i] + ".");
+					}
+					output_filename += (exploded_filename[i]);
+
+					output_filename += ("_SplineFit.pdb");
+
+					dl.download = output_filename;
 
 					updated_pdb = true;
 				}
@@ -368,6 +385,8 @@ function loadServerMRC(file)
 			dataView = new DataView(arrayBuffer);
 
 			DMap = new DensityMap();
+
+			DMap.filename = "sample.pdb";
 	
 			updateTransformedPoints();
 
@@ -390,7 +409,14 @@ function changeDensity(evt)
 
 	BPlane = new Plane(1, -3, 1, 2);
 
-	DMap = new DensityMap();
+	DMap_new = new DensityMap();
+
+	DMap_new.filename = DMap.filename;
+	DMap_new.extension = DMap.extension;
+
+	delete DMap;
+
+	DMap = DMap_new;
 }
 
 document.getElementById('mrc_file').addEventListener('change', loadLocalMRC, false);
@@ -399,20 +425,52 @@ function loadLocalMRC(evt)
 {
 	var file = evt.target.files[0];
 
+	var exploded_filename = (file.name).split(".");
+	var extension = exploded_filename[exploded_filename.length - 1];
+
 	var fileReader = new FileReader();
 
-	fileReader.readAsArrayBuffer(file);
-
-	fileReader.onload = function (oEvent)
+	if (extension == 'mrc')
 	{
-		var arrayBuffer = oEvent.target.result;
-		if (arrayBuffer)
+		fileReader.readAsArrayBuffer(file);
+
+		fileReader.onload = function (oEvent)
 		{
-			var byteArray = new Uint8Array(arrayBuffer);
+			var arrayBuffer = oEvent.target.result;
+			if (arrayBuffer)
+			{
+				var byteArray = new Uint8Array(arrayBuffer);
 
-			dataView = new DataView(arrayBuffer);
+				dataView = new DataView(arrayBuffer);
 
-			DMap = new DensityMap();
+				DMap = new DensityMap();
+
+				DMap.filename = file.name;
+				DMap.extension = extension;
+
+				updateTransformedPoints();
+
+				if (BPlane != undefined)
+				{
+					BPlane = new Plane(1, -3, 1, 2);
+					BSurface.finished = false;
+					// Refit the new image
+				}
+			}
+		};
+	}
+	else if (extension == 'pdb')
+	{
+		fileReader.readAsText(file);
+
+		fileReader.onload = function (oEvent)
+		{
+			var pdb_string = oEvent.target.result;
+
+			DMap = new DensityMap(pdb_string);
+
+			DMap.filename = file.name;
+			DMap.extension = extension;
 
 			updateTransformedPoints();
 
@@ -422,8 +480,9 @@ function loadLocalMRC(evt)
 				BSurface.finished = false;
 				// Refit the new image
 			}
-		}
-	};
+		};
+	}
+
 }
 
 
@@ -453,111 +512,86 @@ function createArray(length) {
 }
 
 
-function DensityMap()
+function DensityMap(pdb_string = "")
 {
-	this.nx = readInt(0);
-	this.ny = readInt(1);
-	this.nz = readInt(2);
-	this.mode = readInt(3);
-
-	this.nxstart = readInt(4);
-	this.nystart = readInt(5);
-	this.nzstart = readInt(6);
-
-	this.mx = readInt(7);
-	this.my = readInt(8);
-	this.mz = readInt(9);
-
-	this.xlength = readFloat(10);
-	this.ylength = readFloat(11);
-	this.zlength = readFloat(12);
-
-	this.alpha = readFloat(13);
-	this.beta = readFloat(14);
-	this.gamma = readFloat(15);
-
-	this.mapc = readInt(16);
-	this.mapr = readInt(17);
-	this.maps = readInt(18);
-
-	this.amin = readFloat(19);
-	this.amax = readFloat(20);
-	this.amean = readFloat(21);
-
-	this.ispg = readInt(22);
-	this.nsymbt = readInt(23);
-
-	// Extra 25 ints of storage space
-
-	this.xorigin = readFloat(23+26);
-	this.yorigin = readFloat(23+27);
-	this.zorigin = readFloat(23+28);
-
-	this.scale = this.xlength/this.mx; // The size of each voxel in Angstroms
-
-	if (this.scale != 1)
+	if (pdb_string == "")
 	{
-		alert("PDB export of non-1 voxel size MRC's is unsupported");
+		this.createFromMRC();
 	}
-
-	//this.nlabl = readInt(23+29+3);
-
-	voxel = createArray(this.nx, this.ny, this.nz);
-
-	var x_avg = 0;
-	var y_avg = 0;
-	var z_avg = 0;
-
-	var num = 0;
-
-	// Find center of data points (above threshold)
-	for (var z = 0; z < this.nz; z++)
+	else
 	{
-		for (var y = 0; y < this.ny; y++)
-		{
-			for (var x = 0; x < this.nx; x++)
-			{
-				var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
-				if (density > density_threshold)
-				{
-					num++;
+		lines = pdb_string.split("\n");
 
-					x_avg += (x + this.xorigin);
-					y_avg += (y + this.yorigin);
-					z_avg += (z + this.zorigin);
-				}
+		this.points = new Array();
+		this.points_T = new Array();
+
+		for (var i = 0; i < lines.length; i++)
+		{
+			var current_line = lines[i];
+
+			// Replace multiple space segments in line with one space each:
+			current_line_min = current_line.replace(/  +/g, ' ');
+
+			var datum = current_line_min.split(" ");
+			var type = datum[0];
+			if (type == "ATOM")
+			{
+				var coord_substring = current_line.substring(30, 55);
+				coord_substring = coord_substring.replace(/  +/g, ' ');
+				var coord_datum = coord_substring.split(" ");
+
+				var x = Number(coord_datum[1]);
+				var y = Number(coord_datum[2]);
+				var z = Number(coord_datum[3]);
+
+				var p = new Point(x, y, z);
+				var p_t = new Point(0, 0, 0);
+
+				this.points.push(p);
+				this.points_T.push(p_t);
 			}
 		}
-	}
 
-	x_avg /= num;
-	y_avg /= num;
-	z_avg /= num;
+		// Calculate average position
 
-	this.x_avg = x_avg;
-	this.y_avg = y_avg;
-	this.z_avg = z_avg;
+		var avgx = 0;
+		var avgy = 0;
+		var avgz = 0;
 
-	this.points = new Array(); // Immutable data points
-	this.points_T = new Array(); // Points in camera space
-
-	for (var z = 0; z < this.nz; z++)
-	{
-		for (var y = 0; y < this.ny; y++)
+		for (var i = 0; i < this.points.length; i++)
 		{
-			for (var x = 0; x < this.nx; x++)
-			{
-				var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
-				if (density > density_threshold)
-				{
-					var scale = this.scale;
-					var p = new Point(((x+this.xorigin) - x_avg)*scale, ((y+this.yorigin) - y_avg)*scale, ((z+this.zorigin) - z_avg)*scale);
-					var p2 = new Point(0, 0, 0);
-					this.points.push(p);
-					this.points_T.push(p2);
-				}
-			}
+			var p = this.points[i];
+
+			avgx += p.x;
+			avgy += p.y;
+			avgz += p.z;
 		}
+
+		avgx /= this.points.length;
+		avgy /= this.points.length;
+		avgz /= this.points.length;
+
+		this.x_avg = avgx;
+		this.y_avg = avgy;
+		this.z_avg = avgz;
+
+
+		// Renormalize points WRT avg position
+
+		for (var i = 0; i < this.points.length; i++)
+		{
+			var p = this.points[i];
+
+			p.x -= avgx;
+			p.y -= avgy;
+			p.z -= avgz;
+		}
+
+
+
+		this.scale = 1;
+
+
 	}
 
 	// Min and max parameter projections of voxel data points
@@ -566,9 +600,116 @@ function DensityMap()
 	this.max_t = 1;
 	this.min_u = 0;
 	this.max_u = 1;
-
-	this.updateTransformedPoints();
 }
+
+DensityMap.prototype.createFromMRC = function()
+{
+		this.nx = readInt(0);
+		this.ny = readInt(1);
+		this.nz = readInt(2);
+		this.mode = readInt(3);
+
+		this.nxstart = readInt(4);
+		this.nystart = readInt(5);
+		this.nzstart = readInt(6);
+
+		this.mx = readInt(7);
+		this.my = readInt(8);
+		this.mz = readInt(9);
+
+		this.xlength = readFloat(10);
+		this.ylength = readFloat(11);
+		this.zlength = readFloat(12);
+
+		this.alpha = readFloat(13);
+		this.beta = readFloat(14);
+		this.gamma = readFloat(15);
+
+		this.mapc = readInt(16);
+		this.mapr = readInt(17);
+		this.maps = readInt(18);
+
+		this.amin = readFloat(19);
+		this.amax = readFloat(20);
+		this.amean = readFloat(21);
+
+		this.ispg = readInt(22);
+		this.nsymbt = readInt(23);
+
+		// Extra 25 ints of storage space
+
+		this.xorigin = readFloat(23+26);
+		this.yorigin = readFloat(23+27);
+		this.zorigin = readFloat(23+28);
+
+		this.scale = this.xlength/this.mx; // The size of each voxel in Angstroms
+
+		if (this.scale != 1)
+		{
+			alert("PDB export of non-1 voxel size MRC's is unsupported");
+		}
+
+		//this.nlabl = readInt(23+29+3);
+
+		voxel = createArray(this.nx, this.ny, this.nz);
+
+		var x_avg = 0;
+		var y_avg = 0;
+		var z_avg = 0;
+
+		var num = 0;
+
+		// Find center of data points (above threshold)
+		for (var z = 0; z < this.nz; z++)
+		{
+			for (var y = 0; y < this.ny; y++)
+			{
+				for (var x = 0; x < this.nx; x++)
+				{
+					var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
+					if (density > density_threshold)
+					{
+						num++;
+
+						x_avg += (x + this.xorigin);
+						y_avg += (y + this.yorigin);
+						z_avg += (z + this.zorigin);
+					}
+				}
+			}
+		}
+
+		x_avg /= num;
+		y_avg /= num;
+		z_avg /= num;
+
+		this.x_avg = x_avg;
+		this.y_avg = y_avg;
+		this.z_avg = z_avg;
+
+		this.points = new Array(); // Immutable data points
+		this.points_T = new Array(); // Points in camera space
+
+		for (var z = 0; z < this.nz; z++)
+		{
+			for (var y = 0; y < this.ny; y++)
+			{
+				for (var x = 0; x < this.nx; x++)
+				{
+					var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
+					if (density > density_threshold)
+					{
+						var scale = this.scale;
+						var p = new Point(((x+this.xorigin) - x_avg)*scale, ((y+this.yorigin) - y_avg)*scale, ((z+this.zorigin) - z_avg)*scale);
+						var p2 = new Point(0, 0, 0);
+						this.points.push(p);
+						this.points_T.push(p2);
+					}
+				}
+			}
+		}
+
+};
 
 DensityMap.prototype.updateTransformedPoints = function()
 {
@@ -589,6 +730,11 @@ DensityMap.prototype.draw = function()
 	for (var i = 0; i < this.points.length; i++)
 	{
 		this.points_T[i].draw();
+
+		if (this.extension == 'pdb')
+		{
+			// alert(this.points_T[i].x + " " + this.points_T[i].y + " " + this.points_T[i].z);
+		}
 	}
 
 	if (t == lim)
