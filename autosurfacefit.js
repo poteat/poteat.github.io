@@ -7,7 +7,7 @@
 // GLOBAL SCOPE DECLARATIVE HEADER
 //
 	// Camera and animation parameters
-	var fps = 25;
+	var fps = 30;
 	var fov = 250;
 	var yaw = 10;
 	var pitch = 0.7;
@@ -18,6 +18,7 @@
 	var ctx = cvs.getContext('2d');
 
 	var dl = document.getElementById('surface_download_link');
+	var fit_dl = document.getElementById('fit_download_link');
 
 	// Global object declarations
 	var Mouse = new Mouse();
@@ -52,7 +53,7 @@ function init()
 }
 
 
-var desired_control_points = 3;
+var desired_control_points = 4;
 
 var updated_pdb = false;
 
@@ -114,6 +115,12 @@ function main()
 					dl.href = file;
 
 
+					var fit_string = generateFitString();
+					var fit_file = generateTextFile(fit_string);
+
+					fit_dl.href = fit_file;
+
+
 					// Build filename by appending "_SplineFit" to the end of the input file
 
 					var filename = DMap.filename;
@@ -127,9 +134,13 @@ function main()
 					}
 					output_filename += (exploded_filename[i]);
 
-					output_filename += ("_SplineFit.pdb");
+					fit_filename = output_filename + "_SplineFit.fit";
+
+					output_filename += "_SplineFit.pdb";
 
 					dl.download = output_filename;
+
+					fit_dl.download = fit_filename;
 
 					updated_pdb = true;
 				}
@@ -313,6 +324,34 @@ function generatePDBString(points)
 	return string;
 }
 
+
+function generateFitString()
+{
+	var string = "" + density_threshold + "\n";
+
+	string += DMap.x_avg + " " + DMap.y_avg + " " + DMap.z_avg + "\n";
+
+	string += DMap.rot_theta + " " + DMap.rot_ux + " " + DMap.rot_uy + " " + DMap.rot_uz + "\n";
+
+	string += DMap.min_t + " " + DMap.max_t + "\n";
+
+	string += DMap.min_u + " " + DMap.max_u + "\n";
+
+	string += BSurface.X + " " + BSurface.Y + "\n";
+
+	for (var i = 0; i < BSurface.X; i++)
+	{
+		for (var j = 0; j < BSurface.Y; j++)
+		{
+			var p = BSurface.controlPoints[i][j];
+			string += p.x + " " + p.y + " " + p.z + "\n";
+		}
+	}
+
+	return string;
+}
+
+
 function generateTextFile(string)
 {
     var data = new Blob([string], {type: 'text/plain'});
@@ -485,6 +524,90 @@ function loadLocalMRC(evt)
 
 }
 
+document.getElementById('fit_file').addEventListener('change', loadFittingFile, false);
+
+function loadFittingFile(evt)
+{
+	var file = evt.target.files[0];
+	var fileReader = new FileReader();
+	fileReader.readAsText(file);
+
+	fileReader.onload = function (oEvent)
+	{
+		var fit_string = oEvent.target.result;
+
+		var lines = fit_string.split("\n");
+
+		density_threshold = Number(lines[0]);
+
+		var val = lines[1].split(" ");
+
+		var avgx = Number(val[0]);
+		var avgy = Number(val[1]);
+		var avgz = Number(val[2]);
+
+		var val = lines[2].split(" ");
+
+		var rot_theta = Number(val[0]);
+		var rot_ux = Number(val[1]);
+		var rot_uy = Number(val[2]);
+		var rot_uz = Number(val[3]);
+
+		var val = lines[3].split(" ");
+
+		var min_t = Number(val[0]);
+		var max_t = Number(val[1]);
+
+		var val = lines[4].split(" ");
+
+		var min_u = Number(val[0]);
+		var max_u = Number(val[1]);
+
+		var val = lines[5].split(" ");
+
+		var X = Number(val[0]);
+		var Y = Number(val[1]);
+
+		var array_of_points = new Array(X);
+
+		// Declare 2d array
+		for (var i = 0; i < X; i++)
+		{
+			array_of_points[i] = new Array(Y);
+		}
+
+		var i = 6;
+		for (var x_i = 0; x_i < X; x_i++)
+		{
+			for (var y_i = 0; y_i < Y; y_i++)
+			{
+				var val = lines[i].split(" ");
+				var x = val[0];
+				var y = val[1];
+				var z = val[2];
+
+				var p = new Point(x, y, z);
+
+				array_of_points[x_i][y_i] = p;
+				i++;
+			}
+		}
+
+		// Finished reading all data.
+		// Initialize new DMap and BSurface
+
+		DMap.createFromFit(avgx, avgy, avgz, rot_theta, rot_ux, rot_uy, rot_uz, min_t, max_t, min_u, max_u);
+
+		BSurface.setControlPoints(array_of_points);
+		BSurface.finished = true;
+		BPlane.finished = true;
+
+		DMap.updateProjection();
+
+		updateTransformedPoints();
+	};
+}
+
 
 function readInt(i)
 {
@@ -512,9 +635,9 @@ function createArray(length) {
 }
 
 
-function DensityMap(pdb_string = "")
+function DensityMap(pdb_string)
 {
-	if (pdb_string == "")
+	if (pdb_string == undefined)
 	{
 		this.createFromMRC();
 	}
@@ -600,6 +723,96 @@ function DensityMap(pdb_string = "")
 	this.max_t = 1;
 	this.min_u = 0;
 	this.max_u = 1;
+}
+
+DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta, rot_ux, rot_uy, rot_uz, min_t, max_t, min_u, max_u)
+{
+		this.nx = readInt(0);
+		this.ny = readInt(1);
+		this.nz = readInt(2);
+		this.mode = readInt(3);
+
+		this.nxstart = readInt(4);
+		this.nystart = readInt(5);
+		this.nzstart = readInt(6);
+
+		this.mx = readInt(7);
+		this.my = readInt(8);
+		this.mz = readInt(9);
+
+		this.xlength = readFloat(10);
+		this.ylength = readFloat(11);
+		this.zlength = readFloat(12);
+
+		this.alpha = readFloat(13);
+		this.beta = readFloat(14);
+		this.gamma = readFloat(15);
+
+		this.mapc = readInt(16);
+		this.mapr = readInt(17);
+		this.maps = readInt(18);
+
+		this.amin = readFloat(19);
+		this.amax = readFloat(20);
+		this.amean = readFloat(21);
+
+		this.ispg = readInt(22);
+		this.nsymbt = readInt(23);
+
+		// Extra 25 ints of storage space
+
+		this.xorigin = readFloat(23+26);
+		this.yorigin = readFloat(23+27);
+		this.zorigin = readFloat(23+28);
+
+		this.scale = this.xlength/this.mx; // The size of each voxel in Angstroms
+
+		if (this.scale != 1)
+		{
+			alert("PDB export of non-1 voxel size MRC's is unsupported");
+		}
+
+		//this.nlabl = readInt(23+29+3);
+
+		voxel = createArray(this.nx, this.ny, this.nz);
+
+		this.x_avg = x_avg;
+		this.y_avg = y_avg;
+		this.z_avg = z_avg;
+
+		this.points = new Array(); // Immutable data points
+		this.points_T = new Array(); // Points in camera space
+
+		for (var z = 0; z < this.nz; z++)
+		{
+			for (var y = 0; y < this.ny; y++)
+			{
+				for (var x = 0; x < this.nx; x++)
+				{
+					var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
+					if (density > density_threshold)
+					{
+						var scale = this.scale;
+						var p = new Point(((x+this.xorigin) - x_avg)*scale, ((y+this.yorigin) - y_avg)*scale, ((z+this.zorigin) - z_avg)*scale);
+						var p2 = new Point(0, 0, 0);
+						this.points.push(p);
+						this.points_T.push(p2);
+					}
+				}
+			}
+		}
+
+		this.rot_theta = rot_theta;
+		this.rot_ux = rot_ux;
+		this.rot_uy = rot_uy;
+		this.rot_uz = rot_uz;
+
+		DMap.rotateAxis(DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz);
+
+		this.min_t = min_t;
+		this.max_t = max_t;
+		this.min_u = min_u;
+		this.max_u = max_u;
 }
 
 DensityMap.prototype.createFromMRC = function()
@@ -739,7 +952,10 @@ DensityMap.prototype.draw = function()
 
 	if (t == lim)
 	{
-		this.updateProjection();
+		if (BSurface.finished != true)
+		{
+			this.updateProjection();
+		}
 	}
 	else
 	{
@@ -750,8 +966,9 @@ DensityMap.prototype.draw = function()
 	{
 			var p = this.points[i];
 			var p_draw = this.points_T[i]
-			coords = BSurface.calc(p.t, p.u);
+			//coords = BSurface.calc(p.t, p.u);
 
+			/*
 			var proj = new Point(coords[0], coords[1], coords[2]);
 			proj.scaleFactor(zoom);
 			proj.rotateY(yaw);
@@ -761,7 +978,7 @@ DensityMap.prototype.draw = function()
 			ctx.beginPath();
 			ctx.moveTo(p_draw.x2d, p_draw.y2d);
 			ctx.lineTo(proj.x2d, proj.y2d);
-			ctx.stroke();
+			ctx.stroke();*/
 	}
 };
 
@@ -2210,8 +2427,18 @@ Projection.prototype.updateTransformedPoints = function()
 
 
 
-function Point(x, y, z, color = "black", size = 1, id)
+function Point(x, y, z, color, size, id)
 {
+	if (color == undefined)
+	{
+		color = "black";
+	}
+
+	if (size == undefined)
+	{
+		size = 1;
+	}
+
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -2221,8 +2448,13 @@ function Point(x, y, z, color = "black", size = 1, id)
 	this.id = id;
 }
 
-Point.prototype.draw = function(actually_draw = true)
+Point.prototype.draw = function(actually_draw)
 {
+	if (actually_draw == undefined)
+	{
+		actually_draw = true;
+	}
+
 	var x3d = this.x;
 	var y3d = this.y; 
 	var z3d = this.z; 
@@ -2615,7 +2847,12 @@ cvs.addEventListener('dblclick', function(evt)
 
 cvs.addEventListener('mousewheel',function(evt)
 {
-	var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+	var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
+
+	zoom *= (1 + delta*.1)
+
+	updateTransformedPoints();
+
 	evt.preventDefault();
     return false; 
 }, false);
