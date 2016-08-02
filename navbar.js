@@ -26,6 +26,6 @@ document.write('\
 			<li><a href="surfaceprojection.html">Surface-Point Projection</a></li>\
 			<li><b><a href="autosurfacefit.html">Surface Fitting Program v2</a></b></li>\
 			<li><a href="interpolator.html">3-Point Interpolator</a></li>\
-			<li><a href="delauneytriangulation.html">Delauney Triangulation</a></li>\
+			<li><a href="characteristicshape.html">Characteristic Shape Algorithm</a></li>\
 		</ul>\
 ');

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Characteristic Shape Algorithm</h2>
+
+		<p>
+		The "Characteristic Shape" algorithm generates a simple polygon given a planar set of points, that encompasses said points.  It is a generalization of the convex hull, and can be said to generate "concave" hulls.
+		</p>
+
+		<p>
+		The algorithm initially calculates the Delaunay triangulation of the set of points.  Then, it iteratively removes the longest "boundary edges", or edges on the outside of the triangulation.  It does this in O(n lg(n)) time,
+		and O(n) space.  It uses relational maps to keep track of the edges, constitutent triangles, and boundary efficiently.  However, this particular implementation of the algorithm is technically O(n^2) in time, due to the fact that
+		this implementation uses simple arrays, rather than, for example, B-Trees.
+		</p>
+
+		<p>
+		<cmd>Double click existing points</cmd> to remove them from the curve.  <cmd>Double click empty areas</cmd> to append a new control point to the end of the curve.
+		</p>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<p>More on this algorithm can be found in Matt Duckham's <a href="http://www.geosensor.net/papers/duckham08.PR.pdf">characteristic shapes paper</a>, or <a href="http://ambientspatial.net/ddo/?p=143">on his website</a>.</p>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="delaunay.js"></script>
+		<script type="text/javascript" src="characteristicshape.js"></script>
+	</body>
+</html>
