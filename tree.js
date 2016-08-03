@@ -10,9 +10,32 @@ var Mouse = new Mouse();
 clearInterval(mainloop);
 var mainloop = setInterval("main();",1000/fps);
 
+var _Select;
+
 function init()
 {
-	Points.appendPoint(100, 100, "black");
+	Points.createPoint(200, 100, 'm');
+
+
+
+	var button_labels = new Array();
+
+	button_labels.push("Mass Node");
+	button_labels.push("Stage Node");
+	button_labels.push("Fuel Node");
+	button_labels.push("Engine Node");
+	button_labels.push("Structure Edge");
+	button_labels.push("Fuel Edge");
+
+	var box_width = 80;
+	var box_height = 15;
+	var menu_label_height = 15;
+
+	var inset_width = 5;
+	var inset_height = 5;
+
+	_Select = new SelectMenu(20, 50, "Placement Menu", box_width, box_height, inset_width, inset_height, menu_label_height, button_labels, 0)
+
 }
 
 function main()
@@ -20,8 +43,7 @@ function main()
 	ctx.clearRect(0, 0, cvs.width, cvs.height);
 
 	Points.draw();
-
-	ctx.fillText("Children: " + Points.x[0].children.length, 10, 10);
+	_Select.draw();
 }
 
 
@@ -57,10 +79,10 @@ function _Points()
 
 var Points = new _Points()
 
-_Points.prototype.appendPoint = function(x, y, color = "black")
+_Points.prototype.createPoint = function(x, y, type)
 {
 	var id = this.x.length;
-	this.x.push(new Point(x, y, color, id));
+	this.x.push(new Point(x, y, type, id));
 
 	return id;
 };
@@ -128,30 +150,31 @@ _Points.prototype.draw = function()
 
 
 
-
-
-
-
-
-function Point(x, y, color, id)
+function Point(x, y, type, id)
 {
 	this.x = x;
 	this.y = y;
 
 	this.radius = 10;
+	this.type = type;
 
 	this.parent = null;
 	this.children = new Array();
-	this.color = color;
 	this.id = id;
 }
 
 Point.prototype.draw = function()
 {
+	// Draw circle
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
     ctx.stroke();
 
+    // Draw type
+    ctx.fillStyle = 'black';
+    ctx.fillText(this.type, this.x - 4, this.y + 3);
+
+    // Draw child arrows
     for (var i = 0; i < this.children.length; i++)
     {
     	this.drawArrowTo(Points.x[this.children[i]]);
@@ -338,23 +361,314 @@ Point.prototype.hasParent = function()
 
 
 
-function SelectButton(x, y, width, height, label)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function _SelectButtons()
+{
+	this.x = new Array();
+}
+
+var SelectButtons = new _SelectButtons();
+
+_SelectButtons.prototype.createSelectButton = function(x, y, width, height, label, active)
+{
+	var id = this.x.length;
+	this.x.push(new SelectButton(x, y, width, height, label, active, id));
+
+	return id;
+};
+
+_SelectButtons.prototype.draw = function()
+{
+	for (var i = 0; i < this.x.length; i++)
+	{
+		if (this.x[i] != null)
+		{
+			this.x[i].draw();
+		}
+	}
+}
+
+
+
+function SelectButton(x, y, width, height, label, active, id)
 {
 	this.x = x;
 	this.y = y;
 	this.width = width;
 	this.height = height;
+	this.label = label;
 
-	
+	this.down = false;
+	this.active = active;
+	this.id = id;
 }
 
-
-SelectButton.prototype.draw = function()
+SelectButton.prototype.hasWithin = function(obj)
 {
+	return obj.x > this.x && obj.x < this.x + this.width && obj.y > this.y && obj.y < this.y + this.height;
+};
+
+SelectButton.prototype.draw = function(actually_draw = true)
+{
+	var background = '#D3D3D3';
+	var active_background = '#A796EB';
+
+	if (this.hasWithin(Mouse))
+	{
+		background = '#BABABA';
+		active_background = '#9384D1';
+
+		if (Mouse.down)
+		{
+			background = '#8F8F8F';
+			active_background = '#8072B5';
+			this.down = true;
+		}
+
+		if (this.down && !Mouse.down)
+		{
+			this.active = !this.active;
+		}
+	}
+
+	if (!Mouse.down)
+	{
+		this.down = false;
+	}
+
+	if (this.active)
+	{
+		background = active_background;
+	}
+
+	// If actually_draw is set to false, then it only updates the mouse checks
+	if (actually_draw)
+	{
+		// Draw background
+		ctx.fillStyle = background;
+		ctx.beginPath();
+		ctx.rect(this.x, this.y, this.width, this.height);
+		ctx.fill();
+
+		// Draw border
+		ctx.strokeStyle = 'black';
+		ctx.beginPath();
+		ctx.rect(this.x, this.y, this.width, this.height);
+		ctx.stroke();
+
+		// Draw text
+
+		var fontsize = 7;
+
+
+		ctx.fillStyle = 'black';
+		ctx.fillText(this.label, this.x + 4, this.y + this.height/2 + fontsize/2);
+	}
+};
+
+SelectButton.prototype.moveOffset = function(x, y)
+{
+    this.x += x;
+    this.y += y;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function SelectMenu(x, y, menu_label, box_width, box_height, inset_width, inset_height, menu_label_height, label_array, default_selection, id)
+{
+	this.button_ids = new Array();
+
+	this.x = x;
+	this.y = y;
+
+	this.box_width = box_width;
+	this.box_height = box_height;
+	this.inset_width = inset_width;
+	this.inset_height = inset_height;
+
+	this.menu_label_height = menu_label_height;
+
+	this.menu_label = menu_label;
+
+	this.width = inset_width*2 + box_width;
+	this.height = menu_label_height + inset_height*2 + label_array.length*box_height;
+
+	this.selected = default_selection;
+
+	var y_offset = box_height;
+
+	x += inset_width;
+	y += menu_label_height + inset_height;
+
+	for (var i = 0; i < label_array.length; i++)
+	{
+		this.button_ids.push(SelectButtons.createSelectButton(x, y, box_width, box_height, label_array[i], i == default_selection));
+		y += y_offset;
+	}
+
+	this.down == false;
+	this.heldX = 0;
+	this.heldY = 0;
+
+	this.id = id;
+}
+
+SelectMenu.prototype.draw = function()
+{
+	var button_hovers = false;
+
+	var button_active = false;
+
+	for (var i = 0; i < this.button_ids.length; i++)
+	{
+		var button = SelectButtons.x[this.button_ids[i]];
+
+		button.draw(false); // Only check for mouse info
+
+		if (button.active)
+		{
+			button_active = true;
+		}
+
+		if (button.active && i != this.selected)
+		{
+			this.selected = i;
+
+			// Turn all other buttons off
+			for (var j = 0; j < this.button_ids.length; j++)
+			{
+				if (j != this.selected)
+				{
+					SelectButtons.x[this.button_ids[j]].active = false;
+				}
+			}
+		}
+
+		if (button.hasWithin(Mouse) || button.down)
+		{
+			button_hovers = true;
+		}
+	}
+
+	if (!button_active)
+	{
+		SelectButtons.x[this.selected].active = true;
+	}
+
+	if (!button_hovers && this.hasWithin(Mouse))
+	{
+		if (Mouse.down && !this.down)
+		{
+			this.down = true;
+			this.heldX = Mouse.x;
+			this.heldY = Mouse.y;
+		}
+	}
+
+	if (!Mouse.down)
+	{
+		this.down = false;
+	}
+
+	if (this.down)
+	{
+		var alt_x = Mouse.x - this.heldX;
+		var alt_y = Mouse.y - this.heldY;
+
+		if (alt_x != 0 || alt_y != 0)
+		{
+			this.moveOffset(alt_x, alt_y);
+			this.heldX = Mouse.x;
+			this.heldY = Mouse.y;
+		}
+	}
+
+	for (var i = 0; i < this.button_ids.length; i++)
+	{
+		var button = SelectButtons.x[this.button_ids[i]];
+		button.draw();
+	}
+
 	ctx.beginPath();
 	ctx.rect(this.x, this.y, this.width, this.height);
 	ctx.stroke();
+
+	ctx.fillText(this.menu_label, this.x + 3, this.y + this.menu_label_height/2 + 4);
+}
+
+SelectMenu.prototype.hasWithin = function(obj)
+{
+	return obj.x > this.x && obj.x < this.x + this.width && obj.y > this.y && obj.y < this.y + this.height;
 };
+
+SelectMenu.prototype.moveOffset = function(x, y)
+{
+    this.x += x;
+    this.y += y;
+
+    for (var i = 0; i < this.button_ids.length; i++)
+    {
+    	SelectButtons.x[this.button_ids[i]].moveOffset(x, y);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -395,7 +709,7 @@ cvs.addEventListener('mousemove', function(evt)
 
 	    if (cID >= 0)
 	    {
-		    if (Points.x[Mouse.objHeld].dist(Points.x[cID]) < 100)
+		    if (Points.x[Mouse.objHeld].dist(Points.x[cID]) < 80)
 		    {
 		    	Points.x[Mouse.objHeld].setParent(cID);
 		    }
@@ -463,18 +777,18 @@ cvs.addEventListener('dblclick', function(evt)
 		}
 		else
 		{
-			new_id = Points.appendPoint(Mouse.x, Mouse.y);
+			new_id = Points.createPoint(Mouse.x, Mouse.y, 'm');
 		}
 	}
 	else
 	{
-		new_id = Points.appendPoint(Mouse.x, Mouse.y);
+		new_id = Points.createPoint(Mouse.x, Mouse.y, 'm');
 	}
 
 	if (new_id >= 0)
 	{
 		var closest = Points.closestToID(new_id);
-		if (Points.x[new_id].dist(Points.x[closest]) < 100)
+		if (Points.x[new_id].dist(Points.x[closest]) < 80)
 		{
 			Points.x[new_id].setParent(closest);
 		}
