@@ -362,5 +362,157 @@ function concaveHull(array_of_points, length_threshold)
 	*/
 
 
-	// We now return
+
+
+
+	// Create a set of all edges and anti-edge 2-tuples on the boundary, except for the first.
+
+	var ConcaveEdges = new Array();
+
+	for (var i = 1; i < Boundary.length; i++)
+	{
+		var B = Boundary[i];
+		var E = Edges[B];
+
+		var v1 = E[0];
+		var v2 = E[1];
+
+		ConcaveEdges.push([v1, v2]);
+		ConcaveEdges.push([v2, v1]);
+	}
+
+	// Sort all convex edges according to first vertex index, increasing.
+	ConcaveEdges.sort(
+		function(a,b){
+			return (a[0] - b[0]) + (a[1] - b[1])*(a[0] - b[0] == 0);
+		})
+
+
+	var ConcaveVertices = new Array();
+
+	ConcaveVertices.push(Edges[Boundary[0]][0]); // Push the very first boundary vertex.
+	ConcaveVertices.push(Edges[Boundary[0]][1]); // Push the very first boundary vertex.
+
+	var seeking = Edges[Boundary[0]][1]; // The next vertex to find, connected
+
+
+	while (ConcaveEdges.length != 0)
+	{
+		var index = ConcaveEdges.indexOf(seeking);
+		var seeking2 = ConcaveEdges[index][1]
+
+		ConcaveEdges.splice(index, 1);
+
+		var index2 = ConcaveEdges.indexOf(seeking2, seeking);
+
+		ConcaveEdges.splice(index2, 1);
+
+		ConcaveVertices.push(seeking2);
+
+		seeking = seeking2;
+	}
+
+	ConcaveVertices.splice(ConcaveVertices.length - 1, 1);
+
+	/*
+	for (var i = 0; i < ConcaveVertices.length; i++)
+	{
+		var CV = ConcaveVertices[i];
+		console.log(CV);
+	}/*/
+
+
+	return ConcaveVertices;
+}
+
+
+function lengthOfEdge(Vertices, Edge)
+{
+	if (Edge == null)
+	{
+		return null;
+	}
+	var v1 = Vertices[Edge[0]];
+	var v2 = Vertices[Edge[1]];
+	var dist = Math.sqrt(Math.pow(v1[0]-v2[0],2) + Math.pow(v1[1]-v2[1],2));
+
+	return dist;
+}
+
+
+// This is an O(n) sorted-array insertion function.  Technically, insertion can be reduced to lg(n) by using
+// the B-tree data structure instead of an array.  However, currently, the fact that the Boundary is an array
+// makes the asymptotic complexity of the entire implementation n^2.
+function insertBoundaryByLength(Vertices, Edges, Boundary_Array, Edge_index)
+{
+	var insert_i = -1
+
+	for (var i = 0; i < Boundary_Array.length; i++)
+	{
+		var B = Boundary_Array[i];
+		var B_Edge = Edges[B];
+
+		var B_length = lengthOfEdge(Vertices, B_Edge);
+
+		var Edge = Edges[Edge_index];
+		var E_length = lengthOfEdge(Vertices, Edge);
+
+		if (Math.abs(B_length - E_length) < .0001)
+		{
+			//return;
+		}
+
+		if (E_length > B_length)
+		{
+			insert_i = i;
+			break;
+		}
+	}
+
+	if (insert_i != -1)
+	{
+		Boundary_Array.splice(insert_i, 0, Edge_index);
+	}
+	else
+	{
+		Boundary_Array.push(Edge_index);
+	}
+
+}
+
+
+Array.prototype.indexOf = function(target1, target2)
+{
+    var min = 0;
+    var max = this.length - 1;
+    var guess;
+
+    while(min <= max) {
+        guess = Math.floor((max + min) / 2);
+
+        if (this[guess][0] === target1)
+        {
+        	if (this[guess][1] === target2 || target2 == undefined)
+        	{
+        		return guess;
+        	}
+            else if (this[guess+1][1] === target2)
+            {
+            	return guess+1;
+            }
+            else if (this[guess-1][1] === target2)
+            {
+            	return guess-1;
+            }
+        }
+        else if (this[guess][0] < target1) {
+            min = guess + 1;
+        }
+        else {
+            max = guess - 1;
+        }
+
+    }
+
+    return -1;
 }
