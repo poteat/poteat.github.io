@@ -115,11 +115,10 @@ QuadraticBezier.prototype.draw = function()
 	ctx.fillText("Arc Length: " + arclength, 20, 20);
 
 
+	var subchord_arclength = this.arcLength(0, this.t);
+	t_estimate = ((subchord_arclength/arclength)+.5*1)/2;
 
-	var subchord_arclength = this.arcLength(0, .5);
-	t_estimate = subchord_arclength/arclength;
-
-	//Sliders[this.smooth_slider_id].setValue(this.t);
+	// Sliders[this.smooth_slider_id].setValue(this.t);
 
 
 	ctx.fillText("Arc Estimate: " + t_estimate, 20, 30);
@@ -145,7 +144,7 @@ QuadraticBezier.prototype.updateControl = function()
 
 QuadraticBezier.prototype.arcLength = function(min = 0, max = 1)
 {
-	var samples = 10;
+	var samples = 100;
 	var totalLength = 0;
 
 	var p = new Point(0, 0);

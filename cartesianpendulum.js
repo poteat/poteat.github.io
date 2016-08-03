@@ -37,6 +37,7 @@
     for (var i = 0; i < steps_per_frame; i++)
     {
         P.Z = rk8(P.Z, P.diff, h/steps_per_frame);
+        P.normalize();
     }
     
     P.draw();
@@ -106,6 +107,22 @@
     this.L = L;
     this.M = M;
   }
+
+  Pendulum.prototype.normalize = function()
+  {
+    var x = this.Z[0];
+    var y = this.Z[1];
+    var vx = this.Z[2];
+    var vy = this.Z[3];
+    var L = P.L;
+
+    var ang = Math.atan2(x, -y);
+
+    var x = L*Math.sin(ang);
+    var y = -L*Math.cos(ang);
+
+    this.Z = [x, y, vx, vy];
+  }
   
   Pendulum.prototype.diff = function(Z)
   {
@@ -116,11 +133,13 @@
     var L = P.L;
 
     var d = Math.hypot(x, y);
-    var x /= d/L;
-    var y /= d/L;
+
+    /*
+    var x = d/L;
+    var y = d/L;
 
     Z[0] /= d/L;
-    Z[1] /= d/L;
+    Z[1] /= d/L;*/
 
     var ang = Math.atan2(x, -y);
     v = Math.hypot(vx, vy);
@@ -164,8 +183,8 @@
     ctx.lineTo(bobx_draw, boby_draw);
     ctx.stroke();
 
-    ang = Math.atan2(x, -y);
-    v = Math.hypot(vx, vy);
+    ang = Math.atan2(px, -py);
+    v = Math.hypot(pvx, pvy);
 
     KE = (1/2)*M*Math.pow(v, 2);
     PE = M*g*(py+this.L);
