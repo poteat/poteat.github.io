@@ -32,7 +32,8 @@
 //
 
 
-
+	var first_execution = true;
+	var BPerimeter;
 
 
 
@@ -144,6 +145,45 @@ function main()
 
 					updated_pdb = true;
 				}
+
+				// Now that the surface is finished optimizing itself, we can calculate the projected concave hull!
+
+				if (first_execution)
+				{
+					var Vertices = new Array();
+
+					for (var i = 0; i < DMap.points.length; i++)
+					{
+						var p = DMap.points[i];
+
+						var t = p.t;
+						var u = p.u;
+
+						Vertices.push([t, u]);
+					}
+
+					ConcaveVertices = concaveHull(Vertices, .115);
+
+					var ConcaveHull = new Array()
+
+					for (var i = 0; i < ConcaveVertices.length; i++)
+					{
+						var V_i = ConcaveVertices[i];
+						var V = Vertices[V_i];
+
+						ConcaveHull.push(V);
+					}
+
+					BPerimeter = new Perimeter(ConcaveHull);
+
+					first_execution = false;
+				}
+
+				BPerimeter.draw();
+
+
+
+
 			}
 		}
 		else
@@ -213,6 +253,11 @@ function updateTransformedPoints()
 	}
 
 	BProj.updateTransformedPoints();
+
+	if (BPerimeter != null)
+	{
+		BPerimeter.updateTransformedPoints();
+	}
 }
 
 
@@ -1220,6 +1265,90 @@ DensityMap.prototype.calculateBoundingBox = function()
 
 
 
+function Perimeter(ConcaveHull)
+{
+	this.vertices = ConcaveHull;
+
+	this.points = new Array();
+	this.points_T = new Array();
+
+	for (var i = 0; i < ConcaveHull.length; i++)
+	{
+		var V = ConcaveHull[i];
+
+		var t = V[0];
+		var u = V[1];
+
+		var calc = BSurface.calc(t, u);
+
+		var p = new Point(calc[0], calc[1], calc[2]);
+
+		var p_T = new Point(0, 0, 0, "red", 2);
+
+		this.points.push(p);
+		this.points_T.push(p_T);
+	}
+
+	this.updateTransformedPoints();
+}
+
+Perimeter.prototype.updateTransformedPoints = function()
+{
+	for (var i = 0; i < this.points_T.length; i++)
+	{
+		this.points_T[i].moveTo(this.points[i]);
+		this.points_T[i].scaleFactor(zoom);
+		this.points_T[i].rotateY(yaw);
+		this.points_T[i].rotateX(pitch);
+	}
+}
+
+Perimeter.prototype.draw = function()
+{
+	for (var i = 0; i < this.points_T.length; i++)
+	{
+		var p = this.points_T[i];
+		p.draw();
+	}
+
+	ctx.strokeStyle = "red";
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+
+	for (var i = 0; i < this.points_T.length; i++)
+	{
+		var p = this.points_T[i];
+
+		var x = p.x2d;
+		var y = p.y2d;
+
+		if (i == 0)
+		{
+			ctx.moveTo(x, y);
+		}
+		else
+		{
+			ctx.lineTo(x, y);
+		}
+
+		if (i == this.points_T.length - 1)
+		{
+			var p = this.points_T[0];
+
+			var x = p.x2d;
+			var y = p.y2d;
+
+			ctx.lineTo(x, y);
+		}
+
+	}
+
+	ctx.lineWidth = 1;
+	ctx.stroke();
+
+	ctx.strokeStyle = "black";
+}
 
 
 
