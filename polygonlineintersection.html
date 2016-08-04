@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<meta charset="UTF-8"> 
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel = stylesheet href = "main.css" type = "text/css">
+		<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	</head>
+
+	<body>
+
+		<h1>Michael's Lab</h1>
+		<script src="navbar.js"></script>
+
+		<h2>Polygon-Line Intersection</h2>
+
+		<p>
+		<cmd>Double click existing points</cmd> to remove them from the curve.  <cmd>Double click empty areas</cmd> to append a new control point to the end of the curve.
+		</p>
+
+		<canvas id="canvas" width="500" height="500"></canvas>
+
+		<div id = "footer"></div>
+
+		<script type="text/javascript" src="delaunay.js"></script>
+		<script type="text/javascript" src="concavehull.js"></script>
+		<script type="text/javascript" src="polygonlineintersection.js"></script>
+	</body>
+</html>

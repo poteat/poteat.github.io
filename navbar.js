@@ -27,5 +27,6 @@ document.write('\
 			<li><b><a href="autosurfacefit.html">Surface Fitting Program v2</a></b></li>\
 			<li><a href="interpolator.html">3-Point Interpolator</a></li>\
 			<li><a href="characteristicshape.html">Characteristic Shape Algorithm</a></li>\
+			<li><a href="polygonlineintersection.html">Polygon-Line Intersection</a></li>\
 		</ul>\
 ');
