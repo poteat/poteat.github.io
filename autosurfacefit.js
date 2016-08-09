@@ -66,7 +66,7 @@ function main()
 //	BProj.draw();
 
 	BSurface.draw();
-	if (DMap != undefined)
+	if (DMap != undefined && BSurface.finished == false)
 	{
 		DMap.draw();
 	}
@@ -150,6 +150,8 @@ function main()
 
 				if (first_execution)
 				{
+					DMap.updateProjection(true);
+
 					var Vertices = new Array();
 
 					for (var i = 0; i < DMap.points.length; i++)
@@ -180,6 +182,7 @@ function main()
 				}
 
 				BPerimeter.draw();
+
 
 
 
@@ -1027,7 +1030,7 @@ DensityMap.prototype.draw = function()
 	}
 };
 
-DensityMap.prototype.updateProjection = function()
+DensityMap.prototype.updateProjection = function(permissive)
 {
 	var min_t = 0;
 	var max_t = 1;
@@ -1038,7 +1041,7 @@ DensityMap.prototype.updateProjection = function()
 	{
 		var p = this.points[i];
 		p.findClosestResPoint();
-		p.refineProjection();
+		p.refineProjection(permissive);
 
 		if (p.t < min_t)
 		{
@@ -1272,12 +1275,18 @@ function Perimeter(ConcaveHull)
 	this.points = new Array();
 	this.points_T = new Array();
 
+	var t_avg = 0;
+	var u_avg = 0;
+
 	for (var i = 0; i < ConcaveHull.length; i++)
 	{
 		var V = ConcaveHull[i];
 
 		var t = V[0];
 		var u = V[1];
+
+		t_avg += t;
+		u_avg += u;
 
 		var calc = BSurface.calc(t, u);
 
@@ -1288,6 +1297,16 @@ function Perimeter(ConcaveHull)
 		this.points.push(p);
 		this.points_T.push(p_T);
 	}
+
+	t_avg /= ConcaveHull.length;
+	u_avg /= ConcaveHull.length;
+
+	this.t_avg = t_avg;
+	this.u_avg = u_avg;
+
+	var calc = BSurface.calc(t_avg, u_avg);
+
+	var p = new Point(calc[0], calc[1], calc[2]);
 
 	this.updateTransformedPoints();
 }
@@ -1302,6 +1321,8 @@ Perimeter.prototype.updateTransformedPoints = function()
 		this.points_T[i].rotateX(pitch);
 	}
 }
+
+
 
 Perimeter.prototype.draw = function()
 {
@@ -2430,8 +2451,6 @@ Projection.prototype.refineProjection = function(i)
 
 	}
 
-	ctx.fillText("T, U: " + t + " " + u, 20, 100);
-
 	p.t = t;
 	p.u = u;
 }
@@ -2756,8 +2775,13 @@ Point.prototype.findClosestResPoint = function()
 	return [min_i, min_j];
 };
 
-Point.prototype.refineProjection = function()
+Point.prototype.refineProjection = function(permissive)
 {
+	if (permissive == undefined)
+	{
+		permissive = false;
+	}
+
 	var gap = 1/(BSurface.RX - 1);
 
 	var iterations = 20;
@@ -2836,6 +2860,28 @@ Point.prototype.refineProjection = function()
 			}
 			previous_state_u = -1;
 		}
+	}
+
+
+	if (permissive == false)
+	{
+		if (t < 0)
+		{
+			t = 0;
+		}
+		else if (t > 1)
+		{
+			t = 1;
+		}
+
+		if (u < 0)
+		{
+			u = 0;
+		}
+		else if (u > 1)
+		{
+			u = 1;
+		}	
 	}
 
 	this.t = t;
