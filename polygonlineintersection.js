@@ -140,7 +140,7 @@ function main()
 
 
 }
-
+ 
 
 function getIntersectionPoints(x, y, ang, Hull, permissive)
 {

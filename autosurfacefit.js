@@ -66,7 +66,7 @@ function main()
 //	BProj.draw();
 
 	BSurface.draw();
-	if (DMap != undefined && BSurface.finished == false)
+	//if (DMap != undefined && BSurface.finished == false)
 	{
 		DMap.draw();
 	}
@@ -151,6 +151,8 @@ function main()
 				if (first_execution)
 				{
 					DMap.updateProjection(true);
+					BSurface.updatePoints();
+					BSurface.drawSurface = false;
 
 					var Vertices = new Array();
 
@@ -1032,10 +1034,10 @@ DensityMap.prototype.draw = function()
 
 DensityMap.prototype.updateProjection = function(permissive)
 {
-	var min_t = 0;
-	var max_t = 1;
-	var min_u = 0;
-	var max_u = 1;
+	var min_t = 1;
+	var max_t = 0;
+	var min_u = 1;
+	var max_u = 0;
 
 	for (var i = 0; i < this.points.length; i++)
 	{
@@ -1275,9 +1277,6 @@ function Perimeter(ConcaveHull)
 	this.points = new Array();
 	this.points_T = new Array();
 
-	var t_avg = 0;
-	var u_avg = 0;
-
 	for (var i = 0; i < ConcaveHull.length; i++)
 	{
 		var V = ConcaveHull[i];
@@ -1285,28 +1284,102 @@ function Perimeter(ConcaveHull)
 		var t = V[0];
 		var u = V[1];
 
-		t_avg += t;
-		u_avg += u;
-
 		var calc = BSurface.calc(t, u);
 
 		var p = new Point(calc[0], calc[1], calc[2]);
 
-		var p_T = new Point(0, 0, 0, "red", 2);
+		var p_T = new Point(0, 0, 0, "black", 1);
 
 		this.points.push(p);
 		this.points_T.push(p_T);
 	}
 
-	t_avg /= ConcaveHull.length;
-	u_avg /= ConcaveHull.length;
+	this.R = 30;
+	var R = this.R;
+	var buffer = .03;
 
-	this.t_avg = t_avg;
-	this.u_avg = u_avg;
+	this.surfacePointsX = new Array(R);
+	this.surfacePointsX_T = new Array(R);
 
-	var calc = BSurface.calc(t_avg, u_avg);
+	for (var i = 0; i < R; i++)
+	{
+		this.surfacePointsX[i] = new Array(R);
+		this.surfacePointsX_T[i] = new Array(R);
 
-	var p = new Point(calc[0], calc[1], calc[2]);
+	}
+
+	for (var i = 0; i < R; i++)
+	{
+		var t = DMap.min_t + buffer + (DMap.max_t - DMap.min_t - buffer*2) * i/(R-1);
+
+		var IntersectionVertices = getIntersectionPoints(t, 0, 0, ConcaveHull, true);
+
+		if (IntersectionVertices != false)
+		{
+			var V1 = IntersectionVertices[0];
+			var V2 = IntersectionVertices[1];
+
+			var u1 = V1[1];
+			var u2 = V2[1];
+
+			for (var j = 0; j < R; j++)
+			{
+				var u = u1 + (u2 - u1) * j/(R-1);
+
+				var coords = BSurface.calc(t, u);
+
+				var p = new Point(coords[0], coords[1], coords[2]);
+				var p_T = new Point(0, 0, 0, "purple", 3);
+
+				this.surfacePointsX[i][j] = p;
+				this.surfacePointsX_T[i][j] = p_T;
+			}
+		}
+	}
+
+
+
+
+	this.surfacePointsY = new Array(R);
+	this.surfacePointsY_T = new Array(R);
+
+	for (var i = 0; i < R; i++)
+	{
+		this.surfacePointsY[i] = new Array(R);
+		this.surfacePointsY_T[i] = new Array(R);
+
+	}
+
+	for (var i = 0; i < R; i++)
+	{
+		var u = DMap.min_u + buffer + (DMap.max_u - DMap.min_u - buffer*2) * i/(R-1);
+
+		var IntersectionVertices = getIntersectionPoints(0, u, Math.PI/2, ConcaveHull, true);
+
+		if (IntersectionVertices != false)
+		{
+			var V1 = IntersectionVertices[0];
+			var V2 = IntersectionVertices[1];
+
+			var t1 = V1[0];
+			var t2 = V2[0];
+
+			for (var j = 0; j < R; j++)
+			{
+				var t = t1 + (t2 - t1) * j/(R-1);
+
+				var coords = BSurface.calc(t, u);
+
+				var p = new Point(coords[0], coords[1], coords[2]);
+				var p_T = new Point(0, 0, 0, "blue", 3);
+
+				this.surfacePointsY[i][j] = p;
+				this.surfacePointsY_T[i][j] = p_T;
+			}
+		}
+	}
+
+
 
 	this.updateTransformedPoints();
 }
@@ -1320,6 +1393,34 @@ Perimeter.prototype.updateTransformedPoints = function()
 		this.points_T[i].rotateY(yaw);
 		this.points_T[i].rotateX(pitch);
 	}
+
+	for (var i = 0; i < this.R; i++)
+	{
+		if (this.surfacePointsX_T[i][0] != undefined)
+		{
+			for (var j = 0; j < this.R; j++)
+			{
+				this.surfacePointsX_T[i][j].moveTo(this.surfacePointsX[i][j]);
+				this.surfacePointsX_T[i][j].scaleFactor(zoom);
+				this.surfacePointsX_T[i][j].rotateY(yaw);
+				this.surfacePointsX_T[i][j].rotateX(pitch);
+			}
+		}
+	}
+
+	for (var i = 0; i < this.R; i++)
+	{
+		if (this.surfacePointsY_T[i][0] != undefined)
+		{
+			for (var j = 0; j < this.R; j++)
+			{
+				this.surfacePointsY_T[i][j].moveTo(this.surfacePointsY[i][j]);
+				this.surfacePointsY_T[i][j].scaleFactor(zoom);
+				this.surfacePointsY_T[i][j].rotateY(yaw);
+				this.surfacePointsY_T[i][j].rotateX(pitch);
+			}
+		}
+	}
 }
 
 
@@ -1332,7 +1433,111 @@ Perimeter.prototype.draw = function()
 		p.draw();
 	}
 
-	ctx.strokeStyle = "red";
+	for (var i = 0; i < this.R; i++)
+	{
+		for (var j = 0; j < this.R; j++)
+		{
+			var p = this.surfacePointsX_T[i][j];
+			p.draw(false);
+		}
+	}
+
+	for (var i = 0; i < this.R; i++)
+	{
+		for (var j = 0; j < this.R; j++)
+		{
+			var p = this.surfacePointsY_T[i][j];
+			p.draw(false);
+		}
+	}
+
+	// Draw surface wireframe
+	ctx.strokeStyle = "grey";
+
+	ctx.beginPath();
+
+	var needToMove = false;
+
+	for (var i = 0; i < this.R; i++)
+	{
+		var j = 0;
+
+		var p = this.surfacePointsX_T[i][j];
+
+		if (p.scale > 0)
+		{
+			ctx.moveTo(p.x2d, p.y2d);
+		}
+		else
+		{
+			needToMove = true;
+		}
+		
+		for (var j = 0; j < this.R; j++)
+		{
+			var p = this.surfacePointsX_T[i][j];
+
+			if (p.scale > 0)
+			{
+				if (!needToMove)
+				{
+					ctx.lineTo(p.x2d, p.y2d);
+				}
+				else
+				{
+					ctx.moveTo(p.x2d, p.y2d);
+					needToMove = false;
+				}
+			}
+		}
+	}
+
+	ctx.stroke();
+
+	ctx.beginPath();
+
+	var needToMove = false;
+
+	for (var i = 0; i < this.R; i++)
+	{
+		var j = 0;
+
+		var p = this.surfacePointsY_T[i][j];
+
+		if (p.scale > 0)
+		{
+			ctx.moveTo(p.x2d, p.y2d);
+		}
+		else
+		{
+			needToMove = true;
+		}
+		
+		for (var j = 0; j < this.R; j++)
+		{
+			var p = this.surfacePointsY_T[i][j];
+
+			if (p.scale > 0)
+			{
+				if (!needToMove)
+				{
+					ctx.lineTo(p.x2d, p.y2d);
+				}
+				else
+				{
+					ctx.moveTo(p.x2d, p.y2d);
+					needToMove = false;
+				}
+			}
+		}
+	}
+
+	ctx.stroke();
+
+
+
+
+	ctx.strokeStyle = "black";
 	ctx.lineWidth = 2;
 
 	ctx.beginPath();
@@ -1388,6 +1593,8 @@ function Surface(X, Y, T, U)
 	this.Y = Y;
 	this.T = T;
 	this.U = U;
+
+	this.drawSurface = true;
 
 
 	// Control points determine the shape of the curve.  Here, we define
@@ -1626,98 +1833,103 @@ Surface.prototype.draw = function()
 		opt_t++;
 	}
 
-	// 'Draw' surface points to calculate their 'scale' (if negative, outside of cam space)
-	for (var i = 0; i < this.T; i++)
+	if (this.drawSurface)
 	{
-		for (var j = 0; j < this.U; j++)
+		// 'Draw' surface points to calculate their 'scale' (if negative, outside of cam space)
+		for (var i = 0; i < this.T; i++)
 		{
-			this.drawPoints_T[i][j].draw(false);
+			for (var j = 0; j < this.U; j++)
+			{
+				this.drawPoints_T[i][j].draw(false);
+			}
 		}
-	}
 
-	// Draw surface wireframe
+		// Draw surface wireframe
 
-	ctx.strokeStyle = "grey";
+		ctx.strokeStyle = "grey";
 
-	ctx.beginPath();
+		ctx.beginPath();
 
-	var needToMove = false;
+		var needToMove = false;
 
-	for (var i = 0; i < this.T; i++)
-	{
-		var j = 0;
-
-		var p = this.drawPoints_T[i][j];
-
-		if (p.scale > 0)
+		for (var i = 0; i < this.T; i++)
 		{
-			ctx.moveTo(p.x2d, p.y2d);
-		}
-		else
-		{
-			needToMove = true;
-		}
-		
+			var j = 0;
 
-
-		for (var j = 0; j < this.U; j++)
-		{
 			var p = this.drawPoints_T[i][j];
 
-
 			if (p.scale > 0)
 			{
-				if (!needToMove)
-				{
-					ctx.lineTo(p.x2d, p.y2d);
-				}
-				else
-				{
-					ctx.moveTo(p.x2d, p.y2d);
-					needToMove = false;
-				}
+				ctx.moveTo(p.x2d, p.y2d);
 			}
-		}
-	}
-
-	var needToMove = false;
-
-	for (var i = 0; i < this.U; i++)
-	{
-		var j = 0;
-
-		var p = this.drawPoints_T[j][i];
-
-		if (p.scale > 0)
-		{
-			ctx.moveTo(p.x2d, p.y2d)
-		}
-		else
-		{
-			needToMove = true;
-		}
-		
-
-		for (var j = 0; j < this.T; j++)
-		{
-			var p = this.drawPoints_T[j][i];
-			if (p.scale > 0)
+			else
 			{
-				if (!needToMove)
-				{
-					ctx.lineTo(p.x2d, p.y2d);
-				}
-				else
-				{
-					ctx.moveTo(p.x2d, p.y2d);
-					needToMove = false;
-				}
+				needToMove = true;
 			}
 			
+
+
+			for (var j = 0; j < this.U; j++)
+			{
+				var p = this.drawPoints_T[i][j];
+
+
+				if (p.scale > 0)
+				{
+					if (!needToMove)
+					{
+						ctx.lineTo(p.x2d, p.y2d);
+					}
+					else
+					{
+						ctx.moveTo(p.x2d, p.y2d);
+						needToMove = false;
+					}
+				}
+			}
 		}
+
+		var needToMove = false;
+
+		for (var i = 0; i < this.U; i++)
+		{
+			var j = 0;
+
+			var p = this.drawPoints_T[j][i];
+
+			if (p.scale > 0)
+			{
+				ctx.moveTo(p.x2d, p.y2d)
+			}
+			else
+			{
+				needToMove = true;
+			}
+			
+
+			for (var j = 0; j < this.T; j++)
+			{
+				var p = this.drawPoints_T[j][i];
+				if (p.scale > 0)
+				{
+					if (!needToMove)
+					{
+						ctx.lineTo(p.x2d, p.y2d);
+					}
+					else
+					{
+						ctx.moveTo(p.x2d, p.y2d);
+						needToMove = false;
+					}
+				}
+				
+			}
+		}
+
+		ctx.stroke();
 	}
 
-	ctx.stroke();
+
 
 
 
