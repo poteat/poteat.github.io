@@ -74,10 +74,12 @@ function main()
 	if (DMap != undefined)
 	{
 		var score = DMap.score();
+		var normalized = Math.sqrt(score/DMap.points.length)
 
 		ctx.fillStyle = "black";
 
 		ctx.fillText("Score: " + score, 10, 20);
+		ctx.fillText("Normalized Score: " + normalized, 10, 30);
 		ctx.fillText("Number of points: " + DMap.points.length, 10, 40);
 
 		if (BSurface.finished)
@@ -504,9 +506,6 @@ function changeDensity(evt)
 	delete DMap;
 
 	DMap = DMap_new;
-
-	first_execution = true;
-	BSurface.drawSurface = true;
 }
 
 document.getElementById('mrc_file').addEventListener('change', loadLocalMRC, false);
@@ -572,9 +571,6 @@ function loadLocalMRC(evt)
 			}
 		};
 	}
-
-	first_execution = true;
-	BSurface.drawSurface = true;
 
 }
 
@@ -1097,7 +1093,7 @@ DensityMap.prototype.score = function()
 		sum_dist += Math.pow(p.dist(proj),2);
 	}
 
-	return Math.sqrt(sum_dist/this.points.length)
+	return sum_dist;
 };
 
 DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
@@ -2045,9 +2041,7 @@ Surface.prototype.optimizeControlPoint = function(p)
 	var delta_y = 1;
 	var delta_z = 1;
 
-	var threshold = .0003;
-
-	//var threshold = .001
+	var threshold = .5;
 
 	var score = DMap.score();
 
