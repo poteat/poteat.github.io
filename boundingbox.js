@@ -55,8 +55,18 @@ function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
 
 
 
-function Line(slope = 0, intersect = 0)
+function Line(slope, intersect)
 {
+	if (slope == undefined)
+	{
+		slope = 0;
+	}
+
+	if (intersect == undefined)
+	{
+		intersect = 0;
+	}
+
 	this.slope = slope;
 	this.intersect = intersect;
 
@@ -199,8 +209,18 @@ function _Points()
 
 var Points = new _Points();
 
-_Points.prototype.createPoint = function(x, y, color = "black", size = 1)
+_Points.prototype.createPoint = function(x, y, color, size)
 {
+	if (color == undefined)
+	{
+		color = "black";
+	}
+
+	if (size == undefined)
+	{
+		size = 1;
+	}
+
 	var id = this.x.length;
 	this.x.push(new Point(x, y, color, size, id));
 
@@ -438,8 +458,12 @@ _Points.prototype.calculateBoxPoint = function(p1_id, p2_id)
 	return p;
 };
 
-function Point(x, y, color = "black")
+function Point(x, y, color)
 {
+	if (color == undefined)
+	{
+		color = "black";
+	}
 	this.x = x;
 	this.y = y;
 	this.color = color;

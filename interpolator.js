@@ -118,7 +118,7 @@ QuadraticBezier.prototype.draw = function()
 	var subchord_arclength = this.arcLength(0, this.t);
 	t_estimate = ((subchord_arclength/arclength)+.5*1)/2;
 
-	// Sliders[this.smooth_slider_id].setValue(this.t);
+	Sliders[this.smooth_slider_id].setValue(this.t);
 
 
 	ctx.fillText("Arc Estimate: " + t_estimate, 20, 30);
@@ -142,8 +142,18 @@ QuadraticBezier.prototype.updateControl = function()
 	this.controlPoint[1].y = y;
 };
 
-QuadraticBezier.prototype.arcLength = function(min = 0, max = 1)
+QuadraticBezier.prototype.arcLength = function(min, max)
 {
+	if (min == undefined)
+	{
+		min = 0;
+	}
+
+	if (max == undefined)
+	{
+		max = 1;
+	}
+
 	var samples = 100;
 	var totalLength = 0;
 

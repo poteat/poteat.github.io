@@ -778,8 +778,18 @@ Projection.prototype.updateTransformedPoints = function()
 
 
 
-function Point(x, y, z, color = "black", size = 1, id)
+function Point(x, y, z, color, size, id)
 {
+	if (color == undefined)
+	{
+		color = "black";
+	}
+
+	if (size == undefined)
+	{
+		size = 1;
+	}
+
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -789,8 +799,13 @@ function Point(x, y, z, color = "black", size = 1, id)
 	this.id = id;
 }
 
-Point.prototype.draw = function(actually_draw = true)
+Point.prototype.draw = function(actually_draw)
 {
+	if (actually_draw == undefined)
+	{
+		actually_draw = true;
+	}
+
 	var x3d = this.x;
 	var y3d = this.y; 
 	var z3d = this.z; 
@@ -1051,7 +1066,12 @@ cvs.addEventListener('dblclick', function(evt)
 
 cvs.addEventListener('mousewheel',function(evt)
 {
-	var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+	var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
+
+	zoom *= (1 + delta*.1)
+
+	updateTransformedPoints();
+
 	evt.preventDefault();
     return false; 
 }, false);

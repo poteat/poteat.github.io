@@ -267,8 +267,23 @@ Projection.prototype.draw = function()
 
 
 
-function Point(x, y, fill = true, size = 5, color = "black")
+function Point(x, y, fill, size, color)
 {
+	if (fill == undefined)
+	{
+		fill = true;
+	}
+
+	if (size == undefined)
+	{
+		size = 5;
+	}
+
+	if (color == undefined)
+	{
+		color = "black";
+	}
+
 	this.x = x;
 	this.y = y;
 	this.fill = fill;

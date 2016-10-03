@@ -1372,8 +1372,18 @@ function _Points()
 
 var Points = new _Points()
 
-_Points.prototype.createPoint = function(x, y, z, color = "black", size = 1)
+_Points.prototype.createPoint = function(x, y, z, color, size)
 {
+	if (color == undefined)
+	{
+		color = "black";
+	}
+
+	if (size == undefined)
+	{
+		size = 1;
+	}
+
 	var id = this.x.length;
 	this.x.push(new Point(x, y, z, color, size, id));
 
@@ -1415,8 +1425,18 @@ _Points.prototype.draw = function()
 	}
 };
 
-function Point(x, y, z, color = "black", size = 1, id)
+function Point(x, y, z, color, size, id)
 {
+	if (color == undefined)
+	{
+		color = "black";
+	}
+
+	if (size == undefined)
+	{
+		size = 1;
+	}
+
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -1426,8 +1446,13 @@ function Point(x, y, z, color = "black", size = 1, id)
 	this.id = id;
 }
 
-Point.prototype.draw = function(actually_draw = true)
+Point.prototype.draw = function(actually_draw)
 {
+	if (actually_draw == undefined)
+	{
+		actually_draw = true;
+	}
+
 	var x3d = this.x;
 	var y3d = this.y; 
 	var z3d = this.z; 

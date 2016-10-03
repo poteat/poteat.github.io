@@ -435,8 +435,13 @@ SelectButton.prototype.hasWithin = function(obj)
 	return obj.x > this.x && obj.x < this.x + this.width && obj.y > this.y && obj.y < this.y + this.height;
 };
 
-SelectButton.prototype.draw = function(actually_draw = true)
+SelectButton.prototype.draw = function(actually_draw)
 {
+	if (actually_draw == undefined)
+	{
+		actually_draw = true;
+	}
+	
 	var background = '#D3D3D3';
 	var active_background = '#A796EB';
 
