@@ -150,7 +150,10 @@ function main()
 				{
 					DMap.updateProjection(true);
 					BSurface.updatePoints();
+
+					// Clear up HUD
 					BSurface.drawSurface = false;
+					BSurface.drawControlPoints = false;
 
 					var Vertices = new Array();
 
@@ -1292,7 +1295,7 @@ function Perimeter(ConcaveHull)
 
 		var p = new Point(calc[0], calc[1], calc[2]);
 
-		var p_T = new Point(0, 0, 0, "black", 1);
+		var p_T = new Point(0, 0, 0, "black", 3);
 
 		this.points.push(p);
 		this.points_T.push(p_T);
@@ -1383,9 +1386,165 @@ function Perimeter(ConcaveHull)
 		}
 	}
 
-
-
 	this.updateTransformedPoints();
+
+
+	this.updateColorError();
+}
+
+Perimeter.prototype.updateColorError = function()
+{
+	var L = this.points.length;
+	var P_prev;
+	var P_next;
+
+	console.log("Running updateColorError");
+
+	for (var i = 0; i < L; i++)
+	{
+		var P = this.points[i];
+		if (i == 0) // If first
+		{
+			P_prev = this.points[L - 1];
+			P_next = this.points[1];
+		}
+		else if (i == L - 1) // If last
+		{
+			P_prev = this.points[L - 2];
+			P_next = this.points[0];
+		}
+		else
+		{
+			P_prev = this.points[i - 1];
+			P_next = this.points[i + 1];
+		}
+
+		// Calculate 3D (true) distance between P and P_prev/P_next.
+		// Then find their average.
+
+		var threshold = (P.dist(P_prev) + P.dist(P_next))/2;
+
+		threshold = 5;
+
+		// Loop through all true voxels.  If their distance to P is less than threshold,
+		// Add their projection distance to a sum.
+
+		var proj_dist_avg = 0;
+		var num = 0;
+
+		for (var j = 0; j < DMap.points.length; j++)
+		{
+			var voxel = DMap.points[j];
+
+			var dist = voxel.dist(P);
+
+			if (dist < threshold)
+			{
+				var t = voxel.t;
+				var u = voxel.u;
+
+				var surface_p = BSurface.calc(t, u);
+				var x = surface_p[0];
+				var y = surface_p[1];
+				var z = surface_p[2];
+				var surface_p = new Point(x, y, z);
+
+				var proj_dist = voxel.dist(surface_p);
+
+				proj_dist_avg += proj_dist;
+				num++;
+			}
+		}
+
+		proj_dist_avg /= num;
+
+		P.error = proj_dist_avg;
+	}
+
+	// Now all perimeter errors are calculated.  We now calculate each normalized error from 0 to 1.
+
+	// Find the minimum and maximum errors.
+
+	var min_error = this.points[0].error;
+	var max_error = this.points[0].error;
+	var min_error_i = 0;
+	var max_error_i = 0;
+
+	for (var i = 1; i < this.points.length; i++)
+	{
+		var P = this.points[i];
+
+		if (P.error < min_error)
+		{
+			min_error = P.error;
+			min_error_i = i;
+		}
+
+		if (P.error > max_error)
+		{
+			max_error = P.error;
+			max_error_i = i;
+		}
+	}
+
+	// Loop through all points and set their normalized error.
+
+	var range = max_error - min_error;
+
+	if (range == 0)
+	{
+		range = 1;
+	}
+
+	for (var i = 0; i < this.points.length; i++)
+	{
+		var P = this.points[i];
+
+		var error = P.error;
+
+		var normalized_error = (error - min_error)/range;
+
+		P.normalized_error = normalized_error;
+	}
+
+	// Loop through all points, calculate the color by linear interpolation.
+
+	var low_color = [0, 0, 255]; // Blue
+	var high_color = [255, 0, 0]; // Red
+
+	for (var i = 0; i < this.points.length; i++)
+	{
+		var P = this.points[i];
+		var percent = P.normalized_error;
+
+		var interpolated_color = [0, 0, 0];
+
+		for (var j = 0; j < interpolated_color.length; j++)
+		{
+			var high = high_color[j];
+			var low = low_color[j];
+			var range = high-low;
+
+			var color_value = Math.round(percent*range + low);
+
+			interpolated_color[j] = color_value;
+		}
+
+		var P_T = this.points_T[i];
+
+		// Convert interpolated color to string.
+		// Convert [0, 0, 255] to "#0000FF"
+
+		var r = interpolated_color[0];
+		var g = interpolated_color[1];
+		var b = interpolated_color[2];
+
+		color_string = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+
+		P_T.color = color_string;
+	}
+
+
 }
 
 Perimeter.prototype.updateTransformedPoints = function()
@@ -1541,6 +1700,45 @@ Perimeter.prototype.draw = function()
 
 
 
+	// Draw a linearly interpolated colored line between each perimeter point.
+
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 2;
+
+	var L = this.points_T.length;
+
+	for (var i = 0; i < L; i++)
+	{
+		var P = this.points_T[i];
+
+		if (i == L - 1) // If last
+		{
+			var P_next = this.points_T[0];
+		}
+		else
+		{
+			var P_next = this.points_T[i + 1];
+		}
+
+		var gradient = ctx.createLinearGradient(P.x2d, P.y2d, P_next.x2d, P_next.y2d);
+		gradient.addColorStop(0, P.color);
+		gradient.addColorStop(1, P_next.color);
+
+		ctx.strokeStyle = gradient;
+
+		ctx.beginPath();
+
+		ctx.moveTo(P.x2d, P.y2d);
+		ctx.lineTo(P_next.x2d, P_next.y2d);
+
+		ctx.stroke();
+	}
+
+
+
+
+	/*
+
 	ctx.strokeStyle = "black";
 	ctx.lineWidth = 2;
 
@@ -1553,7 +1751,9 @@ Perimeter.prototype.draw = function()
 		var x = p.x2d;
 		var y = p.y2d;
 
-		if (i == 0)
+		var prev_color = p.color;
+
+		if (i == 0) // If first
 		{
 			ctx.moveTo(x, y);
 		}
@@ -1562,7 +1762,7 @@ Perimeter.prototype.draw = function()
 			ctx.lineTo(x, y);
 		}
 
-		if (i == this.points_T.length - 1)
+		if (i == this.points_T.length - 1) // If last
 		{
 			var p = this.points_T[0];
 
@@ -1572,10 +1772,16 @@ Perimeter.prototype.draw = function()
 			ctx.lineTo(x, y);
 		}
 
+		var P_prev = p;
+
 	}
 
-	ctx.lineWidth = 1;
 	ctx.stroke();
+
+
+	*/
+
+	ctx.lineWidth = 1;
 
 	ctx.strokeStyle = "black";
 }
@@ -1599,6 +1805,8 @@ function Surface(X, Y, T, U)
 	this.U = U;
 
 	this.drawSurface = true;
+
+	this.drawControlPoints = true;
 
 
 	// Control points determine the shape of the curve.  Here, we define
@@ -1936,25 +2144,28 @@ Surface.prototype.draw = function()
 
 
 
-
-	// Draw resolution points
-	for (var i = 0; i < this.RX; i++)
+	if (this.drawControlPoints)
 	{
-		for (var j = 0; j < this.RY; j++)
+		// Draw resolution points
+		for (var i = 0; i < this.RX; i++)
 		{
-			this.resPoints_T[i][j].draw();
+			for (var j = 0; j < this.RY; j++)
+			{
+				this.resPoints_T[i][j].draw();
+			}
 		}
+
+
+		// Draw control points
+		for (var i = 0; i < this.X; i++)
+		{
+			for (var j = 0; j < this.Y; j++)
+			{
+				this.controlPoints_T[i][j].draw();
+			}
+		}		
 	}
 
-
-	// Draw control points
-	for (var i = 0; i < this.X; i++)
-	{
-		for (var j = 0; j < this.Y; j++)
-		{
-			this.controlPoints_T[i][j].draw();
-		}
-	}
 
 };
 
