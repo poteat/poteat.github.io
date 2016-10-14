@@ -1424,7 +1424,53 @@ Perimeter.prototype.updateColorError = function()
 
 		var threshold = (P.dist(P_prev) + P.dist(P_next))/2;
 
-		threshold = 5;
+		var threshold = 5;
+
+
+		/*
+		// *************************
+		// Loop through voxels.  Find maximum proj dist in set of dist less than threshold.
+
+		
+
+		var max_proj_dist = 0;
+
+		for (var j = 0; j < DMap.points.length; j++)
+		{
+			var voxel = DMap.points[j];
+
+			var dist = voxel.dist(P);
+
+			if (dist < threshold)
+			{
+				var t = voxel.t;
+				var u = voxel.u;
+
+				var surface_p = BSurface.calc(t, u);
+				var x = surface_p[0];
+				var y = surface_p[1];
+				var z = surface_p[2];
+				var surface_p = new Point(x, y, z);
+
+				var proj_dist = voxel.dist(surface_p);
+
+				if (proj_dist > max_proj_dist)
+				{
+					max_proj_dist = proj_dist;
+				}
+			}
+		}
+
+		P.error = max_proj_dist;
+		*/
+		
+
+		// *************************
+
+
+
+		
+		// *************************
 
 		// Loop through all true voxels.  If their distance to P is less than threshold,
 		// Add their projection distance to a sum.
@@ -1459,6 +1505,9 @@ Perimeter.prototype.updateColorError = function()
 		proj_dist_avg /= num;
 
 		P.error = proj_dist_avg;
+		// *************************
+		
+		
 	}
 
 	// Now all perimeter errors are calculated.  We now calculate each normalized error from 0 to 1.

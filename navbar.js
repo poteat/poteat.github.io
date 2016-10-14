@@ -28,5 +28,6 @@ document.write('\
 			<li><a href="interpolator.html">3-Point Interpolator</a></li>\
 			<li><a href="characteristicshape.html">Characteristic Shape Algorithm</a></li>\
 			<li><a href="polygonlineintersection.html">Polygon-Line Intersection</a></li>\
+			<li><a href="linetwist.html">Symmetric Line Similarity Method</a></li>\
 		</ul>\
 ');
