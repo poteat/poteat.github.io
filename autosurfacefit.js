@@ -35,6 +35,8 @@
 	var first_execution = true;
 	var BPerimeter;
 
+	var BStrand;
+
 
 
 // Program entry point, runs once at initialization of application.
@@ -63,10 +65,8 @@ function main()
 {
 	ctx.clearRect(0, 0, cvs.width, cvs.height);
 
-//	BProj.draw();
-
 	BSurface.draw();
-	//if (DMap != undefined && BSurface.finished == false)
+	if (DMap != undefined && BSurface.finished == false)
 	{
 		DMap.draw();
 	}
@@ -182,14 +182,22 @@ function main()
 					BPerimeter = new Perimeter(ConcaveHull);
 
 					first_execution = false;
+
+					initializeStrandFit();
 				}
+
+
+				// This area is devoted to post-processing after surface fit.
+
+
+				BStrand.draw();
 
 				BPerimeter.draw();
 
 
 
 
-
+				// End post-process handling area.
 			}
 		}
 		else
@@ -241,6 +249,10 @@ function main()
 
 
 
+function initializeStrandFit()
+{
+	BStrand = new Strand();
+}
 
 
 
@@ -263,6 +275,11 @@ function updateTransformedPoints()
 	if (BPerimeter != null)
 	{
 		BPerimeter.updateTransformedPoints();
+	}
+
+	if (BStrand != null)
+	{
+		BStrand.updateTransformedPoints();
 	}
 }
 
@@ -438,7 +455,7 @@ function binomial(n, k)
 
 function clamp(num, min, max)
 {
-  return num < min ? min : num > max ? max : num;
+	return num < min ? min : num > max ? max : num;
 }
 
 
@@ -1398,8 +1415,6 @@ Perimeter.prototype.updateColorError = function()
 	var P_prev;
 	var P_next;
 
-	console.log("Running updateColorError");
-
 	for (var i = 0; i < L; i++)
 	{
 		var P = this.points[i];
@@ -1787,7 +1802,7 @@ Perimeter.prototype.draw = function()
 
 
 	/*
-
+	// This does the same thing as the above code, only it calculates using the maximum instead.
 	ctx.strokeStyle = "black";
 	ctx.lineWidth = 2;
 
@@ -1834,6 +1849,682 @@ Perimeter.prototype.draw = function()
 
 	ctx.strokeStyle = "black";
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Strand()
+{
+	this.originPoint = new Point(0, 0, 0);
+	this.originPoint_T = new Point(0, 0, 0, 'green', 5);
+
+	var coords = BSurface.calc(0.5, 0.5);
+
+	var angle_degrees = 45;
+
+	var angle = angle_degrees * Math.PI/180;
+
+	Hull = BPerimeter.vertices;
+
+	intersects = getIntersectionPoints(0.5, 0.5, angle, Hull, true);
+
+	coords1 = BSurface.calc(intersects[0][0], intersects[0][1]);
+	coords2 = BSurface.calc(intersects[1][0], intersects[1][1]);
+
+	// Linearly interpolate between two intersections points on surface space.
+
+	var t1 = intersects[0][0];
+	var u1 = intersects[0][1];
+
+	var t2 = intersects[1][0];
+	var u2 = intersects[1][1];
+
+	var N = 100;
+
+	this.points = new Array();
+	this.points_T = new Array();
+
+	for (var i = 0; i < N; i++)
+	{
+		var P = i/(N-1);
+
+		var t = t1 + P*(t2-t1);
+		var u = u1 + P*(u2-u1);
+
+		var coords = BSurface.calc(t, u);
+
+		var sample = new Point(coords[0], coords[1], coords[2]);
+
+		sample.t = t;
+		sample.u = u;
+
+		var sample_T = new Point(0, 0, 0, 'deeppink',3)
+
+		this.points.push(sample);
+		this.points_T.push(sample_T);
+	}
+
+	this.originPoint.x = coords[0];
+	this.originPoint.y = coords[1];
+	this.originPoint.z = coords[2];
+
+
+
+	// Estimate arclength of entire arc.
+
+	var sumdist = 0;
+
+	this.points[0].sumdist = 0;
+
+	for (var i = 1; i < this.points.length; i++)
+	{
+		var p = this.points[i-1];
+		var p2 = this.points[i];
+
+		var dist = p.dist(p2);
+
+		sumdist += dist;
+
+		//console.log(sumdist);
+
+		p2.sumdist = sumdist;
+	}
+
+
+
+	// Given arclength estimation, find points closest to the 1/5 2/5 3/5 4/5 definition
+	// to populate the midPoints array.
+
+	var i = 0;
+
+	this.midPoints = new Array();
+	this.midPoints_T = new Array();
+
+	for (var j = 1; j < 5; j++)
+	{
+		var target = sumdist*(j/5);
+
+		while(i < this.points.length)
+		{
+			var p = this.points[i];
+			var p_T = this.points_T[i];
+
+			if (p.sumdist > target)
+			{
+				this.midPoints.push(p);
+				this.midPoints_T.push(p_T);
+
+				//console.log(p.sumdist);
+				break;
+			}
+
+			i++;
+		}
+	}
+
+
+	// Given the midpoints array, project each of the four midpoints left five angstroms to 
+	// populate the left midpoints array.
+
+	this.midPointsLeft = new Array();
+	this.midPointsLeft_T = new Array();
+
+	var N = 100;
+
+	var perpendicular_angle = (angle_degrees + 90) * Math.PI/180;
+
+	for (var j = 0; j < this.midPoints.length; j++)
+	{
+		var starting_p = this.midPoints[j];
+
+		var intersections = getIntersectionPoints(starting_p.t, starting_p.u, perpendicular_angle, Hull, true);
+
+		var t1 = starting_p.t;
+		var u1 = starting_p.u;
+
+		var t2 = intersections[0][0];
+		var u2 = intersections[0][1];
+
+		var target = 5;
+
+		var sumdist = 0;
+
+		var i = 0;
+
+		var prev_coords;
+
+		while (i < N)
+		{
+			var percentage = i/(N-1);
+			var t = t1 + (t2-t1)*percentage;
+			var u = u1 + (u2-u1)*percentage;
+
+			var coords = BSurface.calc(t, u);
+
+			if (i == 0)
+			{
+				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
+			}
+			else
+			{
+				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
+			}
+
+			prev_coords = coords;
+
+			if (sumdist > target)
+			{
+				var p = new Point(coords[0], coords[1], coords[2]);
+				var p_T = new Point(coords[0], coords[1], coords[2], "deeppink", 3);
+
+
+				this.midPointsLeft.push(p);
+				this.midPointsLeft_T.push(p_T);
+
+				break;
+			}
+
+			i++;
+		}
+	}
+
+
+
+
+
+	// Do the same thing for the right array
+
+	this.midPointsRight = new Array();
+	this.midPointsRight_T = new Array();
+
+	var N = 100;
+
+	var perpendicular_angle = (angle_degrees + 90) * Math.PI/180;
+
+	for (var j = 0; j < this.midPoints.length; j++)
+	{
+		var starting_p = this.midPoints[j];
+
+		var intersections = getIntersectionPoints(starting_p.t, starting_p.u, perpendicular_angle, Hull, true);
+
+		var t1 = starting_p.t;
+		var u1 = starting_p.u;
+
+		var t2 = intersections[1][0];
+		var u2 = intersections[1][1];
+
+		var target = 5;
+
+		var sumdist = 0;
+
+		var i = 0;
+
+		var prev_coords;
+
+		while (i < N)
+		{
+			var percentage = i/(N-1);
+			var t = t1 + (t2-t1)*percentage;
+			var u = u1 + (u2-u1)*percentage;
+
+			var coords = BSurface.calc(t, u);
+
+			if (i == 0)
+			{
+				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
+			}
+			else
+			{
+				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
+			}
+
+			prev_coords = coords;
+
+			if (sumdist > target)
+			{
+				var p = new Point(coords[0], coords[1], coords[2]);
+				var p_T = new Point(coords[0], coords[1], coords[2], "deeppink", 3);
+
+				this.midPointsRight.push(p);
+				this.midPointsRight_T.push(p_T);
+
+				break;
+			}
+
+			i++;
+		}
+	}
+
+
+
+
+	this.angles = new Array();
+
+	// Calculate angle between mid and left arrays.
+
+	for (var i = 1; i < this.midPoints.length; i++)
+	{
+		var p1 = this.midPoints[i-1];
+		var p2 = this.midPoints[i];
+
+		var p3 = this.midPointsLeft[i-1];
+		var p4 = this.midPointsLeft[i];
+
+		var angle = this.angleBetweenTwoVectors(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z,p4.x-p3.x, p4.y-p3.y, p4.z-p3.z);
+		angle *= 180/Math.PI;
+
+		this.angles.push(angle);
+	}
+
+	// Calculate angle between mid and right arrays.
+
+	for (var i = 1; i < this.midPoints.length; i++)
+	{
+		var p1 = this.midPoints[i-1];
+		var p2 = this.midPoints[i];
+
+		var p3 = this.midPointsRight[i-1];
+		var p4 = this.midPointsRight[i];
+
+		var angle = this.angleBetweenTwoVectors(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z,p4.x-p3.x, p4.y-p3.y, p4.z-p3.z);
+		angle *= 180/Math.PI;
+
+		this.angles.push(angle);
+	}
+
+
+	var max_ang = 0;
+	var max_i = -1;
+
+	for (var i = 0; i < this.angles.length; i++)
+	{
+		var ang = this.angles[i];
+
+		if (ang > max_ang)
+		{
+			max_ang = ang;
+			max_i = i;
+		}
+	}
+
+	this.max_ang = max_ang;
+
+	this.maxAnglePoints = new Array();
+
+	if (max_i != -1)
+	{
+		if (max_i < 4) // left
+		{
+			var p1 = this.midPointsLeft_T[max_i];
+			var p2 = this.midPointsLeft_T[max_i+1]
+
+			p1.color = "purple";
+			p2.color = "purple";
+		}
+		else // right
+		{
+			max_i -= 4;
+
+			var p1 = this.midPointsRight_T[max_i];
+			var p2 = this.midPointsRight_T[max_i+1]
+
+			p1.color = "purple";
+			p2.color = "purple";
+		}
+
+		this.maxAnglePoints.push(p1);
+		this.maxAnglePoints.push(p2);
+	}
+
+
+
+
+	this.updateTransformedPoints();
+}
+
+Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2)
+{
+	var l1 = Math.sqrt(Math.pow(x1,2)+Math.pow(y1,2)+Math.pow(z1,2));
+	var l2 = Math.sqrt(Math.pow(x2,2)+Math.pow(y2,2)+Math.pow(z2,2));
+
+	var dot = x1*x2 + y1*y2 + z1*z2;
+
+	return Math.acos(dot/l1/l2);
+}
+
+Strand.prototype.distBetweenSamples = function(x1, y1, z1, x2, y2, z2)
+{
+	return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2)+Math.pow(z1-z2,2));
+}
+
+Strand.prototype.draw = function()
+{
+	this.originPoint_T.draw();
+
+
+
+
+
+
+	// Draw middle strand line
+
+	var needToMove = true;
+
+	ctx.strokeStyle = "deeppink";
+	ctx.lineWidth = 2;
+
+	ctx.beginPath();
+
+	for (var i = 0; i < this.points_T.length; i++)
+	{
+		var p = this.points_T[i];
+
+		p.draw(false) // Calculate scale.
+
+		if (p.scale > 0) // Inside window
+		{
+			if (needToMove)
+			{
+				ctx.moveTo(p.x2d, p.y2d);
+				needToMove = false;
+			}
+			else
+			{
+				ctx.lineTo(p.x2d, p.y2d);
+			}
+		}
+		else
+		{
+			needToMove = true;
+		}
+	}
+
+	ctx.stroke();
+
+	ctx.lineWidth = 1; // Reset line width.
+
+
+
+
+
+	// Draw midpoint lines
+
+	var needToMove = true;
+
+	ctx.strokeStyle = "green";
+	ctx.lineWidth = 4;
+
+	ctx.beginPath();
+
+	for (var i = 0; i < this.midPoints_T.length; i++)
+	{
+		var p = this.midPoints_T[i];
+
+		p.draw(false) // Calculate scale.
+
+		if (p.scale > 0) // Inside window
+		{
+			if (needToMove)
+			{
+				ctx.moveTo(p.x2d, p.y2d);
+				needToMove = false;
+			}
+			else
+			{
+				ctx.lineTo(p.x2d, p.y2d);
+			}
+		}
+		else
+		{
+			needToMove = true;
+		}
+	}
+
+	ctx.stroke();
+
+	ctx.lineWidth = 1; // Reset line width.
+
+
+
+
+
+
+	// Draw left midpoint lines
+
+	var needToMove = true;
+
+	ctx.strokeStyle = "green";
+	ctx.lineWidth = 4;
+
+	ctx.beginPath();
+
+	for (var i = 0; i < this.midPointsLeft_T.length; i++)
+	{
+		var p = this.midPointsLeft_T[i];
+
+		p.draw(false) // Calculate scale.
+
+		if (p.scale > 0) // Inside window
+		{
+			if (needToMove)
+			{
+				ctx.moveTo(p.x2d, p.y2d);
+				needToMove = false;
+			}
+			else
+			{
+				ctx.lineTo(p.x2d, p.y2d);
+			}
+		}
+		else
+		{
+			needToMove = true;
+		}
+	}
+
+	ctx.stroke();
+
+	ctx.lineWidth = 1; // Reset line width.
+
+
+
+
+	// Draw left midpoint lines
+
+	var needToMove = true;
+
+	ctx.strokeStyle = "green";
+	ctx.lineWidth = 4;
+
+	ctx.beginPath();
+
+	for (var i = 0; i < this.midPointsRight_T.length; i++)
+	{
+		var p = this.midPointsRight_T[i];
+
+		p.draw(false) // Calculate scale.
+
+		if (p.scale > 0) // Inside window
+		{
+			if (needToMove)
+			{
+				ctx.moveTo(p.x2d, p.y2d);
+				needToMove = false;
+			}
+			else
+			{
+				ctx.lineTo(p.x2d, p.y2d);
+			}
+		}
+		else
+		{
+			needToMove = true;
+		}
+	}
+
+	ctx.stroke();
+
+	ctx.lineWidth = 1; // Reset line width.
+
+
+
+
+	// Draw maximum angle line
+
+	ctx.beginPath();
+	ctx.strokeStyle = "purple";
+	ctx.lineWidth = 4;
+
+	for (var i = 0; i < this.maxAnglePoints.length; i++)
+	{
+		var p = this.maxAnglePoints[i];
+		p.draw(false);
+
+		if (i == 0)
+		{
+			if (p.scale > 0)
+			{
+				ctx.moveTo(p.x2d, p.y2d);
+			}
+			else
+			{
+				break;
+			}
+		}
+		else
+		{
+			if (p.scale > 0)
+			{
+				ctx.lineTo(p.x2d, p.y2d)
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	ctx.stroke();
+
+
+
+
+	ctx.lineWidth = 1;
+
+
+
+
+	// Draw midpoints
+
+	for (var i = 0; i < this.midPoints_T.length; i++)
+	{
+		var p = this.midPoints_T[i];
+		p.draw();
+	}
+
+
+	// Draw left midpoints
+
+	for (var i = 0; i < this.midPointsLeft_T.length; i++)
+	{
+		var p = this.midPointsLeft_T[i];
+		p.draw();
+	}
+
+	// Draw right midpoints
+
+	for (var i = 0; i < this.midPointsRight_T.length; i++)
+	{
+		var p = this.midPointsRight_T[i];
+		p.draw();
+	}
+
+
+
+
+
+	// Draw textual output
+
+	ctx.fillStyle = "black";
+	ctx.fillText("Max Ang (deg): " + this.max_ang, 10, 100);
+
+}
+
+Strand.prototype.updateTransformedPoints = function()
+{
+	this.originPoint_T.moveTo(this.originPoint);
+	this.originPoint_T.scaleFactor(zoom);
+	this.originPoint_T.rotateY(yaw);
+	this.originPoint_T.rotateX(pitch);
+
+	for (var i = 0; i < this.points_T.length; i++)
+	{
+		this.points_T[i].moveTo(this.points[i]);
+		this.points_T[i].scaleFactor(zoom);
+		this.points_T[i].rotateY(yaw);
+		this.points_T[i].rotateX(pitch);
+	}
+
+	if (this.midPointsLeft_T != undefined)
+	{
+		for (var i = 0; i < this.midPointsLeft_T.length; i++)
+		{
+			this.midPointsLeft_T[i].moveTo(this.midPointsLeft[i]);
+			this.midPointsLeft_T[i].scaleFactor(zoom);
+			this.midPointsLeft_T[i].rotateY(yaw);
+			this.midPointsLeft_T[i].rotateX(pitch);
+		}
+	}
+
+	if (this.midPointsRight_T != undefined)
+	{
+		for (var i = 0; i < this.midPointsRight_T.length; i++)
+		{
+			this.midPointsRight_T[i].moveTo(this.midPointsRight[i]);
+			this.midPointsRight_T[i].scaleFactor(zoom);
+			this.midPointsRight_T[i].rotateY(yaw);
+			this.midPointsRight_T[i].rotateX(pitch);
+		}
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1985,14 +2676,6 @@ Surface.prototype.setControlPoints = function(array_of_points)
 
 	this.updatePoints();
 	DMap.updateProjection();
-
-//	this.points[0][0] = array_of_points[0][0];
-//	this.points[0][3] = array_of_points[0][1];
-//	this.points[3][0] = array_of_points[1][0];
-//	this.points[3][3] = array_of_points[1][1];
-
-//	this.updatePoints();
-//	this.updateTransformedPoints();
 }
 
 Surface.prototype.updatePoints = function()
@@ -2214,8 +2897,6 @@ Surface.prototype.draw = function()
 			}
 		}		
 	}
-
-
 };
 
 Surface.prototype.closestControlPoint2D = function(obj)

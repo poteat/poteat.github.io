@@ -28,13 +28,13 @@ function init()
     Masses[id_E].hookForce(Gravity);
 //    Masses[id_B].hookForce(AirResistance);
 
-    var spring_id = createSpringObject(100, 50, 10, id_A, id_B);
+    var spring_id = createSpringObject(1000, 50, 10, id_A, id_B);
 
-    var spring_id2 = createSpringObject(100, 50, 10, id_B, id_C);
+    var spring_id2 = createSpringObject(1000, 50, 10, id_B, id_C);
 
-    var spring_id3 = createSpringObject(100, 50, 10, id_C, id_D);
+    var spring_id3 = createSpringObject(1000, 50, 10, id_C, id_D);
 
-    var spring_id4 = createSpringObject(100, 50, 10, id_D, id_E);
+    var spring_id4 = createSpringObject(1000, 50, 10, id_D, id_E);
 
  //   Masses[id_A].hookForce(Springs[spring_id]);
     Masses[id_B].hookForce(Springs[spring_id]);

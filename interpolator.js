@@ -116,7 +116,7 @@ QuadraticBezier.prototype.draw = function()
 
 
 	var subchord_arclength = this.arcLength(0, this.t);
-	t_estimate = ((subchord_arclength/arclength)+.5*1)/2;
+	t_estimate = ((subchord_arclength/arclength)+.5)/2;
 
 	Sliders[this.smooth_slider_id].setValue(this.t);
 
@@ -154,7 +154,7 @@ QuadraticBezier.prototype.arcLength = function(min, max)
 		max = 1;
 	}
 
-	var samples = 100;
+	var samples = 500;
 	var totalLength = 0;
 
 	var p = new Point(0, 0);

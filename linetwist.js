@@ -142,6 +142,45 @@ LineTwist.prototype.draw = function()
 
 
 
+	// For each linepoint, calculate its projection distance to the line of best fit.
+
+	var L = this.linepoints.length;
+
+	var P1 = this.points[0];
+	var P2 = this.points[1];
+	var dist1 = P1.dist(P2.x, P2.y);
+	var delta = dist1/(L/2);
+
+	var sumdist = 0;
+
+	for (var i = 0; i < L/2; i++)
+	{
+		var p = this.linepoints[i];
+		var dist = Math.abs(p.distFromLine(this.slope, this.intersect));
+		sumdist += dist;
+	}
+
+	sumdist *= delta;
+
+
+	var P1 = this.points[2];
+	var P2 = this.points[3];
+	var dist2 = P1.dist(P2.x, P2.y);
+	var delta = dist1/(L/2);
+
+	var sumdist2 = 0;
+
+	for (var i = L/2; i < L; i++)
+	{
+		var p = this.linepoints[i];
+		var dist = Math.abs(p.distFromLine(this.slope, this.intersect));
+		sumdist2 += dist;
+	}
+
+	sumdist2 *= delta;
+
+	var total_area = sumdist + sumdist2;
+
 	// Calculate average of projected control points.
 
 	var sumx = 0;
@@ -195,6 +234,11 @@ LineTwist.prototype.draw = function()
 	ctx.lineTo(this.projectedPoint[max_i].x,this.projectedPoint[max_i].y);
 	ctx.stroke();
 
+	var p_min = this.projectedPoint[min_i];
+	var p_max = this.projectedPoint[max_i];
+
+	var large_dist = p_min.dist(p_max.x, p_max.y);
+
 	var found = false;
 
 	ctx.beginPath();
@@ -208,16 +252,28 @@ LineTwist.prototype.draw = function()
 			if (!found)
 			{
 				ctx.moveTo(P.x, P.y);
+				var p_min = P;
 				found = true;
 			}
 			else
 			{
+				var p_max = P;
 				ctx.lineTo(P.x, P.y);
 			}
 		}
 	}
 
 	ctx.stroke();
+
+	var small_dist = p_min.dist(p_max.x, p_max.y);
+	var ratio = small_dist/large_dist;
+
+	ctx.fillText("Projection Ratio: " + ratio, 250, 15);
+	ctx.fillText("Total Area (Pixels): " + total_area, 250, 25);
+
+	var similarity = ratio/total_area;
+
+	ctx.fillText("Symmetric Similarity: " + similarity*10000, 250, 45);
 
 	for (var i = 0; i < this.projectedPoint.length; i++)
 	{
