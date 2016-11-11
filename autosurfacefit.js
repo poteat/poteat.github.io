@@ -65,6 +65,17 @@ function main()
 {
 	ctx.clearRect(0, 0, cvs.width, cvs.height);
 
+	// Draw all toggle button and slider objects.
+	for (var i = 0; i < ToggleButtons.length; i++)
+	{
+		ToggleButtons[i].draw();
+	}
+
+	for (var i = 0; i < Sliders.length; i++)
+	{
+		Sliders[i].draw();
+	}
+
 	BSurface.draw();
 	if (DMap != undefined && BSurface.finished == false)
 	{
@@ -1878,17 +1889,139 @@ Perimeter.prototype.draw = function()
 function Strand()
 {
 	this.originPoint = new Point(0, 0, 0);
-	this.originPoint_T = new Point(0, 0, 0, 'green', 5);
+	this.originPoint_T = new Point(0, 0, 0, 'blue', 7);
 
-	var coords = BSurface.calc(0.5, 0.5);
+	optimize_button = Create_ToggleButton(550, 30, 70, 25, "Optimize");
+	angle_slider = Create_Slider(550, 60, 150, 20, "Angle", 10, 0, 179.99, 45);
+	offset_slider = Create_Slider(550, 90, 150, 20, "Offset", 10, -1.99, 2, 0);
 
-	var angle_degrees = 45;
+	this.optimize_button = ToggleButtons[optimize_button];
+	this.angle_slider = Sliders[angle_slider];
+	this.offset_slider = Sliders[offset_slider];
 
-	var angle = angle_degrees * Math.PI/180;
+
+
+	// Calculate center surface position of all hull points.
 
 	Hull = BPerimeter.vertices;
 
-	intersects = getIntersectionPoints(0.5, 0.5, angle, Hull, true);
+	var avgt = 1;
+	var avgu = 1;
+
+	for (var i = 0; i < Hull.length; i++)
+	{
+		var V = Hull[i];
+
+		avgt += Math.pow(V[0],2);
+		avgu += Math.pow(V[1],2);
+	}
+
+	avgt /= Hull.length;
+	avgu /= Hull.length;
+
+	avgt = Math.sqrt(avgt);
+	avgu = Math.sqrt(avgu);
+
+	avgt = 0;
+	avgu = 0;
+
+	for (var i = 0; i < DMap.points.length; i++)
+	{
+		var p = DMap.points[i];
+		avgt += p.t;
+		avgu += p.u;
+	}
+
+	avgt /= DMap.points.length;
+	avgu /= DMap.points.length;
+
+
+	var coords = BSurface.calc(avgt, avgu);
+
+	this.originPoint.x = coords[0];
+	this.originPoint.y = coords[1];
+	this.originPoint.z = coords[2];
+
+	this.originPoint.t = avgt;
+	this.originPoint.u = avgu;
+
+	this.angle = 45;
+	this.offset = 0;
+
+	this.setAngle(45, 0);
+}
+
+Strand.prototype.setAngle = function(angle_degrees, offset)
+{
+
+	var width_of_gap = 4;
+
+	var angle = angle_degrees * Math.PI/180;
+
+	var perpendicular_angle = (angle_degrees + 90) * Math.PI/180;
+
+	// Search for parameters in surface space that give a real space distance of 2 angstrom offset.
+
+	var target = offset;
+
+	var starting_p = this.originPoint;
+
+	var t1 = starting_p.t;
+	var u1 = starting_p.u;
+
+	var sumdist = 0;
+	var i = 0;
+	var prev_coords = null;
+
+	var delta = 0.001;
+
+	var t = t1;
+	var u = u1;
+
+	var i = 0;
+
+	var dir = sign(target);
+
+	var delta_t = -dir*delta*Math.sin(perpendicular_angle);
+	var delta_u = dir*delta*Math.cos(perpendicular_angle);
+
+	var dx = 0;
+	var dy = 0;
+
+	while (i < 5/delta) // Search for a max 5 Angstroms surface-space)
+	{
+		t += delta_t;
+		u += delta_u;
+
+		var coords = BSurface.calc(t, u);
+
+		if (i == 0)
+		{
+			sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
+		}
+		else
+		{
+			sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
+		}
+
+		prev_coords = coords;
+
+		if (sumdist > Math.abs(target))
+		{
+			dx = t - t1;
+			dy = u - u1;
+
+			break;
+		}
+
+		i++;
+	}
+
+
+
+	Hull = BPerimeter.vertices;
+
+	intersects = getIntersectionPoints(this.originPoint.t + dx, this.originPoint.u + dy, angle, Hull, true);
 
 	coords1 = BSurface.calc(intersects[0][0], intersects[0][1]);
 	coords2 = BSurface.calc(intersects[1][0], intersects[1][1]);
@@ -1926,10 +2059,6 @@ function Strand()
 		this.points_T.push(sample_T);
 	}
 
-	this.originPoint.x = coords[0];
-	this.originPoint.y = coords[1];
-	this.originPoint.z = coords[2];
-
 
 
 	// Estimate arclength of entire arc.
@@ -1951,7 +2080,6 @@ function Strand()
 
 		p2.sumdist = sumdist;
 	}
-
 
 
 	// Given arclength estimation, find points closest to the 1/5 2/5 3/5 4/5 definition
@@ -1985,6 +2113,143 @@ function Strand()
 	}
 
 
+
+
+
+	var target = width_of_gap;
+	var delta = .005; // 0.1 Angstrom delta for search
+
+
+	this.midPointsLeft = new Array();
+	this.midPointsLeft_T = new Array();
+
+	var perpendicular_angle = (angle_degrees + 90) * Math.PI/180;
+
+	for (var j = 0; j < this.midPoints.length; j++)
+	{
+		var starting_p = this.midPoints[j];
+
+		var t1 = starting_p.t;
+		var u1 = starting_p.u;
+
+		var sumdist = 0;
+		var i = 0;
+		var prev_coords = null;
+
+		var t = t1;
+		var u = u1;
+
+		var i = 0;
+
+		var delta_t = -delta*Math.sin(perpendicular_angle);
+		var delta_u = delta*Math.cos(perpendicular_angle);
+
+		while (i < 10/delta) // Search for a max 10 Angstroms surface-space)
+		{
+			t += delta_t;
+			u += delta_u;
+
+			var coords = BSurface.calc(t, u);
+
+			if (i == 0)
+			{
+				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
+			}
+			else
+			{
+				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
+			}
+
+			prev_coords = coords;
+
+			if (sumdist > target)
+			{
+				var p = new Point(coords[0], coords[1], coords[2]);
+				var p_T = new Point(coords[0], coords[1], coords[2], "deeppink", 3);
+
+
+				this.midPointsLeft.push(p);
+				this.midPointsLeft_T.push(p_T);
+
+				break;
+			}
+
+			i++;
+		}
+	}
+
+
+
+
+
+
+
+	this.midPointsRight = new Array();
+	this.midPointsRight_T = new Array();
+
+	var perpendicular_angle = (angle_degrees - 90) * Math.PI/180;
+
+	for (var j = 0; j < this.midPoints.length; j++)
+	{
+		var starting_p = this.midPoints[j];
+
+		var t1 = starting_p.t;
+		var u1 = starting_p.u;
+
+		var sumdist = 0;
+		var i = 0;
+		var prev_coords = null;
+
+		var t = t1;
+		var u = u1;
+
+		var i = 0;
+
+		var delta_t = -delta*Math.sin(perpendicular_angle);
+		var delta_u = delta*Math.cos(perpendicular_angle);
+
+		while (i < 10/delta) // Search for a max 10 Angstroms surface-space)
+		{
+			t += delta_t;
+			u += delta_u;
+
+			var coords = BSurface.calc(t, u);
+
+			if (i == 0)
+			{
+				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
+			}
+			else
+			{
+				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
+			}
+
+			prev_coords = coords;
+
+			if (sumdist > target)
+			{
+				var p = new Point(coords[0], coords[1], coords[2]);
+				var p_T = new Point(coords[0], coords[1], coords[2], "deeppink", 3);
+
+
+				this.midPointsRight.push(p);
+				this.midPointsRight_T.push(p_T);
+
+				break;
+			}
+
+			i++;
+		}
+	}
+
+
+
+
+
+
+
+	/*
+
 	// Given the midpoints array, project each of the four midpoints left five angstroms to 
 	// populate the left midpoints array.
 
@@ -2015,11 +2280,14 @@ function Strand()
 
 		var prev_coords;
 
-		while (i < N)
+		while (i < 2000)
 		{
 			var percentage = i/(N-1);
-			var t = t1 + (t2-t1)*percentage;
-			var u = u1 + (u2-u1)*percentage;
+			//var t = t1 + (t2-t1)*percentage;
+			//var u = u1 + (u2-u1)*percentage;
+
+			var t = t1 + Math.abs(t2-t1);
+			var u = u1 + Math.abs(u2-u1);
 
 			var coords = BSurface.calc(t, u);
 
@@ -2083,11 +2351,14 @@ function Strand()
 
 		var prev_coords;
 
-		while (i < N)
+		while (i < 2000)
 		{
 			var percentage = i/(N-1);
-			var t = t1 + (t2-t1)*percentage;
-			var u = u1 + (u2-u1)*percentage;
+//			var t = t1 + (t2-t1)*percentage;
+//			var u = u1 + (u2-u1)*percentage;
+
+			var t = t1 - .1;
+			var u = u1 - .1;
 
 			var coords = BSurface.calc(t, u);
 
@@ -2117,14 +2388,20 @@ function Strand()
 		}
 	}
 
+	*/
 
+	this.updateScore();
 
+	this.updateTransformedPoints();
+}
 
+Strand.prototype.updateScore = function()
+{
 	this.angles = new Array();
 
 	// Calculate angle between mid and left arrays.
 
-	for (var i = 1; i < this.midPoints.length; i++)
+	for (var i = 1; i < this.midPointsLeft.length; i++)
 	{
 		var p1 = this.midPoints[i-1];
 		var p2 = this.midPoints[i];
@@ -2132,7 +2409,7 @@ function Strand()
 		var p3 = this.midPointsLeft[i-1];
 		var p4 = this.midPointsLeft[i];
 
-		var angle = this.angleBetweenTwoVectors(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z,p4.x-p3.x, p4.y-p3.y, p4.z-p3.z);
+		var angle = this.angleBetweenTwoVectors(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z,p4.x-p3.x, p4.y-p3.y, p4.z-p3.z, p1, p3);
 		angle *= 180/Math.PI;
 
 		this.angles.push(angle);
@@ -2140,7 +2417,7 @@ function Strand()
 
 	// Calculate angle between mid and right arrays.
 
-	for (var i = 1; i < this.midPoints.length; i++)
+	for (var i = 1; i < this.midPointsRight.length; i++)
 	{
 		var p1 = this.midPoints[i-1];
 		var p2 = this.midPoints[i];
@@ -2148,7 +2425,7 @@ function Strand()
 		var p3 = this.midPointsRight[i-1];
 		var p4 = this.midPointsRight[i];
 
-		var angle = this.angleBetweenTwoVectors(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z,p4.x-p3.x, p4.y-p3.y, p4.z-p3.z);
+		var angle = this.angleBetweenTwoVectors(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z,p4.x-p3.x, p4.y-p3.y, p4.z-p3.z, p1, p3);
 		angle *= 180/Math.PI;
 
 		this.angles.push(angle);
@@ -2162,7 +2439,7 @@ function Strand()
 	{
 		var ang = this.angles[i];
 
-		if (ang > max_ang)
+		if (Math.abs(ang) > max_ang)
 		{
 			max_ang = ang;
 			max_i = i;
@@ -2171,21 +2448,42 @@ function Strand()
 
 	this.max_ang = max_ang;
 
+
+
+	// Calculate average twist angle
+
+	var avg_ang = 0;
+
+	for (var i = 0; i < this.angles.length; i++)
+	{
+		var ang = this.angles[i];
+		avg_ang += ang;
+	}
+
+	this.avg_ang = avg_ang/this.angles.length;
+
+
 	this.maxAnglePoints = new Array();
 
 	if (max_i != -1)
 	{
-		if (max_i < 4) // left
+		if (max_i < 3) // left
 		{
 			var p1 = this.midPointsLeft_T[max_i];
 			var p2 = this.midPointsLeft_T[max_i+1]
 
+
 			p1.color = "purple";
+
+
+
 			p2.color = "purple";
+
+			
 		}
 		else // right
 		{
-			max_i -= 4;
+			max_i -= 3;
 
 			var p1 = this.midPointsRight_T[max_i];
 			var p2 = this.midPointsRight_T[max_i+1]
@@ -2197,21 +2495,32 @@ function Strand()
 		this.maxAnglePoints.push(p1);
 		this.maxAnglePoints.push(p2);
 	}
-
-
-
-
-	this.updateTransformedPoints();
 }
 
-Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2)
+Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2, p1, p3)
 {
 	var l1 = Math.sqrt(Math.pow(x1,2)+Math.pow(y1,2)+Math.pow(z1,2));
 	var l2 = Math.sqrt(Math.pow(x2,2)+Math.pow(y2,2)+Math.pow(z2,2));
 
 	var dot = x1*x2 + y1*y2 + z1*z2;
 
-	return Math.acos(dot/l1/l2);
+	var ang = Math.acos(dot/l1/l2);
+
+	// Twist direction calculation
+
+	var cross_x = y1*z2 - z1*y2;
+	var cross_y = z1*x2 - x1*z2;
+	var cross_z = x1*y2 - y1*x2;
+
+	var delta_x = p1.x - p3.x;
+	var delta_y = p1.y - p3.y;
+	var delta_z = p1.z - p3.z;
+
+	var dot_dir = cross_x*delta_x + cross_y*delta_y + cross_z*delta_z;
+
+	var dir = sign(dot_dir);
+
+	return dir*ang;
 }
 
 Strand.prototype.distBetweenSamples = function(x1, y1, z1, x2, y2, z2)
@@ -2221,12 +2530,17 @@ Strand.prototype.distBetweenSamples = function(x1, y1, z1, x2, y2, z2)
 
 Strand.prototype.draw = function()
 {
+
+	if ((this.angle_slider.value != this.angle) || (this.offset_slider.value != this.offset))
+	{
+		this.angle = this.angle_slider.value;
+
+		this.offset = this.offset_slider.value;
+
+		this.setAngle(this.angle, this.offset);
+	}
+
 	this.originPoint_T.draw();
-
-
-
-
-
 
 	// Draw middle strand line
 
@@ -2400,28 +2714,31 @@ Strand.prototype.draw = function()
 	for (var i = 0; i < this.maxAnglePoints.length; i++)
 	{
 		var p = this.maxAnglePoints[i];
-		p.draw(false);
+		if (p != undefined)
+		{
+			p.draw(false);
 
-		if (i == 0)
-		{
-			if (p.scale > 0)
+			if (i == 0)
 			{
-				ctx.moveTo(p.x2d, p.y2d);
+				if (p.scale > 0)
+				{
+					ctx.moveTo(p.x2d, p.y2d);
+				}
+				else
+				{
+					break;
+				}
 			}
 			else
 			{
-				break;
-			}
-		}
-		else
-		{
-			if (p.scale > 0)
-			{
-				ctx.lineTo(p.x2d, p.y2d)
-			}
-			else
-			{
-				break;
+				if (p.scale > 0)
+				{
+					ctx.lineTo(p.x2d, p.y2d)
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
 	}
@@ -2462,13 +2779,12 @@ Strand.prototype.draw = function()
 	}
 
 
-
-
-
 	// Draw textual output
 
 	ctx.fillStyle = "black";
 	ctx.fillText("Max Ang (deg): " + this.max_ang, 10, 100);
+
+	ctx.fillText("Avg Ang (deg): " + this.avg_ang, 10, 70);
 
 }
 
@@ -4114,7 +4430,7 @@ cvs.addEventListener('mousemove', function(evt)
 				BProj.movePointTo2D(Mouse.held_id, Mouse.x, Mouse.y)
 			}
 		}
-		else if (changed)
+		else if (changed && !this.hover)
 		{
 			delta_pitch = (new_y - old_y)*.006;
 			if (pitch + delta_pitch <= 90/180*3.1415 && pitch + delta_pitch >= -90/180*3.1415)
@@ -4134,6 +4450,40 @@ cvs.addEventListener('mousemove', function(evt)
 cvs.addEventListener('mousedown', function(evt)
 {
 	Mouse.down = true;
+
+	// Check if mouse is over a button or slider
+
+	var any = false;
+	for (var i = 0; i < Sliders.length; i++)
+	{
+		var S = Sliders[i];
+
+		if (S.hover)
+		{
+			any = true;
+			break;
+		}
+	}
+
+	for (var i = 0; i < ToggleButtons.length; i++)
+	{
+		var T = ToggleButtons[i];
+
+		if (T.hover)
+		{
+			any = true;
+			break;
+		}
+	}
+
+	if (any)
+	{
+		this.hover = true;
+	}
+	else
+	{
+		this.hover = false;
+	}
 
 	// Check if mouse is over a point
 	var closest_id = BSurface.closestControlPoint2D(Mouse);
@@ -4202,6 +4552,292 @@ cvs.addEventListener("DOMMouseScroll",function(evt)
 	evt.preventDefault();
 	return false;
 }, false);
+
+
+
+
+
+
+var Sliders = new Array();
+
+function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val)
+{
+	var id = Sliders.length;
+	Sliders.push(new Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val, id));
+
+	return id;
+}
+
+function Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val, id)
+{
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+	this.text = text;
+	this.bar_width = bar_width;
+	this.min_val = min_val;
+	this.max_val = max_val;
+	this.default_val = default_val;
+
+	this.activated = true;
+
+	this.value = default_val;
+
+	var setting = (default_val - min_val)/(max_val - min_val);
+
+	if (setting >= 0 && setting <= 1)
+	{
+		this.setting = setting;
+	}
+	else if (setting < 0)
+	{
+		this.setting = 0;
+	}
+	else if (setting > 1)
+	{
+		this.setting = 1;
+	}
+
+	this.id = id;
+}
+
+Slider.prototype.draw = function()
+{
+	ctx.beginPath();
+	ctx.rect(this.x, this.y, this.width, this.height);
+	ctx.fillStyle = "silver";
+	ctx.fill();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'black';
+	ctx.stroke();
+
+	var box_xpos = this.x  + this.setting*(this.width - this.bar_width);
+	var box_ypos = this.y;
+
+	var box_width = this.bar_width;
+	var box_height = this.height;
+
+	var box_right = box_xpos + box_width;
+	var box_bottom = box_ypos + box_height;
+
+
+	if (this.held)
+	{
+		var setting = (Mouse.x - this.x - box_width/2) / (this.width - box_width);
+		if (setting >= 0 && setting <= 1)
+		{
+			this.setting = setting;
+		}
+		else if (setting < 0)
+		{
+			this.setting = 0;
+		}
+		else if (setting > 1)
+		{
+			this.setting = 1;
+		}
+	}
+
+
+	if (Mouse.x > box_xpos && Mouse.x < box_right && Mouse.y > box_ypos && Mouse.y < box_bottom)
+	{
+		this.hover = true;
+
+		if (this.activated == false)
+		{
+			ctx.fillStyle = "darkgrey";
+		}
+		else if (this.activated == true)
+		{
+			ctx.fillStyle = "limegreen";
+		}
+
+		if (Mouse.down == true)
+		{
+			this.held = true;
+		}
+		else if (Mouse.down != true)
+		{
+			this.held = false;
+		}
+	}
+	else
+	{
+		this.hover = false;
+
+		if (this.activated == false)
+		{
+			ctx.fillStyle = "grey";
+		}
+		else if (this.activated == true)
+		{
+			ctx.fillStyle = "lightgreen";
+		}
+		
+		if (Mouse.down != true)
+		{
+			this.held = false;
+		}
+	}
+
+	this.value = this.min_val + this.setting*(this.max_val - this.min_val);
+
+	ctx.beginPath();
+	ctx.rect(box_xpos, box_ypos, box_width, box_height);
+	ctx.fill();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'black';
+	ctx.stroke();
+
+	ctx.fillStyle = "black";
+	ctx.fillText("" + (this.value).toFixed(2), this.x + 13, this.y + 3 + this.height/2);
+};
+
+Slider.prototype.setValue = function(val)
+{
+	this.setting = (val - this.min_val)/(this.max_val - this.min_val);
+	this.value = val;
+}
+
+Slider.prototype.setActive = function(activated)
+{
+	this.activated = activated;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Global variable of all toggle button objects, so that the mouse can check for hovering, and handle it.
+var ToggleButtons = new Array();
+
+// Used by anything to create a new toggle button object,
+//  returns id, which the calling function can use to access the object through ToggleButtons array.
+function Create_ToggleButton(x, y, width, height, text)
+{
+	var id = ToggleButtons.length;
+	ToggleButtons.push(new ToggleButton(x, y, width, height, text, id));
+
+	return id;
+}
+
+// Used by anything to destroy a toggle button with a given id.  Silently fails if the id is not valid.
+function Destroy_ToggleButton(id)
+{
+	if (id >= 0 && id < ToggleButtons.length)
+	{
+		ToggleButtons.splice(id, 1);
+	}
+}
+
+// Constructor of ToggleButton object, used to create new toggle buttons.
+function ToggleButton(x, y, width, height, text, id)
+{
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+	this.text = text;
+
+	this.activated = false;
+	this.hover = false; // Used for drawing
+	this.pressed = false;
+
+	this.id = id; // This button's index inside the global ToggleButtons array.
+	// Should be set correctly by NewToggleButton();
+}
+
+// Draws this particular button, called by main in a loop of all toggle buttons, to draw all of them.
+//  Drawing state depends on whether the button is activated or not.
+ToggleButton.prototype.draw = function()
+{
+	if (Mouse.x > this.x && Mouse.x < this.x + this.width && Mouse.y > this.y && Mouse.y < this.y + this.height)
+	{
+		this.hover = true;
+		if (Mouse.down == true)
+		{
+			this.pressed = true;
+		}
+		else if (Mouse.down == false)
+		{
+			if (this.pressed == true)
+			{
+				// Mouse was pressed, now it's still hovering, but it's not pressing.  Ergo, a click!
+				this.toggle();
+			}
+
+
+			this.pressed = false;
+		}
+	}
+	else
+	{
+		this.hover = false;
+		this.pressed = false;
+	}
+
+	if (this.hover == false)
+	{
+		ctx.fillStyle = 'lightgrey';
+	}
+	else if (this.hover == true)
+	{
+		if (this.pressed == false)
+		{
+			ctx.fillStyle = 'silver';
+		}
+		else if (this.pressed == true)
+		{
+			ctx.fillStyle = 'grey';
+		}
+	}
+
+	if (this.activated)
+	{
+		ctx.fillStyle = "lightgreen";
+	}
+
+	ctx.beginPath();
+	ctx.rect(this.x, this.y, this.width, this.height);
+	ctx.fill();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'black';
+	ctx.stroke();
+
+	ctx.font = "10px Verdana";
+	ctx.fillStyle = "black";
+	ctx.fillText(this.text, this.x + 10, this.y + this.height/1.6);
+};
+
+// Called by anything to see if the button is active or not.
+ToggleButton.prototype.isActivated = function()
+{
+	return this.activated;
+};
+
+// Called by the Mouse singleton to "toggle" the activation state.
+ToggleButton.prototype.toggle = function()
+{
+	if (this.activated == false)
+	{
+		this.activated = true;
+	}
+	else if (this.activated == true)
+	{
+		this.activated = false;
+	}
+};
+
+
 
 
 init();
