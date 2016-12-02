@@ -2243,153 +2243,6 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 	}
 
 
-
-
-
-
-
-	/*
-
-	// Given the midpoints array, project each of the four midpoints left five angstroms to 
-	// populate the left midpoints array.
-
-	this.midPointsLeft = new Array();
-	this.midPointsLeft_T = new Array();
-
-	var N = 100;
-
-	var perpendicular_angle = (angle_degrees + 90) * Math.PI/180;
-
-	for (var j = 0; j < this.midPoints.length; j++)
-	{
-		var starting_p = this.midPoints[j];
-
-		var intersections = getIntersectionPoints(starting_p.t, starting_p.u, perpendicular_angle, Hull, true);
-
-		var t1 = starting_p.t;
-		var u1 = starting_p.u;
-
-		var t2 = intersections[0][0];
-		var u2 = intersections[0][1];
-
-		var target = 5;
-
-		var sumdist = 0;
-
-		var i = 0;
-
-		var prev_coords;
-
-		while (i < 2000)
-		{
-			var percentage = i/(N-1);
-			//var t = t1 + (t2-t1)*percentage;
-			//var u = u1 + (u2-u1)*percentage;
-
-			var t = t1 + Math.abs(t2-t1);
-			var u = u1 + Math.abs(u2-u1);
-
-			var coords = BSurface.calc(t, u);
-
-			if (i == 0)
-			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
-			}
-			else
-			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
-			}
-
-			prev_coords = coords;
-
-			if (sumdist > target)
-			{
-				var p = new Point(coords[0], coords[1], coords[2]);
-				var p_T = new Point(coords[0], coords[1], coords[2], "deeppink", 3);
-
-
-				this.midPointsLeft.push(p);
-				this.midPointsLeft_T.push(p_T);
-
-				break;
-			}
-
-			i++;
-		}
-	}
-
-
-
-
-
-	// Do the same thing for the right array
-
-	this.midPointsRight = new Array();
-	this.midPointsRight_T = new Array();
-
-	var N = 100;
-
-	var perpendicular_angle = (angle_degrees + 90) * Math.PI/180;
-
-	for (var j = 0; j < this.midPoints.length; j++)
-	{
-		var starting_p = this.midPoints[j];
-
-		var intersections = getIntersectionPoints(starting_p.t, starting_p.u, perpendicular_angle, Hull, true);
-
-		var t1 = starting_p.t;
-		var u1 = starting_p.u;
-
-		var t2 = intersections[1][0];
-		var u2 = intersections[1][1];
-
-		var target = 5;
-
-		var sumdist = 0;
-
-		var i = 0;
-
-		var prev_coords;
-
-		while (i < 2000)
-		{
-			var percentage = i/(N-1);
-//			var t = t1 + (t2-t1)*percentage;
-//			var u = u1 + (u2-u1)*percentage;
-
-			var t = t1 - .1;
-			var u = u1 - .1;
-
-			var coords = BSurface.calc(t, u);
-
-			if (i == 0)
-			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
-			}
-			else
-			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
-			}
-
-			prev_coords = coords;
-
-			if (sumdist > target)
-			{
-				var p = new Point(coords[0], coords[1], coords[2]);
-				var p_T = new Point(coords[0], coords[1], coords[2], "deeppink", 3);
-
-				this.midPointsRight.push(p);
-				this.midPointsRight_T.push(p_T);
-
-				break;
-			}
-
-			i++;
-		}
-	}
-
-	*/
-
 	this.updateScore();
 
 	this.updateTransformedPoints();
@@ -2528,16 +2381,134 @@ Strand.prototype.distBetweenSamples = function(x1, y1, z1, x2, y2, z2)
 	return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2)+Math.pow(z1-z2,2));
 }
 
+Strand.prototype.optimizeAngle = function()
+{
+	// Do 10 linear interpolants to find rough max angle.
+	var min_ang = 0;
+	var max_ang = 179.99;
+	var N = 10;
+
+	var delta = (max_ang-min_ang)/(N-1);
+
+	var angles = new Array(N);
+	var scores = new Array(N);
+
+	for (var i = 0; i < N; i++)
+	{
+		var ang = min_ang + (max_ang-min_ang)*i/(N-1);
+		this.setAngle(ang);
+		scores[i] = this.avg_ang;
+		angles[i] = ang;
+	}
+
+	// Calculate angle with largest score
+
+	var max_score = -9999;
+	var max_i = -1;
+	for (var i = 0; i < scores.length; i++)
+	{
+		var score = scores[i];
+		if (score > max_score)
+		{
+			max_score = score;
+			var max_i = i;
+		}
+	}
+
+	if (max_i < 0)
+	{
+		// Error, maximum score not found.
+	}
+
+	// Rough max angle found, begin iterative improvement process, starting with rough delta/2
+
+	delta = delta/2;
+
+	console.log("Initial change delta: " + delta);
+
+	var current_score = scores[max_i];
+	var current_angle = angles[max_i]; // Rough optimal angle
+
+
+
+
+
+	while (delta > .05)
+	{
+		this.setAngle(current_angle + delta);
+		var current_score_plus = this.avg_ang;
+		var current_angle_plus = current_angle + delta;
+		var score_change_plus = current_score_plus - current_score;
+
+
+		this.setAngle(current_angle - delta);
+		var current_score_minus = this.avg_ang;
+		var current_angle_minus = current_angle - delta;
+		var score_change_minus = current_score_minus - current_score;
+
+
+		// Two delta-scores found, choose larger one
+
+		if (score_change_plus >= score_change_minus && score_change_plus > 0)
+		{
+			// Plus results in score increase, take it.
+			current_score = current_score_plus;
+			current_angle = current_angle_plus;
+			delta = delta/2;
+		}
+		else if (score_change_minus > score_change_plus && score_change_minus > 0)
+		{
+			// Minus results in score increase, take it.
+			current_score = current_score_minus;
+			current_angle = current_angle_minus;
+			delta = delta/2;
+		}
+		else
+		{
+			// Both results in score decrease, half the search delta and try again.
+			delta = delta/2;
+		}
+
+		console.log(delta + ":  Score: " + current_score);
+	}
+
+
+	// We now have the best angle for this particular origin point.
+	this.angle_slider.setValue(current_angle);
+	this.angle = current_angle;
+
+	console.log("Best angle: " + current_angle);
+
+	this.optimized = true;
+
+
+}
+
+Strand.prototype.generateSurfaceField = function()
+{
+
+}
+
 Strand.prototype.draw = function()
 {
 
-	if ((this.angle_slider.value != this.angle) || (this.offset_slider.value != this.offset))
+	if (!this.optimized)
 	{
-		this.angle = this.angle_slider.value;
+		if ((this.angle_slider.value != this.angle) || (this.offset_slider.value != this.offset))
+		{
+			this.angle = this.angle_slider.value;
 
-		this.offset = this.offset_slider.value;
+			this.offset = this.offset_slider.value;
 
-		this.setAngle(this.angle, this.offset);
+			this.setAngle(this.angle, this.offset);
+		}		
+	}
+
+
+	if (this.optimize_button.activated)
+	{
+		this.optimizeAngle();
+		this.optimize_button.activated = false;
 	}
 
 	this.originPoint_T.draw();
@@ -2932,8 +2903,6 @@ function Surface(X, Y, T, U)
 			this.resPoints_T[i][j] = new Point(0, 0, 0, "blue", 1);
 		}
 	}
-
-
 
 
 
@@ -4558,6 +4527,11 @@ cvs.addEventListener("DOMMouseScroll",function(evt)
 
 
 
+
+
+
+
+
 var Sliders = new Array();
 
 function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val)
@@ -4655,6 +4629,7 @@ Slider.prototype.draw = function()
 
 		if (Mouse.down == true)
 		{
+			BStrand.optimized = false;
 			this.held = true;
 		}
 		else if (Mouse.down != true)
@@ -4765,6 +4740,7 @@ ToggleButton.prototype.draw = function()
 		this.hover = true;
 		if (Mouse.down == true)
 		{
+			BStrand.optimized = false;
 			this.pressed = true;
 		}
 		else if (Mouse.down == false)
@@ -4836,8 +4812,6 @@ ToggleButton.prototype.toggle = function()
 		this.activated = false;
 	}
 };
-
-
 
 
 init();
