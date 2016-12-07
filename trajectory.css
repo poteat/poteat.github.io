@@ -1,0 +1,104 @@
+
+body
+{
+	background-color: black;
+	font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	padding: 0 10% 0 10%;
+}
+
+h1
+{
+	color: grey;
+}
+
+h2
+{
+	color: lightgrey;
+}
+
+p
+{
+	color: grey;
+}
+
+cmd
+{
+	font-style: italic;
+}
+
+pre.sh_sourceCode
+{
+  background-color: lightgrey;
+  color: black;
+  font-style: normal;
+  font-weight: normal;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+#footer
+{
+	height: 500px;
+}
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: initial;
+
+    padding: 0 50px 0 50px;
+}
+
+textarea.imagestring {
+	background-color: black;
+	color: lightgrey;
+	font-size: 5pt;
+	font-family: "Courier";
+} 
+
+#canvas-panel
+{
+	position: relative;
+
+	border: solid;
+	padding: 0;
+	border-width: 0px;
+	border-color: white;
+	width: 750px;
+	height: 500px;
+}
+
+#subcanvas_1
+{
+	position: absolute;
+	left: 501px;
+}
+
+#subcanvas_2
+{
+	position: absolute;
+	left: 501px;
+	top: 251px;
+}
+
+canvas
+{
+	border: solid;
+	border-color: gray;
+	border-width: 1px;
+	padding: 0;
+	z-index: 2;
+}
+
+#tracer
+{
+	position: relative;
+	border:solid;
+	border-width: 1px;
+	z-index: 1;
+}

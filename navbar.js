@@ -29,5 +29,6 @@ document.write('\
 			<li><a href="characteristicshape.html">Characteristic Shape Algorithm</a></li>\
 			<li><a href="polygonlineintersection.html">Polygon-Line Intersection</a></li>\
 			<li><a href="linetwist.html">Symmetric Line Similarity Method</a></li>\
+			<li><a href="trajectory.html">Trajectory Visualization</a></li>\
 		</ul>\
 ');
