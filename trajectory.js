@@ -87,9 +87,85 @@ function init()
 
 
 
+function Trajectory()
+{
+	this.initial_turn_height = 13000; // All distances in meters
+	this.final_turn_height = 45000;
+	this.turn_shape = .3; 	// How sharp of a turn to make
+							// low is gradual, high is sharp
+
+	this.final_angle = 0; // Final target angle to go towards
+	this.height_target = 70000; // Target apoapsis height
+}
+
+
+/** 
+ * Trajectory.getAngle() description
+ *
+ * angle goes from 90 deg to 0 deg as height 
+ *  goes from initial_turn_height to final_turn_height
+ *  if final_angle is not zero, goes to that instead
+ *
+ * returns current angle as a function of height,
+ *  normalized with respect to the inertial reference frame
+ *
+ *  (i.e. add the rocket-earth relative angle afterwards)
+ */
+Trajectory.prototype.getAngle = function(float height)
+{
+	
+};
 
 
 
+function Rocket()
+{
+	this.initial_mass = 17.071; // All masses in metric tons
+	this.final_mass = 3.6520; // 'dry' mass: when no fuel is left
+
+	this.thrust = 200; // All forces are in kilo-Newtons
+
+								/**/
+	this.atmosphere_isp = 320; 	// isp: specific impulse
+	this.vacuum_isp = 370;     	// defines how efficient the engine is
+								/**/
+
+	this.g = 9.81; // Used for isp unit conversion (not gravity)
+
+	/**
+	 * The rocket state is a 5-vector:
+	 *	1. x position	(x)
+	 *  2. y position	(y)
+	 *  3. x velocity	(vx)
+	 *  4. y velocity	(vy)
+	 *  5. mass 		(m)
+	 */
+
+	this.state = [0, main_planet.radius, RS, 0, this.initial_mass];
+
+	// The initial state is defined as follows:
+
+	/**
+	 *      90 deg
+	 *
+	 *      (0,R)
+	 *       _O_  ----> v: (RS, 0)
+	 *     .` | `.
+	 *    :   .   :  0 deg 
+	 *    `.     .`
+	 *      '---'
+	 *
+	 *============================
+	 *
+	 *       +y
+	 *        ^
+	 *        : 
+	 * -x <-------> +x
+	 *        :
+	 *        v
+	 *       -y
+	 */
+}
 
 
 
@@ -100,7 +176,14 @@ function Planet()
 {
 	this.x = 0;
 	this.y = 0;
+
+	// gravitational and mass constants
 	this.radius = 600000;
+	this.standard_gravitational_parameter = 3.5316E12;
+	this.equatorial_rotation_speed = 174.53; // meters per second
+
+	// atmospheric constants
+	this.drag_constant = 9.784758844E-4;
 	this.atmospheric_height = 70000;
 	this.scale_height = 5000;
 }
@@ -123,7 +206,7 @@ Planet.prototype.draw = function()
 	ctx.beginPath();
 	ctx.arc(draw_x, draw_y, draw_radius, 0, 2*Math.PI);
 	ctx.strokeStyle = 'black';
-	ctx.lineWidth = Camera.zoom * 600000 / (1.5*62.5);
+	ctx.lineWidth = Camera.zoom * this.radius / (1.5*62.5);
 	//ctx.lineWidth = 2;
 	ctx.stroke();
 };
@@ -146,7 +229,7 @@ Planet.prototype.drawAtmosphere = function(true_exponential)
     var N = 10 * true_exponential;
     for (var i = 0; i < N; i++)
     {
-    	var t = i/(10 - 1); // t linearly between 0 and 1 at N intervals
+    	var t = i/(N - 1); // t linearly between 0 and 1 at N intervals
     	var height = t*this.atmospheric_height; // height between 0 and top of atmosphere
 
     	var pressure = Math.exp(-height/this.scale_height); // Exponentially goes from 1 to 0
@@ -165,6 +248,8 @@ Planet.prototype.drawAtmosphere = function(true_exponential)
     ctx.fillStyle = gradient;
     ctx.fill();
 }
+
+
 
 
 
@@ -236,6 +321,8 @@ Camera.prototype.transformCoordinates = function(x, y)
 
 	return [draw_x, draw_y];
 };
+
+
 
 
 
@@ -327,8 +414,6 @@ cvs.addEventListener("DOMMouseScroll",function(evt)
 	var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
 
 	Camera.zoom *= (1 + delta*.1)
-
-	updateTransformedPoints();
 
 	evt.preventDefault();
 	return false;
