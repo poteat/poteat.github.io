@@ -200,6 +200,7 @@ function main()
 
 				// This area is devoted to post-processing after surface fit.
 
+				Mouse.draw();
 
 				BStrand.draw();
 
@@ -1287,8 +1288,8 @@ DensityMap.prototype.calculateBoundingBox = function()
 
 	p1_T.color = "green";
 	p3_T.color = "green";
-	p2_T.color = "purple";
-	p4_T.color = "purple";
+	p2_T.color = "black";
+	p4_T.color = "black";
 	p1_T.size = 5;
 	p2_T.size = 5;
 	p3_T.size = 5;
@@ -1307,6 +1308,13 @@ DensityMap.prototype.calculateBoundingBox = function()
 
 function Perimeter(ConcaveHull)
 {
+
+	// Old feature of displaying colored perimeter, based on local error of fit estimation
+	// To enable, set to 'true' - although local error of fit never ended up being useful.
+
+	this.colored_perimeter = false;
+
+
 	this.vertices = ConcaveHull;
 
 	this.points = new Array();
@@ -1364,7 +1372,7 @@ function Perimeter(ConcaveHull)
 				var coords = BSurface.calc(t, u);
 
 				var p = new Point(coords[0], coords[1], coords[2]);
-				var p_T = new Point(0, 0, 0, "purple", 3);
+				var p_T = new Point(0, 0, 0, "black", 3);
 
 				this.surfacePointsX[i][j] = p;
 				this.surfacePointsX_T[i][j] = p_T;
@@ -1416,8 +1424,10 @@ function Perimeter(ConcaveHull)
 
 	this.updateTransformedPoints();
 
-
-	this.updateColorError();
+	if (this.colored_perimeter)
+	{
+		this.updateColorError();
+	}
 }
 
 Perimeter.prototype.updateColorError = function()
@@ -1665,11 +1675,15 @@ Perimeter.prototype.updateTransformedPoints = function()
 
 Perimeter.prototype.draw = function()
 {
+
+	var actually_draw = this.colored_perimeter;
+
 	for (var i = 0; i < this.points_T.length; i++)
 	{
 		var p = this.points_T[i];
-		p.draw();
-	}
+
+		p.draw(actually_draw);
+	}	
 
 	for (var i = 0; i < this.R; i++)
 	{
@@ -1778,7 +1792,7 @@ Perimeter.prototype.draw = function()
 	// Draw a linearly interpolated colored line between each perimeter point.
 
 	ctx.strokeStyle = "black";
-	ctx.lineWidth = 2;
+	ctx.lineWidth = 1;
 
 	var L = this.points_T.length;
 
@@ -1795,11 +1809,18 @@ Perimeter.prototype.draw = function()
 			var P_next = this.points_T[i + 1];
 		}
 
-		var gradient = ctx.createLinearGradient(P.x2d, P.y2d, P_next.x2d, P_next.y2d);
-		gradient.addColorStop(0, P.color);
-		gradient.addColorStop(1, P_next.color);
+		if (this.colored_perimeter)
+		{
+			var gradient = ctx.createLinearGradient(P.x2d, P.y2d, P_next.x2d, P_next.y2d);
+			gradient.addColorStop(0, P.color);
+			gradient.addColorStop(1, P_next.color);
 
-		ctx.strokeStyle = gradient;
+			ctx.strokeStyle = gradient;
+		}
+		else
+		{
+			ctx.strokeStyle = 'black';
+		}
 
 		ctx.beginPath();
 
@@ -1951,9 +1972,22 @@ function Strand()
 	this.setAngle(45, 0);
 }
 
+Strand.prototype.setOrigin = function(t, u)
+{
+	var coords = BSurface.calc(t, u);
+
+	this.originPoint.x = coords[0];
+	this.originPoint.y = coords[1];
+	this.originPoint.z = coords[2];
+
+	this.originPoint.t = t;
+	this.originPoint.u = u;
+
+	this.setAngle(this.angle, 0);
+}
+
 Strand.prototype.setAngle = function(angle_degrees, offset)
 {
-
 	var width_of_gap = 4;
 
 	var angle = angle_degrees * Math.PI/180;
@@ -2053,7 +2087,7 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 		sample.t = t;
 		sample.u = u;
 
-		var sample_T = new Point(0, 0, 0, 'deeppink',3)
+		var sample_T = new Point(0, 0, 0, 'black',3)
 
 		this.points.push(sample);
 		this.points_T.push(sample_T);
@@ -2165,7 +2199,7 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 			if (sumdist > target)
 			{
 				var p = new Point(coords[0], coords[1], coords[2]);
-				var p_T = new Point(coords[0], coords[1], coords[2], "deeppink", 3);
+				var p_T = new Point(coords[0], coords[1], coords[2], "black", 3);
 
 
 				this.midPointsLeft.push(p);
@@ -2229,7 +2263,7 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 			if (sumdist > target)
 			{
 				var p = new Point(coords[0], coords[1], coords[2]);
-				var p_T = new Point(coords[0], coords[1], coords[2], "deeppink", 3);
+				var p_T = new Point(coords[0], coords[1], coords[2], "black", 3);
 
 
 				this.midPointsRight.push(p);
@@ -2326,11 +2360,11 @@ Strand.prototype.updateScore = function()
 			var p2 = this.midPointsLeft_T[max_i+1]
 
 
-			p1.color = "purple";
+			p1.color = "black";
 
 
 
-			p2.color = "purple";
+			p2.color = "black";
 
 			
 		}
@@ -2341,8 +2375,8 @@ Strand.prototype.updateScore = function()
 			var p1 = this.midPointsRight_T[max_i];
 			var p2 = this.midPointsRight_T[max_i+1]
 
-			p1.color = "purple";
-			p2.color = "purple";
+			p1.color = "black";
+			p2.color = "black";
 		}
 
 		this.maxAnglePoints.push(p1);
@@ -2511,14 +2545,13 @@ Strand.prototype.draw = function()
 		this.optimize_button.activated = false;
 	}
 
-	this.originPoint_T.draw();
 
 	// Draw middle strand line
 
 	var needToMove = true;
 
-	ctx.strokeStyle = "deeppink";
-	ctx.lineWidth = 2;
+	ctx.strokeStyle = "darkgrey";
+	ctx.lineWidth = 10;
 
 	ctx.beginPath();
 
@@ -2552,14 +2585,14 @@ Strand.prototype.draw = function()
 
 
 
-
+	this.originPoint_T.draw();
 
 	// Draw midpoint lines
 
 	var needToMove = true;
 
-	ctx.strokeStyle = "green";
-	ctx.lineWidth = 4;
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 2;
 
 	ctx.beginPath();
 
@@ -2600,8 +2633,8 @@ Strand.prototype.draw = function()
 
 	var needToMove = true;
 
-	ctx.strokeStyle = "green";
-	ctx.lineWidth = 4;
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 2;
 
 	ctx.beginPath();
 
@@ -2640,8 +2673,8 @@ Strand.prototype.draw = function()
 
 	var needToMove = true;
 
-	ctx.strokeStyle = "green";
-	ctx.lineWidth = 4;
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 2;
 
 	ctx.beginPath();
 
@@ -2679,8 +2712,8 @@ Strand.prototype.draw = function()
 	// Draw maximum angle line
 
 	ctx.beginPath();
-	ctx.strokeStyle = "purple";
-	ctx.lineWidth = 4;
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 2;
 
 	for (var i = 0; i < this.maxAnglePoints.length; i++)
 	{
@@ -2934,6 +2967,32 @@ function Surface(X, Y, T, U)
 	this.updatePoints();
 };
 
+Surface.prototype.updateNumberofResPoints = function(RX, RY)
+{
+	this.RX = RX;
+	this.RY = RY;
+
+	this.resPoints = new Array(RX);
+	this.resPoints_T = new Array(RX);
+
+	for (var i = 0; i < RX; i++)
+	{
+		this.resPoints[i] = new Array(RY);
+		this.resPoints_T[i] = new Array(RY);
+	}
+
+	// We only need to allocate the object array here.  The correct values will be calculated
+	//  in updatePoints();
+	for (var i = 0; i < RX; i++)
+	{
+		for (var j = 0; j < RY; j++)
+		{
+			this.resPoints[i][j] = new Point(0, 0, 0)
+			this.resPoints_T[i][j] = new Point(0, 0, 0, "blue", 1);
+		}
+	}
+}
+
 Surface.prototype.setControlPoints = function(array_of_points)
 {
 	this.X = array_of_points.length;
@@ -3181,6 +3240,19 @@ Surface.prototype.draw = function()
 				this.controlPoints_T[i][j].draw();
 			}
 		}		
+	}
+	else
+	{
+		// Even if don't draw, still update their screen positions invisibly
+		//  so that the mouse object can use them for its initial heuristic
+		//  surface projection method.
+		for (var i = 0; i < this.RX; i++)
+		{
+			for (var j = 0; j < this.RY; j++)
+			{
+				this.resPoints_T[i][j].draw(false);
+			}
+		}
 	}
 };
 
@@ -4358,13 +4430,32 @@ function Mouse()
 	this.down = false;
     this.inside = false;
     this.rclick = false;
+
+    this.drawPoint;
+    this.drawPoint_T;
 }
 
 Mouse.draw = function()
 {
-	ctx.beginPath();
+	/*ctx.beginPath();
 	ctx.arc(Mouse.x, Mouse.y, 5, 0, Math.PI*2, true);
-	ctx.fill();
+	ctx.fill();*/
+
+	if (BSurface.finished)
+	{
+		// If the Bsurface was only just finished, initialize the drawPoint object.
+		if (this.drawPoint_T == undefined)
+		{
+			BSurface.updateNumberofResPoints(10, 10);
+			BSurface.updatePoints();
+
+			this.drawPoint = new Point();
+			this.drawPoint_T = new Point(0, 0, 0);
+		}
+
+		this.drawPoint_T.draw();
+	}
+
 };
 
 Mouse.updatePos = function(evt)
@@ -4372,6 +4463,21 @@ Mouse.updatePos = function(evt)
 	var rect = cvs.getBoundingClientRect();
 	this.x = evt.clientX - rect.left - 1;
 	this.y = evt.clientY - rect.top - 1;
+
+	if (BSurface.finished)
+	{
+		var coords = BSurface.calc(this.t, this.u);
+
+		this.drawPoint.x = coords[0];
+		this.drawPoint.y = coords[1];
+		this.drawPoint.z = coords[2];
+
+		this.drawPoint_T.moveTo(this.drawPoint);
+		this.drawPoint_T.scaleFactor(zoom);
+		this.drawPoint_T.rotateY(yaw);
+		this.drawPoint_T.rotateX(pitch);
+	}
+
 };
 
 cvs.addEventListener('mousemove', function(evt)
@@ -4383,6 +4489,227 @@ cvs.addEventListener('mousemove', function(evt)
 	var new_y = Mouse.y;
 
 	var changed = (old_x != new_x) || (old_y != new_y);
+
+	// if BSurface is optimized, find the mouse projection onto the surface
+	// These variables are "t" and "u" of mouse.
+	if (BSurface.finished)
+	{
+		// Find which surface resPoint is closest to mouse
+
+		var min_dist = 99999;
+		var min_x = -1;
+		var min_y = -1;
+
+		for (var x = 0; x < BSurface.RX; x++)
+		{
+			for (var y = 0; y < BSurface.RY; y++)
+			{
+				var p = BSurface.resPoints_T[x][y];
+
+				var dist = p.dist2d(Mouse);
+
+				if (dist < min_dist)
+				{
+					min_dist = dist;
+					min_x = x;
+					min_y = y;
+				}
+			}
+		}
+
+		var t = min_x/(BSurface.RX-1);
+		var u = min_y/(BSurface.RY-1);
+
+		var dist = min_dist;
+
+		// We now have a reasonable initial estimate for the mouse position in surface space.
+		// Time to do a 2-dimensional binary search in the local subspace region.
+
+		var delta_t = 1/(1-BSurface.RX); // delta used for above rough search
+		var delta_u = 1/(1-BSurface.RY); // 0.25 if RX and RY is 5
+
+		var search_point = new Point();
+		var search_point_T = new Point();
+
+		var N = 60; // Do the 2-dimensional binary search for N iterations
+
+		var div_rate = -1.2; // How fast to decrease the search rate on each step
+							// 2 has theoretical optimality if there are no local minima
+							// More than 1 but less than 2 has stronger resistance against minima
+							// More than 2 almost never finds any minima
+							// 1 or less does not converge
+
+		for (var i = 0; i < N; i++)
+		{
+			delta_t /= div_rate;
+			delta_u /= div_rate;
+
+			var t_plus = t + delta_t;
+
+			var coords = BSurface.calc(t_plus, u);
+
+			search_point.x = coords[0];
+			search_point.y = coords[1];
+			search_point.z = coords[2];
+
+			// Now that the 3-dimensional position is set, we still need to find the camera space position.
+			search_point_T.moveTo(search_point);
+			search_point_T.scaleFactor(zoom);
+			search_point_T.rotateY(yaw);
+			search_point_T.rotateX(pitch);
+
+			// We can now invisibly draw the point to the screen, to get its 2-dimensional screen coordinates.
+			search_point_T.draw(false);
+
+			var dist_plus = search_point_T.dist2d(Mouse);
+
+
+
+			// Now we do the same, only for t-minus
+
+			var t_minus = t - delta_t;
+
+			var coords = BSurface.calc(t_minus, u);
+
+			search_point.x = coords[0];
+			search_point.y = coords[1];
+			search_point.z = coords[2];
+
+			// Now that the 3-dimensional position is set, we still need to find the camera space position.
+			search_point_T.moveTo(search_point);
+			search_point_T.scaleFactor(zoom);
+			search_point_T.rotateY(yaw);
+			search_point_T.rotateX(pitch);
+
+			// We can now invisibly draw the point to the screen, to get its 2-dimensional screen coordinates.
+			search_point_T.draw(false);
+
+			var dist_minus = search_point_T.dist2d(Mouse);
+
+			
+			// If either of the distances are smaller, set the new t before we optimize for u.
+
+			if (dist_plus < dist && dist_plus < dist_minus && t_plus < 1.1)
+			{
+				// Adding delta_t is better
+				t = t_plus;
+				//console.log("Increased t: ", t, delta_t)
+			}
+			else if (dist_minus < dist && dist_minus < dist_plus && t_minus > -1.1)
+			{
+				// Subtracting delta_t is better
+				t = t_minus;
+				//console.log("Decreased t: ", t, -delta_t)
+			}
+			else
+			{
+				//console.log("Did not change t: ", t, 0)
+			}
+
+
+
+
+
+
+
+
+			var u_plus = u + delta_u;
+
+			var coords = BSurface.calc(t, u_plus);
+
+			search_point.x = coords[0];
+			search_point.y = coords[1];
+			search_point.z = coords[2];
+
+			// Now that the 3-dimensional position is set, we still need to find the camera space position.
+			search_point_T.moveTo(search_point);
+			search_point_T.scaleFactor(zoom);
+			search_point_T.rotateY(yaw);
+			search_point_T.rotateX(pitch);
+
+			// We can now invisibly draw the point to the screen, to get its 2-dimensional screen coordinates.
+			search_point_T.draw(false);
+
+			var dist_plus = search_point_T.dist2d(Mouse);
+
+
+
+			// Now we do the same, only for t-minus
+
+			var u_minus = u - delta_u;
+
+			var coords = BSurface.calc(t, u_minus);
+
+			search_point.x = coords[0];
+			search_point.y = coords[1];
+			search_point.z = coords[2];
+
+			// Now that the 3-dimensional position is set, we still need to find the camera space position.
+			search_point_T.moveTo(search_point);
+			search_point_T.scaleFactor(zoom);
+			search_point_T.rotateY(yaw);
+			search_point_T.rotateX(pitch);
+
+			// We can now invisibly draw the point to the screen, to get its 2-dimensional screen coordinates.
+			search_point_T.draw(false);
+
+			var dist_minus = search_point_T.dist2d(Mouse);
+
+			
+			// If either of the distances are smaller, set the new t before we optimize for u.
+
+			if (dist_plus < dist && dist_plus < dist_minus && u_plus < 1.1)
+			{
+				// Adding delta_u is better
+				u = u_plus;
+				//console.log("Increased u: ", u, delta_u)
+			}
+			else if (dist_minus < dist && dist_minus < dist_plus && u_minus > -1.1)
+			{
+				// Subtracting delta_u is better
+				u = u_minus;
+				//console.log("Decreased u: ", u, -delta_u)
+			}
+			else
+			{
+				//console.log("Did not change u: ", u, 0)
+			}
+
+
+
+
+
+
+
+
+
+			Mouse.t = t;
+			Mouse.u = u;
+		}
+
+
+
+
+	}
+
+
+
+	// Used for strand movement code
+	if (Mouse.down)
+	{
+		if (Mouse.held_object != undefined)
+		{
+			Mouse.holding = true;
+			var p = Mouse.held_object; // equals BStrand.originPoint;
+
+			if (p == BStrand.originPoint)
+			{
+				BStrand.setOrigin(Mouse.t, Mouse.u);
+			}
+		}
+	}
+
+
 
 	if (Mouse.down)
 	{
@@ -4454,26 +4781,50 @@ cvs.addEventListener('mousedown', function(evt)
 		this.hover = false;
 	}
 
-	// Check if mouse is over a point
-	var closest_id = BSurface.closestControlPoint2D(Mouse);
-	var closest_control_point = BSurface.controlPoints_T[closest_id[0]][closest_id[1]];
-	
-	var closest_dist = closest_control_point.dist2d(Mouse);
-	if (closest_dist < 15)
+
+	// Check if mouse is over the strand origin point
+
+	if (BSurface.finished)
 	{
-		BSurface.finished = false;
-		Mouse.holding = true;
-		Mouse.held_id = closest_id;
-		Mouse.held_type = 0;
+		var p = BStrand.originPoint_T;
+		var dist = p.dist2d(Mouse);
+
+		if (dist < 15)
+		{
+			Mouse.held_object = BStrand.originPoint;
+		}
 	}
 
-	var closest_id = BProj.closestPoint2D(Mouse, 15)
-	if (closest_id != -1)
+
+
+
+	// Check if mouse is over a surface control point
+	// If the sheet is already optimized and the underlying data is hidden, do not check.
+
+	if (!BSurface.finished)
 	{
-		Mouse.holding = true;
-		Mouse.held_id = closest_id;
-		Mouse.held_type = 1;
-	}	
+		var closest_id = BSurface.closestControlPoint2D(Mouse);
+		var closest_control_point = BSurface.controlPoints_T[closest_id[0]][closest_id[1]];
+		
+		var closest_dist = closest_control_point.dist2d(Mouse);
+		if (closest_dist < 15)
+		{
+			BSurface.finished = false;
+			Mouse.holding = true;
+			Mouse.held_id = closest_id;
+			Mouse.held_type = 0;
+		}
+
+		var closest_id = BProj.closestPoint2D(Mouse, 15)
+		if (closest_id != -1)
+		{
+			Mouse.holding = true;
+			Mouse.held_id = closest_id;
+			Mouse.held_type = 1;
+		}	
+	}
+
+
 
 }, false);
 
@@ -4482,6 +4833,8 @@ cvs.addEventListener('mouseleave', function(evt)
 	Mouse.holding = false;
 	Mouse.objHeld = null;
 
+	Mouse.held_object = undefined;
+
 	Mouse.down = false;
 }, false);
 
@@ -4489,6 +4842,8 @@ cvs.addEventListener('mouseup', function(evt)
 {
 	Mouse.holding = false;
 	Mouse.objHeld = null;
+
+	Mouse.held_object = undefined;
 
 	Mouse.down = false;
 }, false);
