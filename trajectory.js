@@ -29,13 +29,16 @@ function main()
 {
 	checkForResize();
 	ctx.clearRect(0, 0, cvs.width, cvs.height);
-
 	main_planet.draw();
+
+	main_trajectory.draw();
+
+	main_rocket.draw();
 }
 
 function hypot(x, y)
 {
-	Math.sqrt(x*x + y*y);
+	return Math.sqrt(x*x + y*y);
 }
 
 function resize()
@@ -82,18 +85,56 @@ function checkForResize()
 function init()
 {
 	resize();
+
 	main_planet = new Planet();
+	main_trajectory = new Trajectory();
+	main_rocket = new Rocket();
 
 	Camera = new Camera();
 	Camera.centerOn(main_planet);
 
 	mainloop = setInterval("main();",1000/fps);
+
+	main_trajectory.updateTrajectory()
+
+	updateTransformation();
 }
 
+function updateTransformation()
+{
+	main_trajectory.updateTransformation();
+}
 
+Array.prototype.add = function(b)
+{
+	a = this;
+	c = new Array(a.length);
+
+	for (var i = 0; i < a.length; i++)
+	{
+		c[i] = a[i] + b[i];
+	}
+
+	return c;
+}
+
+Array.prototype.mul = function(b)
+{
+	a = this;
+	c = new Array(a.length);
+
+	for (var i = 0; i < a.length; i++)
+	{
+		c[i] = a[i] * b;
+	}
+
+	return c;
+}
 
 function Trajectory()
 {
+	// Initial trajectory parameters
+
 	this.initial_turn_height = 13000; // All distances in meters
 	this.final_turn_height = 45000;
 	this.turn_shape = .3; 	// How sharp of a turn to make
@@ -101,13 +142,95 @@ function Trajectory()
 
 	this.final_angle = 0; // Final target angle to go towards
 	this.height_target = 70000; // Target apoapsis height
+
+
+
+	// Point arrays for drawing objects.
+
+	this.drawPoints = new Array();
+	this.drawPoints_T = new Array();
 }
 
+Trajectory.prototype.draw = function()
+{
+
+	ctx.beginPath();
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = "white";
+
+	for (var i = 0; i < this.drawPoints_T.length; i++)
+	{
+		var p = this.drawPoints_T[i];
+
+		if (i == 0)
+		{
+			ctx.moveTo(p.x, p.y);
+		}
+		else
+		{
+			ctx.lineTo(p.x, p.y);
+		}
+	}
+
+	ctx.stroke();
+}
+
+Trajectory.prototype.updateTransformation = function()
+{
+	for (var i = 0; i < this.drawPoints.length; i++)
+	{
+		var p = this.drawPoints[i];
+		draw_coords = Camera.transformCoordinates(p.x, p.y);
+		var p_T = this.drawPoints_T[i];
+
+		p_T.x = draw_coords[0];
+		p_T.y = draw_coords[1];
+	}
+}
+
+Trajectory.prototype.RK4 = function()
+{
+
+}
+
+Trajectory.prototype.updateTrajectory = function()
+{
+	main_rocket.resetState();
+
+	var communication_interval = 100; // multiple of h
+
+	this.drawPoints = new Array();
+	this.drawPoints_T = new Array();
+
+	var h = 0.1;
+
+	for (var i = 0; i < 70000/communication_interval; i++)
+	{
+		for (var j = 0; j < communication_interval; j++)
+		{
+			Z = main_rocket.state;
+			Z_d = main_rocket.model(Z);
+			Z_new = Z.add(Z_d.mul(h));
+			main_rocket.state = Z_new;
+		}
+
+		var x = Z_new[0];
+		var y = Z_new[1];
+
+		var p = new Point(x, y);
+		var p_T = new Point(x, y);
+
+		this.drawPoints.push(p);
+		this.drawPoints_T.push(p_T);
+	}
+
+	this.updateTransformation();
+}
 
 /** 
  * Trajectory.getAngle() description
  *
- * angle goes from 90 deg to 0 deg as height 
+ * angle goes from 0 deg to -90 deg as height 
  *  goes from initial_turn_height to final_turn_height
  *  if final_angle is not zero, goes to that instead
  *
@@ -116,7 +239,7 @@ function Trajectory()
  *
  *  (i.e. add the rocket-earth relative angle afterwards)
  */
-Trajectory.prototype.getThrustAngle = function(height, distance)
+Trajectory.prototype.getThrustAngle = function(height)
 {
 	if (height < this.initial_turn_height)
 	{
@@ -124,9 +247,7 @@ Trajectory.prototype.getThrustAngle = function(height, distance)
 	}
 	else if (height < this.final_turn_height)
 	{
-		return (Math.PI/2 - Math.pow((distance - this.initial_turn_height)/(this.final_turn_height \
-				- this.initial_turn_height), this.turn_shape)) * (Math.PI - this.turn_shape) - 	   \ 
-				Math.pow(Math.PI, 2)/4;
+		return (Math.PI/2 - Math.pow((height - this.initial_turn_height)/(this.final_turn_height - this.initial_turn_height), this.turn_shape)) * (Math.PI/2 - this.final_angle) - Math.pow(Math.PI, 2)/4;
 	}
 	else
 	{
@@ -159,8 +280,7 @@ function Rocket()
 	 *  5. mass 		(m)
 	 */
 
-	this.state = [0, main_planet.radius, RS, 0, this.initial_mass];
-
+	this.resetState();
 	// The initial state is defined as follows:
 
 	/**
@@ -185,15 +305,68 @@ function Rocket()
 	 */
 }
 
-Rocket.prototype.getThrustVector = function(height, distance, mass)
+Rocket.prototype.draw = function()
 {
-	if (height < Trajectory.final_turn_height && mass > this.final_mass)
-	{
-		var thrust_angle = Trajectory.getThrustAngle(height, distance);
-		var thrust = T/mass;
+	var x = this.state[0];
+	var y = this.state[1];
 
-		var thrust_x = thrust * Math.cos(thrust_angle);
-		var thrust_y = thrust * Math.sin(thrust_angle);
+	var draw_coords = Camera.transformCoordinates(x, y);
+
+	var draw_x = draw_coords[0];
+	var draw_y = draw_coords[1];
+
+	ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.arc(draw_x, draw_y, 1, 0, Math.PI*2, true);
+    ctx.fill();
+}
+
+Rocket.prototype.resetState = function()
+{
+	this.state = [0, main_planet.radius, main_planet.equatorial_rotation_speed, 0, this.initial_mass];
+}
+
+Rocket.prototype.model = function(state)
+{
+	var x = state[0];
+	var y = state[1];
+	var vx = state[2];
+	var vy = state[3];
+	var mass = state[4];
+
+	var distance = hypot(x, y);
+	var height = distance - main_planet.radius;
+	var pressure = Math.exp(-height / main_planet.scale_height);
+	var angle = Math.atan2(y, x);
+
+	var thrust = this.getThrustVector(height, angle, mass);
+	var gravity = this.getGravityVector(distance, x, y);
+	var drag = this.getDragVector(pressure, distance, angle, vx, vy);
+
+	var ax = thrust[0] + gravity[0] + drag[0];
+	var ay = thrust[1] + gravity[1] + drag[1];
+
+	if (height < main_trajectory.final_turn_height && mass > this.final_mass)
+	{
+		delta_mass = this.thrust/(this.g*((this.vacuum_isp - this.atmosphere_isp) * pressure - this.vacuum_isp));
+	}
+	else
+	{
+		delta_mass = 0;
+	}
+
+	return [vx, vy, ax, ay, delta_mass];
+}
+
+Rocket.prototype.getThrustVector = function(height, position_angle, mass)
+{
+	if (height < main_trajectory.final_turn_height && mass > this.final_mass)
+	{
+		var thrust_angle = position_angle + main_trajectory.getThrustAngle(height);
+		var thrust_accel = this.thrust/mass;
+
+		var thrust_x = thrust_accel * Math.cos(thrust_angle);
+		var thrust_y = thrust_accel * Math.sin(thrust_angle);
 
 		return [thrust_x, thrust_y];
 	}
@@ -205,16 +378,27 @@ Rocket.prototype.getThrustVector = function(height, distance, mass)
 
 Rocket.prototype.getGravityVector = function(distance, x, y)
 {
-	var grav = -Planet.standard_gravitational_parameter/Math.pow(distance,3);
+	var grav = -main_planet.standard_gravitational_parameter/Math.pow(distance,3);
 	var grav_x = grav * x;
 	var grav_y = grav * y;
 
 	return [grav_x, grav_y];
 }
 
-Rocket.prototype.getDragVector = function(pressure, vx, vy)
+Rocket.prototype.getDragVector = function(pressure, distance, position_angle, vx, vy)
 {
-	drag_angle = 
+	var drag_angle = position_angle - Math.PI/2;
+	var modified_rotational_speed = (main_planet.equatorial_rotation_speed + distance)/main_planet.radius * main_planet.equatorial_rotation_speed;
+
+	var drag_projection_x = vx - modified_rotational_speed * Math.cos(drag_angle);
+	var drag_projection_y = vy - modified_rotational_speed * Math.sin(drag_angle);
+
+	var drag_mult = -main_planet.drag_constant * pressure * hypot(drag_projection_x, drag_projection_y);
+
+	var drag_x = drag_mult * drag_projection_x;
+	var drag_y = drag_mult * drag_projection_y;
+
+	return [drag_x, drag_y];
 }
 
 
@@ -277,6 +461,7 @@ Planet.prototype.drawAtmosphere = function(true_exponential)
 	var atmospheric_radius = this.radius + this.atmospheric_height;
 	ctx.beginPath();
 	ctx.rect(0, 0, cvs.width, cvs.height);
+
     var gradient = ctx.createRadialGradient(draw_x, draw_y, this.radius*Camera.zoom, draw_x, draw_y, atmospheric_radius*Camera.zoom);
 
     var N = 10 * true_exponential;
@@ -365,6 +550,8 @@ Camera.prototype.centerOn = function(obj)
 	var percentage = 1/10;
 
 	this.zoom = (screen_size * percentage) / obj.radius;
+
+	updateTransformation();
 }
 
 Camera.prototype.transformCoordinates = function(x, y)
@@ -414,9 +601,8 @@ Mouse.updatePos = function(evt)
 	this.world_y = (this.y - cvs.height/2) / Camera.zoom;
 };
 
-cvs.addEventListener('mousemove', function(evt)
+Mouse.checkDrag = function()
 {
-	Mouse.updatePos(evt)
 	if (Mouse.down)
 	{
 		var delta_x = Mouse.x - Mouse.press_x;
@@ -427,7 +613,15 @@ cvs.addEventListener('mousemove', function(evt)
 
 		Camera.x = Mouse.press_cam_x + world_delta_x;
 		Camera.y = Mouse.press_cam_y + world_delta_y;
+
+		updateTransformation();
 	}
+};
+
+cvs.addEventListener('mousemove', function(evt)
+{
+	Mouse.updatePos(evt);
+	Mouse.checkDrag();
 }, false);
 
 cvs.addEventListener('mousedown', function(evt)
@@ -458,6 +652,10 @@ cvs.addEventListener('mousewheel',function(evt)
 
 	Camera.zoom *= (1 + delta*.1)
 
+	Mouse.checkDrag();
+
+	updateTransformation();
+
 	evt.preventDefault();
     return false; 
 }, false);
@@ -467,6 +665,10 @@ cvs.addEventListener("DOMMouseScroll",function(evt)
 	var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
 
 	Camera.zoom *= (1 + delta*.1)
+
+	Mouse.checkDrag();
+
+	updateTransformation();
 
 	evt.preventDefault();
 	return false;
