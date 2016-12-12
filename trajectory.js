@@ -33,6 +33,11 @@ function main()
 	main_planet.draw();
 }
 
+function hypot(x, y)
+{
+	Math.sqrt(x*x + y*y);
+}
+
 function resize()
 {
 	screen_width = window.innerWidth;
@@ -111,10 +116,23 @@ function Trajectory()
  *
  *  (i.e. add the rocket-earth relative angle afterwards)
  */
-Trajectory.prototype.getAngle = function(float height)
+Trajectory.prototype.getThrustAngle = function(height, distance)
 {
-	
-};
+	if (height < this.initial_turn_height)
+	{
+		return 0;
+	}
+	else if (height < this.final_turn_height)
+	{
+		return (Math.PI/2 - Math.pow((distance - this.initial_turn_height)/(this.final_turn_height \
+				- this.initial_turn_height), this.turn_shape)) * (Math.PI - this.turn_shape) - 	   \ 
+				Math.pow(Math.PI, 2)/4;
+	}
+	else
+	{
+		return final_angle - Math.PI/2;
+	}
+}
 
 
 
@@ -167,6 +185,41 @@ function Rocket()
 	 */
 }
 
+Rocket.prototype.getThrustVector = function(height, distance, mass)
+{
+	if (height < Trajectory.final_turn_height && mass > this.final_mass)
+	{
+		var thrust_angle = Trajectory.getThrustAngle(height, distance);
+		var thrust = T/mass;
+
+		var thrust_x = thrust * Math.cos(thrust_angle);
+		var thrust_y = thrust * Math.sin(thrust_angle);
+
+		return [thrust_x, thrust_y];
+	}
+	else
+	{
+		return [0, 0];
+	}
+}
+
+Rocket.prototype.getGravityVector = function(distance, x, y)
+{
+	var grav = -Planet.standard_gravitational_parameter/Math.pow(distance,3);
+	var grav_x = grav * x;
+	var grav_y = grav * y;
+
+	return [grav_x, grav_y];
+}
+
+Rocket.prototype.getDragVector = function(pressure, vx, vy)
+{
+	drag_angle = 
+}
+
+
+
+
 
 
 
@@ -209,7 +262,7 @@ Planet.prototype.draw = function()
 	ctx.lineWidth = Camera.zoom * this.radius / (1.5*62.5);
 	//ctx.lineWidth = 2;
 	ctx.stroke();
-};
+}
 
 
 // For true exponential color drop-off, set true_exponential to true.
@@ -267,18 +320,18 @@ Point.prototype.draw = function()
     ctx.beginPath();
     ctx.arc(this.x, this.y, 5, 0, Math.PI*2, true);
     ctx.fill();
-};
+}
 
 Point.prototype.dist = function(x, y)
 {
 	return Math.sqrt( Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2) );
-};
+}
 
 Point.prototype.moveTo = function(x, y)
 {
     this.x = x;
     this.y = y;
-};
+}
 
 
 
@@ -320,7 +373,7 @@ Camera.prototype.transformCoordinates = function(x, y)
 	var draw_y = -(y + this.y) * this.zoom + cvs.height/2;
 
 	return [draw_x, draw_y];
-};
+}
 
 
 
