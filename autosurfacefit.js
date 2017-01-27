@@ -19,6 +19,7 @@
 
 	var dl = document.getElementById('surface_download_link');
 	var fit_dl = document.getElementById('fit_download_link');
+	var strand_dl = document.getElementById('strand_download_link');
 
 	// Global object declarations
 	var Mouse = new Mouse();
@@ -203,6 +204,8 @@ function main()
 				Mouse.draw();
 
 				BStrand.draw();
+
+				//DMap.draw();
 
 				BPerimeter.draw();
 
@@ -506,7 +509,7 @@ function loadServerMRC(file)
 			DMap = new DensityMap();
 
 			DMap.filename = "sample.pdb";
-	
+
 			updateTransformedPoints();
 
 			mainloop = setInterval("main();",1000/fps);
@@ -1275,7 +1278,7 @@ DensityMap.prototype.calculateBoundingBox = function()
 		this.points[i].color = "black";
 	}
 
-	
+
 	var p1 = this.points[min_dist_id];
 	var p2 = this.points[min_proj_dist_id];
 	var p3 = this.points[max_dist_id];
@@ -1467,7 +1470,7 @@ Perimeter.prototype.updateColorError = function()
 		// *************************
 		// Loop through voxels.  Find maximum proj dist in set of dist less than threshold.
 
-		
+
 
 		var max_proj_dist = 0;
 
@@ -1499,13 +1502,13 @@ Perimeter.prototype.updateColorError = function()
 
 		P.error = max_proj_dist;
 		*/
-		
+
 
 		// *************************
 
 
 
-		
+
 		// *************************
 
 		// Loop through all true voxels.  If their distance to P is less than threshold,
@@ -1542,8 +1545,8 @@ Perimeter.prototype.updateColorError = function()
 
 		P.error = proj_dist_avg;
 		// *************************
-		
-		
+
+
 	}
 
 	// Now all perimeter errors are calculated.  We now calculate each normalized error from 0 to 1.
@@ -1683,7 +1686,7 @@ Perimeter.prototype.draw = function()
 		var p = this.points_T[i];
 
 		p.draw(actually_draw);
-	}	
+	}
 
 	for (var i = 0; i < this.R; i++)
 	{
@@ -1724,7 +1727,7 @@ Perimeter.prototype.draw = function()
 		{
 			needToMove = true;
 		}
-		
+
 		for (var j = 0; j < this.R; j++)
 		{
 			var p = this.surfacePointsX_T[i][j];
@@ -1764,7 +1767,7 @@ Perimeter.prototype.draw = function()
 		{
 			needToMove = true;
 		}
-		
+
 		for (var j = 0; j < this.R; j++)
 		{
 			var p = this.surfacePointsY_T[i][j];
@@ -1921,6 +1924,10 @@ function Strand()
 	this.offset_slider = Sliders[offset_slider];
 
 
+	// Current only used for pdb render
+	this.strand_gap = 5;
+
+
 
 	// Calculate center surface position of all hull points.
 
@@ -1988,7 +1995,7 @@ Strand.prototype.setOrigin = function(t, u)
 
 Strand.prototype.setAngle = function(angle_degrees, offset)
 {
-	var width_of_gap = 4;
+	var width_of_gap = this.strand_gap;
 
 	var angle = angle_degrees * Math.PI/180;
 
@@ -2366,7 +2373,7 @@ Strand.prototype.updateScore = function()
 
 			p2.color = "black";
 
-			
+
 		}
 		else // right
 		{
@@ -2464,9 +2471,6 @@ Strand.prototype.optimizeAngle = function()
 	var current_angle = angles[max_i]; // Rough optimal angle
 
 
-
-
-
 	while (delta > .05)
 	{
 		this.setAngle(current_angle + delta);
@@ -2518,14 +2522,197 @@ Strand.prototype.optimizeAngle = function()
 
 }
 
-Strand.prototype.generateSurfaceField = function()
+
+// Create a set of points that finely samples each strand, then untransform to world coordinates and call the points to pdb string function
+Strand.prototype.updateDownload = function()
 {
+	// We first generate the two perpendicular hull collision points so we can later find the origin points of each strand
+
+	var Hull = BPerimeter.vertices;
+
+	var intersects = getIntersectionPoints(this.originPoint.t, this.originPoint.u, (this.angle + 90)/180*Math.PI, Hull, true);
+
+	// Now using coords1 and coords2, we linearly interpolate between them and the origin point in the surface space,
+	// generating 100 points on each side.
+
+	this.originStrandPoints = new Array();
+	this.originStrandPoints_T = new Array();
+
+	var num = 1000;
+
+	var arclength = 0;
+
+	var prev_x = this.originPoint.t;
+	var prev_y = this.originPoint.u;
+
+	var prev = BSurface.calc(prev_x, prev_y);
+
+	for (var t = 0; t < 1; t += 1/num)
+	{
+		var x = this.originPoint.t + (intersects[0][0] - this.originPoint.t)*t;
+		var y = this.originPoint.u + (intersects[0][1] - this.originPoint.u)*t;
+
+		var coords = BSurface.calc(x, y);
+
+		var dist = Math.sqrt(Math.pow(coords[0] - prev[0], 2) + Math.pow(coords[1] - prev[1], 2) + Math.pow(coords[2] - prev[2], 2));
+
+		arclength += dist;
+
+		prev = coords;
+
+		if (arclength > this.strand_gap)
+		{
+			arclength -= this.strand_gap;
+
+			var p = new Point(coords[0], coords[1], coords[2]);
+			var p_T = new Point(0, 0, 0, "darkred", 5)
+
+			// Must save the surface coordinates to do further surface collision projections later on.
+			p.t = x;
+			p.u = y;
+
+			this.originStrandPoints.push(p)
+			this.originStrandPoints_T.push(p_T);
+		}
+	}
+
+
+	// Now we do this process of finding the strand origin points again, but on this opposite side of the main strand.
+
+	// intersects = getIntersectionPoints(this.originPoint.t, this.originPoint.u, (this.angle + 90)/180*Math.PI, Hull, true);
+
+	var num = 1000;
+
+	var arclength = 0;
+
+	var prev_x = this.originPoint.t;
+	var prev_y = this.originPoint.u;
+
+	var prev = BSurface.calc(prev_x, prev_y);
+
+	for (var t = 0; t < 1; t += 1/num)
+	{
+		var x = this.originPoint.t + (intersects[1][0] - this.originPoint.t)*t;
+		var y = this.originPoint.u + (intersects[1][1] - this.originPoint.u)*t;
+
+		var coords = BSurface.calc(x, y);
+
+		var dist = Math.sqrt(Math.pow(coords[0] - prev[0], 2) + Math.pow(coords[1] - prev[1], 2) + Math.pow(coords[2] - prev[2], 2));
+
+		arclength += dist;
+
+		prev = coords;
+
+		if (arclength > this.strand_gap)
+		{
+			arclength -= this.strand_gap;
+
+			var p = new Point(coords[0], coords[1], coords[2]);
+			var p_T = new Point(0, 0, 0, "darkred", 5)
+
+			// Must save the surface coordinates to do further surface collision projections later on.
+			p.t = x;
+			p.u = y;
+
+			this.originStrandPoints.push(p)
+			this.originStrandPoints_T.push(p_T);
+		}
+	}
+
+	// Finally, add the origin point.
+
+	this.originStrandPoints.push(this.originPoint);
+	this.originStrandPoints_T.push(this.originPoint_T);
+
+
+	// Now that we have the origin strand points, iterate through them, project them orthogonally to find the collision points, iterate between the collision
+	// points at some specified delta of resolution, and append each sample point to an array to be rendered.
+
+	this.strandSamples = new Array();
+	this.strandSamples_T = new Array();
+
+	for (var i = 0; i < this.originStrandPoints.length; i++)
+	{
+		var p = this.originStrandPoints[i];
+
+		var intersects = getIntersectionPoints(p.t, p.u, (this.angle)/180*Math.PI, Hull, true);
+
+		// Now we linearly interpolate between the intersect coordinates.
+
+		var num = 100;
+
+		for (var t = 0; t < 1; t+= 1/num)
+		{
+			var x = intersects[0][0] + (intersects[1][0] - intersects[0][0])*t;
+			var y = intersects[0][1] + (intersects[1][1] - intersects[0][1])*t;
+
+			var coords = BSurface.calc(x, y);
+
+			var p = new Point(coords[0], coords[1], coords[2]);
+			var p_T = new Point(0, 0, 0, "black", 3);
+
+			this.strandSamples.push(p);
+			this.strandSamples_T.push(p_T);
+		}
+
+	}
+
+
+
+	// We now happily have the full set of strand sample points, so we can generate a pdb file and hook it to the button (magic)
+
+	// Create new array of strand samples to perform work on.
+
+	var sample_points = new Array();
+
+	for (var i = 0; i < this.strandSamples.length; i++)
+	{
+		var p = this.strandSamples[i];
+
+		var p_copy = new Point(p.x, p.y, p.z);
+
+		sample_points.push(p_copy);
+	}
+
+	// Undo plane and centering transformations
+	for (var i = 0; i < sample_points.length; i++)
+	{
+		sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz)
+
+		sample_points[i].x += DMap.x_avg
+		sample_points[i].y += DMap.y_avg
+		sample_points[i].z += DMap.z_avg
+	}
+
+	var string = generatePDBString(sample_points);
+
+	var file = generateTextFile(string);
+
+	strand_dl.href = file;
+
+	// Build filename by appending "_SplineFit" to the end of the input file
+
+	var filename = DMap.filename;
+	var exploded_filename = filename.split(".");
+
+	var strand_filename = "";
+
+	for (var i = 0; i < exploded_filename.length - 2; i++)
+	{
+		strand_filename += (exploded_filename[i] + ".");
+	}
+	strand_filename += (exploded_filename[i]);
+
+	strand_filename += "_SplineFit_Strands.pdb";
+
+	strand_dl.download = strand_filename;
 
 }
 
+
+
 Strand.prototype.draw = function()
 {
-
 	if (!this.optimized)
 	{
 		if ((this.angle_slider.value != this.angle) || (this.offset_slider.value != this.offset))
@@ -2535,7 +2722,7 @@ Strand.prototype.draw = function()
 			this.offset = this.offset_slider.value;
 
 			this.setAngle(this.angle, this.offset);
-		}		
+		}
 	}
 
 
@@ -2544,6 +2731,46 @@ Strand.prototype.draw = function()
 		this.optimizeAngle();
 		this.optimize_button.activated = false;
 	}
+
+	// Draw strand samples
+
+	if (this.strandSamples)
+	{
+		for (var i = 0; i < this.strandSamples.length; i++)
+		{
+			var p = this.strandSamples[i];
+			var p_T = this.strandSamples_T[i];
+
+			p_T.moveTo(p);
+			p_T.scaleFactor(zoom);
+			p_T.rotateY(yaw);
+			p_T.rotateX(pitch);
+
+			p_T.draw();
+		}
+	}
+
+
+
+	// Draw debug perpindicular collision lines
+
+
+	if (this.originStrandPoints)
+	{
+		for (var i = 0; i < this.originStrandPoints.length; i++)
+		{
+			var p = this.originStrandPoints[i];
+			var p_T = this.originStrandPoints_T[i];
+
+			p_T.moveTo(p);
+			p_T.scaleFactor(zoom);
+			p_T.rotateY(yaw);
+			p_T.rotateX(pitch);
+
+			p_T.draw();
+		}
+	}
+
 
 
 	// Draw middle strand line
@@ -2941,7 +3168,7 @@ function Surface(X, Y, T, U)
 
 
 	// Draw point are the sample points of the surface which we use the render and display
-	//  the shape of the surface.  As well, we define the array of camera-transformed 
+	//  the shape of the surface.  As well, we define the array of camera-transformed
 	//  sample points.  (Which we need, of course, to draw on the screen).
 
 	this.drawPoints = new Array(T);
@@ -3154,7 +3381,7 @@ Surface.prototype.draw = function()
 			{
 				needToMove = true;
 			}
-			
+
 
 
 			for (var j = 0; j < this.U; j++)
@@ -3193,7 +3420,7 @@ Surface.prototype.draw = function()
 			{
 				needToMove = true;
 			}
-			
+
 
 			for (var j = 0; j < this.T; j++)
 			{
@@ -3210,7 +3437,7 @@ Surface.prototype.draw = function()
 						needToMove = false;
 					}
 				}
-				
+
 			}
 		}
 
@@ -3239,7 +3466,7 @@ Surface.prototype.draw = function()
 			{
 				this.controlPoints_T[i][j].draw();
 			}
-		}		
+		}
 	}
 	else
 	{
@@ -3511,7 +3738,7 @@ Surface.prototype.incrementControlPoints = function()
 		{
 			var t = i/(x-1)
 			var u = j/(y-1)
-			
+
 			coords = this.calc(t, u);
 
 			controlPoints[i][j] = new Point(coords[0], coords[1], coords[2]);
@@ -3620,7 +3847,7 @@ Plane.prototype.generatePoints = function()
 				this.points_T.push(p2);
 			}
 		}
-	}	
+	}
 	else if (max_i == 1) // If 'B' is the highest term, generate y-vals
 	{
 		var size = 20;
@@ -4120,10 +4347,10 @@ Point.prototype.draw = function(actually_draw)
 	}
 
 	var x3d = this.x;
-	var y3d = this.y; 
-	var z3d = this.z; 
-	this.scale = fov/(fov+z3d); 
-	this.x2d = (x3d * this.scale) + cvs.width/2;	
+	var y3d = this.y;
+	var z3d = this.z;
+	this.scale = fov/(fov+z3d);
+	this.x2d = (x3d * this.scale) + cvs.width/2;
 	this.y2d = (y3d * this.scale) + cvs.height/2;
 
     if (this.scale > 0 && actually_draw)
@@ -4397,7 +4624,7 @@ Point.prototype.refineProjection = function(permissive)
 		else if (u > 1)
 		{
 			u = 1;
-		}	
+		}
 	}
 
 	this.t = t;
@@ -4586,7 +4813,7 @@ cvs.addEventListener('mousemove', function(evt)
 
 			var dist_minus = search_point_T.dist2d(Mouse);
 
-			
+
 			// If either of the distances are smaller, set the new t before we optimize for u.
 
 			if (dist_plus < dist && dist_plus < dist_minus && t_plus < 1.1)
@@ -4655,7 +4882,7 @@ cvs.addEventListener('mousemove', function(evt)
 
 			var dist_minus = search_point_T.dist2d(Mouse);
 
-			
+
 			// If either of the distances are smaller, set the new t before we optimize for u.
 
 			if (dist_plus < dist && dist_plus < dist_minus && u_plus < 1.1)
@@ -4805,7 +5032,7 @@ cvs.addEventListener('mousedown', function(evt)
 	{
 		var closest_id = BSurface.closestControlPoint2D(Mouse);
 		var closest_control_point = BSurface.controlPoints_T[closest_id[0]][closest_id[1]];
-		
+
 		var closest_dist = closest_control_point.dist2d(Mouse);
 		if (closest_dist < 15)
 		{
@@ -4821,7 +5048,7 @@ cvs.addEventListener('mousedown', function(evt)
 			Mouse.holding = true;
 			Mouse.held_id = closest_id;
 			Mouse.held_type = 1;
-		}	
+		}
 	}
 
 
@@ -4862,7 +5089,7 @@ cvs.addEventListener('mousewheel',function(evt)
 	updateTransformedPoints();
 
 	evt.preventDefault();
-    return false; 
+    return false;
 }, false);
 
 cvs.addEventListener("DOMMouseScroll",function(evt)
@@ -4881,6 +5108,18 @@ cvs.addEventListener("DOMMouseScroll",function(evt)
 
 
 
+
+
+// Add event listener for the strand download button: That way, we can update the strand render when we need to.
+strand_dl.addEventListener('mouseover', function(evt)
+{
+	console.log("hover");
+
+	if (BStrand && !BStrand.updated)
+	{
+		BStrand.updateDownload();
+	}
+}, false);
 
 
 
@@ -5004,7 +5243,7 @@ Slider.prototype.draw = function()
 		{
 			ctx.fillStyle = "lightgreen";
 		}
-		
+
 		if (Mouse.down != true)
 		{
 			this.held = false;
