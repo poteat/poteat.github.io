@@ -1,43 +1,34 @@
-
-
-
-
-
-
 // GLOBAL SCOPE DECLARATIVE HEADER
 //
-	// Camera and animation parameters
-	var fps = 30;
-	var fov = 250;
-	var yaw = 10;
-	var pitch = 0.7;
-	var zoom = 4;
+// Camera and animation parameters
+var fps = 30;
+var fov = 250;
+var yaw = 10;
+var pitch = 0.7;
+var zoom = 4;
 
-	// Canvas and drawing DOM objects
-	var cvs = document.getElementById('canvas');
-	var ctx = cvs.getContext('2d');
+// Canvas and drawing DOM objects
+var cvs = document.getElementById('canvas');
+var ctx = cvs.getContext('2d');
 
-	var dl = document.getElementById('surface_download_link');
-	var fit_dl = document.getElementById('fit_download_link');
-	var strand_dl = document.getElementById('strand_download_link');
+var dl = document.getElementById('surface_download_link');
+var fit_dl = document.getElementById('fit_download_link');
+var strand_dl = document.getElementById('strand_download_link');
 
-	// Global object declarations
-	var Mouse = new Mouse();
-	var BSurface;
-	var DemingRegressor;
-	var BProj;
+// Global object declarations
+var Mouse = new Mouse();
+var BSurface;
+var DemingRegressor;
+var BProj;
 
-	// Program entry and loop definition
-	clearInterval(mainloop);
-	var mainloop = setInterval("main();",1000/fps);
-//
+// Program entry and loop definition
+clearInterval(mainloop);
+var mainloop = setInterval("main();", 1000 / fps);
 
+var first_execution = true;
+var BPerimeter;
 
-	var first_execution = true;
-	var BPerimeter;
-
-	var BStrand;
-
+var BStrand;
 
 
 // Program entry point, runs once at initialization of application.
@@ -51,7 +42,7 @@ function init()
 
 	BProj = new Projection();
 
-//	BProj.appendPoint(0, 50, 0);
+	//	BProj.appendPoint(0, 50, 0);
 
 	updateTransformedPoints();
 }
@@ -112,7 +103,8 @@ function main()
 					// Undo plane and centering transformations
 					for (var i = 0; i < sample_points.length; i++)
 					{
-						sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz)
+						sample_points[i].rotateAxis(-DMap.rot_theta,
+							DMap.rot_ux, DMap.rot_uy, DMap.rot_uz)
 
 						sample_points[i].x += DMap.x_avg
 						sample_points[i].y += DMap.y_avg
@@ -132,7 +124,8 @@ function main()
 					fit_dl.href = fit_file;
 
 
-					// Build filename by appending "_SplineFit" to the end of the input file
+					// Build filename by appending "_SplineFit" to the end of
+					// the input file
 
 					var filename = DMap.filename;
 					var exploded_filename = filename.split(".");
@@ -156,7 +149,8 @@ function main()
 					updated_pdb = true;
 				}
 
-				// Now that the surface is finished optimizing itself, we can calculate the projected concave hull!
+				// Now that the surface is finished optimizing itself, we can
+				// calculate the projected concave hull!
 
 				if (first_execution)
 				{
@@ -241,7 +235,8 @@ function main()
 				// Rotate DMap
 				BPlane.finished = true;
 
-				var mag = Math.sqrt(Math.pow(BPlane.A,2) + Math.pow(BPlane.C,2));
+				var mag = Math.sqrt(Math.pow(BPlane.A, 2) +
+					Math.pow(BPlane.C, 2));
 
 				DMap.rot_ux = BPlane.C / mag;
 				DMap.rot_uy = 0;
@@ -249,7 +244,8 @@ function main()
 
 				DMap.rot_theta = Math.acos(BPlane.B);
 
-				DMap.rotateAxis(DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz);
+				DMap.rotateAxis(DMap.rot_theta, DMap.rot_ux, DMap.rot_uy,
+					DMap.rot_uz);
 
 				DMap.updateTransformedPoints();
 
@@ -273,9 +269,11 @@ function initializeStrandFit()
 
 // updateTransformedPoints()
 // ----------------------------------------------------------------------
-// This function updates the "camera-transformed" set of points belonging to each object.
-// The transformation consists of two rotations around the Y and X axes, by the yaw and
-// pitch camera angles respectively.  There is also a scaling transformation for zoom.
+// This function updates the "camera-transformed" set of points belonging to 
+// each object.
+// The transformation consists of two rotations around the Y and X axes, by the 
+// yaw and pitch camera angles respectively.  There is also a scaling
+// transformation for zoom.
 
 function updateTransformedPoints()
 {
@@ -305,19 +303,19 @@ function generatePDBString(points)
 
 	for (var i = 0; i < points.length; i++)
 	{
-		if (i+1 < 10)
+		if (i + 1 < 10)
 		{
 			var space = "     ";
 		}
-		else if (i+1 < 100)
+		else if (i + 1 < 100)
 		{
 			var space = "    ";
 		}
-		else if (i+1 < 1000)
+		else if (i + 1 < 1000)
 		{
 			var space = "   ";
 		}
-		else if (i+1 < 10000)
+		else if (i + 1 < 10000)
 		{
 			var space = "  ";
 		}
@@ -334,11 +332,11 @@ function generatePDBString(points)
 
 		if (x > -1 && x < 1)
 		{
-			var x = points[i].x.toPrecision(precision-1);
+			var x = points[i].x.toPrecision(precision - 1);
 
 			if (x > -.1 && x < .1)
 			{
-				var x = points[i].x.toPrecision(precision-2);
+				var x = points[i].x.toPrecision(precision - 2);
 			}
 		}
 		else
@@ -357,11 +355,11 @@ function generatePDBString(points)
 
 		if (y > -1 && y < 1)
 		{
-			var y = points[i].y.toPrecision(precision-1);
+			var y = points[i].y.toPrecision(precision - 1);
 
 			if (y > -.1 && y < .1)
 			{
-				var y = points[i].y.toPrecision(precision-2);
+				var y = points[i].y.toPrecision(precision - 2);
 			}
 		}
 		else
@@ -380,11 +378,11 @@ function generatePDBString(points)
 
 		if (z > -1 && z < 1)
 		{
-			var z = points[i].z.toPrecision(precision-1);
+			var z = points[i].z.toPrecision(precision - 1);
 
 			if (z > -.1 && z < .1)
 			{
-				var z = points[i].z.toPrecision(precision-2);
+				var z = points[i].z.toPrecision(precision - 2);
 			}
 		}
 		else
@@ -401,7 +399,9 @@ function generatePDBString(points)
 			var z_space = " ";
 		}
 
-		string += "ATOM " + space + (i+1) + "  C   HOH A   1     " + x_space + x + " " + y_space + y + " " + z_space + z + "                          \n";
+		string += "ATOM " + space + (i + 1) + "  C   HOH A   1     " +
+			x_space + x + " " + y_space + y + " " + z_space + z +
+			"                          \n";
 	}
 
 	return string;
@@ -414,7 +414,8 @@ function generateFitString()
 
 	string += DMap.x_avg + " " + DMap.y_avg + " " + DMap.z_avg + "\n";
 
-	string += DMap.rot_theta + " " + DMap.rot_ux + " " + DMap.rot_uy + " " + DMap.rot_uz + "\n";
+	string += DMap.rot_theta + " " + DMap.rot_ux + " " + DMap.rot_uy + " " +
+		DMap.rot_uz + "\n";
 
 	string += DMap.min_t + " " + DMap.max_t + "\n";
 
@@ -437,11 +438,14 @@ function generateFitString()
 
 function generateTextFile(string)
 {
-    var data = new Blob([string], {type: 'text/plain'});
+	var data = new Blob([string],
+	{
+		type: 'text/plain'
+	});
 
-    file = window.URL.createObjectURL(data);
+	file = window.URL.createObjectURL(data);
 
-    return file;
+	return file;
 }
 
 
@@ -453,16 +457,19 @@ function generateTextFile(string)
 // ----------------------------------------------------------------------
 
 // sign(x) returns -1 if x is negative, 1 if x is positive, and 0 if x is zero.
-function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
+function sign(x)
+{
+	return x > 0 ? 1 : x < 0 ? -1 : 0;
+}
 
-// binomial(n,k) returns the binomial coefficient of n, k.  i.e. N select K.  Used primarily
-// for generating surface points.
+// binomial(n,k) returns the binomial coefficient of n, k.  i.e. N select K.  
+// Used primarily for generating surface points.
 function binomial(n, k)
 {
 	var prod = 1;
 	for (i = 1; i <= k; i++)
 	{
-		prod *= (n + 1 - i)/i;
+		prod *= (n + 1 - i) / i;
 	}
 
 	return prod;
@@ -481,23 +488,13 @@ function clamp(num, min, max)
 
 
 
-
-
-
-
-
-
-
-
-
-
 function loadServerMRC(file)
 {
 	var oReq = new XMLHttpRequest();
 	oReq.open("GET", "/" + file, true);
 	oReq.responseType = "arraybuffer";
 
-	oReq.onload = function (oEvent)
+	oReq.onload = function(oEvent)
 	{
 		var arrayBuffer = oReq.response; // Note: not oReq.responseText
 		if (arrayBuffer)
@@ -512,7 +509,7 @@ function loadServerMRC(file)
 
 			updateTransformedPoints();
 
-			mainloop = setInterval("main();",1000/fps);
+			mainloop = setInterval("main();", 1000 / fps);
 		}
 	};
 
@@ -523,7 +520,8 @@ var DMap;
 var dataView;
 var density_threshold = 0.65;
 
-document.getElementById('density_threshold').addEventListener('change', changeDensity, false);
+document.getElementById('density_threshold').addEventListener('change',
+	changeDensity, false);
 
 function changeDensity(evt)
 {
@@ -544,7 +542,8 @@ function changeDensity(evt)
 	BSurface.drawSurface = true;
 }
 
-document.getElementById('mrc_file').addEventListener('change', loadLocalMRC, false);
+document.getElementById('mrc_file').addEventListener('change', loadLocalMRC,
+	false);
 
 function loadLocalMRC(evt)
 {
@@ -559,7 +558,7 @@ function loadLocalMRC(evt)
 	{
 		fileReader.readAsArrayBuffer(file);
 
-		fileReader.onload = function (oEvent)
+		fileReader.onload = function(oEvent)
 		{
 			var arrayBuffer = oEvent.target.result;
 			if (arrayBuffer)
@@ -588,7 +587,7 @@ function loadLocalMRC(evt)
 	{
 		fileReader.readAsText(file);
 
-		fileReader.onload = function (oEvent)
+		fileReader.onload = function(oEvent)
 		{
 			var pdb_string = oEvent.target.result;
 
@@ -613,7 +612,8 @@ function loadLocalMRC(evt)
 
 }
 
-document.getElementById('fit_file').addEventListener('change', loadFittingFile, false);
+document.getElementById('fit_file').addEventListener('change', loadFittingFile,
+	false);
 
 function loadFittingFile(evt)
 {
@@ -621,7 +621,7 @@ function loadFittingFile(evt)
 	var fileReader = new FileReader();
 	fileReader.readAsText(file);
 
-	fileReader.onload = function (oEvent)
+	fileReader.onload = function(oEvent)
 	{
 		var fit_string = oEvent.target.result;
 
@@ -685,7 +685,8 @@ function loadFittingFile(evt)
 		// Finished reading all data.
 		// Initialize new DMap and BSurface
 
-		DMap.createFromFit(avgx, avgy, avgz, rot_theta, rot_ux, rot_uy, rot_uz, min_t, max_t, min_u, max_u);
+		DMap.createFromFit(avgx, avgy, avgz, rot_theta, rot_ux, rot_uy, rot_uz,
+			min_t, max_t, min_u, max_u);
 
 		BSurface.setControlPoints(array_of_points);
 		BSurface.finished = true;
@@ -711,16 +712,18 @@ function readFloat(i)
 }
 
 
-function createArray(length) {
-    var arr = new Array(length || 0),
-        i = length;
+function createArray(length)
+{
+	var arr = new Array(length || 0),
+		i = length;
 
-    if (arguments.length > 1) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        while(i--) arr[length-1 - i] = createArray.apply(this, args);
-    }
+	if (arguments.length > 1)
+	{
+		var args = Array.prototype.slice.call(arguments, 1);
+		while (i--) arr[length - 1 - i] = createArray.apply(this, args);
+	}
 
-    return arr;
+	return arr;
 }
 
 
@@ -814,202 +817,210 @@ function DensityMap(pdb_string)
 	this.max_u = 1;
 }
 
-DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta, rot_ux, rot_uy, rot_uz, min_t, max_t, min_u, max_u)
+DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta,
+	rot_ux, rot_uy, rot_uz, min_t, max_t, min_u, max_u)
 {
-		this.nx = readInt(0);
-		this.ny = readInt(1);
-		this.nz = readInt(2);
-		this.mode = readInt(3);
+	this.nx = readInt(0);
+	this.ny = readInt(1);
+	this.nz = readInt(2);
+	this.mode = readInt(3);
 
-		this.nxstart = readInt(4);
-		this.nystart = readInt(5);
-		this.nzstart = readInt(6);
+	this.nxstart = readInt(4);
+	this.nystart = readInt(5);
+	this.nzstart = readInt(6);
 
-		this.mx = readInt(7);
-		this.my = readInt(8);
-		this.mz = readInt(9);
+	this.mx = readInt(7);
+	this.my = readInt(8);
+	this.mz = readInt(9);
 
-		this.xlength = readFloat(10);
-		this.ylength = readFloat(11);
-		this.zlength = readFloat(12);
+	this.xlength = readFloat(10);
+	this.ylength = readFloat(11);
+	this.zlength = readFloat(12);
 
-		this.alpha = readFloat(13);
-		this.beta = readFloat(14);
-		this.gamma = readFloat(15);
+	this.alpha = readFloat(13);
+	this.beta = readFloat(14);
+	this.gamma = readFloat(15);
 
-		this.mapc = readInt(16);
-		this.mapr = readInt(17);
-		this.maps = readInt(18);
+	this.mapc = readInt(16);
+	this.mapr = readInt(17);
+	this.maps = readInt(18);
 
-		this.amin = readFloat(19);
-		this.amax = readFloat(20);
-		this.amean = readFloat(21);
+	this.amin = readFloat(19);
+	this.amax = readFloat(20);
+	this.amean = readFloat(21);
 
-		this.ispg = readInt(22);
-		this.nsymbt = readInt(23);
+	this.ispg = readInt(22);
+	this.nsymbt = readInt(23);
 
-		// Extra 25 ints of storage space
+	// Extra 25 ints of storage space
 
-		this.xorigin = readFloat(23+26);
-		this.yorigin = readFloat(23+27);
-		this.zorigin = readFloat(23+28);
+	this.xorigin = readFloat(23 + 26);
+	this.yorigin = readFloat(23 + 27);
+	this.zorigin = readFloat(23 + 28);
 
-		this.scale = this.xlength/this.mx; // The size of each voxel in Angstroms
+	this.scale = this.xlength / this.mx; // The size of each voxel in Angstroms
 
-		if (this.scale != 1)
+	if (this.scale != 1)
+	{
+		alert("PDB export of non-1 voxel size MRC's is unsupported");
+	}
+
+	//this.nlabl = readInt(23+29+3);
+
+	voxel = createArray(this.nx, this.ny, this.nz);
+
+	this.x_avg = x_avg;
+	this.y_avg = y_avg;
+	this.z_avg = z_avg;
+
+	this.points = new Array(); // Immutable data points
+	this.points_T = new Array(); // Points in camera space
+
+	for (var z = 0; z < this.nz; z++)
+	{
+		for (var y = 0; y < this.ny; y++)
 		{
-			alert("PDB export of non-1 voxel size MRC's is unsupported");
-		}
-
-		//this.nlabl = readInt(23+29+3);
-
-		voxel = createArray(this.nx, this.ny, this.nz);
-
-		this.x_avg = x_avg;
-		this.y_avg = y_avg;
-		this.z_avg = z_avg;
-
-		this.points = new Array(); // Immutable data points
-		this.points_T = new Array(); // Points in camera space
-
-		for (var z = 0; z < this.nz; z++)
-		{
-			for (var y = 0; y < this.ny; y++)
+			for (var x = 0; x < this.nx; x++)
 			{
-				for (var x = 0; x < this.nx; x++)
+				var density = readFloat(256 + (z * this.nx * this.ny + y *
+					this.nx + x));
+				if (density > density_threshold)
 				{
-					var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
-					if (density > density_threshold)
-					{
-						var scale = this.scale;
-						var p = new Point(((x+this.xorigin) - x_avg)*scale, ((y+this.yorigin) - y_avg)*scale, ((z+this.zorigin) - z_avg)*scale);
-						var p2 = new Point(0, 0, 0);
-						this.points.push(p);
-						this.points_T.push(p2);
-					}
+					var scale = this.scale;
+					var p = new Point(((x + this.xorigin) - x_avg) * scale,
+						((y + this.yorigin) - y_avg) * scale, ((z +
+							this.zorigin) - z_avg) * scale);
+					var p2 = new Point(0, 0, 0);
+					this.points.push(p);
+					this.points_T.push(p2);
 				}
 			}
 		}
+	}
 
-		this.rot_theta = rot_theta;
-		this.rot_ux = rot_ux;
-		this.rot_uy = rot_uy;
-		this.rot_uz = rot_uz;
+	this.rot_theta = rot_theta;
+	this.rot_ux = rot_ux;
+	this.rot_uy = rot_uy;
+	this.rot_uz = rot_uz;
 
-		DMap.rotateAxis(DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz);
+	DMap.rotateAxis(DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz);
 
-		this.min_t = min_t;
-		this.max_t = max_t;
-		this.min_u = min_u;
-		this.max_u = max_u;
+	this.min_t = min_t;
+	this.max_t = max_t;
+	this.min_u = min_u;
+	this.max_u = max_u;
 }
 
 DensityMap.prototype.createFromMRC = function()
 {
-		this.nx = readInt(0);
-		this.ny = readInt(1);
-		this.nz = readInt(2);
-		this.mode = readInt(3);
+	this.nx = readInt(0);
+	this.ny = readInt(1);
+	this.nz = readInt(2);
+	this.mode = readInt(3);
 
-		this.nxstart = readInt(4);
-		this.nystart = readInt(5);
-		this.nzstart = readInt(6);
+	this.nxstart = readInt(4);
+	this.nystart = readInt(5);
+	this.nzstart = readInt(6);
 
-		this.mx = readInt(7);
-		this.my = readInt(8);
-		this.mz = readInt(9);
+	this.mx = readInt(7);
+	this.my = readInt(8);
+	this.mz = readInt(9);
 
-		this.xlength = readFloat(10);
-		this.ylength = readFloat(11);
-		this.zlength = readFloat(12);
+	this.xlength = readFloat(10);
+	this.ylength = readFloat(11);
+	this.zlength = readFloat(12);
 
-		this.alpha = readFloat(13);
-		this.beta = readFloat(14);
-		this.gamma = readFloat(15);
+	this.alpha = readFloat(13);
+	this.beta = readFloat(14);
+	this.gamma = readFloat(15);
 
-		this.mapc = readInt(16);
-		this.mapr = readInt(17);
-		this.maps = readInt(18);
+	this.mapc = readInt(16);
+	this.mapr = readInt(17);
+	this.maps = readInt(18);
 
-		this.amin = readFloat(19);
-		this.amax = readFloat(20);
-		this.amean = readFloat(21);
+	this.amin = readFloat(19);
+	this.amax = readFloat(20);
+	this.amean = readFloat(21);
 
-		this.ispg = readInt(22);
-		this.nsymbt = readInt(23);
+	this.ispg = readInt(22);
+	this.nsymbt = readInt(23);
 
-		// Extra 25 ints of storage space
+	// Extra 25 ints of storage space
 
-		this.xorigin = readFloat(23+26);
-		this.yorigin = readFloat(23+27);
-		this.zorigin = readFloat(23+28);
+	this.xorigin = readFloat(23 + 26);
+	this.yorigin = readFloat(23 + 27);
+	this.zorigin = readFloat(23 + 28);
 
-		this.scale = this.xlength/this.mx; // The size of each voxel in Angstroms
+	this.scale = this.xlength / this.mx; // The size of each voxel in Angstroms
 
-		if (this.scale != 1)
+	if (this.scale != 1)
+	{
+		alert("PDB export of non-1 voxel size MRC's is unsupported");
+	}
+
+	//this.nlabl = readInt(23+29+3);
+
+	voxel = createArray(this.nx, this.ny, this.nz);
+
+	var x_avg = 0;
+	var y_avg = 0;
+	var z_avg = 0;
+
+	var num = 0;
+
+	// Find center of data points (above threshold)
+	for (var z = 0; z < this.nz; z++)
+	{
+		for (var y = 0; y < this.ny; y++)
 		{
-			alert("PDB export of non-1 voxel size MRC's is unsupported");
-		}
-
-		//this.nlabl = readInt(23+29+3);
-
-		voxel = createArray(this.nx, this.ny, this.nz);
-
-		var x_avg = 0;
-		var y_avg = 0;
-		var z_avg = 0;
-
-		var num = 0;
-
-		// Find center of data points (above threshold)
-		for (var z = 0; z < this.nz; z++)
-		{
-			for (var y = 0; y < this.ny; y++)
+			for (var x = 0; x < this.nx; x++)
 			{
-				for (var x = 0; x < this.nx; x++)
+				var density = readFloat(256 + (z * this.nx * this.ny + y *
+					this.nx + x));
+				if (density > density_threshold)
 				{
-					var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
-					if (density > density_threshold)
-					{
-						num++;
+					num++;
 
-						x_avg += (x + this.xorigin);
-						y_avg += (y + this.yorigin);
-						z_avg += (z + this.zorigin);
-					}
+					x_avg += (x + this.xorigin);
+					y_avg += (y + this.yorigin);
+					z_avg += (z + this.zorigin);
 				}
 			}
 		}
+	}
 
-		x_avg /= num;
-		y_avg /= num;
-		z_avg /= num;
+	x_avg /= num;
+	y_avg /= num;
+	z_avg /= num;
 
-		this.x_avg = x_avg;
-		this.y_avg = y_avg;
-		this.z_avg = z_avg;
+	this.x_avg = x_avg;
+	this.y_avg = y_avg;
+	this.z_avg = z_avg;
 
-		this.points = new Array(); // Immutable data points
-		this.points_T = new Array(); // Points in camera space
+	this.points = new Array(); // Immutable data points
+	this.points_T = new Array(); // Points in camera space
 
-		for (var z = 0; z < this.nz; z++)
+	for (var z = 0; z < this.nz; z++)
+	{
+		for (var y = 0; y < this.ny; y++)
 		{
-			for (var y = 0; y < this.ny; y++)
+			for (var x = 0; x < this.nx; x++)
 			{
-				for (var x = 0; x < this.nx; x++)
+				var density = readFloat(256 + (z * this.nx * this.ny + y *
+					this.nx + x));
+				if (density > density_threshold)
 				{
-					var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
-					if (density > density_threshold)
-					{
-						var scale = this.scale;
-						var p = new Point(((x+this.xorigin) - x_avg)*scale, ((y+this.yorigin) - y_avg)*scale, ((z+this.zorigin) - z_avg)*scale);
-						var p2 = new Point(0, 0, 0);
-						this.points.push(p);
-						this.points_T.push(p2);
-					}
+					var scale = this.scale;
+					var p = new Point(((x + this.xorigin) - x_avg) * scale,
+						((y + this.yorigin) - y_avg) * scale, ((z +
+							this.zorigin) - z_avg) * scale);
+					var p2 = new Point(0, 0, 0);
+					this.points.push(p);
+					this.points_T.push(p2);
 				}
 			}
 		}
+	}
 
 };
 
@@ -1035,7 +1046,8 @@ DensityMap.prototype.draw = function()
 
 		if (this.extension == 'pdb')
 		{
-			// alert(this.points_T[i].x + " " + this.points_T[i].y + " " + this.points_T[i].z);
+			// alert(this.points_T[i].x + " " + this.points_T[i].y + " " + 
+			// this.points_T[i].z);
 		}
 	}
 
@@ -1053,21 +1065,21 @@ DensityMap.prototype.draw = function()
 
 	for (var i = 0; i < this.points.length; i++)
 	{
-			var p = this.points[i];
-			var p_draw = this.points_T[i]
+		var p = this.points[i];
+		var p_draw = this.points_T[i]
 			//coords = BSurface.calc(p.t, p.u);
 
-			/*
-			var proj = new Point(coords[0], coords[1], coords[2]);
-			proj.scaleFactor(zoom);
-			proj.rotateY(yaw);
-			proj.rotateX(pitch);
-			proj.draw(false);
+		/*
+		var proj = new Point(coords[0], coords[1], coords[2]);
+		proj.scaleFactor(zoom);
+		proj.rotateY(yaw);
+		proj.rotateX(pitch);
+		proj.draw(false);
 
-			ctx.beginPath();
-			ctx.moveTo(p_draw.x2d, p_draw.y2d);
-			ctx.lineTo(proj.x2d, proj.y2d);
-			ctx.stroke();*/
+		ctx.beginPath();
+		ctx.moveTo(p_draw.x2d, p_draw.y2d);
+		ctx.lineTo(proj.x2d, proj.y2d);
+		ctx.stroke();*/
 	}
 };
 
@@ -1129,10 +1141,10 @@ DensityMap.prototype.score = function()
 		var p = this.points[i];
 		var coords = BSurface.calc(p.t, p.u);
 		var proj = new Point(coords[0], coords[1], coords[2]);
-		sum_dist += Math.pow(p.dist(proj),2);
+		sum_dist += Math.pow(p.dist(proj), 2);
 	}
 
-	return Math.sqrt(sum_dist/this.points.length)
+	return Math.sqrt(sum_dist / this.points.length)
 };
 
 DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
@@ -1140,10 +1152,10 @@ DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
 	this.updateProjection();
 
 	var size_t = this.max_t - this.min_t;
-	var delta_t = size_t/(num_X-1);
+	var delta_t = size_t / (num_X - 1);
 
 	var size_u = this.max_u - this.min_u;
-	var delta_u = size_u/(num_Y-1);
+	var delta_u = size_u / (num_Y - 1);
 
 	// Instantiate a bit array of dimensions [num_x, num_y] to false.
 	var bit_array = new Array(num_X);
@@ -1164,9 +1176,9 @@ DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
 		var u = p.u;
 
 		// Convert value to array coordinate
-		t = clamp(Math.round((t-this.min_t)/delta_t), 0, num_X-1);
+		t = clamp(Math.round((t - this.min_t) / delta_t), 0, num_X - 1);
 
-		u = clamp(Math.round((u-this.min_u)/delta_u), 0, num_Y-1);
+		u = clamp(Math.round((u - this.min_u) / delta_u), 0, num_Y - 1);
 
 		bit_array[t][u] = true;
 	}
@@ -1179,8 +1191,8 @@ DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
 		{
 			if (bit_array[i][j] == true)
 			{
-				var t = i*delta_t + this.min_t;
-				var u = j*delta_u + this.min_u;
+				var t = i * delta_t + this.min_t;
+				var u = j * delta_u + this.min_u;
 
 				var coords = BSurface.calc(t, u);
 				var p = new Point(coords[0], coords[1], coords[2]);
@@ -1222,8 +1234,9 @@ DensityMap.prototype.calculateBoundingBox = function()
 	vr_z /= (this.points.length - 1);
 	covr /= (this.points.length - 1);
 
-	slope = (vr_z - vr_x + Math.sqrt(Math.pow(vr_z-vr_x, 2) + 4*Math.pow(covr, 2)))/(2*covr);
-	intersect = avgz - slope*avgx;
+	slope = (vr_z - vr_x + Math.sqrt(Math.pow(vr_z - vr_x, 2) + 4 *
+		Math.pow(covr, 2))) / (2 * covr);
+	intersect = avgz - slope * avgx;
 
 	var min_dist = 1;
 	var max_dist = -1;
@@ -1256,12 +1269,13 @@ DensityMap.prototype.calculateBoundingBox = function()
 		var x = this.points[i].x;
 		var z = this.points[i].z;
 
-		var projection_x = (x + m*(z - b))/(Math.pow(m, 2) + 1);
-		var projection_z = (m*(x + m*z) + b)/(Math.pow(m, 2) + 1);
+		var projection_x = (x + m * (z - b)) / (Math.pow(m, 2) + 1);
+		var projection_z = (m * (x + m * z) + b) / (Math.pow(m, 2) + 1);
 
 		var direction = sign(projection_x - avgx);
 
-		var proj_dist = direction*Math.sqrt(Math.pow(projection_x - avgx,2) + Math.pow(projection_z - avgz, 2));
+		var proj_dist = direction * Math.sqrt(Math.pow(projection_x - avgx, 2) +
+			Math.pow(projection_z - avgz, 2));
 
 		if (proj_dist < min_proj_dist)
 		{
@@ -1298,7 +1312,10 @@ DensityMap.prototype.calculateBoundingBox = function()
 	p3_T.size = 5;
 	p4_T.size = 5;
 
-	var array = [[p1,p2], [p4,p3]];
+	var array = [
+		[p1, p2],
+		[p4, p3]
+	];
 
 	BSurface.setControlPoints(array);
 };
@@ -1312,8 +1329,9 @@ DensityMap.prototype.calculateBoundingBox = function()
 function Perimeter(ConcaveHull)
 {
 
-	// Old feature of displaying colored perimeter, based on local error of fit estimation
-	// To enable, set to 'true' - although local error of fit never ended up being useful.
+	// Old feature of displaying colored perimeter, based on local error of fit 
+	// estimation. To enable, set to 'true' - although local error of fit never 
+	// ended up being useful.
 
 	this.colored_perimeter = false;
 
@@ -1356,9 +1374,11 @@ function Perimeter(ConcaveHull)
 
 	for (var i = 0; i < R; i++)
 	{
-		var t = DMap.min_t + buffer + (DMap.max_t - DMap.min_t - buffer*2) * i/(R-1);
+		var t = DMap.min_t + buffer + (DMap.max_t - DMap.min_t - buffer * 2) *
+			i / (R - 1);
 
-		var IntersectionVertices = getIntersectionPoints(t, 0, 0, ConcaveHull, true);
+		var IntersectionVertices = getIntersectionPoints(t, 0, 0, ConcaveHull,
+			true);
 
 		if (IntersectionVertices != false)
 		{
@@ -1370,7 +1390,7 @@ function Perimeter(ConcaveHull)
 
 			for (var j = 0; j < R; j++)
 			{
-				var u = u1 + (u2 - u1) * j/(R-1);
+				var u = u1 + (u2 - u1) * j / (R - 1);
 
 				var coords = BSurface.calc(t, u);
 
@@ -1398,9 +1418,11 @@ function Perimeter(ConcaveHull)
 
 	for (var i = 0; i < R; i++)
 	{
-		var u = DMap.min_u + buffer + (DMap.max_u - DMap.min_u - buffer*2) * i/(R-1);
+		var u = DMap.min_u + buffer + (DMap.max_u - DMap.min_u - buffer * 2) *
+			i / (R - 1);
 
-		var IntersectionVertices = getIntersectionPoints(0, u, Math.PI/2, ConcaveHull, true);
+		var IntersectionVertices = getIntersectionPoints(0, u, Math.PI / 2,
+			ConcaveHull, true);
 
 		if (IntersectionVertices != false)
 		{
@@ -1412,7 +1434,7 @@ function Perimeter(ConcaveHull)
 
 			for (var j = 0; j < R; j++)
 			{
-				var t = t1 + (t2 - t1) * j/(R-1);
+				var t = t1 + (t2 - t1) * j / (R - 1);
 
 				var coords = BSurface.calc(t, u);
 
@@ -1461,14 +1483,15 @@ Perimeter.prototype.updateColorError = function()
 		// Calculate 3D (true) distance between P and P_prev/P_next.
 		// Then find their average.
 
-		var threshold = (P.dist(P_prev) + P.dist(P_next))/2;
+		var threshold = (P.dist(P_prev) + P.dist(P_next)) / 2;
 
 		var threshold = 5;
 
 
 		/*
 		// *************************
-		// Loop through voxels.  Find maximum proj dist in set of dist less than threshold.
+		// Loop through voxels.  Find maximum proj dist in set of dist less than
+		// threshold.
 
 
 
@@ -1511,8 +1534,8 @@ Perimeter.prototype.updateColorError = function()
 
 		// *************************
 
-		// Loop through all true voxels.  If their distance to P is less than threshold,
-		// Add their projection distance to a sum.
+		// Loop through all true voxels.  If their distance to P is less than 
+		// threshold, Add their projection distance to a sum.
 
 		var proj_dist_avg = 0;
 		var num = 0;
@@ -1549,7 +1572,8 @@ Perimeter.prototype.updateColorError = function()
 
 	}
 
-	// Now all perimeter errors are calculated.  We now calculate each normalized error from 0 to 1.
+	// Now all perimeter errors are calculated.  We now calculate each 
+	// normalized error from 0 to 1.
 
 	// Find the minimum and maximum errors.
 
@@ -1590,7 +1614,7 @@ Perimeter.prototype.updateColorError = function()
 
 		var error = P.error;
 
-		var normalized_error = (error - min_error)/range;
+		var normalized_error = (error - min_error) / range;
 
 		P.normalized_error = normalized_error;
 	}
@@ -1611,9 +1635,9 @@ Perimeter.prototype.updateColorError = function()
 		{
 			var high = high_color[j];
 			var low = low_color[j];
-			var range = high-low;
+			var range = high - low;
 
-			var color_value = Math.round(percent*range + low);
+			var color_value = Math.round(percent * range + low);
 
 			interpolated_color[j] = color_value;
 		}
@@ -1627,7 +1651,8 @@ Perimeter.prototype.updateColorError = function()
 		var g = interpolated_color[1];
 		var b = interpolated_color[2];
 
-		color_string = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+		color_string = "#" + ((1 << 24) + (r << 16) + (g << 8) +
+			b).toString(16).slice(1);
 
 		P_T.color = color_string;
 	}
@@ -1814,7 +1839,8 @@ Perimeter.prototype.draw = function()
 
 		if (this.colored_perimeter)
 		{
-			var gradient = ctx.createLinearGradient(P.x2d, P.y2d, P_next.x2d, P_next.y2d);
+			var gradient = ctx.createLinearGradient(P.x2d, P.y2d, P_next.x2d,
+				P_next.y2d);
 			gradient.addColorStop(0, P.color);
 			gradient.addColorStop(1, P_next.color);
 
@@ -1837,7 +1863,8 @@ Perimeter.prototype.draw = function()
 
 
 	/*
-	// This does the same thing as the above code, only it calculates using the maximum instead.
+	// This does the same thing as the above code, only it calculates using the 
+	// maximum instead.
 	ctx.strokeStyle = "black";
 	ctx.lineWidth = 2;
 
@@ -1893,23 +1920,6 @@ Perimeter.prototype.draw = function()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function Strand()
 {
 	this.originPoint = new Point(0, 0, 0);
@@ -1940,8 +1950,8 @@ function Strand()
 	{
 		var V = Hull[i];
 
-		avgt += Math.pow(V[0],2);
-		avgu += Math.pow(V[1],2);
+		avgt += Math.pow(V[0], 2);
+		avgu += Math.pow(V[1], 2);
 	}
 
 	avgt /= Hull.length;
@@ -1979,6 +1989,10 @@ function Strand()
 	this.setAngle(45, 0);
 }
 
+Strand.prototype.score = function(angle, offset, gap, bond) {
+
+}
+
 Strand.prototype.setOrigin = function(t, u)
 {
 	var coords = BSurface.calc(t, u);
@@ -1997,11 +2011,12 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 {
 	var width_of_gap = this.strand_gap;
 
-	var angle = angle_degrees * Math.PI/180;
+	var angle = angle_degrees * Math.PI / 180;
 
-	var perpendicular_angle = (angle_degrees + 90) * Math.PI/180;
+	var perpendicular_angle = (angle_degrees + 90) * Math.PI / 180;
 
-	// Search for parameters in surface space that give a real space distance of 2 angstrom offset.
+	// Search for parameters in surface space that give a real space distance of
+	// 2 angstrom offset.
 
 	var target = offset;
 
@@ -2023,13 +2038,13 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 	var dir = sign(target);
 
-	var delta_t = -dir*delta*Math.sin(perpendicular_angle);
-	var delta_u = dir*delta*Math.cos(perpendicular_angle);
+	var delta_t = -dir * delta * Math.sin(perpendicular_angle);
+	var delta_u = dir * delta * Math.cos(perpendicular_angle);
 
 	var dx = 0;
 	var dy = 0;
 
-	while (i < 5/delta) // Search for a max 5 Angstroms surface-space)
+	while (i < 5 / delta) // Search for a max 5 Angstroms surface-space)
 	{
 		t += delta_t;
 		u += delta_u;
@@ -2038,11 +2053,13 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 		if (i == 0)
 		{
-			sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
+			sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2],
+				starting_p.x, starting_p.y, starting_p.z);
 		}
 		else
 		{
-			sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
+			sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2],
+				prev_coords[0], prev_coords[1], prev_coords[2]);
 		}
 
 		prev_coords = coords;
@@ -2062,7 +2079,8 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 	Hull = BPerimeter.vertices;
 
-	intersects = getIntersectionPoints(this.originPoint.t + dx, this.originPoint.u + dy, angle, Hull, true);
+	intersects = getIntersectionPoints(this.originPoint.t + dx,
+		this.originPoint.u + dy, angle, Hull, true);
 
 	coords1 = BSurface.calc(intersects[0][0], intersects[0][1]);
 	coords2 = BSurface.calc(intersects[1][0], intersects[1][1]);
@@ -2082,10 +2100,10 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 	for (var i = 0; i < N; i++)
 	{
-		var P = i/(N-1);
+		var P = i / (N - 1);
 
-		var t = t1 + P*(t2-t1);
-		var u = u1 + P*(u2-u1);
+		var t = t1 + P * (t2 - t1);
+		var u = u1 + P * (u2 - u1);
 
 		var coords = BSurface.calc(t, u);
 
@@ -2094,7 +2112,7 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 		sample.t = t;
 		sample.u = u;
 
-		var sample_T = new Point(0, 0, 0, 'black',3)
+		var sample_T = new Point(0, 0, 0, 'black', 3)
 
 		this.points.push(sample);
 		this.points_T.push(sample_T);
@@ -2110,7 +2128,7 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 	for (var i = 1; i < this.points.length; i++)
 	{
-		var p = this.points[i-1];
+		var p = this.points[i - 1];
 		var p2 = this.points[i];
 
 		var dist = p.dist(p2);
@@ -2123,8 +2141,8 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 	}
 
 
-	// Given arclength estimation, find points closest to the 1/5 2/5 3/5 4/5 definition
-	// to populate the midPoints array.
+	// Given arclength estimation, find points closest to the 1/5 2/5 3/5 4/5 
+	// definition to populate the midPoints array.
 
 	var i = 0;
 
@@ -2133,9 +2151,9 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 	for (var j = 1; j < 5; j++)
 	{
-		var target = sumdist*(j/5);
+		var target = sumdist * (j / 5);
 
-		while(i < this.points.length)
+		while (i < this.points.length)
 		{
 			var p = this.points[i];
 			var p_T = this.points_T[i];
@@ -2164,7 +2182,7 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 	this.midPointsLeft = new Array();
 	this.midPointsLeft_T = new Array();
 
-	var perpendicular_angle = (angle_degrees + 90) * Math.PI/180;
+	var perpendicular_angle = (angle_degrees + 90) * Math.PI / 180;
 
 	for (var j = 0; j < this.midPoints.length; j++)
 	{
@@ -2182,10 +2200,10 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 		var i = 0;
 
-		var delta_t = -delta*Math.sin(perpendicular_angle);
-		var delta_u = delta*Math.cos(perpendicular_angle);
+		var delta_t = -delta * Math.sin(perpendicular_angle);
+		var delta_u = delta * Math.cos(perpendicular_angle);
 
-		while (i < 10/delta) // Search for a max 10 Angstroms surface-space)
+		while (i < 10 / delta) // Search for a max 10 Angstroms surface-space)
 		{
 			t += delta_t;
 			u += delta_u;
@@ -2194,11 +2212,13 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 			if (i == 0)
 			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
+				sumdist += this.distBetweenSamples(coords[0], coords[1],
+					coords[2], starting_p.x, starting_p.y, starting_p.z);
 			}
 			else
 			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
+				sumdist += this.distBetweenSamples(coords[0], coords[1],
+					coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
 			}
 
 			prev_coords = coords;
@@ -2206,7 +2226,8 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 			if (sumdist > target)
 			{
 				var p = new Point(coords[0], coords[1], coords[2]);
-				var p_T = new Point(coords[0], coords[1], coords[2], "black", 3);
+				var p_T = new Point(coords[0], coords[1], coords[2], "black",
+					3);
 
 
 				this.midPointsLeft.push(p);
@@ -2228,7 +2249,7 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 	this.midPointsRight = new Array();
 	this.midPointsRight_T = new Array();
 
-	var perpendicular_angle = (angle_degrees - 90) * Math.PI/180;
+	var perpendicular_angle = (angle_degrees - 90) * Math.PI / 180;
 
 	for (var j = 0; j < this.midPoints.length; j++)
 	{
@@ -2246,10 +2267,10 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 		var i = 0;
 
-		var delta_t = -delta*Math.sin(perpendicular_angle);
-		var delta_u = delta*Math.cos(perpendicular_angle);
+		var delta_t = -delta * Math.sin(perpendicular_angle);
+		var delta_u = delta * Math.cos(perpendicular_angle);
 
-		while (i < 10/delta) // Search for a max 10 Angstroms surface-space)
+		while (i < 10 / delta) // Search for a max 10 Angstroms surface-space)
 		{
 			t += delta_t;
 			u += delta_u;
@@ -2258,11 +2279,13 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 
 			if (i == 0)
 			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], starting_p.x, starting_p.y, starting_p.z);
+				sumdist += this.distBetweenSamples(coords[0], coords[1],
+					coords[2], starting_p.x, starting_p.y, starting_p.z);
 			}
 			else
 			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
+				sumdist += this.distBetweenSamples(coords[0], coords[1],
+					coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
 			}
 
 			prev_coords = coords;
@@ -2270,7 +2293,8 @@ Strand.prototype.setAngle = function(angle_degrees, offset)
 			if (sumdist > target)
 			{
 				var p = new Point(coords[0], coords[1], coords[2]);
-				var p_T = new Point(coords[0], coords[1], coords[2], "black", 3);
+				var p_T = new Point(coords[0], coords[1], coords[2], "black",
+					3);
 
 
 				this.midPointsRight.push(p);
@@ -2297,14 +2321,15 @@ Strand.prototype.updateScore = function()
 
 	for (var i = 1; i < this.midPointsLeft.length; i++)
 	{
-		var p1 = this.midPoints[i-1];
+		var p1 = this.midPoints[i - 1];
 		var p2 = this.midPoints[i];
 
-		var p3 = this.midPointsLeft[i-1];
+		var p3 = this.midPointsLeft[i - 1];
 		var p4 = this.midPointsLeft[i];
 
-		var angle = this.angleBetweenTwoVectors(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z,p4.x-p3.x, p4.y-p3.y, p4.z-p3.z, p1, p3);
-		angle *= 180/Math.PI;
+		var angle = this.angleBetweenTwoVectors(p2.x - p1.x, p2.y - p1.y, p2.z -
+			p1.z, p4.x - p3.x, p4.y - p3.y, p4.z - p3.z, p1, p3);
+		angle *= 180 / Math.PI;
 
 		this.angles.push(angle);
 	}
@@ -2313,14 +2338,15 @@ Strand.prototype.updateScore = function()
 
 	for (var i = 1; i < this.midPointsRight.length; i++)
 	{
-		var p1 = this.midPoints[i-1];
+		var p1 = this.midPoints[i - 1];
 		var p2 = this.midPoints[i];
 
-		var p3 = this.midPointsRight[i-1];
+		var p3 = this.midPointsRight[i - 1];
 		var p4 = this.midPointsRight[i];
 
-		var angle = this.angleBetweenTwoVectors(p2.x-p1.x, p2.y-p1.y, p2.z-p1.z,p4.x-p3.x, p4.y-p3.y, p4.z-p3.z, p1, p3);
-		angle *= 180/Math.PI;
+		var angle = this.angleBetweenTwoVectors(p2.x - p1.x, p2.y - p1.y, p2.z -
+			p1.z, p4.x - p3.x, p4.y - p3.y, p4.z - p3.z, p1, p3);
+		angle *= 180 / Math.PI;
 
 		this.angles.push(angle);
 	}
@@ -2354,7 +2380,7 @@ Strand.prototype.updateScore = function()
 		avg_ang += ang;
 	}
 
-	this.avg_ang = avg_ang/this.angles.length;
+	this.avg_ang = avg_ang / this.angles.length;
 
 
 	this.maxAnglePoints = new Array();
@@ -2364,7 +2390,7 @@ Strand.prototype.updateScore = function()
 		if (max_i < 3) // left
 		{
 			var p1 = this.midPointsLeft_T[max_i];
-			var p2 = this.midPointsLeft_T[max_i+1]
+			var p2 = this.midPointsLeft_T[max_i + 1]
 
 
 			p1.color = "black";
@@ -2380,7 +2406,7 @@ Strand.prototype.updateScore = function()
 			max_i -= 3;
 
 			var p1 = this.midPointsRight_T[max_i];
-			var p2 = this.midPointsRight_T[max_i+1]
+			var p2 = this.midPointsRight_T[max_i + 1]
 
 			p1.color = "black";
 			p2.color = "black";
@@ -2391,35 +2417,37 @@ Strand.prototype.updateScore = function()
 	}
 }
 
-Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2, p1, p3)
+Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2, p1,
+	p3)
 {
-	var l1 = Math.sqrt(Math.pow(x1,2)+Math.pow(y1,2)+Math.pow(z1,2));
-	var l2 = Math.sqrt(Math.pow(x2,2)+Math.pow(y2,2)+Math.pow(z2,2));
+	var l1 = Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2) + Math.pow(z1, 2));
+	var l2 = Math.sqrt(Math.pow(x2, 2) + Math.pow(y2, 2) + Math.pow(z2, 2));
 
-	var dot = x1*x2 + y1*y2 + z1*z2;
+	var dot = x1 * x2 + y1 * y2 + z1 * z2;
 
-	var ang = Math.acos(dot/l1/l2);
+	var ang = Math.acos(dot / l1 / l2);
 
 	// Twist direction calculation
 
-	var cross_x = y1*z2 - z1*y2;
-	var cross_y = z1*x2 - x1*z2;
-	var cross_z = x1*y2 - y1*x2;
+	var cross_x = y1 * z2 - z1 * y2;
+	var cross_y = z1 * x2 - x1 * z2;
+	var cross_z = x1 * y2 - y1 * x2;
 
 	var delta_x = p1.x - p3.x;
 	var delta_y = p1.y - p3.y;
 	var delta_z = p1.z - p3.z;
 
-	var dot_dir = cross_x*delta_x + cross_y*delta_y + cross_z*delta_z;
+	var dot_dir = cross_x * delta_x + cross_y * delta_y + cross_z * delta_z;
 
 	var dir = sign(dot_dir);
 
-	return dir*ang;
+	return dir * ang;
 }
 
 Strand.prototype.distBetweenSamples = function(x1, y1, z1, x2, y2, z2)
 {
-	return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2)+Math.pow(z1-z2,2));
+	return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 -
+		z2, 2));
 }
 
 Strand.prototype.optimizeAngle = function()
@@ -2429,14 +2457,14 @@ Strand.prototype.optimizeAngle = function()
 	var max_ang = 179.99;
 	var N = 10;
 
-	var delta = (max_ang-min_ang)/(N-1);
+	var delta = (max_ang - min_ang) / (N - 1);
 
 	var angles = new Array(N);
 	var scores = new Array(N);
 
 	for (var i = 0; i < N; i++)
 	{
-		var ang = min_ang + (max_ang-min_ang)*i/(N-1);
+		var ang = min_ang + (max_ang - min_ang) * i / (N - 1);
 		this.setAngle(ang);
 		scores[i] = this.avg_ang;
 		angles[i] = ang;
@@ -2461,9 +2489,10 @@ Strand.prototype.optimizeAngle = function()
 		// Error, maximum score not found.
 	}
 
-	// Rough max angle found, begin iterative improvement process, starting with rough delta/2
+	// Rough max angle found, begin iterative improvement process, starting with
+	// rough delta/2
 
-	delta = delta/2;
+	delta = delta / 2;
 
 	console.log("Initial change delta: " + delta);
 
@@ -2492,19 +2521,21 @@ Strand.prototype.optimizeAngle = function()
 			// Plus results in score increase, take it.
 			current_score = current_score_plus;
 			current_angle = current_angle_plus;
-			delta = delta/2;
+			delta = delta / 2;
 		}
-		else if (score_change_minus > score_change_plus && score_change_minus > 0)
+		else if (score_change_minus > score_change_plus && score_change_minus >
+			0)
 		{
 			// Minus results in score increase, take it.
 			current_score = current_score_minus;
 			current_angle = current_angle_minus;
-			delta = delta/2;
+			delta = delta / 2;
 		}
 		else
 		{
-			// Both results in score decrease, half the search delta and try again.
-			delta = delta/2;
+			// Both results in score decrease, half the search delta and try 
+			// again.
+			delta = delta / 2;
 		}
 
 		console.log(delta + ":  Score: " + current_score);
@@ -2523,17 +2554,21 @@ Strand.prototype.optimizeAngle = function()
 }
 
 
-// Create a set of points that finely samples each strand, then untransform to world coordinates and call the points to pdb string function
+// Create a set of points that finely samples each strand, then untransform to 
+// world coordinates and call the points to pdb string function
 Strand.prototype.updateDownload = function()
 {
-	// We first generate the two perpendicular hull collision points so we can later find the origin points of each strand
+	// We first generate the two perpendicular hull collision points so we can 
+	// later find the origin points of each strand
 
 	var Hull = BPerimeter.vertices;
 
-	var intersects = getIntersectionPoints(this.originPoint.t, this.originPoint.u, (this.angle + 90)/180*Math.PI, Hull, true);
+	var intersects = getIntersectionPoints(this.originPoint.t,
+		this.originPoint.u, (this.angle + 90) / 180 * Math.PI, Hull, true);
 
-	// Now using coords1 and coords2, we linearly interpolate between them and the origin point in the surface space,
-	// generating 100 points on each side.
+	// Now using coords1 and coords2, we linearly interpolate between them and 
+	// the origin point in the surface space, generating 100 points on each 
+	// side.
 
 	this.originStrandPoints = new Array();
 	this.originStrandPoints_T = new Array();
@@ -2547,14 +2582,18 @@ Strand.prototype.updateDownload = function()
 
 	var prev = BSurface.calc(prev_x, prev_y);
 
-	for (var t = 0; t < 1; t += 1/num)
+	for (var t = 0; t < 1; t += 1 / num)
 	{
-		var x = this.originPoint.t + (intersects[0][0] - this.originPoint.t)*t;
-		var y = this.originPoint.u + (intersects[0][1] - this.originPoint.u)*t;
+		var x = this.originPoint.t + (intersects[0][0] - this.originPoint.t) *
+			t;
+		var y = this.originPoint.u + (intersects[0][1] - this.originPoint.u) *
+			t;
 
 		var coords = BSurface.calc(x, y);
 
-		var dist = Math.sqrt(Math.pow(coords[0] - prev[0], 2) + Math.pow(coords[1] - prev[1], 2) + Math.pow(coords[2] - prev[2], 2));
+		var dist = Math.sqrt(Math.pow(coords[0] - prev[0], 2) +
+			Math.pow(coords[1] - prev[1], 2) + Math.pow(coords[2] -
+				prev[2], 2));
 
 		arclength += dist;
 
@@ -2567,7 +2606,8 @@ Strand.prototype.updateDownload = function()
 			var p = new Point(coords[0], coords[1], coords[2]);
 			var p_T = new Point(0, 0, 0, "darkred", 5)
 
-			// Must save the surface coordinates to do further surface collision projections later on.
+			// Must save the surface coordinates to do further surface collision
+			// projections later on.
 			p.t = x;
 			p.u = y;
 
@@ -2577,9 +2617,11 @@ Strand.prototype.updateDownload = function()
 	}
 
 
-	// Now we do this process of finding the strand origin points again, but on this opposite side of the main strand.
+	// Now we do this process of finding the strand origin points again, but on 
+	// this opposite side of the main strand.
 
-	// intersects = getIntersectionPoints(this.originPoint.t, this.originPoint.u, (this.angle + 90)/180*Math.PI, Hull, true);
+	// intersects = getIntersectionPoints(this.originPoint.t, this.originPoint.u
+	// , (this.angle + 90)/180*Math.PI, Hull, true);
 
 	var num = 1000;
 
@@ -2590,14 +2632,18 @@ Strand.prototype.updateDownload = function()
 
 	var prev = BSurface.calc(prev_x, prev_y);
 
-	for (var t = 0; t < 1; t += 1/num)
+	for (var t = 0; t < 1; t += 1 / num)
 	{
-		var x = this.originPoint.t + (intersects[1][0] - this.originPoint.t)*t;
-		var y = this.originPoint.u + (intersects[1][1] - this.originPoint.u)*t;
+		var x = this.originPoint.t + (intersects[1][0] - this.originPoint.t) *
+			t;
+		var y = this.originPoint.u + (intersects[1][1] - this.originPoint.u) *
+			t;
 
 		var coords = BSurface.calc(x, y);
 
-		var dist = Math.sqrt(Math.pow(coords[0] - prev[0], 2) + Math.pow(coords[1] - prev[1], 2) + Math.pow(coords[2] - prev[2], 2));
+		var dist = Math.sqrt(Math.pow(coords[0] - prev[0], 2) +
+			Math.pow(coords[1] - prev[1], 2) + Math.pow(coords[2] - prev[2],
+				2));
 
 		arclength += dist;
 
@@ -2610,7 +2656,8 @@ Strand.prototype.updateDownload = function()
 			var p = new Point(coords[0], coords[1], coords[2]);
 			var p_T = new Point(0, 0, 0, "darkred", 5)
 
-			// Must save the surface coordinates to do further surface collision projections later on.
+			// Must save the surface coordinates to do further surface collision
+			// projections later on.
 			p.t = x;
 			p.u = y;
 
@@ -2625,8 +2672,10 @@ Strand.prototype.updateDownload = function()
 	this.originStrandPoints_T.push(this.originPoint_T);
 
 
-	// Now that we have the origin strand points, iterate through them, project them orthogonally to find the collision points, iterate between the collision
-	// points at some specified delta of resolution, and append each sample point to an array to be rendered.
+	// Now that we have the origin strand points, iterate through them, project 
+	// them orthogonally to find the collision points, iterate between the 
+	// collision points at some specified delta of resolution, and append each 
+	// sample point to an array to be rendered.
 
 	this.strandSamples = new Array();
 	this.strandSamples_T = new Array();
@@ -2635,16 +2684,19 @@ Strand.prototype.updateDownload = function()
 	{
 		var p = this.originStrandPoints[i];
 
-		var intersects = getIntersectionPoints(p.t, p.u, (this.angle)/180*Math.PI, Hull, true);
+		var intersects = getIntersectionPoints(p.t, p.u, (this.angle) / 180 *
+			Math.PI, Hull, true);
 
 		// Now we linearly interpolate between the intersect coordinates.
 
 		var num = 100;
 
-		for (var t = 0; t < 1; t+= 1/num)
+		for (var t = 0; t < 1; t += 1 / num)
 		{
-			var x = intersects[0][0] + (intersects[1][0] - intersects[0][0])*t;
-			var y = intersects[0][1] + (intersects[1][1] - intersects[0][1])*t;
+			var x = intersects[0][0] + (intersects[1][0] - intersects[0][0]) *
+				t;
+			var y = intersects[0][1] + (intersects[1][1] - intersects[0][1]) *
+				t;
 
 			var coords = BSurface.calc(x, y);
 
@@ -2659,7 +2711,8 @@ Strand.prototype.updateDownload = function()
 
 
 
-	// We now happily have the full set of strand sample points, so we can generate a pdb file and hook it to the button (magic)
+	// We now happily have the full set of strand sample points, so we can 
+	// generate a pdb file and hook it to the button (magic)
 
 	// Create new array of strand samples to perform work on.
 
@@ -2677,7 +2730,8 @@ Strand.prototype.updateDownload = function()
 	// Undo plane and centering transformations
 	for (var i = 0; i < sample_points.length; i++)
 	{
-		sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz)
+		sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy,
+			DMap.rot_uz)
 
 		sample_points[i].x += DMap.x_avg
 		sample_points[i].y += DMap.y_avg
@@ -2715,7 +2769,8 @@ Strand.prototype.draw = function()
 {
 	if (!this.optimized)
 	{
-		if ((this.angle_slider.value != this.angle) || (this.offset_slider.value != this.offset))
+		if ((this.angle_slider.value != this.angle) ||
+			(this.offset_slider.value != this.offset))
 		{
 			this.angle = this.angle_slider.value;
 
@@ -3066,24 +3121,6 @@ Strand.prototype.updateTransformedPoints = function()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function Surface(X, Y, T, U)
 {
 	this.X = X;
@@ -3116,12 +3153,13 @@ function Surface(X, Y, T, U)
 	{
 		for (var j = 0; j < Y; j++)
 		{
-			var x = lower + i/(X-1)*(upper - lower);
-			var z = lower + j/(X-1)*(upper - lower);
+			var x = lower + i / (X - 1) * (upper - lower);
+			var z = lower + j / (X - 1) * (upper - lower);
 
 			var width = 0;
 
-			var y = Math.random()*width*2 - width; // Between -width and width
+			var y = Math.random() * width * 2 - width; // Between -width and 
+			// width
 
 			this.controlPoints[i][j] = new Point(x, y, z)
 			this.controlPoints_T[i][j] = new Point(x, y, z, "black", 2);
@@ -3133,10 +3171,11 @@ function Surface(X, Y, T, U)
 
 
 
-	// resPoints (Resolution points) are the initial estimate points for the heuristic
-	//  point-projection algorithm.  They are a low-resolution sample of the curve, an
-	//  array of small enough size that it is not prohibitive to find the minimum distance
-	//  of the array of points from one point.  We also define the transformed version.
+	// resPoints (Resolution points) are the initial estimate points for the 
+	//  heuristic point-projection algorithm.  They are a low-resolution sample 
+	//  of the curve, an array of small enough size that it is not prohibitive 
+	//  to find the minimum distance of the array of points from one point.  
+	//  We also define the transformed version.
 
 	var RX = X + 1;
 	var RY = Y + 1;
@@ -3153,8 +3192,8 @@ function Surface(X, Y, T, U)
 		this.resPoints_T[i] = new Array(RY);
 	}
 
-	// We only need to allocate the object array here.  The correct values will be calculated
-	//  in updatePoints();
+	// We only need to allocate the object array here.  The correct values will 
+	// be calculated in updatePoints();
 	for (var i = 0; i < RX; i++)
 	{
 		for (var j = 0; j < RY; j++)
@@ -3167,9 +3206,10 @@ function Surface(X, Y, T, U)
 
 
 
-	// Draw point are the sample points of the surface which we use the render and display
-	//  the shape of the surface.  As well, we define the array of camera-transformed
-	//  sample points.  (Which we need, of course, to draw on the screen).
+	// Draw point are the sample points of the surface which we use the render 
+	// 	and display the shape of the surface.  As well, we define the array of 
+	// 	camera-transformed sample points.  (Which we need, of course, to draw on
+	// 	 the screen).
 
 	this.drawPoints = new Array(T);
 	this.drawPoints_T = new Array(T);
@@ -3180,8 +3220,8 @@ function Surface(X, Y, T, U)
 		this.drawPoints_T[i] = new Array(U);
 	}
 
-	// We only need to allocate the object array of draw points here; the point locations
-	//  are calculated in the updatePoints() function.
+	// We only need to allocate the object array of draw points here; the point 
+	// locations are calculated in the updatePoints() function.
 	for (var i = 0; i < T; i++)
 	{
 		for (var j = 0; j < U; j++)
@@ -3208,8 +3248,8 @@ Surface.prototype.updateNumberofResPoints = function(RX, RY)
 		this.resPoints_T[i] = new Array(RY);
 	}
 
-	// We only need to allocate the object array here.  The correct values will be calculated
-	//  in updatePoints();
+	// We only need to allocate the object array here.  The correct values will 
+	// be calculated in updatePoints();
 	for (var i = 0; i < RX; i++)
 	{
 		for (var j = 0; j < RY; j++)
@@ -3270,8 +3310,8 @@ Surface.prototype.updatePoints = function()
 				var min_u = 0;
 			}
 
-			var t = size_t*i/(this.T-1) + min_t;
-			var u = size_u*j/(this.U-1) + min_u;
+			var t = size_t * i / (this.T - 1) + min_t;
+			var u = size_u * j / (this.U - 1) + min_u;
 
 			var coords = this.calc(t, u);
 			var p = this.drawPoints[i][j];
@@ -3286,8 +3326,8 @@ Surface.prototype.updatePoints = function()
 	{
 		for (var j = 0; j < this.RY; j++)
 		{
-			var t = i/(this.RX-1);
-			var u = j/(this.RY-1);
+			var t = i / (this.RX - 1);
+			var u = j / (this.RY - 1);
 
 			var coords = this.calc(t, u);
 			var p = this.resPoints[i][j];
@@ -3350,7 +3390,8 @@ Surface.prototype.draw = function()
 
 	if (this.drawSurface)
 	{
-		// 'Draw' surface points to calculate their 'scale' (if negative, outside of cam space)
+		// 'Draw' surface points to calculate their 'scale' (if negative, 
+		// outside of cam space)
 		for (var i = 0; i < this.T; i++)
 		{
 			for (var j = 0; j < this.U; j++)
@@ -3514,9 +3555,9 @@ Surface.prototype.moveControlPointTo2D = function(i, j, x2d, y2d)
 	var scale = p.scale;
 
 	// Transform modified screen space coordinates into camera space coordinates
-	p.x = (x2d - cvs.width/2) / scale;
-	p.y = (y2d - cvs.height/2) / scale;
-	p.z = fov/scale - fov;
+	p.x = (x2d - cvs.width / 2) / scale;
+	p.y = (y2d - cvs.height / 2) / scale;
+	p.z = fov / scale - fov;
 
 	// Transform camera space coordinates into world space
 	var p_world = new Point;
@@ -3524,12 +3565,21 @@ Surface.prototype.moveControlPointTo2D = function(i, j, x2d, y2d)
 
 	p_world.rotateX(-pitch);
 	p_world.rotateY(-yaw);
-	p_world.scaleFactor(1/zoom);
+	p_world.scaleFactor(1 / zoom);
 
 	this.controlPoints[i][j].moveTo(p_world);
 };
 
-// Given surface parameters t and u, this function returns the xyz coordinates of that surface location.
+
+// Given surface parameters t and u, this function returns the xyz coordinates 
+// of that surface location.
+
+/**
+ * 
+ * @param  {[type]}
+ * @param  {[type]}
+ * @return {[type]}
+ */
 Surface.prototype.calc = function(t, u)
 {
 	var sum_x = 0;
@@ -3546,11 +3596,12 @@ Surface.prototype.calc = function(t, u)
 			var control_y = control_point.y;
 			var control_z = control_point.z;
 
-			var product = this.basis(t, x, this.X - 1) * this.basis(u, y, this.Y - 1);
+			var product = this.basis(t, x, this.X - 1) * this.basis(u, y,
+				this.Y - 1);
 
-			sum_x += product*control_x;
-			sum_y += product*control_y;
-			sum_z += product*control_z;
+			sum_x += product * control_x;
+			sum_y += product * control_y;
+			sum_z += product * control_z;
 		}
 	}
 
@@ -3559,7 +3610,7 @@ Surface.prototype.calc = function(t, u)
 
 Surface.prototype.basis = function(t, i, n)
 {
-	return binomial(n, i)*Math.pow(t, i)*Math.pow(1-t,n-i);
+	return binomial(n, i) * Math.pow(t, i) * Math.pow(1 - t, n - i);
 };
 
 Surface.prototype.optimizeControlPoint = function(p)
@@ -3584,7 +3635,7 @@ Surface.prototype.optimizeControlPoint = function(p)
 	{
 		p.x += delta_x;
 		var score_inc = DMap.score();
-		p.x -= 2*delta_x;
+		p.x -= 2 * delta_x;
 		var score_dec = DMap.score();
 		p.x += delta_x;
 
@@ -3617,7 +3668,7 @@ Surface.prototype.optimizeControlPoint = function(p)
 
 		p.y += delta_y;
 		var score_inc = DMap.score();
-		p.y -= 2*delta_y;
+		p.y -= 2 * delta_y;
 		var score_dec = DMap.score();
 		p.y += delta_y;
 
@@ -3650,7 +3701,7 @@ Surface.prototype.optimizeControlPoint = function(p)
 
 		p.z += delta_z;
 		var score_inc = DMap.score();
-		p.z -= 2*delta_z;
+		p.z -= 2 * delta_z;
 		var score_dec = DMap.score();
 		p.z += delta_z;
 
@@ -3736,8 +3787,8 @@ Surface.prototype.incrementControlPoints = function()
 
 		for (var j = 0; j < y; j++)
 		{
-			var t = i/(x-1)
-			var u = j/(y-1)
+			var t = i / (x - 1)
+			var u = j / (y - 1)
 
 			coords = this.calc(t, u);
 
@@ -3751,38 +3802,6 @@ Surface.prototype.incrementControlPoints = function()
 	this.controlPoints = controlPoints;
 	this.controlPoints_T = controlPoints_T;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -3816,8 +3835,8 @@ Plane.prototype.generatePoints = function()
 	this.points = this.points.splice(0, 0);
 	this.points_T = this.points_T.splice(0, 0);
 
-	this.A = Math.sin(this.alpha)*Math.cos(this.beta);
-	this.B = Math.sin(this.alpha)*Math.sin(this.beta);
+	this.A = Math.sin(this.alpha) * Math.cos(this.beta);
+	this.B = Math.sin(this.alpha) * Math.sin(this.beta);
 	this.C = Math.cos(this.alpha);
 	this.D = this.delta;
 
@@ -3840,7 +3859,7 @@ Plane.prototype.generatePoints = function()
 		{
 			for (var z = -size; z <= size; z += 2)
 			{
-				var x = (-this.D - this.B*y - this.C*z)/this.A;
+				var x = (-this.D - this.B * y - this.C * z) / this.A;
 				var p = new Point(x, y, z, this.color);
 				var p2 = new Point(0, 0, 0);
 				this.points.push(p);
@@ -3855,7 +3874,7 @@ Plane.prototype.generatePoints = function()
 		{
 			for (var z = -size; z <= size; z += 2)
 			{
-				var y = (-this.D - this.A*x - this.C*z)/this.B;
+				var y = (-this.D - this.A * x - this.C * z) / this.B;
 				var p = new Point(x, y, z, this.color);
 				var p2 = new Point(0, 0, 0);
 				this.points.push(p);
@@ -3870,7 +3889,7 @@ Plane.prototype.generatePoints = function()
 		{
 			for (var y = -size; y <= size; y += 2)
 			{
-				var z = (-this.D - this.A*x - this.B*y)/this.C;
+				var z = (-this.D - this.A * x - this.B * y) / this.C;
 				var p = new Point(x, y, z, this.color);
 				var p2 = new Point(0, 0, 0);
 				this.points.push(p);
@@ -3905,13 +3924,13 @@ Plane.prototype.updateTransformedPoints = function()
 
 Plane.prototype.distance = function(p)
 {
-	return this.A*p.x + this.B*p.y + this.C*p.z + this.D;
+	return this.A * p.x + this.B * p.y + this.C * p.z + this.D;
 };
 
 Plane.prototype.score = function()
 {
-	this.A = Math.sin(this.alpha)*Math.cos(this.beta);
-	this.B = Math.sin(this.alpha)*Math.sin(this.beta);
+	this.A = Math.sin(this.alpha) * Math.cos(this.beta);
+	this.B = Math.sin(this.alpha) * Math.sin(this.beta);
 	this.C = Math.cos(this.alpha);
 	this.D = this.delta;
 
@@ -4013,24 +4032,25 @@ Plane.prototype.optimize = function()
 
 	if (new_alpha > Math.PI)
 	{
-		new_alpha -= 2*Math.PI;
+		new_alpha -= 2 * Math.PI;
 	}
 	else if (new_alpha < -Math.PI)
 	{
-		new_alpha += 2*Math.PI;
+		new_alpha += 2 * Math.PI;
 	}
 
 
 	if (new_beta > Math.PI)
 	{
-		new_beta -= 2*Math.PI;
+		new_beta -= 2 * Math.PI;
 	}
 	else if (new_beta < -Math.PI)
 	{
-		new_beta += 2*Math.PI;
+		new_beta += 2 * Math.PI;
 	}
 
-	var total_change = Math.pow(this.alpha - new_alpha, 2) + Math.pow(this.beta - new_beta, 2) + Math.pow(this.delta - new_delta, 2);
+	var total_change = Math.pow(this.alpha - new_alpha, 2) + Math.pow(
+		this.beta - new_beta, 2) + Math.pow(this.delta - new_delta, 2);
 
 	this.alpha = new_alpha;
 	this.beta = new_beta;
@@ -4038,18 +4058,6 @@ Plane.prototype.optimize = function()
 
 	return total_change;
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -4113,12 +4121,12 @@ Projection.prototype.refineProjection = function(i)
 {
 	var p = this.points[i];
 
-	var gap = 1/(BSurface.RX - 1);
+	var gap = 1 / (BSurface.RX - 1);
 
 	var iterations = 30;
 
-	var delta_t = 2*gap/iterations;
-	var delta_u = 2*gap/iterations;
+	var delta_t = 2 * gap / iterations;
+	var delta_u = 2 * gap / iterations;
 
 	var threshold = 0;
 
@@ -4223,8 +4231,8 @@ Projection.prototype.findClosestResPoint = function(i)
 		}
 	}
 
-	p.t = min_i/(BSurface.RX - 1);
-	p.u = min_j/(BSurface.RY - 1);
+	p.t = min_i / (BSurface.RX - 1);
+	p.u = min_j / (BSurface.RY - 1);
 
 	return [min_i, min_j];
 }
@@ -4264,9 +4272,9 @@ Projection.prototype.movePointTo2D = function(i, x2d, y2d)
 	var scale = p.scale;
 
 	// Transform modified screen space coordinates into camera space coordinates
-	p.x = (x2d - cvs.width/2) / scale;
-	p.y = (y2d - cvs.height/2) / scale;
-	p.z = fov/scale - fov;
+	p.x = (x2d - cvs.width / 2) / scale;
+	p.y = (y2d - cvs.height / 2) / scale;
+	p.z = fov / scale - fov;
 
 	// Transform camera space coordinates into world space
 	var p_world = new Point;
@@ -4274,7 +4282,7 @@ Projection.prototype.movePointTo2D = function(i, x2d, y2d)
 
 	p_world.rotateX(-pitch);
 	p_world.rotateY(-yaw);
-	p_world.scaleFactor(1/zoom);
+	p_world.scaleFactor(1 / zoom);
 
 	this.points[i].moveTo(p_world);
 }
@@ -4289,26 +4297,6 @@ Projection.prototype.updateTransformedPoints = function()
 		this.points_T[i].rotateX(pitch);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -4349,39 +4337,43 @@ Point.prototype.draw = function(actually_draw)
 	var x3d = this.x;
 	var y3d = this.y;
 	var z3d = this.z;
-	this.scale = fov/(fov+z3d);
-	this.x2d = (x3d * this.scale) + cvs.width/2;
-	this.y2d = (y3d * this.scale) + cvs.height/2;
+	this.scale = fov / (fov + z3d);
+	this.x2d = (x3d * this.scale) + cvs.width / 2;
+	this.y2d = (y3d * this.scale) + cvs.height / 2;
 
-    if (this.scale > 0 && actually_draw)
-    {
-	    ctx.beginPath();
-	    ctx.fillStyle = this.color;
-	    ctx.arc(this.x2d, this.y2d, this.scale*this.size, 0, Math.PI*2, true);
-	    ctx.fill();
-    }
+	if (this.scale > 0 && actually_draw)
+	{
+		ctx.beginPath();
+		ctx.fillStyle = this.color;
+		ctx.arc(this.x2d, this.y2d, this.scale * this.size, 0, Math.PI * 2,
+			true);
+		ctx.fill();
+	}
 };
 
 Point.prototype.dist2d = function(obj)
 {
-	return Math.sqrt( Math.pow(this.x2d - obj.x, 2) + Math.pow(this.y2d - obj.y, 2) );
+	return Math.sqrt(Math.pow(this.x2d - obj.x, 2) + Math.pow(this.y2d - obj.y,
+		2));
 };
 
 Point.prototype.dist = function(obj)
 {
-	return Math.sqrt( Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y, 2) + Math.pow(this.z - obj.z, 2) );
+	return Math.sqrt(Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y,
+		2) + Math.pow(this.z - obj.z, 2));
 };
 
 Point.prototype.planeDist = function(A, B, C, D)
 {
-	return Math.abs(A*this.x + B*this.y + C*this.z + D)/Math.sqrt(A*A + B*B + C*C);
+	return Math.abs(A * this.x + B * this.y + C * this.z + D) / Math.sqrt(A *
+		A + B * B + C * C);
 };
 
 Point.prototype.moveTo = function(obj)
 {
-    this.x = obj.x;
-    this.y = obj.y;
-    this.z = obj.z;
+	this.x = obj.x;
+	this.y = obj.y;
+	this.z = obj.z;
 };
 
 Point.prototype.scaleFactor = function(factor)
@@ -4449,25 +4441,21 @@ Point.prototype.rotateZ = function(angle)
 
 Point.prototype.rotateAxis = function(ang, ux, uy, uz)
 {
-	//var x_new = this.x*(Math.cos(ang) + Math.pow(ux, 2)*(1-Math.cos(ang))) + this.y*(uy*ux*(1-Math.cos(ang))+uz*Math.sin(ang)) + this.z*(uz*ux*(1-Math.cos(ang))-uy*Math.sin(ang));
-	//var y_new = this.x*(ux*uy*(1-Math.cos(ang))-uz*Math.sin(ang)) + this.y*(Math.cos(ang)+Math.pow(uy,2)*(1-Math.cos(ang))) + this.z*(uz*uy*(1-Math.cos(ang))+ux*Math.sin(ang));
-	//var z_new = this.x*(ux*uz*(1-Math.cos(ang))+uy*Math.sin(ang)) + this.y*(uy*uz*(1-Math.cos(ang))-ux*Math.sin(ang)) + this.z*(Math.cos(ang)+Math.pow(uz,2)*(1-Math.cos(ang)));
+	var m_11 = Math.cos(ang) + Math.pow(ux, 2) * (1 - Math.cos(ang));
+	var m_12 = ux * uy * (1 - Math.cos(ang)) - uz * Math.sin(ang);
+	var m_13 = ux * uz * (1 - Math.cos(ang)) + uy * Math.sin(ang);
 
-	var m_11 = Math.cos(ang) + Math.pow(ux,2)*(1-Math.cos(ang));
-	var m_12 = ux*uy*(1-Math.cos(ang))-uz*Math.sin(ang);
-	var m_13 = ux*uz*(1-Math.cos(ang))+uy*Math.sin(ang);
+	var m_21 = uy * ux * (1 - Math.cos(ang)) + uz * (Math.sin(ang));
+	var m_22 = Math.cos(ang) + Math.pow(uy, 2) * (1 - Math.cos(ang));
+	var m_23 = uy * uz * (1 - Math.cos(ang)) - ux * Math.sin(ang);
 
-	var m_21 = uy*ux*(1-Math.cos(ang))+uz*(Math.sin(ang));
-	var m_22 = Math.cos(ang) + Math.pow(uy,2)*(1-Math.cos(ang));
-	var m_23 = uy*uz*(1-Math.cos(ang))-ux*Math.sin(ang);
+	var m_31 = uz * ux * (1 - Math.cos(ang)) - uy * Math.sin(ang);
+	var m_32 = uz * uy * (1 - Math.cos(ang)) + ux * Math.sin(ang);
+	var m_33 = Math.cos(ang) + Math.pow(uz, 2) * (1 - Math.cos(ang));
 
-	var m_31 = uz*ux*(1-Math.cos(ang))-uy*Math.sin(ang);
-	var m_32 = uz*uy*(1-Math.cos(ang))+ux*Math.sin(ang);
-	var m_33 = Math.cos(ang) + Math.pow(uz,2)*(1-Math.cos(ang));
-
-	var x_new = this.x*m_11 + this.y*m_21 + this.z*m_31;
-	var y_new = this.x*m_12 + this.y*m_22 + this.z*m_32;
-	var z_new = this.x*m_13 + this.y*m_23 + this.z*m_33;
+	var x_new = this.x * m_11 + this.y * m_21 + this.z * m_31;
+	var y_new = this.x * m_12 + this.y * m_22 + this.z * m_32;
+	var z_new = this.x * m_13 + this.y * m_23 + this.z * m_33;
 
 	this.x = x_new;
 	this.y = y_new;
@@ -4476,17 +4464,20 @@ Point.prototype.rotateAxis = function(ang, ux, uy, uz)
 
 Point.prototype.distFromLine = function(slope, intersect)
 {
-	return (slope*this.x - this.z + intersect)/Math.sqrt(Math.pow(slope, 2) + 1);
+	return (slope * this.x - this.z + intersect) / Math.sqrt(Math.pow(slope,
+		2) + 1);
 };
 
-// Given surface parameters t and u, this function returns the distance to that surface location.
+// Given surface parameters t and u, this function returns the distance to that 
+// surface location.
 Point.prototype.distToParameter = function(t, u)
 {
 	var coords = BSurface.calc(t, u);
 	var x = coords[0];
 	var y = coords[1];
 	var z = coords[2];
-	return Math.sqrt(Math.pow(this.x-x, 2) + Math.pow(this.y-y, 2) + Math.pow(this.z-z, 2));
+	return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y,
+		2) + Math.pow(this.z - z, 2));
 };
 
 Point.prototype.findClosestResPoint = function()
@@ -4512,8 +4503,8 @@ Point.prototype.findClosestResPoint = function()
 		}
 	}
 
-	this.t = min_i/(BSurface.RX - 1);
-	this.u = min_j/(BSurface.RY - 1);
+	this.t = min_i / (BSurface.RX - 1);
+	this.u = min_j / (BSurface.RY - 1);
 
 	return [min_i, min_j];
 };
@@ -4525,12 +4516,12 @@ Point.prototype.refineProjection = function(permissive)
 		permissive = false;
 	}
 
-	var gap = 1/(BSurface.RX - 1);
+	var gap = 1 / (BSurface.RX - 1);
 
 	var iterations = 20;
 
-	var delta_t = 10*gap/iterations;
-	var delta_u = 10*gap/iterations;
+	var delta_t = 10 * gap / iterations;
+	var delta_u = 10 * gap / iterations;
 
 	var threshold = 0;
 
@@ -4639,27 +4630,16 @@ Point.prototype.refineProjection = function(permissive)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 function Mouse()
 {
 	this.x = 0;
 	this.y = 0;
 	this.down = false;
-    this.inside = false;
-    this.rclick = false;
+	this.inside = false;
+	this.rclick = false;
 
-    this.drawPoint;
-    this.drawPoint_T;
+	this.drawPoint;
+	this.drawPoint_T;
 }
 
 Mouse.draw = function()
@@ -4670,7 +4650,8 @@ Mouse.draw = function()
 
 	if (BSurface.finished)
 	{
-		// If the Bsurface was only just finished, initialize the drawPoint object.
+		// If the Bsurface was only just finished, initialize the drawPoint 
+		// object.
 		if (this.drawPoint_T == undefined)
 		{
 			BSurface.updateNumberofResPoints(10, 10);
@@ -4704,7 +4685,6 @@ Mouse.updatePos = function(evt)
 		this.drawPoint_T.rotateY(yaw);
 		this.drawPoint_T.rotateX(pitch);
 	}
-
 };
 
 cvs.addEventListener('mousemove', function(evt)
@@ -4744,27 +4724,31 @@ cvs.addEventListener('mousemove', function(evt)
 			}
 		}
 
-		var t = min_x/(BSurface.RX-1);
-		var u = min_y/(BSurface.RY-1);
+		var t = min_x / (BSurface.RX - 1);
+		var u = min_y / (BSurface.RY - 1);
 
 		var dist = min_dist;
 
-		// We now have a reasonable initial estimate for the mouse position in surface space.
-		// Time to do a 2-dimensional binary search in the local subspace region.
+		// We now have a reasonable initial estimate for the mouse position in 
+		// surface space. Time to do a 2-dimensional binary search in the local 
+		// subspace region.
 
-		var delta_t = 1/(1-BSurface.RX); // delta used for above rough search
-		var delta_u = 1/(1-BSurface.RY); // 0.25 if RX and RY is 5
+		var delta_t = 1 / (1 - BSurface.RX); // delta used for above rough 
+		// search
+		var delta_u = 1 / (1 - BSurface.RY); // 0.25 if RX and RY is 5
 
 		var search_point = new Point();
 		var search_point_T = new Point();
 
 		var N = 60; // Do the 2-dimensional binary search for N iterations
 
-		var div_rate = -1.2; // How fast to decrease the search rate on each step
-							// 2 has theoretical optimality if there are no local minima
-							// More than 1 but less than 2 has stronger resistance against minima
-							// More than 2 almost never finds any minima
-							// 1 or less does not converge
+		var div_rate = -1.2; // How fast to decrease the search rate on each 
+		//step
+		//
+		// 2 has theoretical optimality if there are no local minima
+		// More than 1 but less than 2 has stronger resistance against minima
+		// More than 2 almost never finds any minima
+		// 1 or less does not converge
 
 		for (var i = 0; i < N; i++)
 		{
@@ -4779,13 +4763,15 @@ cvs.addEventListener('mousemove', function(evt)
 			search_point.y = coords[1];
 			search_point.z = coords[2];
 
-			// Now that the 3-dimensional position is set, we still need to find the camera space position.
+			// Now that the 3-dimensional position is set, we still need to find
+			// the camera space position.
 			search_point_T.moveTo(search_point);
 			search_point_T.scaleFactor(zoom);
 			search_point_T.rotateY(yaw);
 			search_point_T.rotateX(pitch);
 
-			// We can now invisibly draw the point to the screen, to get its 2-dimensional screen coordinates.
+			// We can now invisibly draw the point to the screen, to get its 
+			// 2-dimensional screen coordinates.
 			search_point_T.draw(false);
 
 			var dist_plus = search_point_T.dist2d(Mouse);
@@ -4802,19 +4788,22 @@ cvs.addEventListener('mousemove', function(evt)
 			search_point.y = coords[1];
 			search_point.z = coords[2];
 
-			// Now that the 3-dimensional position is set, we still need to find the camera space position.
+			// Now that the 3-dimensional position is set, we still need to find
+			//  the camera space position.
 			search_point_T.moveTo(search_point);
 			search_point_T.scaleFactor(zoom);
 			search_point_T.rotateY(yaw);
 			search_point_T.rotateX(pitch);
 
-			// We can now invisibly draw the point to the screen, to get its 2-dimensional screen coordinates.
+			// We can now invisibly draw the point to the screen, to get its 
+			// 2-dimensional screen coordinates.
 			search_point_T.draw(false);
 
 			var dist_minus = search_point_T.dist2d(Mouse);
 
 
-			// If either of the distances are smaller, set the new t before we optimize for u.
+			// If either of the distances are smaller, set the new t before we
+			//  optimize for u.
 
 			if (dist_plus < dist && dist_plus < dist_minus && t_plus < 1.1)
 			{
@@ -4822,7 +4811,8 @@ cvs.addEventListener('mousemove', function(evt)
 				t = t_plus;
 				//console.log("Increased t: ", t, delta_t)
 			}
-			else if (dist_minus < dist && dist_minus < dist_plus && t_minus > -1.1)
+			else if (dist_minus < dist && dist_minus < dist_plus &&
+				t_minus > -1.1)
 			{
 				// Subtracting delta_t is better
 				t = t_minus;
@@ -4848,13 +4838,15 @@ cvs.addEventListener('mousemove', function(evt)
 			search_point.y = coords[1];
 			search_point.z = coords[2];
 
-			// Now that the 3-dimensional position is set, we still need to find the camera space position.
+			// Now that the 3-dimensional position is set, we still need to find
+			// the camera space position.
 			search_point_T.moveTo(search_point);
 			search_point_T.scaleFactor(zoom);
 			search_point_T.rotateY(yaw);
 			search_point_T.rotateX(pitch);
 
-			// We can now invisibly draw the point to the screen, to get its 2-dimensional screen coordinates.
+			// We can now invisibly draw the point to the screen, to get its 
+			// 2-dimensional screen coordinates.
 			search_point_T.draw(false);
 
 			var dist_plus = search_point_T.dist2d(Mouse);
@@ -4871,19 +4863,22 @@ cvs.addEventListener('mousemove', function(evt)
 			search_point.y = coords[1];
 			search_point.z = coords[2];
 
-			// Now that the 3-dimensional position is set, we still need to find the camera space position.
+			// Now that the 3-dimensional position is set, we still need to find
+			// the camera space position.
 			search_point_T.moveTo(search_point);
 			search_point_T.scaleFactor(zoom);
 			search_point_T.rotateY(yaw);
 			search_point_T.rotateX(pitch);
 
-			// We can now invisibly draw the point to the screen, to get its 2-dimensional screen coordinates.
+			// We can now invisibly draw the point to the screen, to get its 
+			// 2-dimensional screen coordinates.
 			search_point_T.draw(false);
 
 			var dist_minus = search_point_T.dist2d(Mouse);
 
 
-			// If either of the distances are smaller, set the new t before we optimize for u.
+			// If either of the distances are smaller, set the new t before we
+			// optimize for u.
 
 			if (dist_plus < dist && dist_plus < dist_minus && u_plus < 1.1)
 			{
@@ -4891,7 +4886,8 @@ cvs.addEventListener('mousemove', function(evt)
 				u = u_plus;
 				//console.log("Increased u: ", u, delta_u)
 			}
-			else if (dist_minus < dist && dist_minus < dist_plus && u_minus > -1.1)
+			else if (dist_minus < dist && dist_minus < dist_plus &&
+				u_minus > -1.1)
 			{
 				// Subtracting delta_u is better
 				u = u_minus;
@@ -4945,7 +4941,8 @@ cvs.addEventListener('mousemove', function(evt)
 			if (Mouse.held_type == 0)
 			{
 				BSurface.finished = false;
-				BSurface.moveControlPointTo2D(Mouse.held_id[0], Mouse.held_id[1], Mouse.x, Mouse.y);
+				BSurface.moveControlPointTo2D(Mouse.held_id[0],
+					Mouse.held_id[1], Mouse.x, Mouse.y);
 				BSurface.updatePoints();
 			}
 			else if (Mouse.held_type == 1)
@@ -4955,13 +4952,14 @@ cvs.addEventListener('mousemove', function(evt)
 		}
 		else if (changed && !this.hover)
 		{
-			delta_pitch = (new_y - old_y)*.006;
-			if (pitch + delta_pitch <= 90/180*3.1415 && pitch + delta_pitch >= -90/180*3.1415)
+			delta_pitch = (new_y - old_y) * .006;
+			if (pitch + delta_pitch <= 90 / 180 * 3.1415 && pitch +
+				delta_pitch >= -90 / 180 * 3.1415)
 			{
 				pitch += delta_pitch;
 			}
 
-			delta_yaw = (old_x - new_x)*.006;
+			delta_yaw = (old_x - new_x) * .006;
 			yaw += delta_yaw;
 		}
 
@@ -5026,12 +5024,14 @@ cvs.addEventListener('mousedown', function(evt)
 
 
 	// Check if mouse is over a surface control point
-	// If the sheet is already optimized and the underlying data is hidden, do not check.
+	// If the sheet is already optimized and the underlying data is hidden, do 
+	// not check.
 
 	if (!BSurface.finished)
 	{
 		var closest_id = BSurface.closestControlPoint2D(Mouse);
-		var closest_control_point = BSurface.controlPoints_T[closest_id[0]][closest_id[1]];
+		var closest_control_point = BSurface.controlPoints_T[closest_id[0]]
+			[closest_id[1]];
 
 		var closest_dist = closest_control_point.dist2d(Mouse);
 		if (closest_dist < 15)
@@ -5075,28 +5075,27 @@ cvs.addEventListener('mouseup', function(evt)
 	Mouse.down = false;
 }, false);
 
-cvs.addEventListener('dblclick', function(evt)
-{
+cvs.addEventListener('dblclick', function(evt) {
 
 }, false);
 
-cvs.addEventListener('mousewheel',function(evt)
+cvs.addEventListener('mousewheel', function(evt)
 {
 	var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
 
-	zoom *= (1 + delta*.1)
+	zoom *= (1 + delta * .1)
 
 	updateTransformedPoints();
 
 	evt.preventDefault();
-    return false;
+	return false;
 }, false);
 
-cvs.addEventListener("DOMMouseScroll",function(evt)
+cvs.addEventListener("DOMMouseScroll", function(evt)
 {
 	var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
 
-	zoom *= (1 + delta*.1)
+	zoom *= (1 + delta * .1)
 
 	updateTransformedPoints();
 
@@ -5110,7 +5109,8 @@ cvs.addEventListener("DOMMouseScroll",function(evt)
 
 
 
-// Add event listener for the strand download button: That way, we can update the strand render when we need to.
+// Add event listener for the strand download button: That way, we can update 
+// the strand render when we need to.
 strand_dl.addEventListener('mouseover', function(evt)
 {
 	console.log("hover");
@@ -5128,15 +5128,18 @@ strand_dl.addEventListener('mouseover', function(evt)
 
 var Sliders = new Array();
 
-function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val)
+function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val,
+	default_val)
 {
 	var id = Sliders.length;
-	Sliders.push(new Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val, id));
+	Sliders.push(new Slider(x, y, width, height, text, bar_width, min_val,
+		max_val, default_val, id));
 
 	return id;
 }
 
-function Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val, id)
+function Slider(x, y, width, height, text, bar_width, min_val, max_val,
+	default_val, id)
 {
 	this.x = x;
 	this.y = y;
@@ -5152,7 +5155,7 @@ function Slider(x, y, width, height, text, bar_width, min_val, max_val, default_
 
 	this.value = default_val;
 
-	var setting = (default_val - min_val)/(max_val - min_val);
+	var setting = (default_val - min_val) / (max_val - min_val);
 
 	if (setting >= 0 && setting <= 1)
 	{
@@ -5180,7 +5183,7 @@ Slider.prototype.draw = function()
 	ctx.strokeStyle = 'black';
 	ctx.stroke();
 
-	var box_xpos = this.x  + this.setting*(this.width - this.bar_width);
+	var box_xpos = this.x + this.setting * (this.width - this.bar_width);
 	var box_ypos = this.y;
 
 	var box_width = this.bar_width;
@@ -5192,7 +5195,8 @@ Slider.prototype.draw = function()
 
 	if (this.held)
 	{
-		var setting = (Mouse.x - this.x - box_width/2) / (this.width - box_width);
+		var setting = (Mouse.x - this.x - box_width / 2) / (this.width -
+			box_width);
 		if (setting >= 0 && setting <= 1)
 		{
 			this.setting = setting;
@@ -5208,7 +5212,8 @@ Slider.prototype.draw = function()
 	}
 
 
-	if (Mouse.x > box_xpos && Mouse.x < box_right && Mouse.y > box_ypos && Mouse.y < box_bottom)
+	if (Mouse.x > box_xpos && Mouse.x < box_right && Mouse.y > box_ypos &&
+		Mouse.y < box_bottom)
 	{
 		this.hover = true;
 
@@ -5250,7 +5255,7 @@ Slider.prototype.draw = function()
 		}
 	}
 
-	this.value = this.min_val + this.setting*(this.max_val - this.min_val);
+	this.value = this.min_val + this.setting * (this.max_val - this.min_val);
 
 	ctx.beginPath();
 	ctx.rect(box_xpos, box_ypos, box_width, box_height);
@@ -5260,12 +5265,13 @@ Slider.prototype.draw = function()
 	ctx.stroke();
 
 	ctx.fillStyle = "black";
-	ctx.fillText("" + (this.value).toFixed(2), this.x + 13, this.y + 3 + this.height/2);
+	ctx.fillText("" + (this.value).toFixed(2), this.x + 13, this.y + 3 +
+		this.height / 2);
 };
 
 Slider.prototype.setValue = function(val)
 {
-	this.setting = (val - this.min_val)/(this.max_val - this.min_val);
+	this.setting = (val - this.min_val) / (this.max_val - this.min_val);
 	this.value = val;
 }
 
@@ -5282,15 +5288,13 @@ Slider.prototype.setActive = function(activated)
 
 
 
-
-
-
-
-// Global variable of all toggle button objects, so that the mouse can check for hovering, and handle it.
+// Global variable of all toggle button objects, so that the mouse can check for
+//  hovering, and handle it.
 var ToggleButtons = new Array();
 
 // Used by anything to create a new toggle button object,
-//  returns id, which the calling function can use to access the object through ToggleButtons array.
+// returns id, which the calling function can use to access the object through
+// ToggleButtons array.
 function Create_ToggleButton(x, y, width, height, text)
 {
 	var id = ToggleButtons.length;
@@ -5299,7 +5303,8 @@ function Create_ToggleButton(x, y, width, height, text)
 	return id;
 }
 
-// Used by anything to destroy a toggle button with a given id.  Silently fails if the id is not valid.
+// Used by anything to destroy a toggle button with a given id.  Silently fails 
+// if the id is not valid.
 function Destroy_ToggleButton(id)
 {
 	if (id >= 0 && id < ToggleButtons.length)
@@ -5325,11 +5330,13 @@ function ToggleButton(x, y, width, height, text, id)
 	// Should be set correctly by NewToggleButton();
 }
 
-// Draws this particular button, called by main in a loop of all toggle buttons, to draw all of them.
-//  Drawing state depends on whether the button is activated or not.
+// Draws this particular button, called by main in a loop of all toggle buttons,
+// to draw all of them. Drawing state depends on whether the button is activated
+// or not.
 ToggleButton.prototype.draw = function()
 {
-	if (Mouse.x > this.x && Mouse.x < this.x + this.width && Mouse.y > this.y && Mouse.y < this.y + this.height)
+	if (Mouse.x > this.x && Mouse.x < this.x + this.width && Mouse.y > this.y &&
+		Mouse.y < this.y + this.height)
 	{
 		this.hover = true;
 		if (Mouse.down == true)
@@ -5341,7 +5348,8 @@ ToggleButton.prototype.draw = function()
 		{
 			if (this.pressed == true)
 			{
-				// Mouse was pressed, now it's still hovering, but it's not pressing.  Ergo, a click!
+				// Mouse was pressed, now it's still hovering, but it's not 
+				// pressing.  Ergo, a click!
 				this.toggle();
 			}
 
@@ -5385,7 +5393,7 @@ ToggleButton.prototype.draw = function()
 
 	ctx.font = "10px Verdana";
 	ctx.fillStyle = "black";
-	ctx.fillText(this.text, this.x + 10, this.y + this.height/1.6);
+	ctx.fillText(this.text, this.x + 10, this.y + this.height / 1.6);
 };
 
 // Called by anything to see if the button is active or not.

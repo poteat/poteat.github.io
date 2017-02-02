@@ -30,6 +30,8 @@ function getIntersectionPoints(x, y, ang, Hull, permissive)
 
     var Left = new Array();
     var Right = new Array();
+
+    // 
 	
 	for (var i = 0; i < Hull.length; i++)
 	{
