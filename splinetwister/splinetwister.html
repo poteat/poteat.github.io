@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+
+<head>
+	<title>Michael's Lab</title>
+	<link rel=stylesheet href="splinetwister.css" type="text/css">
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/M
+		athJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+
+<body>
+	<h1>Michael's Lab</h1>
+	<h2>Auto-fitting Spline Surface</h2> Density File:
+	<input type="file" accept=".mrc, .pdb" id="mrc_file"></input>
+	<input type="text" value="0.8" id="density_threshold"></input>
+	<p></p>
+	Fitting File:
+	<input type="file" accept=".fit" id="fit_file"></input>
+	<p></p>
+	<a class="button" download="" id="surface_download_link">
+			Download Surface PDB
+	</a>
+	<a class="button" download="" id="fit_download_link">
+			Download Fit Data
+	</a>
+	<a class="button" download="" id="strand_download_link">
+			Download Strand PDB Render
+	</a>
+	<p></p>
+	<canvas id="canvas" width="750" height="750"> </canvas>
+	<p></p>
+	<div id="footer"></div>
+	<!-- Dependencies -->
+	<script type="text/javascript" src="utilities/delaunay.js"></script>
+	<script type="text/javascript" src="utilities/concavehull.js"></script>
+	<script type="text/javascript" src="utilities/hullintersection.js"></script>
+	<!-- Class Javascript Files -->
+	<script type="text/javascript" src="objects/densitymap.js"></script>
+	<script type="text/javascript" src="objects/perimeter.js"></script>
+	<script type="text/javascript" src="objects/plane.js"></script>
+	<script type="text/javascript" src="objects/point.js"></script>
+	<script type="text/javascript" src="objects/projection.js"></script>
+	<script type="text/javascript" src="objects/strand.js"></script>
+	<script type="text/javascript" src="objects/surface.js"></script>
+	<!-- Main Javascript Code -->
+	<script type="text/javascript" src="splinetwister_main.js"></script>
+</body>
+
+</html>

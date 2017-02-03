@@ -1,52 +1,43 @@
-
-body
-{
+body {
 	background-color: white;
 	font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	padding: 0 20% 0 20%;
 }
 
-h1
-{
+h1 {
 	color: black;
 }
 
-p
-{
-	
-}
+p {}
 
-cmd
-{
+cmd {
 	font-style: italic;
 }
 
-pre.sh_sourceCode
-{
-  background-color: lightgrey;
-  color: black;
-  font-style: normal;
-  font-weight: normal;
+pre.sh_sourceCode {
+	background-color: lightgrey;
+	color: black;
+	font-style: normal;
+	font-weight: normal;
 }
 
-table, th, td {
-    border: 1px solid black;
+table,
+th,
+td {
+	border: 1px solid black;
 }
 
-#footer
-{
+#footer {
 	height: 500px;
 }
 
 a.button {
-    -webkit-appearance: button;
-    -moz-appearance: button;
-    appearance: button;
-
-    text-decoration: none;
-    color: initial;
-
-    padding: 0 50px 0 50px;
+	-webkit-appearance: button;
+	-moz-appearance: button;
+	appearance: button;
+	text-decoration: none;
+	color: initial;
+	padding: 0 50px 0 50px;
 }
 
 textarea.imagestring {
@@ -54,20 +45,18 @@ textarea.imagestring {
 	color: lightgrey;
 	font-size: 5pt;
 	font-family: "Courier";
-} 
+}
 
-canvas
-{
+canvas {
 	border: solid;
 	border-color: black;
 	border-width: 1px;
 	z-index: 2;
 }
 
-#tracer
-{
+#tracer {
 	position: relative;
-	border:solid;
+	border: solid;
 	border-width: 1px;
 	z-index: 1;
 }
