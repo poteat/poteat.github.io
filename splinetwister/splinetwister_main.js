@@ -30,7 +30,6 @@ var BPerimeter;
 
 var BStrand;
 
-
 // Program entry point, runs once at initialization of application.
 function init()
 {
@@ -46,7 +45,6 @@ function init()
 
 	updateTransformedPoints();
 }
-
 
 var desired_control_points = 4;
 
@@ -258,8 +256,6 @@ function main()
 	}
 }
 
-
-
 function initializeStrandFit()
 {
 	BStrand = new Strand();
@@ -295,7 +291,6 @@ function updateTransformedPoints()
 		BStrand.updateTransformedPoints();
 	}
 }
-
 
 function generatePDBString(points)
 {
@@ -407,7 +402,6 @@ function generatePDBString(points)
 	return string;
 }
 
-
 function generateFitString()
 {
 	var string = "" + density_threshold + "\n";
@@ -434,7 +428,6 @@ function generateFitString()
 
 	return string;
 }
-
 
 function generateTextFile(string)
 {
@@ -698,7 +691,6 @@ function loadFittingFile(evt)
 	};
 }
 
-
 function readInt(i)
 {
 	i *= 4;
@@ -710,7 +702,6 @@ function readFloat(i)
 	i *= 4;
 	return dataView.getFloat32(i, true);
 }
-
 
 function createArray(length)
 {

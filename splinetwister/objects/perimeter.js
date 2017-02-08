@@ -369,8 +369,6 @@ Perimeter.prototype.updateTransformedPoints = function()
 	}
 }
 
-
-
 Perimeter.prototype.draw = function()
 {
 

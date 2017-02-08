@@ -67,8 +67,6 @@ function Strand()
 	this.setAngle(45, 0);
 }
 
-Strand.prototype.score = function(angle, offset, gap, bond) {}
-
 Strand.prototype.setOrigin = function(t, u)
 {
 	var coords = BSurface.calc(t, u);
@@ -627,8 +625,19 @@ Strand.prototype.optimizeAngle = function()
 	this.optimized = true;
 }
 
-// Create a set of points that finely samples each strand, then untransform to 
-// world coordinates and call the points to pdb string function
+/**
+ * Given the internal state of the Strand object, generate a point set which
+ * represents the best estimate for the surface-bound strand positions.
+ *
+ * Specifically, the main strand position is defined by a single angle and 
+ * offset tuple. From the main strand specification, we walk the surface
+ * perpendicularly until the euclidean distance is equal to the chosen strand
+ * gap.
+ *
+ * This function does not modify internal state except for:
+ *  this.strandSamples
+ *  this.strandSampleS_T
+ */
 Strand.prototype.updateDownload = function()
 {
 	// We first generate the two perpendicular hull collision points so we can 
