@@ -168,8 +168,8 @@ Point.prototype.distToParameter = function(t, u)
 	var x = coords[0];
 	var y = coords[1];
 	var z = coords[2];
-	return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y,
-		2) + Math.pow(this.z - z, 2));
+	return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2) + Math.pow(
+		this.z - z, 2));
 };
 
 Point.prototype.findClosestResPoint = function()

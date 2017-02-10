@@ -638,6 +638,9 @@ Strand.prototype.optimizeAngle = function()
  *  this.strandSamples
  *  this.strandSampleS_T
  */
+
+/*
+
 Strand.prototype.updateDownload = function()
 {
 	// We first generate the two perpendicular hull collision points so we can 
@@ -842,6 +845,270 @@ Strand.prototype.updateDownload = function()
 	strand_filename += "_SplineFit_Strands.pdb";
 
 	strand_dl.download = strand_filename;
+}
+*/
+
+
+// Takes in angle in degrees
+Strand.prototype.euclideanShift = function(points, ang, dist)
+{
+	var projected = new Array();
+
+	if (dist > 0)
+	{
+		var sign = 1;
+	}
+	else
+	{
+		dist = Math.abs(dist);
+		var sign = -1;
+	}
+
+	// Currently 5
+	var strand_gap = dist;
+
+	var ang = (ang) / 180 * Math.PI;
+
+	var _cos = Math.cos(ang);
+	var _sin = Math.sin(ang);
+
+	for (var i = 0; i < points.length; i++)
+	{
+		var p = points[i];
+
+		var delta = 0.1;
+
+		var dt = _cos * delta;
+		var du = _sin * delta;
+
+		dist = p.distToParameter(p.t + sign * dt, p.u + sign * du);
+
+		while (Math.abs(dist - strand_gap) > 0.001)
+		{
+			if (dist > strand_gap)
+			{
+				delta /= 2;
+
+				dt -= _cos * delta;
+				du -= _sin * delta;
+			}
+			else
+			{
+				dt += _cos * delta;
+				du += _sin * delta;
+			}
+
+			dist = p.distToParameter(p.t + sign * dt, p.u + sign * du);
+		}
+
+		var coords = BSurface.calc(p.t + sign * dt, p.u + sign * du);
+
+		var p_new = new Point(coords[0], coords[1], coords[2]);
+		p_new.t = p.t + sign * dt;
+		p_new.u = p.u + sign * du;
+
+		projected.push(p_new);
+	}
+
+	return projected;
+}
+
+
+// Returns set of points which are inside of the hull boundary.  If none of the 
+// given points are inside the hull boundary, returns false.
+Strand.prototype.cullExteriorPoints = function(points)
+{
+	var culled = new Array();
+
+	for (var i = 0; i < points.length; i++)
+	{
+		var p = points[i];
+
+		intersect = getIntersectionPoints(p.t, p.u, this.angle / 180 * Math.PI,
+			BPerimeter.vertices, false);
+
+		if (intersect != false)
+		{
+			culled.push(p)
+		}
+	}
+
+	if (culled.length > 0)
+	{
+		return culled;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+Strand.prototype.updateDownload = function()
+{
+
+	this.originStrandPoints = new Array();
+	this.originStrandPoints_T = new Array();
+
+	var Hull = BPerimeter.vertices;
+
+	var intersects = getIntersectionPoints(this.originPoint.t,
+		this.originPoint.u, (this.angle) / 180 * Math.PI, Hull, true);
+
+	// First, we generate the central strand.  We do this by finding the two
+	// perimeter collision points, and arbitrarily scaling them up.
+
+	// Acquire the deltas:
+
+	var dx1 = intersects[0][0] - this.originPoint.t;
+	var dy1 = intersects[0][1] - this.originPoint.u;
+
+	var dx2 = intersects[1][0] - this.originPoint.t;
+	var dy2 = intersects[1][1] - this.originPoint.u;
+
+	// Scale up the deltas by two:
+
+	var scale = 1.5;
+
+	var dx1 = this.originPoint.t + dx1 * scale;
+	var dy1 = this.originPoint.u + dy1 * scale;
+
+	var dx2 = this.originPoint.t + dx2 * scale;
+	var dy2 = this.originPoint.u + dy2 * scale;
+
+	// Linearly interpolate in (t,u) space between the collision points, and 
+	// place the resulting points in local set centralStrand;
+
+	var number_of_samples = 100;
+
+	var centralStrand = new Array();
+	var delta = 1 / number_of_samples;
+
+	for (var t = 0; t <= 1; t += delta)
+	{
+		var dx = dx1 + (dx2 - dx1) * t;
+		var dy = dy1 + (dy2 - dy1) * t;
+
+		var coords = BSurface.calc(dx, dy);
+
+		var p = new Point(coords[0], coords[1], coords[2]);
+		p.t = dx;
+		p.u = dy;
+
+		centralStrand.push(p);
+	}
+
+	// For each central strand point, project at the perpendicular angle
+	// by a small delta until the euclidean distance is greater than or equal to
+	// the strand gap.
+
+	var ang = this.angle;
+	var dist = this.strand_gap;
+
+	var Strands = new Array();
+
+	var projected;
+
+
+	// Generate strands to the left and right.
+
+	for (var s = -1; s < 2; s += 2)
+	{
+		for (var i = 0; true; i++)
+		{
+			if (i == 0)
+			{
+				projected = this.euclideanShift(centralStrand, ang, s * dist);
+			}
+			else
+			{
+				projected = this.euclideanShift(projected, ang, s * dist);
+			}
+
+			var culled = this.cullExteriorPoints(projected);
+
+			if (culled != false)
+			{
+				for (var i = 0; i < culled.length; i++)
+				{
+					var p = culled[i];
+					Strands.push(p);
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	var culled = this.cullExteriorPoints(centralStrand);
+
+	for (var i = 0; i < culled.length; i++)
+	{
+		var p = culled[i];
+		Strands.push(p);
+	}
+
+	this.strandSamples = Strands;
+	this.strandSamples_T = new Array();
+
+	for (var i = 0; i < this.strandSamples.length; i++)
+	{
+		var p_T = new Point(0, 0, 0, "darkred", 1);
+		this.strandSamples_T.push(p_T);
+	}
+
+
+	// We now happily have the full set of strand sample points, so we can 
+	// generate a pdb file and hook it to the button (magic)
+
+	// Create new array of strand samples to perform work on.
+
+	var sample_points = new Array();
+
+	for (var i = 0; i < this.strandSamples.length; i++)
+	{
+		var p = this.strandSamples[i];
+
+		var p_copy = new Point(p.x, p.y, p.z);
+
+		sample_points.push(p_copy);
+	}
+
+	// Undo plane and centering transformations
+	for (var i = 0; i < sample_points.length; i++)
+	{
+		sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy,
+			DMap.rot_uz)
+
+		sample_points[i].x += DMap.x_avg
+		sample_points[i].y += DMap.y_avg
+		sample_points[i].z += DMap.z_avg
+	}
+
+	var string = generatePDBString(sample_points);
+
+	var file = generateTextFile(string);
+
+	strand_dl.href = file;
+
+	// Build filename by appending "_SplineFit" to the end of the input file
+
+	var filename = DMap.filename;
+	var exploded_filename = filename.split(".");
+
+	var strand_filename = "";
+
+	for (var i = 0; i < exploded_filename.length - 2; i++)
+	{
+		strand_filename += (exploded_filename[i] + ".");
+	}
+	strand_filename += (exploded_filename[i]);
+
+	strand_filename += "_SplineFit_Strands.pdb";
+
+	strand_dl.download = strand_filename;
+
 }
 
 Strand.prototype.draw = function()

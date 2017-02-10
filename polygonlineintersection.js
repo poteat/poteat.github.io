@@ -1,13 +1,10 @@
-
-
-
 var fps = 60;
 var cvs = document.getElementById('canvas');
 var ctx = cvs.getContext('2d');
 var Mouse = new Mouse();
 
 clearInterval(mainloop);
-var mainloop = setInterval("main();",1000/fps);
+var mainloop = setInterval("main();", 1000 / fps);
 
 var LinePoint = null;
 
@@ -26,7 +23,7 @@ function init()
 	}*/
 
 	LinePoint = Points.createPoint(250, 250, "blue");
-	
+
 	Points.createPoint(100, 300);
 	Points.createPoint(250, 100);
 	Points.createPoint(400, 300);
@@ -124,8 +121,8 @@ function main()
 
 	var x = Points.x[LinePoint].x;
 	var y = Points.x[LinePoint].y;
-	var ang = (90-Sliders[length_slider].value)/180*Math.PI;
-	
+	var ang = (90 - Sliders[length_slider].value) / 180 * Math.PI;
+
 	var intersects = getIntersectionPoints(x, y, ang, Hull, true);
 
 	if (intersects != false)
@@ -137,7 +134,7 @@ function main()
 		ctx.lineTo(intersects[1][0], intersects[1][1]);
 		ctx.stroke();
 	}
-	
+
 
 
 }
@@ -159,15 +156,18 @@ function main()
 
 var Sliders = new Array();
 
-function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val)
+function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val,
+	default_val)
 {
 	var id = Sliders.length;
-	Sliders.push(new Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val, id));
+	Sliders.push(new Slider(x, y, width, height, text, bar_width, min_val, max_val,
+		default_val, id));
 
 	return id;
 }
 
-function Slider(x, y, width, height, text, bar_width, min_val, max_val, default_val, id)
+function Slider(x, y, width, height, text, bar_width, min_val, max_val,
+	default_val, id)
 {
 	this.x = x;
 	this.y = y;
@@ -183,7 +183,7 @@ function Slider(x, y, width, height, text, bar_width, min_val, max_val, default_
 
 	this.value = default_val;
 
-	var setting = (default_val - min_val)/(max_val - min_val);
+	var setting = (default_val - min_val) / (max_val - min_val);
 
 	if (setting >= 0 && setting <= 1)
 	{
@@ -211,7 +211,7 @@ Slider.prototype.draw = function()
 	ctx.strokeStyle = 'black';
 	ctx.stroke();
 
-	var box_xpos = this.x  + this.setting*(this.width - this.bar_width);
+	var box_xpos = this.x + this.setting * (this.width - this.bar_width);
 	var box_ypos = this.y;
 
 	var box_width = this.bar_width;
@@ -223,7 +223,7 @@ Slider.prototype.draw = function()
 
 	if (this.held)
 	{
-		var setting = (Mouse.x - this.x - box_width/2) / (this.width - box_width);
+		var setting = (Mouse.x - this.x - box_width / 2) / (this.width - box_width);
 		if (setting >= 0 && setting <= 1)
 		{
 			this.setting = setting;
@@ -239,7 +239,8 @@ Slider.prototype.draw = function()
 	}
 
 
-	if (Mouse.x > box_xpos && Mouse.x < box_right && Mouse.y > box_ypos && Mouse.y < box_bottom)
+	if (Mouse.x > box_xpos && Mouse.x < box_right && Mouse.y > box_ypos && Mouse.y <
+		box_bottom)
 	{
 		this.hover = true;
 
@@ -273,14 +274,14 @@ Slider.prototype.draw = function()
 		{
 			ctx.fillStyle = "lightgreen";
 		}
-		
+
 		if (Mouse.down != true)
 		{
 			this.held = false;
 		}
 	}
 
-	this.value = this.min_val + this.setting*(this.max_val - this.min_val);
+	this.value = this.min_val + this.setting * (this.max_val - this.min_val);
 
 	ctx.beginPath();
 	ctx.rect(box_xpos, box_ypos, box_width, box_height);
@@ -290,14 +291,15 @@ Slider.prototype.draw = function()
 	ctx.stroke();
 
 	ctx.fillStyle = "black";
-	ctx.fillText("" + (this.value).toFixed(2), this.x + 13, this.y + 3 + this.height/2);
+	ctx.fillText("" + (this.value).toFixed(2), this.x + 13, this.y + 3 + this.height /
+		2);
 
 	ctx.fillText(this.text, this.x, this.y - 5);
 };
 
 Slider.prototype.setValue = function(val)
 {
-	this.setting = (val - this.min_val)/(this.max_val - this.min_val);
+	this.setting = (val - this.min_val) / (this.max_val - this.min_val);
 	this.value = val;
 }
 
@@ -420,30 +422,31 @@ function Point(x, y, color)
 
 Point.prototype.draw = function()
 {
-    ctx.beginPath();
-    ctx.fillStyle = this.color;
-    ctx.arc(this.x, this.y, 5, 0, Math.PI*2, true);
-    ctx.fill();
+	ctx.beginPath();
+	ctx.fillStyle = this.color;
+	ctx.arc(this.x, this.y, 5, 0, Math.PI * 2, true);
+	ctx.fill();
 
-    ctx.fillStyle = "black";
+	ctx.fillStyle = "black";
 };
 
 Point.prototype.dist = function(x, y)
 {
-	return Math.sqrt( Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2) );
+	return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
 };
 
 Point.prototype.moveTo = function(x, y)
 {
-    this.x = x;
-    this.y = y;
+	this.x = x;
+	this.y = y;
 
-    Points.updateFit = true;
+	Points.updateFit = true;
 };
 
 Point.prototype.distFromLine = function(slope, intersect)
 {
-	return (slope*this.x - this.y + intersect)/Math.sqrt(Math.pow(slope, 2) + 1);
+	return (slope * this.x - this.y + intersect) / Math.sqrt(Math.pow(slope, 2) +
+		1);
 };
 
 
@@ -460,14 +463,14 @@ function Mouse()
 	this.x = 0;
 	this.y = 0;
 	this.down = false;
-    this.inside = false;
-    this.rclick = false;
+	this.inside = false;
+	this.rclick = false;
 }
 
 Mouse.draw = function()
 {
 	ctx.beginPath();
-	ctx.arc(Mouse.x, Mouse.y, 5, 0, Math.PI*2, true);
+	ctx.arc(Mouse.x, Mouse.y, 5, 0, Math.PI * 2, true);
 	ctx.fill();
 };
 
@@ -507,27 +510,27 @@ cvs.addEventListener('mousemove', function(evt)
 	if (Mouse.holding)
 	{
 		Points.x[Mouse.objHeld].moveTo(Mouse.x, Mouse.y);
-    }
+	}
 }, false);
 
 cvs.addEventListener('mousedown', function(evt)
 {
 	evt.preventDefault();
 
-    var cID = Points.closest(Mouse.x, Mouse.y);
+	var cID = Points.closest(Mouse.x, Mouse.y);
 
-    if (Points.x[cID].dist(Mouse.x, Mouse.y) < 20)
-    {
-        Mouse.holding = true;
-        Mouse.objHeld = cID;
-    }
+	if (Points.x[cID].dist(Mouse.x, Mouse.y) < 20)
+	{
+		Mouse.holding = true;
+		Mouse.objHeld = cID;
+	}
 
-    if (Mouse.holding)
-    {
-    	Points.x[cID].moveTo(Mouse.x, Mouse.y);
-    }
+	if (Mouse.holding)
+	{
+		Points.x[cID].moveTo(Mouse.x, Mouse.y);
+	}
 
-    Mouse.down = true;
+	Mouse.down = true;
 }, false);
 
 cvs.addEventListener('mouseleave', function(evt)
@@ -562,17 +565,3 @@ cvs.addEventListener('dblclick', function(evt)
 }, false);
 
 init();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
