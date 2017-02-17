@@ -261,8 +261,6 @@ function initializeStrandFit()
 	BStrand = new Strand();
 }
 
-
-
 // updateTransformedPoints()
 // ----------------------------------------------------------------------
 // This function updates the "camera-transformed" set of points belonging to 
@@ -1160,6 +1158,9 @@ cvs.addEventListener('mousedown', function(evt)
 
 	// Check if mouse is over the strand origin point
 
+	// Strand origin movement is disabled
+
+	/*
 	if (BSurface.finished)
 	{
 		var p = BStrand.originPoint_T;
@@ -1169,7 +1170,7 @@ cvs.addEventListener('mousedown', function(evt)
 		{
 			Mouse.held_object = BStrand.originPoint;
 		}
-	}
+	}*/
 
 
 

@@ -447,6 +447,16 @@ Surface.prototype.moveControlPointTo2D = function(i, j, x2d, y2d)
 	this.controlPoints[i][j].moveTo(p_world);
 };
 
+Surface.prototype.sample = function(t, u)
+{
+	var coords = this.calc(t, u);
+	var p = new Point(coords[0], coords[1], coords[2]);
+	p.t = t;
+	p.u = u;
+
+	return p;
+}
+
 /**
  * Given surface parameters t and u, this function returns the xyz coordinates 
  * of that surface location.

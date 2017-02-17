@@ -313,3 +313,22 @@ Point.prototype.refineProjection = function(permissive)
 	this.t = t;
 	this.u = u;
 };
+
+Point.prototype.clone = function(color, size)
+{
+	var p = new Point(this.x, this.y, this.z);
+	p.t = this.t;
+	p.u = this.u;
+	p.color = color;
+	p.size = size;
+
+	return p;
+}
+
+Point.prototype.transform = function(p)
+{
+	this.moveTo(p);
+	this.scaleFactor(zoom);
+	this.rotateY(yaw);
+	this.rotateX(pitch);
+}

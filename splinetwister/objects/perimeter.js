@@ -127,6 +127,50 @@ function Perimeter(ConcaveHull)
 	}
 }
 
+Perimeter.prototype.getSurfaceCentroid = function()
+{
+	/**
+	 * Returns (t,u) coordinates which represent the centroid of the surface,
+	 * defined via the arithmetic average of the surface coordinates of each
+	 * hull vertex that defines the polygonal boundary.
+	 */
+
+	Hull = BPerimeter.vertices;
+
+	var avgt = 1;
+	var avgu = 1;
+
+	for (var i = 0; i < Hull.length; i++)
+	{
+		var V = Hull[i];
+
+		avgt += Math.pow(V[0], 2);
+		avgu += Math.pow(V[1], 2);
+	}
+
+	avgt /= Hull.length;
+	avgu /= Hull.length;
+
+	avgt = Math.sqrt(avgt);
+	avgu = Math.sqrt(avgu);
+
+	avgt = 0;
+	avgu = 0;
+
+	for (var i = 0; i < DMap.points.length; i++)
+	{
+		var p = DMap.points[i];
+		avgt += p.t;
+		avgu += p.u;
+	}
+
+	avgt /= DMap.points.length;
+	avgu /= DMap.points.length;
+
+	return [avgt, avgu];
+
+}
+
 Perimeter.prototype.updateColorError = function()
 {
 	var L = this.points.length;
