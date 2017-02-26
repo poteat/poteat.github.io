@@ -70,52 +70,38 @@ function createMixingFunction(size, t_vector)
 {
 	var mixer = new Array(size);
 
-	mixer[size - 1] = new Array(size);
-
-	for (var i = 0; i < size; i++)
+	for (var col = size - 1; col >= 0; col--)
 	{
-		mixer[size - 1][i] = 1;
-	}
+		mixer[col] = new Array(size);
 
-	mixer[size - 2] = new Array(size);
-
-	for (var i = 0; i < size; i++)
-	{
-		var t = (size - 1 - i) / (size - 1);
-		mixer[size - 2][i] = t;
-	}
-
-	for (var row = size - 3; row >= 0; row--)
-	{
-		mixer[row] = new Array(size);
-
-		for (var col = 0; col < size; col++)
+		for (var row = 0; row < size; row++)
 		{
-			if (col <= row)
-			{
-				if (col == 0)
-				{
-					mixer[row][col] = 1;
-				}
-				else
-				{
-					mixer[row][col] = mixer[row + 1][col + 1];
-				}
+			var col_sgn = (col % 2) * 2 - 1;
+			var row_sgn = (row % 2) * 2 - 1;
 
+			var sign = col_sgn * row_sgn;
+
+			if (row <= col)
+			{
+				var row_binom = binom(col, row);
+				var col_binom = binom(size - 1, col);
+				mixer[col][row] = col_binom * row_binom * sign;
 			}
 			else
 			{
-				mixer[row][col] = 0;
+				mixer[col][row] = 0;
 			}
 		}
 	}
+
 	/*
 	for (var i = 0; i < size; i++)
 	{
 		console.log(mixer[i]);
 	}
 	*/
-	return math.matrix(mixer);
+
+	return math.inv(math.matrix(mixer));
 }
 
 // t_vector's length is size-2, monotonically increasing
@@ -332,12 +318,12 @@ function init()
 	knots.push(new Point(270, 500, true));
 	controlPoints.push(new Point(270, 550, false));
 
-	//createMixingFunction(4);
+	createMixingFunction(5);
 	//createTimingFunction(4, [1 / 3, 2 / 3]);
 
 	// result = getControlVector([], [10, 7]);
 
-	setInterpolationVector();
+	//setInterpolationVector();
 
 	mainloop = setInterval("main();", 1000 / fps);
 }
