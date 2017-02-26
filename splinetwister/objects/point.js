@@ -323,7 +323,7 @@ Point.prototype.clone = function(color, size)
 	p.size = size;
 
 	return p;
-}
+};
 
 Point.prototype.transform = function(p)
 {
@@ -331,4 +331,12 @@ Point.prototype.transform = function(p)
 	this.scaleFactor(zoom);
 	this.rotateY(yaw);
 	this.rotateX(pitch);
-}
+};
+
+Point.prototype.visible = function()
+{
+	var visible_x = this.x2d >= 0 && this.x2d < cvs.width;
+	var visible_y = this.y2d >= 0 && this.y2d < cvs.height;
+
+	return visible_x && visible_y && this.scale > 0;
+};

@@ -1,7 +1,6 @@
 function Strand()
 {
 	this.originPoint;
-	this.originPoint_T;
 
 	this.optimize_button;
 	this.angle_slider;
@@ -11,13 +10,14 @@ function Strand()
 	this.angle;
 	this.offset;
 
+	this.strandMap;
+
 	this.initialize();
 }
 
 Strand.prototype.initialize = function()
 {
 	this.originPoint = new Point(0, 0, 0);
-	this.originPoint_T = new Point(0, 0, 0, 'blue', 7);
 
 	optimize_button = Create_ToggleButton(550, 30, 70, 25, "Optimize");
 	angle_slider = Create_Slider(550, 60, 150, 20, "Angle", 10, 0, 179.99, 45);
@@ -37,8 +37,7 @@ Strand.prototype.initialize = function()
 	this.offset = 0;
 	this.strand_gap = 5;
 
-
-	this.setAngle(45, 0);
+	this.updateStrandMap(this.angle, this.offset, this.strand_gap);
 }
 
 Strand.prototype.setOrigin = function(t, u)
@@ -626,7 +625,9 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 	var _cos = Math.cos(ang);
 	var _sin = Math.sin(ang);
 
-	for (var i = 0; i < points.length; i++)
+	var neg_length = 0;
+
+	for (var i = points._length; i < points.length; i++)
 	{
 		var p = points[i];
 
@@ -661,8 +662,23 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 		p_new.t = p.t + sign * dt;
 		p_new.u = p.u + sign * du;
 
-		projected.push(p_new);
+		if (i >= 0)
+		{
+			projected[i] = p_new;
+		}
+		else
+		{
+			if (neg_length == 0)
+			{
+				neg_length = -i;
+			}
+
+			projected[i] = p_new;
+		}
+
 	}
+
+	projected._length = -neg_length;
 
 	return projected;
 }
@@ -674,21 +690,37 @@ Strand.prototype.cullExteriorPoints = function(points)
 
 	var culled = new Array();
 
-	for (var i = 0; i < points.length; i++)
+	var neg_length = 0;
+
+	for (var i = points._length; i < points.length; i++)
 	{
 		var p = points[i];
 
-		intersect = getIntersectionPoints(p.t, p.u, this.angle / 180 * Math.PI,
+		intersect = getIntersectionPoints(p.t, p.u, 0,
 			BPerimeter.vertices, false);
 
 		if (intersect != false)
 		{
-			culled.push(p)
+
+			if (i >= 0)
+			{
+				culled[i] = p;
+			}
+			else
+			{
+				if (neg_length == 0)
+				{
+					neg_length = -i;
+				}
+
+				culled[i] = p;
+			}
 		}
 	}
 
-	if (culled.length > 0)
+	if (culled.length > 0 || neg_length > 0)
 	{
+		culled._length = -neg_length;
 		return culled;
 	}
 	else
@@ -867,52 +899,87 @@ Strand.prototype.updateDownload = function()
 
 Strand.prototype.draw = function()
 {
-	this.updateStrandMap(this.angle, this.offset, this.strand_gap);
-
-
-	if (!this.optimized)
+	if ((this.angle_slider.value != this.angle) ||
+		(this.offset_slider.value != this.offset))
 	{
-		if ((this.angle_slider.value != this.angle) ||
-			(this.offset_slider.value != this.offset))
+		this.angle = this.angle_slider.value;
+		this.offset = this.offset_slider.value;
+
+		this.updateStrandMap(this.angle, this.offset, this.strand_gap);
+	}
+
+	this.drawMap();
+}
+
+Strand.prototype.drawMap = function()
+{
+	// Draw all strand map points:
+
+	var map = this.strandMap_T;
+
+	for (var i = map._length; i < map.length; i++)
+	{
+		for (var j = map[i]._length; j < map[i].length; j++)
 		{
-			this.angle = this.angle_slider.value;
+			var p = map[i][j];
 
-			this.offset = this.offset_slider.value;
-
-			this.setAngle(this.angle, this.offset);
+			if (p != undefined)
+			{
+				p.draw();
+			}
 		}
 	}
 
-	if (this.optimize_button.activated)
-	{
-		this.optimizeAngle();
-		this.optimize_button.activated = false;
-	}
 
-	// Draw strand samples
+	// Draw all parallel strand lines (first part of grid)
 
-	if (this.strandSamples)
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 1;
+
+	for (var i = map._length; i < map.length; i++)
 	{
-		for (var i = 0; i < this.strandSamples.length; i++)
+		for (var j = map[i]._length; j < map[i].length - 1; j++)
 		{
-			var p = this.strandSamples[i];
-			var p_T = this.strandSamples_T[i];
+			var p1 = map[i][j];
+			var p2 = map[i][j + 1];
 
-			p_T.moveTo(p);
-			p_T.scaleFactor(zoom);
-			p_T.rotateY(yaw);
-			p_T.rotateX(pitch);
-
-			p_T.draw();
+			if (p1 != undefined && p2 != undefined)
+			{
+				if (p1.visible() || p2.visible())
+				{
+					ctx.beginPath();
+					ctx.moveTo(p1.x2d, p1.y2d);
+					ctx.lineTo(p2.x2d, p2.y2d);
+					ctx.stroke();
+				}
+			}
 		}
 	}
 
-	// Draw textual output
 
-	ctx.fillStyle = "black";
-	ctx.fillText("Max Ang (deg): " + this.max_ang, 10, 100);
 
-	ctx.fillText("Avg Ang (deg): " + this.avg_ang, 10, 70);
+	// Loop through all strands from left to right, drawing if both exist, and
+	// at least one is visible.
+
+	for (var i = map._length; i < map.length - 1; i++)
+	{
+		for (var j = map[i]._length; j < map[i].length; j++)
+		{
+			var p1 = map[i][j];
+			var p2 = map[i + 1][j];
+
+			if (p1 != undefined && p2 != undefined)
+			{
+				if (p1.visible() || p2.visible())
+				{
+					ctx.beginPath();
+					ctx.moveTo(p1.x2d, p1.y2d);
+					ctx.lineTo(p2.x2d, p2.y2d);
+					ctx.stroke();
+				}
+			}
+		}
+	}
 }
 
 Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
@@ -931,32 +998,37 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
 	this.strandMap = new Array();
 
-
 	// We first generate strand 0, positive samples.
 
 	var Hull = BPerimeter.vertices;
 
+	var offset_x = Math.cos((this.angle) / 180 * Math.PI) * this.offset;
+	var offset_y = Math.sin((this.angle) / 180 * Math.PI) * this.offset;
+
+
+
+	// Perform a temporary euclidean shift on the origin point to implement
+	// the offset on strand generation.
+
+	var coords = BPerimeter.getSurfaceCentroid();
+	var avgt = coords[0];
+	var avgu = coords[1];
+	this.originPoint = BSurface.sample(avgt, avgu);
+	var p = [this.originPoint]
+	p._length = 0;
+	p = this.euclideanShift(p, this.angle, offset);
+	this.originPoint = p[0];
+
+
+
+
+
 	var intersects = getIntersectionPoints(this.originPoint.t,
-		this.originPoint.u, (this.angle) / 180 * Math.PI, Hull, true);
+		this.originPoint.u, (this.angle) / 180 * Math.PI, Hull,
+		true);
 
 	// First, we generate the central strand.  We do this by finding the two
 	// perimeter collision points, and arbitrarily scaling them up.
-
-	// Acquire the deltas:
-
-	var dx1 = intersects[0][0] - this.originPoint.t;
-	var dy1 = intersects[0][1] - this.originPoint.u;
-
-	var dx2 = intersects[1][0] - this.originPoint.t;
-	var dy2 = intersects[1][1] - this.originPoint.u;
-
-	var scale = 2;
-
-	var dx1 = this.originPoint.t + dx1 * scale;
-	var dy1 = this.originPoint.u + dy1 * scale;
-
-	var dx2 = this.originPoint.t + dx2 * scale;
-	var dy2 = this.originPoint.u + dy2 * scale;
 
 	// dx1, dy1, dx2, dy2 now represent surface coordinates that we want to
 	// generate strand 0 from.
@@ -977,7 +1049,7 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
 	// Linearly interpolate from centroid to (dx1, dy1).
 
-	var i = 1;
+	var i = 0;
 
 	var scale = 2;
 
@@ -988,15 +1060,15 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
 		var p = BSurface.sample(dx, dy);
 
-		this.strandMap[0][i] = p;
-
 		i++;
+
+		this.strandMap[0][i] = p;
 	}
 
 	// Linearly interpolate from centroid the other way, assigning to negative
 	// indice space.
 
-	var i = 1;
+	var i = 0;
 
 	for (var t = delta; t <= 1; t += delta)
 	{
@@ -1005,71 +1077,141 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
 		var p = BSurface.sample(dx, dy);
 
-		this.strandMap[0][-i] = p;
-
 		i++;
+
+		this.strandMap[0][-i] = p;
 	}
 
-	this.strandMap_T = new Array();
-	this.strandMap_T[0] = new Array();
+	this.strandMap[0]._length = -i;
 
-	var length = 0;
 
-	for (var i = -49; i <= 49; i++)
+	// Euclidean shift the central strand once in left and right directions.
+
+	for (var sign = -1; sign <= 1; sign += 2)
 	{
-		var p = this.strandMap[0][i];
+		var shifted = this.euclideanShift(this.strandMap[0], this.angle,
+			sign * this.strand_gap);
 
-		if (p != undefined)
+		this.strandMap[1 * sign] = shifted;
+	}
+
+	this.strandMap._length = -1;
+
+
+	// Cull central strand, and check the length.  If the length is zero, this
+	// implies the central strand is not on the sheet, so we abort.
+
+	var culled = this.cullExteriorPoints(this.strandMap[0]);
+
+	if (culled._length != undefined)
+	{
+		this.strandMap[0] = culled;
+	}
+	else
+	{
+		console.log("Culled central strand is zero length.")
+		return;
+	}
+
+
+
+
+	// At this point the central strand is culled, and we have both an immediate
+	// right and left strand set.
+
+	// We now take the left strand, extend it, and cull it, iteratively.
+	// We also do the right strand side using the for-sign idiom.
+
+	for (var sign = -1; sign <= 1; sign += 2)
+	{
+		var i = 1 * sign;
+
+		while (true)
 		{
-			this.strandMap_T[0][i] = p.clone("black", 5);
-			this.strandMap_T[0][i].transform(p);
-			this.strandMap_T[0][i].draw();
-			length++;
+			var extended = this.euclideanShift(this.strandMap[i], this.angle,
+				sign * this.strand_gap);
+
+			var culled = this.cullExteriorPoints(this.strandMap[i]);
+
+			//var culled = this.strandMap[i];
+
+			if (culled._length != undefined)
+			{
+				this.strandMap[i] = culled;
+				this.strandMap[i + sign] = extended;
+			}
+			else
+			{
+				// if (culled != false)
+
+				/**
+				 * Here lied an absolutely mind-shattering bug, which over hours
+				 * I tracked down and hunted.  Apparently, empty arrays are
+				 * 'falsey', and thus return are == to false.  In my cull code,
+				 * I either return a negative-indice array if there is a result,
+				 * or I return 'false' if the resultant array is empty.
+				 *
+				 * This lead to a strange and obscure corner case where arrays
+				 * purely formed from negatively indexed elements were not
+				 * rendered on the viewer.  This may be the trickiest bug I've
+				 * solved yet.
+				 */
+
+				this.strandMap[i] = new Array();
+				this.strandMap[i]._length = 0;
+				break;
+			}
+
+			i += sign;
+		}
+
+		if (sign == -1)
+		{
+			this.strandMap._length = i;
 		}
 	}
 
 
 
-	console.log(length);
+	// Create transposed version of strandMap
 
+	this.strandMap_T = new Array();
+	this.strandMap_T._length = this.strandMap._length;
 
+	for (var i = this.strandMap._length; i < this.strandMap.length; i++)
+	{
+		this.strandMap_T[i] = new Array();
+		this.strandMap_T[i]._length = this.strandMap[i]._length;
+
+		for (var j = this.strandMap[i]._length; j < this.strandMap[i].length; j++)
+		{
+			var p = this.strandMap[i][j];
+
+			if (p != undefined)
+			{
+				this.strandMap_T[i][j] = p.clone("black", 1);
+				this.strandMap_T[i][j].transform(p);
+			}
+		}
+	}
 
 }
 
 Strand.prototype.updateTransformedPoints = function()
 {
-	this.originPoint_T.moveTo(this.originPoint);
-	this.originPoint_T.scaleFactor(zoom);
-	this.originPoint_T.rotateY(yaw);
-	this.originPoint_T.rotateX(pitch);
+	var map = this.strandMap_T;
 
-	for (var i = 0; i < this.points_T.length; i++)
+	for (var i = map._length; i < map.length; i++)
 	{
-		this.points_T[i].moveTo(this.points[i]);
-		this.points_T[i].scaleFactor(zoom);
-		this.points_T[i].rotateY(yaw);
-		this.points_T[i].rotateX(pitch);
-	}
-
-	if (this.midPointsLeft_T != undefined)
-	{
-		for (var i = 0; i < this.midPointsLeft_T.length; i++)
+		for (var j = map[i]._length; j < map[i].length; j++)
 		{
-			this.midPointsLeft_T[i].moveTo(this.midPointsLeft[i]);
-			this.midPointsLeft_T[i].scaleFactor(zoom);
-			this.midPointsLeft_T[i].rotateY(yaw);
-			this.midPointsLeft_T[i].rotateX(pitch);
-		}
-	}
+			var p = map[i][j];
 
-	if (this.midPointsRight_T != undefined)
-	{
-		for (var i = 0; i < this.midPointsRight_T.length; i++)
-		{
-			this.midPointsRight_T[i].moveTo(this.midPointsRight[i]);
-			this.midPointsRight_T[i].scaleFactor(zoom);
-			this.midPointsRight_T[i].rotateY(yaw);
-			this.midPointsRight_T[i].rotateX(pitch);
+			if (p != undefined)
+			{
+				p.transform(this.strandMap[i][j]);
+				p.draw();
+			}
 		}
 	}
 }

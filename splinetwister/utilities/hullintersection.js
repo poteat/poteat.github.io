@@ -1,8 +1,3 @@
-
-
-
-
-
 // Takes in x and y position of center point, as well as angle.
 
 // The 'Hull' structure is an array of Vertex objects in order
@@ -28,11 +23,11 @@ function getIntersectionPoints(x, y, ang, Hull, permissive)
 		var Intersections = new Array();
 	}
 
-    var Left = new Array();
-    var Right = new Array();
+	var Left = new Array();
+	var Right = new Array();
 
-    // 
-	
+	// 
+
 	for (var i = 0; i < Hull.length; i++)
 	{
 		var V1 = Hull[i];
@@ -229,23 +224,23 @@ function _intersects(x, y, ang, x1, y1, x2, y2)
 {
 	var A1 = Math.cos(ang);
 	var B1 = Math.sin(ang);
-	var C1 = B1*y + A1*x;
+	var C1 = B1 * y + A1 * x;
 
 	var A2 = y2 - y1;
 	var B2 = x1 - x2;
-	var C2 = A2*x1 + B2*y1;
+	var C2 = A2 * x1 + B2 * y1;
 
-	var D = A1*B2 - A2*B1;
-	var Dx = C1*B2 - C2*B1;
-	var Dy = C2*A1 - C1*A2;
+	var D = A1 * B2 - A2 * B1;
+	var Dx = C1 * B2 - C2 * B1;
+	var Dy = C2 * A1 - C1 * A2;
 
 	if (D == 0)
 	{
 		return false;
 	}
 
-	var x = Dx/D;
-	var y = Dy/D;
+	var x = Dx / D;
+	var y = Dy / D;
 
 	if (x - Math.min(x1, x2) >= -.001 && x - Math.max(x1, x2) <= .001)
 	{

@@ -444,87 +444,95 @@ Perimeter.prototype.draw = function()
 	}
 
 	// Draw surface wireframe
-	ctx.strokeStyle = "grey";
 
-	ctx.beginPath();
+	var draw_surface_wireframe = false;
 
-	var needToMove = false;
-
-	for (var i = 0; i < this.R; i++)
+	if (draw_surface_wireframe)
 	{
-		var j = 0;
+		ctx.strokeStyle = "grey";
 
-		var p = this.surfacePointsX_T[i][j];
+		ctx.beginPath();
 
-		if (p.scale > 0)
-		{
-			ctx.moveTo(p.x2d, p.y2d);
-		}
-		else
-		{
-			needToMove = true;
-		}
+		var needToMove = false;
 
-		for (var j = 0; j < this.R; j++)
+		for (var i = 0; i < this.R; i++)
 		{
+			var j = 0;
+
 			var p = this.surfacePointsX_T[i][j];
 
 			if (p.scale > 0)
 			{
-				if (!needToMove)
+				ctx.moveTo(p.x2d, p.y2d);
+			}
+			else
+			{
+				needToMove = true;
+			}
+
+			for (var j = 0; j < this.R; j++)
+			{
+				var p = this.surfacePointsX_T[i][j];
+
+				if (p.scale > 0)
 				{
-					ctx.lineTo(p.x2d, p.y2d);
-				}
-				else
-				{
-					ctx.moveTo(p.x2d, p.y2d);
-					needToMove = false;
+					if (!needToMove)
+					{
+						ctx.lineTo(p.x2d, p.y2d);
+					}
+					else
+					{
+						ctx.moveTo(p.x2d, p.y2d);
+						needToMove = false;
+					}
 				}
 			}
 		}
-	}
 
-	ctx.stroke();
+		ctx.stroke();
 
-	ctx.beginPath();
+		ctx.beginPath();
 
-	var needToMove = false;
+		var needToMove = false;
 
-	for (var i = 0; i < this.R; i++)
-	{
-		var j = 0;
-
-		var p = this.surfacePointsY_T[i][j];
-
-		if (p.scale > 0)
+		for (var i = 0; i < this.R; i++)
 		{
-			ctx.moveTo(p.x2d, p.y2d);
-		}
-		else
-		{
-			needToMove = true;
-		}
+			var j = 0;
 
-		for (var j = 0; j < this.R; j++)
-		{
 			var p = this.surfacePointsY_T[i][j];
 
 			if (p.scale > 0)
 			{
-				if (!needToMove)
+				ctx.moveTo(p.x2d, p.y2d);
+			}
+			else
+			{
+				needToMove = true;
+			}
+
+			for (var j = 0; j < this.R; j++)
+			{
+				var p = this.surfacePointsY_T[i][j];
+
+				if (p.scale > 0)
 				{
-					ctx.lineTo(p.x2d, p.y2d);
-				}
-				else
-				{
-					ctx.moveTo(p.x2d, p.y2d);
-					needToMove = false;
+					if (!needToMove)
+					{
+						ctx.lineTo(p.x2d, p.y2d);
+					}
+					else
+					{
+						ctx.moveTo(p.x2d, p.y2d);
+						needToMove = false;
+					}
 				}
 			}
 		}
+
+		ctx.stroke();
 	}
 
-	ctx.stroke();
+
 
 
 
@@ -547,6 +555,11 @@ Perimeter.prototype.draw = function()
 		else
 		{
 			var P_next = this.points_T[i + 1];
+		}
+
+		if (!P.visible() && !P_next.visible())
+		{
+			continue;
 		}
 
 		if (this.colored_perimeter)
