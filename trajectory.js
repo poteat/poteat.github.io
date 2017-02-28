@@ -34,6 +34,8 @@ function main()
 	main_trajectory.draw();
 
 	main_rocket.draw();
+
+	angle_controller.draw();
 }
 
 function hypot(x, y)
@@ -90,6 +92,8 @@ function init()
 	main_trajectory = new Trajectory();
 	main_rocket = new Rocket();
 
+	angle_controller = new BezierControl(cvs_1);
+
 	Camera = new Camera();
 	Camera.centerOn(main_planet);
 
@@ -130,6 +134,72 @@ Array.prototype.mul = function(b)
 
 	return c;
 }
+
+
+
+
+
+
+
+// Implements a control interface that allows the user
+// to specify a smooth curve that is exposed to other
+// functions or procedures.
+function BezierControl(canvas)
+{
+	this.cvs = canvas;
+	this.obj_held;
+
+	// margins as percentage of canvas
+	var margin = 0.1;
+	this.left_margin = margin;
+	this.bottom_margin = margin;
+	this.right_margin = margin;
+	this.top_margin = margin;
+}
+
+BezierControl.prototype.draw = function()
+{
+	// Draw axes
+	var left = this.left_margin * cvs.width;
+	var top = this.top_margin * cvs.height;
+	var right = (1 - this.left_margin) * cvs.width;
+	var bottom = (1 - this.right_margin) * cvs.height;
+
+	ctx.strokeStyle = "white";
+	ctx.lineWidth = 1;
+	ctx.beginPath();
+	ctx.moveTo(left, top)
+	ctx.lineTo(left, bottom);
+	ctx.lineTo(right, bottom);
+	ctx.stroke();
+}
+
+BezierControl.prototype.mouseMove = function()
+{
+
+}
+
+BezierControl.prototype.mouseDoubleClick = function()
+{
+
+}
+
+BezierControl.prototype.mouseDown = function()
+{
+
+}
+
+BezierControl.prototype.mouseUp = function()
+{
+
+}
+
+
+
+
+
+
+
 
 function Trajectory()
 {
@@ -326,7 +396,7 @@ Rocket.prototype.resetState = function()
 	this.state = [0, main_planet.radius, main_planet.equatorial_rotation_speed, 0, this.initial_mass];
 }
 
-Rocket.prototype.model = function(state)
+Rocket.prototype.model = function(state, time)
 {
 	var x = state[0];
 	var y = state[1];
