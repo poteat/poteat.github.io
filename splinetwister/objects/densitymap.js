@@ -414,7 +414,9 @@ DensityMap.prototype.score = function()
 		sum_dist += Math.pow(p.dist(proj), 2);
 	}
 
-	return Math.sqrt(sum_dist / this.points.length)
+	this.saved_score = Math.sqrt(sum_dist / this.points.length);
+
+	return this.saved_score;
 };
 
 DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)

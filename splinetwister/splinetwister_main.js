@@ -74,7 +74,15 @@ function main()
 
 	if (DMap != undefined)
 	{
-		var score = DMap.score();
+		if (!BSurface.finished)
+		{
+			var score = DMap.score();
+		}
+		else
+		{
+			var score = DMap.saved_score;
+		}
+
 
 		ctx.fillStyle = "black";
 
@@ -1258,8 +1266,6 @@ cvs.addEventListener("DOMMouseScroll", function(evt)
 // the strand render when we need to.
 strand_dl.addEventListener('mouseover', function(evt)
 {
-	console.log("hover");
-
 	if (BStrand && !BStrand.updated)
 	{
 		BStrand.updateDownload();

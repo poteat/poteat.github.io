@@ -52,421 +52,6 @@ Strand.prototype.setOrigin = function(t, u)
 	this.originPoint.u = u;
 }
 
-Strand.prototype.setAngle = function(angle_degrees, offset)
-{
-	var width_of_gap = this.strand_gap;
-
-	var angle = angle_degrees * Math.PI / 180;
-
-	var perpendicular_angle = (angle_degrees + 90) * Math.PI / 180;
-
-	// Search for parameters in surface space that give a real space distance of
-	// 2 angstrom offset.
-
-	var target = offset;
-
-	var starting_p = this.originPoint;
-
-	var t1 = starting_p.t;
-	var u1 = starting_p.u;
-
-	var sumdist = 0;
-	var i = 0;
-	var prev_coords = null;
-
-	var delta = 0.001;
-
-	var t = t1;
-	var u = u1;
-
-	var i = 0;
-
-	var dir = sign(target);
-
-	var delta_t = -dir * delta * Math.sin(perpendicular_angle);
-	var delta_u = dir * delta * Math.cos(perpendicular_angle);
-
-	var dx = 0;
-	var dy = 0;
-
-	while (i < 5 / delta) // Search for a max 5 Angstroms surface-space)
-	{
-		t += delta_t;
-		u += delta_u;
-
-		var coords = BSurface.calc(t, u);
-
-		if (i == 0)
-		{
-			sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2],
-				starting_p.x, starting_p.y, starting_p.z);
-		}
-		else
-		{
-			sumdist += this.distBetweenSamples(coords[0], coords[1], coords[2],
-				prev_coords[0], prev_coords[1], prev_coords[2]);
-		}
-
-		prev_coords = coords;
-
-		if (sumdist > Math.abs(target))
-		{
-			dx = t - t1;
-			dy = u - u1;
-
-			break;
-		}
-
-		i++;
-	}
-
-
-
-	Hull = BPerimeter.vertices;
-
-	intersects = getIntersectionPoints(this.originPoint.t + dx,
-		this.originPoint.u + dy, angle, Hull, true);
-
-	if (!intersects)
-	{
-		return;
-	}
-
-	coords1 = BSurface.calc(intersects[0][0], intersects[0][1]);
-	coords2 = BSurface.calc(intersects[1][0], intersects[1][1]);
-
-	// Linearly interpolate between two intersections points on surface space.
-
-	var t1 = intersects[0][0];
-	var u1 = intersects[0][1];
-
-	var t2 = intersects[1][0];
-	var u2 = intersects[1][1];
-
-	var N = 100;
-
-	this.points = new Array();
-	this.points_T = new Array();
-
-	for (var i = 0; i < N; i++)
-	{
-		var P = i / (N - 1);
-
-		var t = t1 + P * (t2 - t1);
-		var u = u1 + P * (u2 - u1);
-
-		var coords = BSurface.calc(t, u);
-
-		var sample = new Point(coords[0], coords[1], coords[2]);
-
-		sample.t = t;
-		sample.u = u;
-
-		var sample_T = new Point(0, 0, 0, 'black', 3)
-
-		this.points.push(sample);
-		this.points_T.push(sample_T);
-	}
-
-
-
-	// Estimate arclength of entire arc.
-
-	var sumdist = 0;
-
-	this.points[0].sumdist = 0;
-
-	for (var i = 1; i < this.points.length; i++)
-	{
-		var p = this.points[i - 1];
-		var p2 = this.points[i];
-
-		var dist = p.dist(p2);
-
-		sumdist += dist;
-
-		//console.log(sumdist);
-
-		p2.sumdist = sumdist;
-	}
-
-
-	// Given arclength estimation, find points closest to the 1/5 2/5 3/5 4/5 
-	// definition to populate the midPoints array.
-
-	var i = 0;
-
-	this.midPoints = new Array();
-	this.midPoints_T = new Array();
-
-	for (var j = 1; j < 5; j++)
-	{
-		var target = sumdist * (j / 5);
-
-		while (i < this.points.length)
-		{
-			var p = this.points[i];
-			var p_T = this.points_T[i];
-
-			if (p.sumdist > target)
-			{
-				this.midPoints.push(p);
-				this.midPoints_T.push(p_T);
-
-				//console.log(p.sumdist);
-				break;
-			}
-
-			i++;
-		}
-	}
-
-
-
-
-
-	var target = width_of_gap;
-	var delta = .005; // 0.1 Angstrom delta for search
-
-
-	this.midPointsLeft = new Array();
-	this.midPointsLeft_T = new Array();
-
-	var perpendicular_angle = (angle_degrees + 90) * Math.PI / 180;
-
-	for (var j = 0; j < this.midPoints.length; j++)
-	{
-		var starting_p = this.midPoints[j];
-
-		var t1 = starting_p.t;
-		var u1 = starting_p.u;
-
-		var sumdist = 0;
-		var i = 0;
-		var prev_coords = null;
-
-		var t = t1;
-		var u = u1;
-
-		var i = 0;
-
-		var delta_t = -delta * Math.sin(perpendicular_angle);
-		var delta_u = delta * Math.cos(perpendicular_angle);
-
-		while (i < 10 / delta) // Search for a max 10 Angstroms surface-space)
-		{
-			t += delta_t;
-			u += delta_u;
-
-			var coords = BSurface.calc(t, u);
-
-			if (i == 0)
-			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1],
-					coords[2], starting_p.x, starting_p.y, starting_p.z);
-			}
-			else
-			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1],
-					coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
-			}
-
-			prev_coords = coords;
-
-			if (sumdist > target)
-			{
-				var p = new Point(coords[0], coords[1], coords[2]);
-				var p_T = new Point(coords[0], coords[1], coords[2], "black",
-					3);
-
-
-				this.midPointsLeft.push(p);
-				this.midPointsLeft_T.push(p_T);
-
-				break;
-			}
-
-			i++;
-		}
-	}
-
-
-
-
-
-
-
-	this.midPointsRight = new Array();
-	this.midPointsRight_T = new Array();
-
-	var perpendicular_angle = (angle_degrees - 90) * Math.PI / 180;
-
-	for (var j = 0; j < this.midPoints.length; j++)
-	{
-		var starting_p = this.midPoints[j];
-
-		var t1 = starting_p.t;
-		var u1 = starting_p.u;
-
-		var sumdist = 0;
-		var i = 0;
-		var prev_coords = null;
-
-		var t = t1;
-		var u = u1;
-
-		var i = 0;
-
-		var delta_t = -delta * Math.sin(perpendicular_angle);
-		var delta_u = delta * Math.cos(perpendicular_angle);
-
-		while (i < 10 / delta) // Search for a max 10 Angstroms surface-space)
-		{
-			t += delta_t;
-			u += delta_u;
-
-			var coords = BSurface.calc(t, u);
-
-			if (i == 0)
-			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1],
-					coords[2], starting_p.x, starting_p.y, starting_p.z);
-			}
-			else
-			{
-				sumdist += this.distBetweenSamples(coords[0], coords[1],
-					coords[2], prev_coords[0], prev_coords[1], prev_coords[2]);
-			}
-
-			prev_coords = coords;
-
-			if (sumdist > target)
-			{
-				var p = new Point(coords[0], coords[1], coords[2]);
-				var p_T = new Point(coords[0], coords[1], coords[2], "black",
-					3);
-
-
-				this.midPointsRight.push(p);
-				this.midPointsRight_T.push(p_T);
-
-				break;
-			}
-
-			i++;
-		}
-	}
-
-
-	this.updateScore();
-
-	this.updateTransformedPoints();
-}
-
-Strand.prototype.updateScore = function()
-{
-	this.angles = new Array();
-
-	// Calculate angle between mid and left arrays.
-
-	for (var i = 1; i < this.midPointsLeft.length; i++)
-	{
-		var p1 = this.midPoints[i - 1];
-		var p2 = this.midPoints[i];
-
-		var p3 = this.midPointsLeft[i - 1];
-		var p4 = this.midPointsLeft[i];
-
-		var angle = this.angleBetweenTwoVectors(p2.x - p1.x, p2.y - p1.y, p2.z -
-			p1.z, p4.x - p3.x, p4.y - p3.y, p4.z - p3.z, p1, p3);
-		angle *= 180 / Math.PI;
-
-		this.angles.push(angle);
-	}
-
-	// Calculate angle between mid and right arrays.
-
-	for (var i = 1; i < this.midPointsRight.length; i++)
-	{
-		var p1 = this.midPoints[i - 1];
-		var p2 = this.midPoints[i];
-
-		var p3 = this.midPointsRight[i - 1];
-		var p4 = this.midPointsRight[i];
-
-		var angle = this.angleBetweenTwoVectors(p2.x - p1.x, p2.y - p1.y, p2.z -
-			p1.z, p4.x - p3.x, p4.y - p3.y, p4.z - p3.z, p1, p3);
-		angle *= 180 / Math.PI;
-
-		this.angles.push(angle);
-	}
-
-
-	var max_ang = 0;
-	var max_i = -1;
-
-	for (var i = 0; i < this.angles.length; i++)
-	{
-		var ang = this.angles[i];
-
-		if (Math.abs(ang) > max_ang)
-		{
-			max_ang = ang;
-			max_i = i;
-		}
-	}
-
-	this.max_ang = max_ang;
-
-
-
-	// Calculate average twist angle
-
-	var avg_ang = 0;
-
-	for (var i = 0; i < this.angles.length; i++)
-	{
-		var ang = this.angles[i];
-		avg_ang += ang;
-	}
-
-	this.avg_ang = avg_ang / this.angles.length;
-
-
-	this.maxAnglePoints = new Array();
-
-	if (max_i != -1)
-	{
-		if (max_i < 3) // left
-		{
-			var p1 = this.midPointsLeft_T[max_i];
-			var p2 = this.midPointsLeft_T[max_i + 1]
-
-
-			p1.color = "black";
-
-
-
-			p2.color = "black";
-
-
-		}
-		else // right
-		{
-			max_i -= 3;
-
-			var p1 = this.midPointsRight_T[max_i];
-			var p2 = this.midPointsRight_T[max_i + 1]
-
-			p1.color = "black";
-			p2.color = "black";
-		}
-
-		this.maxAnglePoints.push(p1);
-		this.maxAnglePoints.push(p2);
-	}
-}
-
 Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2, p1,
 	p3)
 {
@@ -500,105 +85,45 @@ Strand.prototype.distBetweenSamples = function(x1, y1, z1, x2, y2, z2)
 		z2, 2));
 }
 
-Strand.prototype.optimizeAngle = function()
+Strand.prototype.linearInterpolate = function(x_array, y_array, x)
 {
-	// Do 10 linear interpolants to find rough max angle.
-	var min_ang = 0;
-	var max_ang = 179.99;
-	var N = 10;
+	// Linearly interpolates to find x from a table x_array; y_array
+	// such that x_array and y_array have the same length, and are
+	// sorted in terms of x_array.
 
-	var delta = (max_ang - min_ang) / (N - 1);
+	// Returns y extrema if x is outside of bounds (i.e. does no extrapolation)
 
-	var angles = new Array(N);
-	var scores = new Array(N);
-
-	for (var i = 0; i < N; i++)
+	if (x_array.length == 0)
 	{
-		var ang = min_ang + (max_ang - min_ang) * i / (N - 1);
-		this.setAngle(ang);
-		scores[i] = this.max_ang;
-		angles[i] = ang;
+		return 0;
 	}
 
-	// Calculate angle with largest score
-
-	var max_score = -9999;
-	var max_i = -1;
-	for (var i = 0; i < scores.length; i++)
+	if (x <= x_array[0])
 	{
-		var score = scores[i];
-		if (score > max_score)
+		return y_array[0];
+	}
+
+	for (var i = 1; i < x_array.length; i++)
+	{
+		var upper_bound = x_array[i];
+		var lower_bound = x_array[i - 1];
+
+		if (x <= upper_bound)
 		{
-			max_score = score;
-			var max_i = i;
+			var range = upper_bound - lower_bound;
+			var delta = x - lower_bound;
+			var slope = (y_array[i] - y_array[i - 1]) / range;
+
+			var y = y_array[i - 1] + delta * slope;
+
+			return y;
 		}
 	}
 
-	if (max_i < 0)
+	if (x > x_array[x_array.length - 1])
 	{
-		// Error, maximum score not found.
+		return y_array[x_array.length - 1];
 	}
-
-	// Rough max angle found, begin iterative improvement process, starting with
-	// rough delta/2
-
-	delta = delta / 2;
-
-	console.log("Initial change delta: " + delta);
-
-	var current_score = scores[max_i];
-	var current_angle = angles[max_i]; // Rough optimal angle
-
-
-	while (delta > .005)
-	{
-		this.setAngle(current_angle + delta);
-		var current_score_plus = this.max_ang;
-		var current_angle_plus = current_angle + delta;
-		var score_change_plus = current_score_plus - current_score;
-
-
-		this.setAngle(current_angle - delta);
-		var current_score_minus = this.max_ang;
-		var current_angle_minus = current_angle - delta;
-		var score_change_minus = current_score_minus - current_score;
-
-
-		// Two delta-scores found, choose larger one
-
-		if (score_change_plus >= score_change_minus && score_change_plus > 0)
-		{
-			// Plus results in score increase, take it.
-			current_score = current_score_plus;
-			current_angle = current_angle_plus;
-			delta = delta / 2;
-		}
-		else if (score_change_minus > score_change_plus && score_change_minus >
-			0)
-		{
-			// Minus results in score increase, take it.
-			current_score = current_score_minus;
-			current_angle = current_angle_minus;
-			delta = delta / 2;
-		}
-		else
-		{
-			// Both results in score decrease, half the search delta and try 
-			// again.
-			delta = delta / 2;
-		}
-
-		console.log(delta + ":  Score: " + current_score);
-	}
-
-
-	// We now have the best angle for this particular origin point.
-	this.angle_slider.setValue(current_angle);
-	this.angle = current_angle;
-
-	console.log("Best angle: " + current_angle);
-
-	this.optimized = true;
 }
 
 Strand.prototype.euclideanShift = function(points, ang, dist)
@@ -620,16 +145,74 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 	// Currently 5
 	var strand_gap = dist;
 
+
+
+	// For every surface point, find the angle shift parameter.
+
+	var eps_dist = 0.01;
+
+	for (var i = points._length; i < points.length - 1; i++)
+	{
+		var p = points[i];
+		var p_next = points[i + 1];
+
+		var angle_shift = 0;
+		var delta = 45;
+
+		var dt = p.t + Math.cos((ang + angle_shift) / 180 * Math.PI) * eps_dist;
+		var du = p.u + Math.sin((ang + angle_shift) / 180 * Math.PI) * eps_dist;
+
+		var p_projected = BSurface.sample(dt, du);
+
+		var x1 = p_projected.x - p.x;
+		var y1 = p_projected.y - p.y;
+		var z1 = p_projected.z - p.z;
+
+		var x2 = p_next.x - p.x;
+		var y2 = p_next.y - p.y;
+		var z2 = p_next.z - p.z;
+
+		var ang_result = this.angleBetweenTwoVectors(x1, y1, z1, x2, y2, z2,
+			p_next,
+			p_projected);
+
+		if (ang_result == 0)
+		{
+			console.log(x1, y1, z1, x2, y2, z2)
+		}
+
+		console.log(ang_result / Math.PI * 180);
+
+
+	}
+
+
+
+
+
+
 	var ang = (ang) / 180 * Math.PI;
 
 	var _cos = Math.cos(ang);
 	var _sin = Math.sin(ang);
 
-	var neg_length = 0;
+	// For a subset of points defined by N, build a look-up table of euclid
+	// shifts.
 
-	for (var i = points._length; i < points.length; i++)
+	var N = 10;
+
+	var x_array = new Array();
+	var y_array = new Array();
+
+	for (var t = 0; t <= 1; t += 1 / (N - 1))
 	{
+		var range = (points.length - 1) - points._length;
+
+		var i = Math.round(points._length + t * range);
+
 		var p = points[i];
+
+		// Now we find the euclid shift for this particular point.
 
 		var delta = 0.1;
 
@@ -655,6 +238,61 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 
 			dist = p.distToParameter(p.t + sign * dt, p.u + sign * du);
 		}
+
+		// Now |dt,du| represents the euclid shift parameter.
+
+		x_array.push(i);
+		y_array.push(Math.sqrt(dt * dt + du * du));
+	}
+
+	var neg_length = 0;
+
+	for (var i = points._length; i < points.length; i++)
+	{
+		var p = points[i];
+
+		/*
+
+		var delta = 0.1;
+
+		var dt = _cos * delta;
+		var du = _sin * delta;
+
+		dist = p.distToParameter(p.t + sign * dt, p.u + sign * du);
+
+		while (Math.abs(dist - strand_gap) > 0.001)
+		{
+			if (dist > strand_gap)
+			{
+				delta /= 2;
+
+				dt -= _cos * delta;
+				du -= _sin * delta;
+			}
+			else
+			{
+				dt += _cos * delta;
+				du += _sin * delta;
+			}
+
+			dist = p.distToParameter(p.t + sign * dt, p.u + sign * du);
+		}
+
+		//*/
+
+		// New linear code START
+
+		var delta = this.linearInterpolate(x_array, y_array, i);
+
+		var dt = _cos * delta;
+		var du = _sin * delta;
+		//*/
+		// New linear code END
+
+		// We have the appropriate delta, but we don't have the angle yet.
+		// We find the angle by binary search.
+
+
 
 		var coords = BSurface.calc(p.t + sign * dt, p.u + sign * du);
 
@@ -732,119 +370,6 @@ Strand.prototype.cullExteriorPoints = function(points)
 Strand.prototype.updateDownload = function()
 {
 
-	this.originStrandPoints = new Array();
-	this.originStrandPoints_T = new Array();
-
-	var Hull = BPerimeter.vertices;
-
-	var intersects = getIntersectionPoints(this.originPoint.t,
-		this.originPoint.u, (this.angle) / 180 * Math.PI, Hull, true);
-
-	// First, we generate the central strand.  We do this by finding the two
-	// perimeter collision points, and arbitrarily scaling them up.
-
-	// Acquire the deltas:
-
-	var dx1 = intersects[0][0] - this.originPoint.t;
-	var dy1 = intersects[0][1] - this.originPoint.u;
-
-	var dx2 = intersects[1][0] - this.originPoint.t;
-	var dy2 = intersects[1][1] - this.originPoint.u;
-
-	// Scale up the deltas by two:
-
-	var scale = 1.5;
-
-	var dx1 = this.originPoint.t + dx1 * scale;
-	var dy1 = this.originPoint.u + dy1 * scale;
-
-	var dx2 = this.originPoint.t + dx2 * scale;
-	var dy2 = this.originPoint.u + dy2 * scale;
-
-	// Linearly interpolate in (t,u) space between the collision points, and 
-	// place the resulting points in local set centralStrand;
-
-	var number_of_samples = 100;
-
-	var centralStrand = new Array();
-	var delta = 1 / number_of_samples;
-
-	for (var t = 0; t <= 1; t += delta)
-	{
-		var dx = dx1 + (dx2 - dx1) * t;
-		var dy = dy1 + (dy2 - dy1) * t;
-
-		var coords = BSurface.calc(dx, dy);
-
-		var p = new Point(coords[0], coords[1], coords[2]);
-		p.t = dx;
-		p.u = dy;
-
-		centralStrand.push(p);
-	}
-
-	// For each central strand point, project at the perpendicular angle
-	// by a small delta until the euclidean distance is greater than or equal to
-	// the strand gap.
-
-	var ang = this.angle;
-	var dist = this.strand_gap;
-
-	var Strands = new Array();
-
-	var projected;
-
-
-	// Generate strands to the left and right.
-
-	for (var s = -1; s < 2; s += 2)
-	{
-		for (var i = 0; true; i++)
-		{
-			if (i == 0)
-			{
-				projected = this.euclideanShift(centralStrand, ang, s * dist);
-			}
-			else
-			{
-				projected = this.euclideanShift(projected, ang, s * dist);
-			}
-
-			var culled = this.cullExteriorPoints(projected);
-
-			if (culled != false)
-			{
-				for (var i = 0; i < culled.length; i++)
-				{
-					var p = culled[i];
-					Strands.push(p);
-				}
-			}
-			else
-			{
-				break;
-			}
-		}
-	}
-
-	var culled = this.cullExteriorPoints(centralStrand);
-
-	for (var i = 0; i < culled.length; i++)
-	{
-		var p = culled[i];
-		Strands.push(p);
-	}
-
-	this.strandSamples = Strands;
-	this.strandSamples_T = new Array();
-
-	for (var i = 0; i < this.strandSamples.length; i++)
-	{
-		var p_T = new Point(0, 0, 0, "darkred", 1);
-		this.strandSamples_T.push(p_T);
-	}
-
-
 	// We now happily have the full set of strand sample points, so we can 
 	// generate a pdb file and hook it to the button (magic)
 
@@ -852,13 +377,21 @@ Strand.prototype.updateDownload = function()
 
 	var sample_points = new Array();
 
-	for (var i = 0; i < this.strandSamples.length; i++)
+	var map = this.strandMap;
+
+	for (var i = map._length; i < map.length; i++)
 	{
-		var p = this.strandSamples[i];
+		for (var j = map[i]._length; j < map[i].length; j++)
+		{
+			var p = map[i][j];
 
-		var p_copy = new Point(p.x, p.y, p.z);
+			if (p != undefined)
+			{
+				var p_copy = new Point(p.x, p.y, p.z);
 
-		sample_points.push(p_copy);
+				sample_points.push(p_copy);
+			}
+		}
 	}
 
 	// Undo plane and centering transformations
