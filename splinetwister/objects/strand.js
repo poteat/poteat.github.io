@@ -147,59 +147,79 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 
 
 
-	// For every surface point, find the angle shift parameter.
-
 	var eps_dist = 0.01;
+	var ang = this.angle;
 
-	for (var i = points._length; i < points.length - 1; i++)
+	var N = 10;
+
+	var x_ang_array = new Array();
+	var y_ang_array = new Array();
+
+	for (var t = 0; t <= 1; t += 1 / (N - 1))
 	{
-		var p = points[i];
-		var p_next = points[i + 1];
+		var range = (points.length - 1) - points._length;
 
-		var angle_shift = 0;
-		var delta = 45;
+		var i = Math.round(points._length + t * range);
 
-		var dt = p.t + Math.cos((ang + angle_shift) / 180 * Math.PI) * eps_dist;
-		var du = p.u + Math.sin((ang + angle_shift) / 180 * Math.PI) * eps_dist;
+		var p1 = points[i];
+		var p2 = points[i + 1];
 
-		var p_projected = BSurface.sample(dt, du);
-
-		var x1 = p_projected.x - p.x;
-		var y1 = p_projected.y - p.y;
-		var z1 = p_projected.z - p.z;
-
-		var x2 = p_next.x - p.x;
-		var y2 = p_next.y - p.y;
-		var z2 = p_next.z - p.z;
-
-		var ang_result = this.angleBetweenTwoVectors(x1, y1, z1, x2, y2, z2,
-			p_next,
-			p_projected);
-
-		if (ang_result == 0)
+		if (p2 == undefined)
 		{
-			console.log(x1, y1, z1, x2, y2, z2)
+			break;
 		}
 
-		console.log(ang_result / Math.PI * 180);
+		var angle_shift = 0;
 
+		var delta = 45;
 
+		for (var j = 0; j < 20; j++)
+		{
+			// Calculate the current angle (should be 90)
+			// 
+			var dt = p1.t + Math.cos((ang + angle_shift) / 180 * Math.PI) * eps_dist;
+			var du = p1.u + Math.sin((ang + angle_shift) / 180 * Math.PI) * eps_dist;
+			var p3 = BSurface.sample(dt, du);
+			var delta_angle = Math.abs(this.angleBetween(p1, p2, p3));
+
+			angle_shift += delta;
+			var dt = p1.t + Math.cos((ang + angle_shift) / 180 * Math.PI) * eps_dist;
+			var du = p1.u + Math.sin((ang + angle_shift) / 180 * Math.PI) * eps_dist;
+			var p3 = BSurface.sample(dt, du);
+			var delta_angle_plus = Math.abs(this.angleBetween(p1, p2, p3));
+
+			angle_shift -= 2 * delta;
+			var dt = p1.t + Math.cos((ang + angle_shift) / 180 * Math.PI) * eps_dist;
+			var du = p1.u + Math.sin((ang + angle_shift) / 180 * Math.PI) * eps_dist;
+			var p3 = BSurface.sample(dt, du);
+			var delta_angle_minus = Math.abs(this.angleBetween(p1, p2, p3));
+
+			if (Math.abs(delta_angle_plus - 90) < Math.abs(delta_angle_minus - 90))
+			{
+				angle_shift += 2 * delta;
+			}
+
+			delta /= 1.5;
+		}
+
+		if (i != points.length - 1)
+		{
+			x_ang_array.push(i);
+			y_ang_array.push(angle_shift);
+		}
+		else
+		{
+			x_ang_array.push(points.length - 1)
+			y_ang_array.push(0);
+		}
 	}
 
 
 
-
-
-
-	var ang = (ang) / 180 * Math.PI;
-
-	var _cos = Math.cos(ang);
-	var _sin = Math.sin(ang);
-
 	// For a subset of points defined by N, build a look-up table of euclid
 	// shifts.
 
-	var N = 10;
+	var N = 40;
 
 	var x_array = new Array();
 	var y_array = new Array();
@@ -215,6 +235,13 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 		// Now we find the euclid shift for this particular point.
 
 		var delta = 0.1;
+
+		var shift_angle = this.linearInterpolate(x_ang_array, y_ang_array, i);
+
+		var adjusted_ang = (ang + shift_angle) / 180 * Math.PI;
+
+		var _cos = Math.cos(adjusted_ang);
+		var _sin = Math.sin(adjusted_ang);
 
 		var dt = _cos * delta;
 		var du = _sin * delta;
@@ -284,8 +311,13 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 
 		var delta = this.linearInterpolate(x_array, y_array, i);
 
-		var dt = _cos * delta;
-		var du = _sin * delta;
+		var shift_angle = this.linearInterpolate(x_ang_array, y_ang_array, i);
+
+		var adjusted_ang = (ang + shift_angle) / 180 * Math.PI;
+
+		var dt = Math.cos(adjusted_ang) * delta;
+		var du = Math.sin(adjusted_ang) * delta;
+
 		//*/
 		// New linear code END
 
@@ -515,6 +547,25 @@ Strand.prototype.drawMap = function()
 	}
 }
 
+Strand.prototype.angleBetween = function(p1, p2, p3)
+{
+	// Returns the angle between p2-p1 and p3-p1.
+
+	var x1 = p2.x - p1.x;
+	var y1 = p2.y - p1.y;
+	var z1 = p2.z - p1.z;
+
+	var x2 = p3.x - p1.x;
+	var y2 = p3.y - p1.y;
+	var z2 = p3.z - p1.z;
+
+	var dot = x1 * x2 + y1 * y2 + z1 * z2;
+	var l1 = Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
+	var l2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);
+
+	return Math.acos(dot / l1 / l2) / Math.PI * 180;
+}
+
 Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 {
 	/**
@@ -616,6 +667,7 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 	}
 
 	this.strandMap[0]._length = -i;
+
 
 
 	// Euclidean shift the central strand once in left and right directions.
