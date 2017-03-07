@@ -175,7 +175,7 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 
 		for (var j = 0; j < 20; j++)
 		{
-			// Calculate the current angle (should be 90)
+			// Calculate the current angle
 			// 
 			var dt = p1.t + Math.cos((ang + angle_shift) / 180 * Math.PI) * eps_dist;
 			var du = p1.u + Math.sin((ang + angle_shift) / 180 * Math.PI) * eps_dist;
@@ -199,7 +199,7 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 				angle_shift += 2 * delta;
 			}
 
-			delta /= 1.5;
+			delta /= 2;
 		}
 
 		if (i != points.length - 1)
@@ -320,9 +320,6 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 
 		//*/
 		// New linear code END
-
-		// We have the appropriate delta, but we don't have the angle yet.
-		// We find the angle by binary search.
 
 
 
