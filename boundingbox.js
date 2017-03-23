@@ -9,7 +9,7 @@ var Mouse = new Mouse();
 
 
 clearInterval(mainloop);
-var mainloop = setInterval("main();",1000/fps);
+var mainloop = setInterval("main();", 1000 / fps);
 
 
 
@@ -41,13 +41,16 @@ function binom(n, k)
 	var prod = 1;
 	for (i = 1; i <= k; i++)
 	{
-		prod *= (n + 1 - i)/i;
+		prod *= (n + 1 - i) / i;
 	}
 
 	return prod;
 }
 
-function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
+function sign(x)
+{
+	return x > 0 ? 1 : x < 0 ? -1 : 0;
+}
 
 
 
@@ -107,7 +110,8 @@ Line.prototype.draw = function()
 // Returns orthogonal distance of a point
 Line.prototype.dist = function(x, y)
 {
-	return Math.abs(-(x-this.origin.x)*this.norm_p.x - (y-this.origin.y)*this.norm_p.y + this.d);
+	return Math.abs(-(x - this.origin.x) * this.norm_p.x - (y - this.origin.y) *
+		this.norm_p.y + this.d);
 }
 
 Line.prototype.updateDrawParameters = function()
@@ -116,9 +120,9 @@ Line.prototype.updateDrawParameters = function()
 	var b = this.intersect;
 
 	var left_y = b;
-	var right_y = m*cvs.width+b;
-	var top_x = -b/m;
-	var bottom_x = (cvs.height - b)/m;
+	var right_y = m * cvs.width + b;
+	var top_x = -b / m;
+	var bottom_x = (cvs.height - b) / m;
 
 	var left = left_y >= 0 && left_y <= cvs.width;
 	var right = right_y >= 0 && right_y <= cvs.width;
@@ -284,7 +288,8 @@ _Points.prototype.draw = function()
 	this.findEdgePoints();
 
 
-	ctx.fillText("Mean x,y: " + Math.round(this.avgx) + " " + Math.round(this.avgy), 10, 15);
+	ctx.fillText("Mean x,y: " + Math.round(this.avgx) + " " + Math.round(this.avgy),
+		10, 15);
 	ctx.fillText("Variance in x: " + this.variance_x, 10, 25);
 	ctx.fillText("Variance in y: " + this.variance_y, 10, 35);
 	ctx.fillText("Covariance: " + this.variance_xy, 10, 45);
@@ -302,8 +307,9 @@ _Points.prototype.updateFitParameters = function()
 	var vy = this.variance_y;
 	var vxy = this.variance_xy;
 
-	this.slope = (vy - vx + Math.sqrt(Math.pow(vy-vx, 2) + 4*Math.pow(vxy, 2)))/(2*vxy);
-	this.intersect = this.avgy - this.slope*this.avgx;
+	this.slope = (vy - vx + Math.sqrt(Math.pow(vy - vx, 2) + 4 * Math.pow(vxy, 2))) /
+		(2 * vxy);
+	this.intersect = this.avgy - this.slope * this.avgx;
 
 	DemingRegressor.setShape(this.slope, this.intersect);
 };
@@ -342,7 +348,7 @@ _Points.prototype.updateVariances = function()
 
 			sumx += Math.pow(deltax, 2);
 			sumy += Math.pow(deltay, 2);
-			sumxy += deltax*deltay;
+			sumxy += deltax * deltay;
 		}
 	}
 
@@ -393,12 +399,13 @@ _Points.prototype.findEdgePoints = function()
 			var x = this.x[i].x;
 			var y = this.x[i].y;
 
-			var projection_x = (x + m*(y - b))/(Math.pow(m, 2) + 1);
-			var projection_y = (m*(x + m*y) + b)/(Math.pow(m, 2) + 1);
+			var projection_x = (x + m * (y - b)) / (Math.pow(m, 2) + 1);
+			var projection_y = (m * (x + m * y) + b) / (Math.pow(m, 2) + 1);
 
 			var direction = sign(projection_x - this.avgx);
 
-			var proj_dist = direction*Math.sqrt(Math.pow(projection_x - this.avgx,2) + Math.pow(projection_y - this.avgy, 2));
+			var proj_dist = direction * Math.sqrt(Math.pow(projection_x - this.avgx, 2) +
+				Math.pow(projection_y - this.avgy, 2));
 
 			if (proj_dist < min_proj_dist)
 			{
@@ -416,13 +423,30 @@ _Points.prototype.findEdgePoints = function()
 		}
 	}
 
-	
+
 	this.x[min_dist_id].color = "purple";
 	this.x[max_dist_id].color = "purple";
 
 	this.x[min_proj_dist_id].color = "green";
 	this.x[max_proj_dist_id].color = "green";
-	
+
+
+	var x1 = this.centerPoint.x;
+	var y1 = this.centerPoint.y;
+	var m1 = this.slope;
+
+	var x2 = this.x[min_proj_dist_id].x;
+	var y2 = this.x[min_proj_dist_id].y;
+	var m2 = -1 / this.slope;
+
+	var x_hat = ((y2 - m2 * x2) - (y1 - m1 * x1)) / (m1 - m2);
+	var y_hat = m1 * x_hat + (y1 - m1 * x1);
+
+	var p = new Point(x_hat, y_hat, "red");
+	p.draw();
+
+	console.log(x_hat);
+
 
 	// Calculating four "corner" box points.
 
@@ -449,10 +473,10 @@ _Points.prototype.calculateBoxPoint = function(p1_id, p2_id)
 	var p2 = this.x[p2_id]; // Second point has slope of 1/m
 
 	var m1 = this.slope;
-	var m2 = -1/m1;
+	var m2 = -1 / m1;
 
-	var x = (-m2*p2.x+p2.y+m1*p1.x-p1.y)/(m1-m2);
-	var y = m1*x-m1*p1.x+p1.y;
+	var x = (-m2 * p2.x + p2.y + m1 * p1.x - p1.y) / (m1 - m2);
+	var y = m1 * x - m1 * p1.x + p1.y;
 
 	var p = new Point(x, y, "blue");
 	return p;
@@ -471,30 +495,31 @@ function Point(x, y, color)
 
 Point.prototype.draw = function()
 {
-    ctx.beginPath();
-    ctx.fillStyle = this.color;
-    ctx.arc(this.x, this.y, 5, 0, Math.PI*2, true);
-    ctx.fill();
+	ctx.beginPath();
+	ctx.fillStyle = this.color;
+	ctx.arc(this.x, this.y, 5, 0, Math.PI * 2, true);
+	ctx.fill();
 
-    ctx.fillStyle = "black";
+	ctx.fillStyle = "black";
 };
 
 Point.prototype.dist = function(x, y)
 {
-	return Math.sqrt( Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2) );
+	return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
 };
 
 Point.prototype.moveTo = function(x, y)
 {
-    this.x = x;
-    this.y = y;
+	this.x = x;
+	this.y = y;
 
-    Points.updateFit = true;
+	Points.updateFit = true;
 };
 
 Point.prototype.distFromLine = function(slope, intersect)
 {
-	return (slope*this.x - this.y + intersect)/Math.sqrt(Math.pow(slope, 2) + 1);
+	return (slope * this.x - this.y + intersect) / Math.sqrt(Math.pow(slope, 2) +
+		1);
 };
 
 
@@ -511,14 +536,14 @@ function Mouse()
 	this.x = 0;
 	this.y = 0;
 	this.down = false;
-    this.inside = false;
-    this.rclick = false;
+	this.inside = false;
+	this.rclick = false;
 }
 
 Mouse.draw = function()
 {
 	ctx.beginPath();
-	ctx.arc(Mouse.x, Mouse.y, 5, 0, Math.PI*2, true);
+	ctx.arc(Mouse.x, Mouse.y, 5, 0, Math.PI * 2, true);
 	ctx.fill();
 };
 
@@ -546,23 +571,23 @@ cvs.addEventListener('mousemove', function(evt)
 	if (Mouse.holding)
 	{
 		Points.x[Mouse.objHeld].moveTo(Mouse.x, Mouse.y);
-    }
+	}
 }, false);
 
 cvs.addEventListener('mousedown', function(evt)
 {
-    var cID = Points.closest(Mouse.x, Mouse.y);
+	var cID = Points.closest(Mouse.x, Mouse.y);
 
-    if (Points.x[cID].dist(Mouse.x, Mouse.y) < 20)
-    {
-        Mouse.holding = true;
-        Mouse.objHeld = cID;
-    }
+	if (Points.x[cID].dist(Mouse.x, Mouse.y) < 20)
+	{
+		Mouse.holding = true;
+		Mouse.objHeld = cID;
+	}
 
-    if (Mouse.holding)
-    {
-    	Points.x[cID].moveTo(Mouse.x, Mouse.y);
-    }
+	if (Mouse.holding)
+	{
+		Points.x[cID].moveTo(Mouse.x, Mouse.y);
+	}
 }, false);
 
 cvs.addEventListener('mouseleave', function(evt)

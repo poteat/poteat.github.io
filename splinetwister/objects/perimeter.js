@@ -119,6 +119,8 @@ function Perimeter(ConcaveHull)
 		}
 	}
 
+	this.updateBoundingLine();
+
 	this.updateTransformedPoints();
 
 	if (this.colored_perimeter)
@@ -586,53 +588,117 @@ Perimeter.prototype.draw = function()
 
 
 
+	// Draw bounding line points
 
 	/*
-	// This does the same thing as the above code, only it calculates using the 
-	// maximum instead.
-	ctx.strokeStyle = "black";
-	ctx.lineWidth = 2;
+	this.p1_T.transform(this.p1);
+	this.p1_T.draw();
 
-	ctx.beginPath();
-
-	for (var i = 0; i < this.points_T.length; i++)
-	{
-		var p = this.points_T[i];
-
-		var x = p.x2d;
-		var y = p.y2d;
-
-		var prev_color = p.color;
-
-		if (i == 0) // If first
-		{
-			ctx.moveTo(x, y);
-		}
-		else
-		{
-			ctx.lineTo(x, y);
-		}
-
-		if (i == this.points_T.length - 1) // If last
-		{
-			var p = this.points_T[0];
-
-			var x = p.x2d;
-			var y = p.y2d;
-
-			ctx.lineTo(x, y);
-		}
-
-		var P_prev = p;
-
-	}
-
-	ctx.stroke();
-
-
+	this.p2_T.transform(this.p2);
+	this.p2_T.draw();
 	*/
 
 	ctx.lineWidth = 1;
 
 	ctx.strokeStyle = "black";
+}
+
+Perimeter.prototype.updateBoundingLine = function()
+{
+	var v = this.vertices;
+	var l = v.length;
+
+	var avgx = 0;
+	var avgy = 0;
+
+	for (var i = 0; i < l; i++)
+	{
+		avgx += v[i][0];
+		avgy += v[i][1];
+	}
+
+	avgx /= l;
+	avgy /= l;
+
+	var vx = 0;
+	var vy = 0;
+	var vxy = 0;
+
+	for (var i = 0; i < l; i++)
+	{
+		var delta_x = v[i][0] - avgx;
+		var delta_y = v[i][1] - avgy;
+
+		vx += Math.pow(delta_x, 2);
+		vy += Math.pow(delta_y, 2);
+		vxy += delta_x * delta_y;
+	}
+
+	vx /= l - 1;
+	vy /= l - 1;
+	vxy /= l - 1;
+
+	var m = (vy - vx + Math.sqrt(Math.pow(vy - vx, 2) + 4 * vxy * vxy)) / 2 / vxy;
+	var b = avgy - m * avgx;
+
+	var min_proj = [null, Infinity];
+	var max_proj = [null, -Infinity];
+
+	for (var i = 0; i < l; i++)
+	{
+		var x = v[i][0];
+		var y = v[i][1];
+
+		var proj_x = (x + m * (y - b)) / (m * m + 1);
+		var proj_y = (m * (x + m * y) + b) / (m * m + 1);
+
+		var dir = sign(proj_x - avgx);
+		var proj_dist = dir * (Math.pow(proj_x - avgx, 2) +
+			Math.pow(proj_y - avgy, 2));
+
+		min_proj = proj_dist < min_proj[1] ? [i, proj_dist] : min_proj;
+		max_proj = proj_dist > max_proj[1] ? [i, proj_dist] : max_proj;
+	}
+
+	min_proj = v[min_proj[0]];
+	max_proj = v[max_proj[0]];
+
+	var x1 = avgx;
+	var y1 = avgy;
+	var m1 = m;
+
+	var x2 = min_proj[0];
+	var y2 = min_proj[1];
+	var m2 = -1 / m;
+
+	var x_hat = ((y2 - m2 * x2) - (y1 - m1 * x1)) / (m1 - m2);
+	var y_hat = m1 * x_hat + (y1 - m1 * x1);
+
+	var p1 = BSurface.sample(x_hat, y_hat);
+	var p1_T = new Point(0, 0, 0, "black", 5);
+	this.p1 = p1;
+	this.p1_T = p1_T;
+
+
+
+	var x2 = max_proj[0];
+	var y2 = max_proj[1];
+	var m2 = -1 / m;
+
+	var x_hat = ((y2 - m2 * x2) - (y1 - m1 * x1)) / (m1 - m2);
+	var y_hat = m1 * x_hat + (y1 - m1 * x1);
+
+	var p2 = BSurface.sample(x_hat, y_hat);
+	var p2_T = new Point(0, 0, 0, "black", 5);
+	this.p2 = p2;
+	this.p2_T = p2_T;
+
+
+	var l1 = Math.pow(avgx - p1.t, 2) + Math.pow(avgy - p1.u, 2);
+	var l2 = Math.pow(avgx - p1.t, 2) + Math.pow(avgy - p2.u, 2);
+
+	l1 = l1 > l2 ? l1 : l2;
+	this.half_length = Math.sqrt(l1);
+
+	console.log(this.half_length);
 }

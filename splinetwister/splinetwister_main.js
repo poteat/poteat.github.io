@@ -517,7 +517,7 @@ function loadServerMRC(file)
 
 var DMap;
 var dataView;
-var density_threshold = 0.65;
+var density_threshold = 0.293;
 
 document.getElementById('density_threshold').addEventListener('change',
 	changeDensity, false);
@@ -724,6 +724,50 @@ function createArray(length)
 }
 
 
+document.getElementById('strand_file').addEventListener('change',
+	loadStrandFile,
+	false);
+
+function loadStrandFile(evt)
+{
+	var file = evt.target.files[0];
+	var fileReader = new FileReader();
+	fileReader.readAsText(file);
+
+	fileReader.onload = function(oEvent)
+	{
+		var fit_string = oEvent.target.result;
+
+		var lines = fit_string.split("\n");
+
+		var points = new Array();
+
+		for (var i = 0; i < lines.length; i++)
+		{
+			var line = lines[i];
+
+			var words = line.split(/ +/g);
+
+			var x = words[6];
+			var y = words[7];
+			var z = words[8];
+
+			// Transform to DMap logical space.
+
+			x -= DMap.x_avg;
+			y -= DMap.y_avg;
+			z -= DMap.z_avg;
+
+			var p = new Point(x, y, z);
+
+			p.rotateAxis(DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz);
+
+			points.push(p);
+		}
+
+		BStrand.importStrands(points);
+	};
+}
 
 
 

@@ -22,10 +22,12 @@ Strand.prototype.initialize = function()
 	optimize_button = Create_ToggleButton(550, 30, 70, 25, "Optimize");
 	angle_slider = Create_Slider(550, 60, 150, 20, "Angle", 10, 0, 179.99, 45);
 	offset_slider = Create_Slider(550, 90, 150, 20, "Offset", 10, -1.99, 2, 0);
+	gap_slider = Create_Slider(550, 120, 150, 20, "Gap", 10, 4, 5, 4.5);
 
 	this.optimize_button = ToggleButtons[optimize_button];
 	this.angle_slider = Sliders[angle_slider];
 	this.offset_slider = Sliders[offset_slider];
+	this.gap_slider = Sliders[gap_slider];
 
 	var coords = BPerimeter.getSurfaceCentroid();
 	var avgt = coords[0];
@@ -35,9 +37,146 @@ Strand.prototype.initialize = function()
 
 	this.angle = 45;
 	this.offset = 0;
-	this.strand_gap = 5;
+	this.strand_gap = 4.5;
 
 	this.updateStrandMap(this.angle, this.offset, this.strand_gap);
+}
+
+Strand.prototype.importStrands = function(points)
+{
+	console.log("Import called");
+
+	// We first define an array of arrays, each array representing a strand.
+	// They initially are in arbitrary order, and we need to solve a matching
+	// problem to find out their true relationship with the simulated strands.
+
+	this.truePoints = new Array();
+
+	this.truePoints[0] = new Array();
+
+	var epsilon = 1;
+
+	var prev_p = points[0];
+
+	var s = 0;
+
+	for (var i = 0; i < points.length; i++)
+	{
+		var p = points[i];
+
+		var dist = p.dist(prev_p);
+
+		if (p.dist(prev_p) < epsilon)
+		{
+			this.truePoints[s].push(p);
+		}
+		else
+		{
+			this.truePoints[s + 1] = new Array();
+			s++;
+			this.truePoints[s].push(p);
+		}
+
+		prev_p = p;
+	}
+
+	// Loop through all true strands, calculating their average x y z coord.
+
+	var L = this.truePoints.length;
+	var avg = new Array();
+
+	for (var i = 0; i < L; i++)
+	{
+		var s = this.truePoints[i];
+
+		console.log(s.length);
+
+		var sum_x = 0;
+		var sum_y = 0;
+		var sum_z = 0;
+
+		for (var j = 0; j < s.length; j++)
+		{
+			var p = s[j];
+
+			sum_x += p.x;
+			sum_y += p.y;
+			sum_z += p.z;
+		}
+
+		sum_x /= s.length;
+		sum_y /= s.length;
+		sum_z /= s.length;
+
+		avg.push(new Point(sum_x, sum_y, sum_z));
+	}
+
+	// Now that we have the true strand center points, find the delta of each
+	// from the central surface point.  This is a simplified heuristic to find
+	// the true strand which is associated with the central simulated strand.
+
+	var min_dist = Infinity;
+	var min_id = -1;
+
+	for (var i = 0; i < avg.length; i++)
+	{
+		var p = avg[i];
+
+		var dist = p.dist(this.originPoint);
+
+		if (dist < min_dist)
+		{
+			min_dist = dist;
+			min_id = i;
+		}
+	}
+
+
+	// For the optimization process, we define, for each true strand, M sample
+	// points that are uniformly spaced throughout the strand.
+
+	M = 10;
+
+	for (var i = 0; i < this.truePoints.length; i++)
+	{
+		var s = this.truePoints[i];
+
+		var range = s.length - 1;
+
+		s.samples = new Array();
+
+		for (var j = 0; j < M; j++)
+		{
+			var t = j / (M - 1);
+
+			var index = Math.round(t * range);
+
+			s.samples[j] = s[index];
+		}
+	}
+
+
+
+	this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[2]);
+
+
+
+	this.truePoints_T = new Array();
+
+	for (var i = 0; i < this.truePoints.length; i++)
+	{
+		this.truePoints_T.push(new Array());
+
+		for (var j = 0; j < this.truePoints[i].length; j++)
+		{
+			var color = "Black";
+			color = i == min_id ? "Red" : color;
+
+			var p = new Point(0, 0, 0, color, 3);
+			p.transform(this.truePoints[i][j]);
+			this.truePoints_T[i].push(p);
+		}
+	}
 }
 
 Strand.prototype.setOrigin = function(t, u)
@@ -462,15 +601,29 @@ Strand.prototype.updateDownload = function()
 Strand.prototype.draw = function()
 {
 	if ((this.angle_slider.value != this.angle) ||
-		(this.offset_slider.value != this.offset))
+		(this.offset_slider.value != this.offset) ||
+		(this.gap_slider.value != this.strand_gap))
 	{
 		this.angle = this.angle_slider.value;
 		this.offset = this.offset_slider.value;
+		this.strand_gap = this.gap_slider.value;
 
 		this.updateStrandMap(this.angle, this.offset, this.strand_gap);
 	}
 
 	this.drawMap();
+	this.drawTrueStrands();
+
+	if (this.truePoints != undefined)
+	{
+		// We call "scoreViaTrueStrand" to find the matching between a given
+		// simulated strand and a given true strand.
+
+		var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[2]);
+		ctx.fillText("Score for initial matching process: " + score, 10, 80);
+
+	}
+
 }
 
 Strand.prototype.drawMap = function()
@@ -491,7 +644,6 @@ Strand.prototype.drawMap = function()
 			}
 		}
 	}
-
 
 	// Draw all parallel strand lines (first part of grid)
 
@@ -518,8 +670,6 @@ Strand.prototype.drawMap = function()
 		}
 	}
 
-
-
 	// Loop through all strands from left to right, drawing if both exist, and
 	// at least one is visible.
 
@@ -542,6 +692,94 @@ Strand.prototype.drawMap = function()
 			}
 		}
 	}
+}
+
+Strand.prototype.drawTrueStrands = function()
+{
+	if (this.truePoints_T != undefined)
+	{
+		for (var i = 0; i < this.truePoints_T.length; i++)
+		{
+			for (var j = 0; j < this.truePoints_T[i].length; j++)
+			{
+				var p = this.truePoints_T[i][j];
+				p.draw();
+			}
+		}
+	}
+}
+
+Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand)
+{
+	// First, we find the closest M-point (for each sim-point).
+
+	var score = 0;
+
+	for (var i = 0; i < sim_strand.length; i++)
+	{
+		var p = sim_strand[i];
+
+		var min_dist = Infinity;
+		var min_index = -1;
+
+		for (var j = 0; j < true_strand.samples.length; j++)
+		{
+			var sample = true_strand.samples[j];
+
+			var dist = p.squareDist(sample);
+
+			if (dist < min_dist)
+			{
+				min_dist = dist;
+				min_index = j;
+			}
+		}
+
+		// We have min_dist, so find the direction we need to search for the
+		// local minimum. (Or if we even need to search further)
+
+		var left_dist = min_index ?
+			p.squareDist(true_strand[min_index - 1]) : Infinity;
+
+		var right_dist = min_index - true_strand.length ?
+			p.squareDist(true_strand[min_index + 1]) : Infinity;
+
+		var direction;
+
+		if (left_dist < right_dist && left_dist < min_dist)
+		{
+			direction = -1;
+		}
+		else if (right_dist < left_dist && right_dist < min_dist)
+		{
+			direction = 1;
+		}
+		else
+		{
+			score += min_dist;
+			continue;
+		}
+
+		while (true)
+		{
+			min_index += direction;
+			var dist = min_index ?
+				p.squareDist(true_strand[min_index + direction]) : Infinity;
+
+			if (dist < min_dist)
+			{
+				min_dist = dist;
+			}
+			else
+			{
+				min_index += direction;
+				score += min_dist;
+				break;
+			}
+		}
+	}
+
+	return Math.sqrt(score / sim_strand.length);
 }
 
 Strand.prototype.angleBetween = function(p1, p2, p3)
@@ -622,17 +860,47 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
 	this.strandMap[0][0] = this.originPoint;
 
+	var len = 1.5 * BPerimeter.half_length;
+
 	var dx1 = intersects[0][0];
 	var dy1 = intersects[0][1];
 
 	var dx2 = intersects[1][0];
 	var dy2 = intersects[1][1];
 
+	var l1 = Math.sqrt(Math.pow(this.originPoint.t - dx1, 2) + Math.pow(
+		this.originPoint.u - dy1, 2));
+
+	var l2 = Math.sqrt(Math.pow(this.originPoint.t - dx2, 2) + Math.pow(
+		this.originPoint.u - dy2, 2));
+
+	var l3 = Math.sqrt(Math.pow(dx1 - dx2, 2) + Math.pow(dy1 - dy2, 2));
+
+	dx1 = this.originPoint.t + (dx1 - this.originPoint.t) / l1;
+	dy1 = this.originPoint.u + (dy1 - this.originPoint.u) / l1;
+
+	dx2 = this.originPoint.t + (dx2 - this.originPoint.t) / l2;
+	dy2 = this.originPoint.u + (dy2 - this.originPoint.u) / l2;
+
+	if (l3 + 0.001 < l1 + l2)
+	{
+		if (l1 < l2)
+		{
+			dx1 = this.originPoint.t - (dx1 - this.originPoint.t);
+			dy1 = this.originPoint.u - (dy1 - this.originPoint.u);
+		}
+		else
+		{
+			dx2 = this.originPoint.t - (dx2 - this.originPoint.t);
+			dy2 = this.originPoint.u - (dy2 - this.originPoint.u);
+		}
+	}
+
 	// Linearly interpolate from centroid to (dx1, dy1).
 
 	var i = 0;
 
-	var scale = 2;
+	var scale = len;
 
 	for (var t = delta; t <= 1; t += delta)
 	{
@@ -715,7 +983,7 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
 			var culled = this.cullExteriorPoints(this.strandMap[i]);
 
-			//var culled = this.strandMap[i];
+			// var culled = this.strandMap[i];
 
 			if (culled._length != undefined)
 			{
@@ -792,7 +1060,18 @@ Strand.prototype.updateTransformedPoints = function()
 			if (p != undefined)
 			{
 				p.transform(this.strandMap[i][j]);
-				p.draw();
+			}
+		}
+	}
+
+	if (this.truePoints_T != undefined)
+	{
+		for (var i = 0; i < this.truePoints_T.length; i++)
+		{
+			for (var j = 0; j < this.truePoints_T[i].length; j++)
+			{
+				var p = this.truePoints_T[i][j];
+				p.transform(this.truePoints[i][j]);
 			}
 		}
 	}
