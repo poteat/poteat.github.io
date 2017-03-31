@@ -55,6 +55,8 @@ function main()
 {
 	ctx.clearRect(0, 0, cvs.width, cvs.height);
 
+	DMap.draw();
+
 	// Draw all toggle button and slider objects.
 	for (var i = 0; i < ToggleButtons.length; i++)
 	{
@@ -201,7 +203,7 @@ function main()
 
 				// This area is devoted to post-processing after surface fit.
 
-				Mouse.draw();
+				//		Mouse.draw();
 
 				BStrand.draw();
 
@@ -874,19 +876,21 @@ Mouse.updatePos = function(evt)
 	this.x = evt.clientX - rect.left - 1;
 	this.y = evt.clientY - rect.top - 1;
 
+	/*
 	if (BSurface.finished)
 	{
-		var coords = BSurface.calc(this.t, this.u);
+			var coords = BSurface.calc(this.t, this.u);
 
-		this.drawPoint.x = coords[0];
-		this.drawPoint.y = coords[1];
-		this.drawPoint.z = coords[2];
+			this.drawPoint.x = coords[0];
+			this.drawPoint.y = coords[1];
+			this.drawPoint.z = coords[2];
 
-		this.drawPoint_T.moveTo(this.drawPoint);
-		this.drawPoint_T.scaleFactor(zoom);
-		this.drawPoint_T.rotateY(yaw);
-		this.drawPoint_T.rotateX(pitch);
+			this.drawPoint_T.moveTo(this.drawPoint);
+			this.drawPoint_T.scaleFactor(zoom);
+			this.drawPoint_T.rotateY(yaw);
+			this.drawPoint_T.rotateX(pitch);
 	}
+	*/
 };
 
 cvs.addEventListener('mousemove', function(evt)

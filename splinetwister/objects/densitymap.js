@@ -131,11 +131,6 @@ DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta,
 
 	this.scale = this.xlength / this.mx; // The size of each voxel in Angstroms
 
-	if (this.scale != 1)
-	{
-		alert("PDB export of non-1 voxel size MRC's is unsupported");
-	}
-
 	//this.nlabl = readInt(23+29+3);
 
 	voxel = createArray(this.nx, this.ny, this.nz);
@@ -224,11 +219,6 @@ DensityMap.prototype.createFromMRC = function()
 
 	this.scale = this.xlength / this.mx; // The size of each voxel in Angstroms
 
-	if (this.scale != 1)
-	{
-		alert("PDB export of non-1 voxel size MRC's is unsupported");
-	}
-
 	//this.nlabl = readInt(23+29+3);
 
 	voxel = createArray(this.nx, this.ny, this.nz);
@@ -252,9 +242,9 @@ DensityMap.prototype.createFromMRC = function()
 				{
 					num++;
 
-					x_avg += (x + this.xorigin);
-					y_avg += (y + this.yorigin);
-					z_avg += (z + this.zorigin);
+					x_avg += (x * this.scale + this.xorigin);
+					y_avg += (y * this.scale + this.yorigin);
+					z_avg += (z * this.scale + this.zorigin);
 				}
 			}
 		}
@@ -282,9 +272,17 @@ DensityMap.prototype.createFromMRC = function()
 				if (density > density_threshold)
 				{
 					var scale = this.scale;
-					var p = new Point(((x + this.xorigin) - x_avg) * scale,
-						((y + this.yorigin) - y_avg) * scale, ((z +
-							this.zorigin) - z_avg) * scale);
+					/*				var p = new Point(((x + this.xorigin) - x_avg) * scale,
+										((y + this.yorigin) - y_avg) * scale, ((z +
+											this.zorigin) - z_avg) * scale);*/
+
+
+					var p = new Point(
+						x * scale + this.xorigin - x_avg,
+						y * scale + this.yorigin - y_avg,
+						z * scale + this.zorigin - z_avg);
+
+
 					var p2 = new Point(0, 0, 0);
 					this.points.push(p);
 					this.points_T.push(p2);
@@ -310,6 +308,13 @@ var lim = 20;
 
 DensityMap.prototype.draw = function()
 {
+	if (BSurface.finished)
+	{
+		// If the surface has been matched, lets draw the voxels transparently.
+
+		ctx.globalAlpha = .5;
+	}
+
 	for (var i = 0; i < this.points.length; i++)
 	{
 		this.points_T[i].draw();
@@ -351,6 +356,8 @@ DensityMap.prototype.draw = function()
 		ctx.lineTo(proj.x2d, proj.y2d);
 		ctx.stroke();*/
 	}
+
+	ctx.globalAlpha = 1;
 };
 
 DensityMap.prototype.updateProjection = function(permissive)

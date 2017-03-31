@@ -54,7 +54,7 @@ Strand.prototype.importStrands = function(points)
 
 	this.truePoints[0] = new Array();
 
-	var epsilon = 1;
+	var epsilon = 4.66;
 
 	var prev_p = points[0];
 
@@ -158,6 +158,94 @@ Strand.prototype.importStrands = function(points)
 
 
 	this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[2]);
+
+
+
+
+	// We have the scoring function, so now we call an initial optimization to
+	// improve the matching between strands.
+
+	var ang_scores = new Array();
+
+	var N = 10;
+
+	this.ignoreChanges = true;
+
+	var ang_min = 0;
+	var ang_max = 180;
+
+	for (var i = 0; i < N; i++)
+	{
+		var t = i / (N - 1);
+		var ang = t * (180 - 180 / N);
+
+		this.updateStrandMap(ang, this.offset, this.strand_gap);
+
+		var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[2]);
+
+		ang_scores.push([ang, score]);
+	}
+
+	// Loop through ang_scores, and choose the angle with the lowest score.
+
+	var min_score = Infinity;
+	var min_index = -1;
+
+	for (var i = 0; i < ang_scores.length; i++)
+	{
+		var score = ang_scores[i][1];
+
+		if (score < min_score)
+		{
+			min_score = score;
+			min_index = i;
+		}
+	}
+
+	var min_ang = ang_scores[min_index][0];
+
+
+
+	// Now we loop through N offsets to find the rough best offset.
+
+	var offset_scores = new Array();
+
+	var search_range = 4;
+
+	for (var i = 0; i < N; i++)
+	{
+		var t = i / (N - 1);
+		var offset = search_range * t - search_range / 2;
+
+		this.updateStrandMap(min_ang, offset, this.strand_gap);
+
+		var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[2]);
+
+		offset_scores.push([offset, score]);
+	}
+
+	// Loop through offset_scores, and choose the offset with the lowest score.
+	// We then have the rough 2*N optimized parameter.
+
+	var min_score = Infinity;
+	var min_index = -1;
+
+	for (var i = 0; i < ang_scores.length; i++)
+	{
+		var score = offset_scores[i][1];
+
+		if (score < min_score)
+		{
+			min_score = score;
+			min_index = i;
+		}
+	}
+
+	var min_offset = offset_scores[min_index][0];
+
+	this.updateStrandMap(this.angle, min_offset, this.strand_gap);
+
+
 
 
 
@@ -494,39 +582,56 @@ Strand.prototype.cullExteriorPoints = function(points)
 	// Returns set of points which are inside of the hull boundary.  If none of the 
 	// given points are inside the hull boundary, returns false.
 
-	var culled = new Array();
+	if (points.length == 0 && points._length == 0)
+	{
+		return false;
+	}
 
-	var neg_length = 0;
+	var min = -Infinity;
+	var max = Infinity;
+
+	// Find minimum element that is inside the hull boundary.
 
 	for (var i = points._length; i < points.length; i++)
 	{
 		var p = points[i];
 
-		intersect = getIntersectionPoints(p.t, p.u, 0,
-			BPerimeter.vertices, false);
-
-		if (intersect != false)
+		if (isInsidePolygon(p.t, p.u, BPerimeter.vertices))
 		{
-
-			if (i >= 0)
-			{
-				culled[i] = p;
-			}
-			else
-			{
-				if (neg_length == 0)
-				{
-					neg_length = -i;
-				}
-
-				culled[i] = p;
-			}
+			min = i;
+			break;
 		}
 	}
 
-	if (culled.length > 0 || neg_length > 0)
+	for (var i = points.length - 1; i >= points._length; i--)
 	{
-		culled._length = -neg_length;
+		var p = points[i];
+
+		if (isInsidePolygon(p.t, p.u, BPerimeter.vertices))
+		{
+			max = i;
+			break;
+		}
+	}
+
+	if (min == -Infinity || max == Infinity)
+	{
+		return false;
+	}
+
+	// Now that we have the max and min, just apply them to a new culled array.
+
+	var culled = new Array();
+
+	culled._length = min;
+
+	for (var i = min; i <= max; i++)
+	{
+		culled[i] = points[i];
+	}
+
+	if (culled.length > 0 || culled._length < 0)
+	{
 		return culled;
 	}
 	else
@@ -600,16 +705,28 @@ Strand.prototype.updateDownload = function()
 
 Strand.prototype.draw = function()
 {
-	if ((this.angle_slider.value != this.angle) ||
-		(this.offset_slider.value != this.offset) ||
-		(this.gap_slider.value != this.strand_gap))
+	if (!this.ignoreChanges)
 	{
-		this.angle = this.angle_slider.value;
-		this.offset = this.offset_slider.value;
-		this.strand_gap = this.gap_slider.value;
+		if ((this.angle_slider.value != this.angle) ||
+			(this.offset_slider.value != this.offset) ||
+			(this.gap_slider.value != this.strand_gap))
+		{
+			this.angle = this.angle_slider.value;
+			this.offset = this.offset_slider.value;
+			this.strand_gap = this.gap_slider.value;
 
-		this.updateStrandMap(this.angle, this.offset, this.strand_gap);
+			this.updateStrandMap(this.angle, this.offset, this.strand_gap);
+		}
 	}
+	else
+	{
+		this.angle_slider.setValue(this.angle);
+		this.offset_slider.setValue(this.offset);
+		this.gap_slider.setValue(this.strand_gap);
+
+		this.ignoreChanges = false;
+	}
+
 
 	this.drawMap();
 	this.drawTrueStrands();
@@ -719,62 +836,65 @@ Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand)
 	{
 		var p = sim_strand[i];
 
-		var min_dist = Infinity;
-		var min_index = -1;
-
-		for (var j = 0; j < true_strand.samples.length; j++)
+		if (p != undefined)
 		{
-			var sample = true_strand.samples[j];
+			var min_dist = Infinity;
+			var min_index = -1;
 
-			var dist = p.squareDist(sample);
-
-			if (dist < min_dist)
+			for (var j = 0; j < true_strand.samples.length; j++)
 			{
-				min_dist = dist;
-				min_index = j;
+				var sample = true_strand.samples[j];
+
+				var dist = p.squareDist(sample);
+
+				if (dist < min_dist)
+				{
+					min_dist = dist;
+					min_index = j;
+				}
 			}
-		}
 
-		// We have min_dist, so find the direction we need to search for the
-		// local minimum. (Or if we even need to search further)
+			// We have min_dist, so find the direction we need to search for the
+			// local minimum. (Or if we even need to search further)
 
-		var left_dist = min_index ?
-			p.squareDist(true_strand[min_index - 1]) : Infinity;
+			var left_dist = min_index ?
+				p.squareDist(true_strand[min_index - 1]) : Infinity;
 
-		var right_dist = min_index - true_strand.length ?
-			p.squareDist(true_strand[min_index + 1]) : Infinity;
+			var right_dist = min_index - true_strand.length ?
+				p.squareDist(true_strand[min_index + 1]) : Infinity;
 
-		var direction;
+			var direction;
 
-		if (left_dist < right_dist && left_dist < min_dist)
-		{
-			direction = -1;
-		}
-		else if (right_dist < left_dist && right_dist < min_dist)
-		{
-			direction = 1;
-		}
-		else
-		{
-			score += min_dist;
-			continue;
-		}
-
-		while (true)
-		{
-			min_index += direction;
-			var dist = min_index ?
-				p.squareDist(true_strand[min_index + direction]) : Infinity;
-
-			if (dist < min_dist)
+			if (left_dist < right_dist && left_dist < min_dist)
 			{
-				min_dist = dist;
+				direction = -1;
+			}
+			else if (right_dist < left_dist && right_dist < min_dist)
+			{
+				direction = 1;
 			}
 			else
 			{
-				min_index += direction;
 				score += min_dist;
-				break;
+				continue;
+			}
+
+			while (true)
+			{
+				min_index += direction;
+				var dist = min_index ?
+					p.squareDist(true_strand[min_index + direction]) : Infinity;
+
+				if (dist < min_dist)
+				{
+					min_dist = dist;
+				}
+				else
+				{
+					min_index += direction;
+					score += min_dist;
+					break;
+				}
 			}
 		}
 	}
@@ -1018,6 +1138,197 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 		if (sign == -1)
 		{
 			this.strandMap._length = i;
+		}
+	}
+
+
+	// Now we do heuristic post-processing with improves accuracy on true
+	// sheets (see blue-ink research page "proposed length-displacement
+	// reduction algorithm".
+
+
+	// Drop any samples that do not have left or right neighbors.
+
+	for (var iterations = 0; iterations < 2; iterations++)
+	{
+		var map = this.strandMap;
+
+		for (var i = map._length; i < map.length; i++)
+		{
+			var strand = map[i];
+
+			var left;
+			var right;
+
+			for (var j = strand._length; j < strand.length; j++)
+			{
+				var p = strand[j];
+
+				if (p != undefined)
+				{
+					if (map[i - 1] != undefined)
+					{
+						left = map[i - 1][j];
+					}
+
+					if (map[i + 1] != undefined)
+					{
+						right = map[i + 1][j];
+					}
+
+					if (left == undefined && right == undefined)
+					{
+						delete map[i][j];
+
+						if (j == strand._length)
+						{
+							strand._length++;
+						}
+					}
+				}
+			}
+		}
+
+
+		// Loop through each strand... if the strand has less or eq than 7 samples,
+		// destroy it.
+
+		for (var i = map._length; i < map.length; i++)
+		{
+			var strand = map[i];
+
+			var num = 0;
+
+			for (var j = strand._length; j < strand.length; j++)
+			{
+				var p = strand[j];
+
+				if (p != undefined)
+				{
+					num++;
+				}
+			}
+
+			strand.num = num;
+
+			if (num <= 7)
+			{
+				for (var j = strand._length; j < strand.length; j++)
+				{
+					var p = strand[j];
+
+					if (p != undefined)
+					{
+						delete map[i][j];
+					}
+				}
+
+				strand.num = 0;
+			}
+		}
+
+
+		// On each strand, remove every sample which is outside the hull.
+
+		for (var i = map._length; i < map.length; i++)
+		{
+			var strand = map[i];
+
+			for (var j = strand._length; j < strand.length; j++)
+			{
+				var p = strand[j];
+
+				if (p != undefined)
+				{
+					if (!isInsidePolygon(p.t, p.u, BPerimeter.vertices))
+					{
+						delete map[i][j];
+					}
+				}
+			}
+		}
+
+
+		// On each strand, identify the number of regions.
+
+		for (var i = map._length; i < map.length; i++)
+		{
+			var strand = map[i];
+
+			if (strand.num != 0)
+			{
+				var region_num = 0;
+				var in_region = false;
+				var regions = new Array();
+
+				for (var j = strand._length; j < strand.length; j++)
+				{
+					var p = map[i][j];
+
+					if (p != undefined)
+					{
+						if (!in_region)
+						{
+							regions[region_num] = new Array();
+							regions[region_num].left_num = 0;
+							regions[region_num].right_num = 0;
+							region_num++;
+						}
+
+						regions[region_num - 1].push(j);
+
+						if (map[i - 1][j] != undefined)
+						{
+							regions[region_num - 1].left_num++;
+						}
+						if (map[i + 1][j] != undefined)
+						{
+							regions[region_num - 1].right_num++;
+						}
+
+						in_region = true;
+					}
+					else
+					{
+						in_region = false;
+					}
+				}
+
+				var max_score = 0;
+				var max_index = 0;
+
+				for (var j = 0; j < regions.length; j++)
+				{
+					var score =
+						Math.pow(regions[j].left_num, 2) +
+						Math.pow(regions[j].right_num, 2);
+
+					if (score > max_score)
+					{
+						max_score = score;
+						max_index = j;
+					}
+				}
+
+				// Delete all regions except the one with maximal score.
+
+				for (var j = 0; j < regions.length; j++)
+				{
+					if (j != max_index)
+					{
+						for (var k = 0; k < regions[j].length; k++)
+						{
+							var p_index = regions[j][k];
+							var p = map[i][p_index];
+
+							if (p != undefined)
+							{
+								delete map[i][p_index];
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 

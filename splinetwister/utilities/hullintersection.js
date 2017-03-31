@@ -11,6 +11,28 @@
 
 // I'm not sure what 'permissive' does.  Best to keep it set to 'true'.
 
+function isInsidePolygon(x, y, Hull)
+{
+	var crossing = 0;
+
+	for (var i = 0; i < Hull.length; i++)
+	{
+		var V1 = Hull[i];
+		var V2 = Hull[(i + 1) % Hull.length];
+
+		if ((V1[1] <= y && V2[1] > y) || (V1[1] > y && V2[1] <= y))
+		{
+			var vt = (y - V1[1]) / (V2[1] - V1[1]);
+			if (x < V1[0] + vt * (V2[0] - V1[0]))
+			{
+				crossing++;
+			}
+		}
+	}
+
+	return crossing & 1;
+}
+
 function getIntersectionPoints(x, y, ang, Hull, permissive)
 {
 	if (permissive == undefined)

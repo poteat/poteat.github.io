@@ -1,5 +1,3 @@
-
-
 var fps = 60;
 var fov = 250;
 
@@ -33,8 +31,9 @@ function init()
 
 	for (var i = 0; i < numPoints; i++)
 	{
-		p = new Point( (Math.random()*200)-100, (Math.random()*200)-100 , (Math.random()*200)-100 ); // -200 <= x <= 200
-		points.push(p); 
+		p = new Point((Math.random() * 200) - 100, (Math.random() * 200) - 100, (Math
+			.random() * 200) - 100); // -200 <= x <= 200
+		points.push(p);
 	}
 }
 
@@ -44,9 +43,9 @@ function main()
 
 	Object.keys(DMap).forEach(function(key, i)
 	{
-		ctx.fillText(key + ": " + eval("DMap."+key), 15, 15 + i*15);
-	    // key: the name of the object key
-	    // index: the ordinal position of the key within the object 
+		ctx.fillText(key + ": " + eval("DMap." + key), 15, 15 + i * 15);
+		// key: the name of the object key
+		// index: the ordinal position of the key within the object 
 	});
 
 	for (var i = 0; i < points.length; i++)
@@ -64,7 +63,7 @@ function loadServerMRC(file)
 	oReq.open("GET", "/" + file, true);
 	oReq.responseType = "arraybuffer";
 
-	oReq.onload = function (oEvent)
+	oReq.onload = function(oEvent)
 	{
 		var arrayBuffer = oReq.response; // Note: not oReq.responseText
 		if (arrayBuffer)
@@ -75,21 +74,22 @@ function loadServerMRC(file)
 
 			DMap = new DensityMap();
 
-			mainloop = setInterval("main();",1000/fps);
+			mainloop = setInterval("main();", 1000 / fps);
 
-//			window.alert(DMap.gamma);
+			//			window.alert(DMap.gamma);
 
-//			for (var i = 0; i < byteArray.byteLength; i++)
-//			{
-//				window.alert(byteArray[i]);
-//	    	}
+			//			for (var i = 0; i < byteArray.byteLength; i++)
+			//			{
+			//				window.alert(byteArray[i]);
+			//	    	}
 		}
 	};
 
 	oReq.send(null);
 }
 
-document.getElementById('density_threshold').addEventListener('change', changeDensity, false);
+document.getElementById('density_threshold').addEventListener('change',
+	changeDensity, false);
 
 function changeDensity(evt)
 {
@@ -98,7 +98,8 @@ function changeDensity(evt)
 	DMap = new DensityMap();
 }
 
-document.getElementById('mrc_file').addEventListener('change', loadLocalMRC, false);
+document.getElementById('mrc_file').addEventListener('change', loadLocalMRC,
+	false);
 
 function loadLocalMRC(evt)
 {
@@ -108,7 +109,7 @@ function loadLocalMRC(evt)
 
 	fileReader.readAsArrayBuffer(file);
 
-	fileReader.onload = function (oEvent)
+	fileReader.onload = function(oEvent)
 	{
 		var arrayBuffer = oEvent.target.result;
 		if (arrayBuffer)
@@ -119,14 +120,14 @@ function loadLocalMRC(evt)
 
 			DMap = new DensityMap();
 
-//			mainloop = setInterval("main();",1000/fps);
+			//			mainloop = setInterval("main();",1000/fps);
 
-//			window.alert(DMap.gamma);
+			//			window.alert(DMap.gamma);
 
-//			for (var i = 0; i < byteArray.byteLength; i++)
-//			{
-//				window.alert(byteArray[i]);
-//	    	}
+			//			for (var i = 0; i < byteArray.byteLength; i++)
+			//			{
+			//				window.alert(byteArray[i]);
+			//	    	}
 		}
 	};
 }
@@ -145,16 +146,18 @@ function readFloat(i)
 }
 
 
-function createArray(length) {
-    var arr = new Array(length || 0),
-        i = length;
+function createArray(length)
+{
+	var arr = new Array(length || 0),
+		i = length;
 
-    if (arguments.length > 1) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        while(i--) arr[length-1 - i] = createArray.apply(this, args);
-    }
+	if (arguments.length > 1)
+	{
+		var args = Array.prototype.slice.call(arguments, 1);
+		while (i--) arr[length - 1 - i] = createArray.apply(this, args);
+	}
 
-    return arr;
+	return arr;
 }
 
 
@@ -194,10 +197,10 @@ function DensityMap()
 
 	// Extra 29 ints of storage space
 
-	this.xorigin = readFloat(23+29+1);
-	this.yorigin = readFloat(23+29+2);
+	this.xorigin = readInt(23 + 29 + 1);
+	this.yorigin = readInt(23 + 29 + 2);
 
-	this.nlabl = readInt(23+29+3);
+	this.nlabl = readInt(23 + 29 + 3);
 
 	voxel = createArray(this.nx, this.ny, this.nz);
 
@@ -213,7 +216,7 @@ function DensityMap()
 		{
 			for (var x = 0; x < this.nx; x++)
 			{
-				var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
+				var density = readFloat(256 + (z * this.nx * this.ny + y * this.nx + x));
 				if (density > density_threshold)
 				{
 					num++;
@@ -231,7 +234,7 @@ function DensityMap()
 	z_avg /= num;
 
 
-	points = points.splice(0,0);
+	points = points.splice(0, 0);
 
 	for (var z = 0; z < this.nz; z++)
 	{
@@ -239,11 +242,12 @@ function DensityMap()
 		{
 			for (var x = 0; x < this.nx; x++)
 			{
-				var density = readFloat(256 + (z*this.nx*this.ny + y*this.nx + x));
+				var density = readFloat(256 + (z * this.nx * this.ny + y * this.nx + x));
 				if (density > density_threshold)
 				{
 					var scale = 5;
-					var p = new Point((x - x_avg)*scale, (y - y_avg)*scale, (z - z_avg)*scale);
+					var p = new Point((x - x_avg) * scale, (y - y_avg) * scale, (z - z_avg) *
+						scale);
 					points.push(p);
 				}
 			}
@@ -265,17 +269,17 @@ DensityMap.prototype.draw = function()
 				if (voxel[x][y][z] > 0)
 				{
 
-					scale = fov/(fov+z); 
+					scale = fov / (fov + z);
 
-					x2d = (x * scale) + cvs.width/2;	
-					y2d = (y * scale)  + cvs.height/2;
+					x2d = (x * scale) + cvs.width / 2;
+					y2d = (y * scale) + cvs.height / 2;
 
 					if (scale > 0)
 					{
-					    ctx.beginPath();
-					    ctx.fillStyle = this.color;
-					    ctx.arc(x2d, y2d, scale, 0, Math.PI*2, true);
-					    ctx.fill();
+						ctx.beginPath();
+						ctx.fillStyle = this.color;
+						ctx.arc(x2d, y2d, scale, 0, Math.PI * 2, true);
+						ctx.fill();
 					}
 				}
 
@@ -298,30 +302,30 @@ function Point(x, y, z, color = "black")
 Point.prototype.draw = function()
 {
 	var x3d = this.x;
-	var y3d = this.y; 
-	var z3d = this.z; 
-	this.scale = fov/(fov+z3d); 
-	this.x2d = (x3d * this.scale) + cvs.width/2;	
-	this.y2d = (y3d * this.scale)  + cvs.height/2;
+	var y3d = this.y;
+	var z3d = this.z;
+	this.scale = fov / (fov + z3d);
+	this.x2d = (x3d * this.scale) + cvs.width / 2;
+	this.y2d = (y3d * this.scale) + cvs.height / 2;
 
-    if (this.scale > 0)
-    {
-	    ctx.beginPath();
-	    ctx.fillStyle = this.color;
-	    ctx.arc(this.x2d, this.y2d, this.scale, 0, Math.PI*2, true);
-	    ctx.fill();
-    }
+	if (this.scale > 0)
+	{
+		ctx.beginPath();
+		ctx.fillStyle = this.color;
+		ctx.arc(this.x2d, this.y2d, this.scale, 0, Math.PI * 2, true);
+		ctx.fill();
+	}
 };
 
 Point.prototype.dist = function(x, y)
 {
-	return Math.sqrt( Math.pow(this.x2d - x, 2) + Math.pow(this.y2d - y, 2) );
+	return Math.sqrt(Math.pow(this.x2d - x, 2) + Math.pow(this.y2d - y, 2));
 };
 
 Point.prototype.moveTo = function(x, y)
 {
-    this.x = x;
-    this.y = y;
+	this.x = x;
+	this.y = y;
 };
 
 Point.prototype.scaleFactor = function(factor)
@@ -399,14 +403,14 @@ function Mouse()
 	this.x = 0;
 	this.y = 0;
 	this.down = false;
-    this.inside = false;
-    this.rclick = false;
+	this.inside = false;
+	this.rclick = false;
 }
 
 Mouse.draw = function()
 {
 	ctx.beginPath();
-	ctx.arc(Mouse.x, Mouse.y, 5, 0, Math.PI*2, true);
+	ctx.arc(Mouse.x, Mouse.y, 5, 0, Math.PI * 2, true);
 	ctx.fill();
 };
 
@@ -438,8 +442,9 @@ cvs.addEventListener('mousemove', function(evt)
 	{
 		if (old_y != new_y)
 		{
-			delta_pitch = (new_y - old_y)*.006;
-			if (pitch + delta_pitch <= 90/180*3.1415 && pitch + delta_pitch >= -90/180*3.1415)
+			delta_pitch = (new_y - old_y) * .006;
+			if (pitch + delta_pitch <= 90 / 180 * 3.1415 && pitch + delta_pitch >= -90 /
+				180 * 3.1415)
 			{
 				pitch += delta_pitch;
 				for (var i = 0; i < points.length; i++)
@@ -461,7 +466,7 @@ cvs.addEventListener('mousemove', function(evt)
 				}
 			}
 
-			delta_yaw = (old_x - new_x)*.006;
+			delta_yaw = (old_x - new_x) * .006;
 			yaw += delta_yaw;
 			for (var i = 0; i < points.length; i++)
 			{
@@ -483,7 +488,7 @@ cvs.addEventListener('mousemove', function(evt)
 
 cvs.addEventListener('mousedown', function(evt)
 {
-    Mouse.holding = true;
+	Mouse.holding = true;
 }, false);
 
 cvs.addEventListener('mouseleave', function(evt)
@@ -496,25 +501,24 @@ cvs.addEventListener('mouseup', function(evt)
 	Mouse.holding = false;
 }, false);
 
-cvs.addEventListener('dblclick', function(evt)
-{
+cvs.addEventListener('dblclick', function(evt) {
 
 }, false);
 
-cvs.addEventListener('mousewheel',function(evt)
+cvs.addEventListener('mousewheel', function(evt)
 {
 	var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 	evt.preventDefault();
-    return false; 
+	return false;
 }, false);
 
-cvs.addEventListener("DOMMouseScroll",function(evt)
+cvs.addEventListener("DOMMouseScroll", function(evt)
 {
 	var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
 
 	for (var i = 0; i < points.length; i++)
 	{
-		points[i].scaleFactor(1+delta*.1);
+		points[i].scaleFactor(1 + delta * .1);
 	}
 
 	evt.preventDefault();
