@@ -44,8 +44,6 @@ Strand.prototype.initialize = function()
 
 Strand.prototype.importStrands = function(points)
 {
-	console.log("Import called");
-
 	// We first define an array of arrays, each array representing a strand.
 	// They initially are in arbitrary order, and we need to solve a matching
 	// problem to find out their true relationship with the simulated strands.
@@ -54,7 +52,7 @@ Strand.prototype.importStrands = function(points)
 
 	this.truePoints[0] = new Array();
 
-	var epsilon = 4.66;
+	var epsilon = 2;
 
 	var prev_p = points[0];
 
@@ -65,6 +63,8 @@ Strand.prototype.importStrands = function(points)
 		var p = points[i];
 
 		var dist = p.dist(prev_p);
+
+		console.log(dist);
 
 		if (p.dist(prev_p) < epsilon)
 		{
@@ -88,8 +88,6 @@ Strand.prototype.importStrands = function(points)
 	for (var i = 0; i < L; i++)
 	{
 		var s = this.truePoints[i];
-
-		console.log(s.length);
 
 		var sum_x = 0;
 		var sum_y = 0;
@@ -131,6 +129,8 @@ Strand.prototype.importStrands = function(points)
 		}
 	}
 
+	this.central_strand = min_id;
+
 
 	// For the optimization process, we define, for each true strand, M sample
 	// points that are uniformly spaced throughout the strand.
@@ -157,7 +157,7 @@ Strand.prototype.importStrands = function(points)
 
 
 
-	this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[2]);
+	this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[this.central_strand]);
 
 
 
@@ -181,7 +181,7 @@ Strand.prototype.importStrands = function(points)
 
 		this.updateStrandMap(ang, this.offset, this.strand_gap);
 
-		var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[2]);
+		var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[this.central_strand]);
 
 		ang_scores.push([ang, score]);
 	}
@@ -219,7 +219,7 @@ Strand.prototype.importStrands = function(points)
 
 		this.updateStrandMap(min_ang, offset, this.strand_gap);
 
-		var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[2]);
+		var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[this.central_strand]);
 
 		offset_scores.push([offset, score]);
 	}
@@ -244,6 +244,112 @@ Strand.prototype.importStrands = function(points)
 	var min_offset = offset_scores[min_index][0];
 
 	this.updateStrandMap(this.angle, min_offset, this.strand_gap);
+
+
+
+	// Search 10x10 = 100 different options within smaller search space.
+
+	var search_space_divider = 10;
+
+	var angle_delta = 180 / search_space_divider;
+	var angle_center = this.angle;
+
+	var offset_delta = search_range / search_space_divider;
+	var offset_center = this.offset;
+
+	var N = 10;
+
+	var scores = new Array(N);
+
+	var min_score = Infinity;
+	var best_angle = this.angle;
+	var best_offset = this.offset;
+
+	for (var i = 0; i < N; i++)
+	{
+		scores[i] = new Array(N);
+
+		for (var j = 0; j < N; j++)
+		{
+			var t1 = i / (N - 1);
+			var t2 = j / (N - 1);
+
+			var min_angle = angle_center - angle_delta / 2;
+			var angle = min_angle + t1 * angle_delta;
+
+			var min_offset = offset_center - offset_delta / 2;
+			var offset = min_offset + t2 * offset_delta;
+
+			this.updateStrandMap(angle, offset, this.strand_gap);
+			var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[this
+				.central_strand]);
+
+			console.log(angle, offset, score);
+
+			if (score < min_score)
+			{
+				min_score = score;
+				best_angle = angle;
+				best_offset = offset;
+			}
+
+			scores[i][j] = score;
+		}
+	}
+
+
+	// Set best found results to map.
+
+	this.updateStrandMap(best_angle, best_offset, this.strand_gap);
+
+
+
+	console.log("Running strand_gap improvement process.");
+
+
+	// Find the strand_gap which best matches the true structure
+
+	var gap_center = 4.5;
+	var gap_delta = 1;
+
+	var N = 100;
+
+	var min_score = Infinity;
+	var best_gap = this.strand_gap;
+
+	var map = this.strandMap;
+
+	for (var i = 0; i < N; i++)
+	{
+		var t = i / (N - 1);
+
+		var min_gap = gap_center - gap_delta / 2;
+		var strand_gap = min_gap + t * gap_delta;
+
+		this.updateStrandMap(this.angle, this.offset, strand_gap);
+
+		var score = 0;
+		for (var j = map._length; j < map.length; j++)
+		{
+			if (map[j].length - map[j]._length > 0)
+			{
+				var change = this.scoreViaTrueStrand(this.strandMap[j], this.truePoints[j +
+					this.central_strand]);
+
+				score += change
+			}
+		}
+
+		if (score < min_score)
+		{
+			min_score = score;
+			best_gap = strand_gap;
+		}
+	}
+
+	this.updateStrandMap(best_angle, best_offset, best_gap);
+
+
 
 
 
@@ -277,6 +383,21 @@ Strand.prototype.setOrigin = function(t, u)
 
 	this.originPoint.t = t;
 	this.originPoint.u = u;
+}
+
+Strand.prototype.twistAngle = function(s1_1, s1_2, s2_1, s2_2)
+{
+	var x1 = s1_2.x - s1_1.x;
+	var y1 = s1_2.y - s1_1.y;
+	var z1 = s1_2.z - s1_1.z;
+
+	var x2 = s2_2.x - s2_1.x;
+	var y2 = s2_2.y - s2_1.y;
+	var z2 = s2_2.z - s2_1.z;
+
+	var twist = this.angleBetweenTwoVectors(x1, y1, z1, x2, y2, z2, s1_1, s2_1);
+
+	return twist;
 }
 
 Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2, p1,
@@ -703,6 +824,79 @@ Strand.prototype.updateDownload = function()
 
 }
 
+Strand.prototype.crossProduct = function(v1, v2)
+{
+	var v = new Array(3);
+
+	v[0] = v1[1] * v2[2] + v1[2] * v2[1];
+	v[1] = v1[2] * v2[0] + v1[0] * v2[2];
+	v[2] = v1[0] * v2[1] + v1[1] * v2[0];
+
+	return v;
+}
+
+Strand.prototype.dotProduct = function(v1, v2)
+{
+	var v = new Array(3);
+
+	v[0] = v1[0] * v2[0];
+	v[1] = v1[1] * v2[1];
+	v[2] = v1[2] * v2[2];
+
+	return v;
+}
+
+Strand.prototype.subtractVector = function(v1, v2)
+{
+	var v = new Array(3);
+
+	v[0] = v1[0] - v2[0];
+	v[1] = v1[1] - v2[1];
+	v[2] = v1[2] - v2[2];
+}
+
+Strand.prototype.absoluteVector = function(v)
+{
+	return Math.sqrt(
+		Math.pow(v[0], 2) + Math.pow(v[1], 2) + Math.pow(v[2], 2));
+}
+
+Strand.prototype.divideVector = function(v1, divisor)
+{
+	var v = new Array(3);
+
+	v[0] = v1[0] / divisor;
+	v[1] = v1[1] / divisor;
+	v[2] = v1[2] / divisor;
+
+	return v;
+}
+
+Strand.prototype.dihedralAngle = function(p1, p2, p3, p4)
+{
+	var p1 = [p1.x, p1.y, p1.z];
+	var p2 = [p2.x, p2.y, p2.z];
+	var p3 = [p3.x, p3.y, p3.z];
+
+	var b1 = this.subtractVector(p2 - p1);
+	var b2 = this.subtractVector(p3 - p2);
+	var b3 = this.subtractVector(p4 - p3);
+
+	var cross1 = this.crossProduct(b1, b2);
+	var cross2 = this.crossProduct(b2, b3);
+	var double_cross = this.crossProduct(cross1, cross2);
+	var right = this.dotProduct(cross1, cross2);
+
+	var magnitude = this.absoluteVector(b2);
+	var divided = this.divideVector(b2, magnitude);
+
+	var left = this.dotProduct(double_cross, divided);
+
+	var angle = Math.atan2(left, right);
+
+	return angle;
+}
+
 Strand.prototype.draw = function()
 {
 	if (!this.ignoreChanges)
@@ -731,13 +925,170 @@ Strand.prototype.draw = function()
 	this.drawMap();
 	this.drawTrueStrands();
 
+
+
+
+	var map = this.strandMap;
+
+	// Find pair of simulated strands with most shared connections.
+	var max_count = -Infinity;
+	var max_index = -Infinity;
+	for (var i = map._length; i < map.length - 1; i++)
+	{
+		var s1 = map[i];
+		var s2 = map[i + 1];
+
+		// Loop through s1, counting how many elements also exist in s2.
+		var count = 0;
+		for (var j = s1._length; j < s1.length; j++)
+		{
+			if (s1[j] != undefined && s2[j] != undefined)
+			{
+				count++;
+			}
+		}
+
+		if (count > max_count)
+		{
+			max_count = count;
+			max_index = i;
+		}
+	}
+
+
+	// TEMPORARILY sample max_index being the center.
+
+	max_index = -1;
+
+
+
+
+	// Loop through pair, and find the minimum twist angle between them.
+
+	var s1 = map[max_index];
+	var s2 = map[max_index + 1];
+
+	var min_angle = Infinity;
+	var max_angle = -Infinity;
+
+	for (var i = s1._length; i < s1.length - 1; i++)
+	{
+		var s1_1 = s1[i];
+		var s1_2 = s1[i + 1];
+
+		var s2_1 = s2[i];
+		var s2_2 = s2[i + 1];
+
+		var defined = s1_1 && s1_2 && s2_1 && s2_2;
+
+		if (defined)
+		{
+			var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+
+			if (angle < min_angle)
+			{
+				min_angle = angle;
+			}
+
+			if (angle > max_angle)
+			{
+				max_angle = angle;
+			}
+		}
+	}
+
+	// Loop through pair, calculating the N average of each N-group of sample
+	// pairs, and finding the max N-avg and min N-avg.  N > 0
+
+	var s1 = map[max_index];
+	var s2 = map[max_index + 1];
+
+	var min_avg_angle = Infinity;
+	var max_avg_angle = -Infinity;
+
+	var N = 4;
+
+	for (var i = s1._length; i < s1.length - N; i++)
+	{
+		var sumtwist = 0;
+
+		for (var j = 0; j < N; j++)
+		{
+			var s1_1 = s1[i + j];
+			var s1_2 = s1[i + j + 1];
+
+			var s2_1 = s2[i + j];
+			var s2_2 = s2[i + j + 1];
+
+			var defined = s1_1 && s1_2 && s2_1 && s2_2;
+
+			if (defined)
+			{
+				var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+
+				sumtwist += angle;
+			}
+			else
+			{
+				sumtwist = NaN;
+				break;
+			}
+		}
+
+		if (sumtwist == sumtwist)
+		{
+			if (sumtwist < min_avg_angle)
+			{
+				min_avg_angle = sumtwist;
+			}
+
+			if (sumtwist > min_avg_angle)
+			{
+				max_avg_angle = sumtwist;
+			}
+		}
+	}
+
+
+
+
+
+
+
+	ctx.fillText("Min twist angle: " + min_angle, 10, 90);
+	ctx.fillText("Max twist angle: " + max_angle, 10, 100);
+
+	ctx.fillText("MinAvg twist angle: " + min_avg_angle, 10, 120);
+	ctx.fillText("MaxAvg twist angle: " + max_avg_angle, 10, 130);
+
+
+
+
+
+
+
+
+
+
+
 	if (this.truePoints != undefined)
 	{
 		// We call "scoreViaTrueStrand" to find the matching between a given
 		// simulated strand and a given true strand.
 
-		var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[2]);
-		ctx.fillText("Score for initial matching process: " + score, 10, 80);
+		var score = 0;
+		for (var j = map._length; j < map.length; j++)
+		{
+			if (map[j].length - map[j]._length > 0)
+			{
+				var change = this.scoreViaTrueStrand(this.strandMap[j], this.truePoints[j +
+					this.central_strand]);
+
+				score += change
+			}
+		}
+
+		ctx.fillText("True-match score: " + score, 10, 80);
 
 	}
 
@@ -832,7 +1183,7 @@ Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand)
 
 	var score = 0;
 
-	for (var i = 0; i < sim_strand.length; i++)
+	for (var i = sim_strand._length; i < sim_strand.length; i++)
 	{
 		var p = sim_strand[i];
 
@@ -844,13 +1195,15 @@ Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand)
 			for (var j = 0; j < true_strand.samples.length; j++)
 			{
 				var sample = true_strand.samples[j];
-
-				var dist = p.squareDist(sample);
-
-				if (dist < min_dist)
+				if (sample != undefined)
 				{
-					min_dist = dist;
-					min_index = j;
+					var dist = p.squareDist(sample);
+
+					if (dist < min_dist)
+					{
+						min_dist = dist;
+						min_index = j;
+					}
 				}
 			}
 
@@ -1331,6 +1684,26 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 			}
 		}
 	}
+
+
+	/*
+		for (var i = map._length; i < map.length; i++)
+		{
+			for (var j = map[i]._length; j < map[i].length - 4; j++)
+			{
+				var p1 = map[i][j];
+				var p2 = map[i][j + 1];
+				var p3 = map[i][j + 2];
+				var p4 = map[i][j + 3];
+
+				if (p1 != undefined && p2 != undefined &&
+					p3 != undefined && p4 != undefined)
+				{
+					var dihedral_angle = this.dihedralAngle(p1, p2, p3, p4);
+					console.log(dihedral_angle);
+				}
+			}
+		}*/
 
 
 

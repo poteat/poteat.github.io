@@ -57,8 +57,10 @@ Point.prototype.dist = function(obj)
 
 Point.prototype.squareDist = function(obj)
 {
-	return Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y,
-		2) + Math.pow(this.z - obj.z, 2);
+	if (obj)
+		return Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y,
+			2) + Math.pow(this.z - obj.z, 2);
+	return 0;
 }
 
 Point.prototype.planeDist = function(A, B, C, D)

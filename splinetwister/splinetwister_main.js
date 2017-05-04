@@ -121,6 +121,8 @@ function main()
 
 					var string = generatePDBString(sample_points);
 
+
+
 					var file = generateTextFile(string);
 
 					dl.href = file;
@@ -184,6 +186,49 @@ function main()
 					ConcaveVertices = concaveHull(Vertices, .115);
 
 					var ConcaveHull = new Array()
+
+
+					// Code for increasing concave hull size
+					/*
+					// Loop through all vertices, calculating average pos.
+					var sum_x = 0;
+					var sum_y = 0;
+					for (var i = 0; i < ConcaveVertices.length; i++)
+					{
+						var V_i = ConcaveVertices[i];
+						var V = Vertices[V_i];
+
+						sum_x += V[0];
+						sum_y += V[1];
+					}
+
+					sum_x /= ConcaveVertices.length;
+					sum_y /= ConcaveVertices.length;
+
+					var scale_factor = 1.1;
+					// Loop through all of them, scaling up 10% rel to avg.
+					for (var i = 0; i < ConcaveVertices.length; i++)
+					{
+						var V_i = ConcaveVertices[i];
+						var V = Vertices[V_i];
+
+						V[0] -= sum_x;
+						V[0] *= scale_factor;
+						V[0] += sum_x;
+						V[1] -= sum_y;
+						V[1] *= scale_factor;
+						V[1] += sum_y;
+					}
+
+					for (var i = 0; i < ConcaveVertices.length; i++)
+					{
+						var V_i = ConcaveVertices[i];
+						var V = Vertices[V_i];
+
+						console.log(V);
+
+						ConcaveHull.push(V);
+					}*/
 
 					for (var i = 0; i < ConcaveVertices.length; i++)
 					{

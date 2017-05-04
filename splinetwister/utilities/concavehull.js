@@ -431,7 +431,12 @@ function concaveHull(array_of_points, length_threshold)
 	{
 		var CV = ConcaveVertices[i];
 		console.log(CV);
-	}/*/
+	}*/
+
+
+
+
+
 
 
 	return ConcaveVertices;

@@ -700,5 +700,5 @@ Perimeter.prototype.updateBoundingLine = function()
 	l1 = l1 > l2 ? l1 : l2;
 	this.half_length = Math.sqrt(l1);
 
-	console.log(this.half_length);
+	// console.log(this.half_length);
 }
