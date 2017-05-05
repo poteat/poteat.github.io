@@ -843,7 +843,7 @@ Strand.prototype.dotProduct = function(v1, v2)
 	v[1] = v1[1] * v2[1];
 	v[2] = v1[2] * v2[2];
 
-	return v;
+	return v[0] + v[1] + v[2];
 }
 
 Strand.prototype.subtractVector = function(v1, v2)
@@ -853,6 +853,8 @@ Strand.prototype.subtractVector = function(v1, v2)
 	v[0] = v1[0] - v2[0];
 	v[1] = v1[1] - v2[1];
 	v[2] = v1[2] - v2[2];
+
+	return v;
 }
 
 Strand.prototype.absoluteVector = function(v)
@@ -877,10 +879,11 @@ Strand.prototype.dihedralAngle = function(p1, p2, p3, p4)
 	var p1 = [p1.x, p1.y, p1.z];
 	var p2 = [p2.x, p2.y, p2.z];
 	var p3 = [p3.x, p3.y, p3.z];
+	var p4 = [p4.x, p4.y, p4.z];
 
-	var b1 = this.subtractVector(p2 - p1);
-	var b2 = this.subtractVector(p3 - p2);
-	var b3 = this.subtractVector(p4 - p3);
+	var b1 = this.subtractVector(p2, p1);
+	var b2 = this.subtractVector(p3, p2);
+	var b3 = this.subtractVector(p4, p3);
 
 	var cross1 = this.crossProduct(b1, b2);
 	var cross2 = this.crossProduct(b2, b3);
@@ -1685,10 +1688,51 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 		}
 	}
 
+	// Loop through strands, cleaning up.
 
-	/*
-		for (var i = map._length; i < map.length; i++)
+	for (var i = map._length; i < map.length; i++)
+	{
+		var min = map[i]._length;
+		var max = map[i].length;
+
+		var found_valid_thus_far = false;
+
+		for (var j = map[i]._length; j < map[i].length; j++)
 		{
+			var p = map[i][j];
+
+			if (p == undefined && found_valid_thus_far == false)
+			{
+				min = j + 1;
+			}
+			else
+			{
+				found_valid_thus_far = true;
+			}
+		}
+
+		map[i]._length = min;
+	}
+
+
+
+
+	console.clear();
+
+	console.log("Strand dihedral angles:");
+
+	var total_average = 0;
+	var total_count = 0;
+
+	for (var i = map._length; i < map.length; i++)
+	{
+		if (map[i]._length < map[i].length - 4)
+		{
+			console.log("Strand number: " + i);
+
+			var sum = 0;
+			var count = 0;
+
 			for (var j = map[i]._length; j < map[i].length - 4; j++)
 			{
 				var p1 = map[i][j];
@@ -1700,10 +1744,25 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 					p3 != undefined && p4 != undefined)
 				{
 					var dihedral_angle = this.dihedralAngle(p1, p2, p3, p4);
-					console.log(dihedral_angle);
+					dihedral_angle = dihedral_angle / Math.PI * 180;
+
+					sum += Math.abs(dihedral_angle);
+					count += 1;
 				}
 			}
-		}*/
+
+			sum /= count;
+
+			total_average += sum;
+			total_count += 1;
+
+			console.log(sum); // Now average			
+		}
+	}
+
+	total_average /= total_count;
+
+	console.log("Total average: " + total_average)
 
 
 
