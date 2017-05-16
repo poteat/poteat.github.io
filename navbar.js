@@ -1,34 +1,111 @@
-document.write('\
-		<ul>\
-			<li><a href="index.html">Home</a></li>\
-			<li><a href="pendulum.html">Pendulum</a></li>\
-			<li><a href="doublependulum.html">Double Pendulum</a></li>\
-			<li><a href="degeneratedouble.html">Pendulum Results</a></li>\
-			<li><a href="triplependulum.html">Triple Pendulum</a></li>\
-			<li><a href="bezier.html">Quadratic Bézier Curves</a></li>\
-			<li><a href="generalizedbezier.html">Nth-order Bézier Curves</a></li>\
-			<li><a href="linear_regression.html">Simple Linear Regression</a></li>\
-			<li><a href="demingregression.html">Deming Regression</a></li>\
-			<li><a href="3dvisual.html">Simple 3D Visualization</a></li>\
-			<li><a href="3dinteractive.html">Interactive 3D View</a></li>\
-			<li><a href="loadmrc.html">MRC Loader</a></li>\
-			<li><a href="smoothbezier.html">Bézier Curve with Smoothing Parameter</a></li>\
-			<li><a href="imagestring.html">Image/String Converter</a></li>\
-			<li><a href="plane.html">Plane of Best Fit</a></li>\
-			<li><a href="bspline.html">B-Splines</a></li>\
-			<li><a href="engine.html">Approximated Physics Engine</a></li>\
-			<li><a href="multimrc.html">Multiple File MRC Viewer</a></li>\
-			<li><a href="polynomial.html">Surface Polynomial Rendering and Optimization</a></li>\
-			<li><a href="tree.html">Tree Structures</a></li>\
-			<li><a href="surface.html">Surface Fitting Program v1</a></li>\
-			<li><a href="boundingbox.html">O(n) Minimum Oriented Bounding Box Heuristic</a></li>\
-			<li><a href="curveprojection.html">Point Projection onto Arbitrary Curves/Surfaces</a></li>\
-			<li><a href="surfaceprojection.html">Surface-Point Projection</a></li>\
-			<li><b><a href="autosurfacefit.html">Surface Fitting Program v2</a></b></li>\
-			<li><a href="interpolator.html">3-Point Interpolator</a></li>\
-			<li><a href="characteristicshape.html">Characteristic Shape Algorithm</a></li>\
-			<li><a href="polygonlineintersection.html">Polygon-Line Intersection</a></li>\
-			<li><a href="linetwist.html">Symmetric Line Similarity Method</a></li>\
-			<li><a href="trajectory.html">Trajectory Visualization</a></li>\
-		</ul>\
-');
+function showSimMenu()
+{
+	var menu = document.getElementById("sim_menu");
+	if (!menu.classList.contains('show'))
+	{
+		menu.classList.toggle("show");
+	}
+}
+
+function showBioMenu()
+{
+	var menu = document.getElementById("bio_menu");
+	if (!menu.classList.contains('show'))
+	{
+		menu.classList.toggle("show");
+	}
+}
+
+function showRoboMenu()
+{
+	var menu = document.getElementById("robo_menu");
+	if (!menu.classList.contains('show'))
+	{
+		menu.classList.toggle("show");
+	}
+}
+
+window.onmouseover = function(e)
+{
+	keep_sim_menu = (e.target.id == "sim_button") || (e.target.parentNode.id == "sim_menu");
+	keep_bio_menu = (e.target.id == "bio_button") || (e.target.parentNode.id == "bio_menu");
+	keep_robo_menu = (e.target.id == "robo_button") || (e.target.parentNode.id == "robo_menu");
+
+	var menu = document.getElementById("sim_menu");
+	if (keep_sim_menu && menu.classList.contains('show'))
+	{
+		// Remove all other menus
+
+		var menu = document.getElementById("bio_menu");
+		if (menu.classList.contains('show'))
+		{
+			menu.classList.remove('show');
+		}
+
+		var menu = document.getElementById("robo_menu");
+		if (menu.classList.contains('show'))
+		{
+			menu.classList.remove('show');
+		}
+	}
+	else
+	{
+		var menu = document.getElementById("sim_menu");
+		if (menu.classList.contains('show'))
+		{
+			menu.classList.remove('show');
+		}
+	}
+
+	var menu = document.getElementById("bio_menu");
+	if (keep_bio_menu && menu.classList.contains('show'))
+	{
+		// Remove all other menus
+
+		var menu = document.getElementById("sim_menu");
+		if (menu.classList.contains('show'))
+		{
+			menu.classList.remove('show');
+		}
+
+		var menu = document.getElementById("robo_menu");
+		if (menu.classList.contains('show'))
+		{
+			menu.classList.remove('show');
+		}
+	}
+	else
+	{
+		var menu = document.getElementById("bio_menu");
+		if (menu.classList.contains('show'))
+		{
+			menu.classList.remove('show');
+		}
+	}
+
+	var menu = document.getElementById("robo_menu");
+	if (keep_robo_menu && menu.classList.contains('show'))
+	{
+		// Remove all other menus
+
+		var menu = document.getElementById("sim_menu");
+		if (menu.classList.contains('show'))
+		{
+			menu.classList.remove('show');
+		}
+
+		var menu = document.getElementById("bio_menu");
+		if (menu.classList.contains('show'))
+		{
+			menu.classList.remove('show');
+		}
+	}
+	else
+	{
+		var menu = document.getElementById("robo_menu");
+		if (menu.classList.contains('show'))
+		{
+			menu.classList.remove('show');
+		}
+	}
+}
