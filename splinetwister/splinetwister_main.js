@@ -1,5 +1,6 @@
-// GLOBAL SCOPE DECLARATIVE HEADER
-//
+
+
+
 // Camera and animation parameters
 var fps = 30;
 var fov = 250;
@@ -36,12 +37,8 @@ function init()
 	loadServerMRC("density_map.mrc");
 
 	BSurface = new Surface(4, 4, 30, 30);
-
 	BPlane = new Plane(1, -3, 1, 2);
-
 	BProj = new Projection();
-
-	//	BProj.appendPoint(0, 50, 0);
 
 	updateTransformedPoints();
 }
@@ -187,49 +184,6 @@ function main()
 
 					var ConcaveHull = new Array()
 
-
-					// Code for increasing concave hull size
-					/*
-					// Loop through all vertices, calculating average pos.
-					var sum_x = 0;
-					var sum_y = 0;
-					for (var i = 0; i < ConcaveVertices.length; i++)
-					{
-						var V_i = ConcaveVertices[i];
-						var V = Vertices[V_i];
-
-						sum_x += V[0];
-						sum_y += V[1];
-					}
-
-					sum_x /= ConcaveVertices.length;
-					sum_y /= ConcaveVertices.length;
-
-					var scale_factor = 1.1;
-					// Loop through all of them, scaling up 10% rel to avg.
-					for (var i = 0; i < ConcaveVertices.length; i++)
-					{
-						var V_i = ConcaveVertices[i];
-						var V = Vertices[V_i];
-
-						V[0] -= sum_x;
-						V[0] *= scale_factor;
-						V[0] += sum_x;
-						V[1] -= sum_y;
-						V[1] *= scale_factor;
-						V[1] += sum_y;
-					}
-
-					for (var i = 0; i < ConcaveVertices.length; i++)
-					{
-						var V_i = ConcaveVertices[i];
-						var V = Vertices[V_i];
-
-						console.log(V);
-
-						ConcaveHull.push(V);
-					}*/
-
 					for (var i = 0; i < ConcaveVertices.length; i++)
 					{
 						var V_i = ConcaveVertices[i];
@@ -245,19 +199,10 @@ function main()
 					initializeStrandFit();
 				}
 
-
-				// This area is devoted to post-processing after surface fit.
-
-				//		Mouse.draw();
+				// Post-processing work after surface fit.
 
 				BStrand.draw();
-
-				//DMap.draw();
-
 				BPerimeter.draw();
-
-
-
 
 				// End post-process handling area.
 			}
@@ -846,40 +791,6 @@ function loadStrandFile(evt)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function Mouse()
 {
 	this.x = 0;
@@ -920,22 +831,6 @@ Mouse.updatePos = function(evt)
 	var rect = cvs.getBoundingClientRect();
 	this.x = evt.clientX - rect.left - 1;
 	this.y = evt.clientY - rect.top - 1;
-
-	/*
-	if (BSurface.finished)
-	{
-			var coords = BSurface.calc(this.t, this.u);
-
-			this.drawPoint.x = coords[0];
-			this.drawPoint.y = coords[1];
-			this.drawPoint.z = coords[2];
-
-			this.drawPoint_T.moveTo(this.drawPoint);
-			this.drawPoint_T.scaleFactor(zoom);
-			this.drawPoint_T.rotateY(yaw);
-			this.drawPoint_T.rotateX(pitch);
-	}
-	*/
 };
 
 cvs.addEventListener('mousemove', function(evt)
@@ -1150,13 +1045,6 @@ cvs.addEventListener('mousemove', function(evt)
 			}
 
 
-
-
-
-
-
-
-
 			Mouse.t = t;
 			Mouse.u = u;
 		}
@@ -1255,24 +1143,6 @@ cvs.addEventListener('mousedown', function(evt)
 	{
 		this.hover = false;
 	}
-
-
-	// Check if mouse is over the strand origin point
-
-	// Strand origin movement is disabled
-
-	/*
-	if (BSurface.finished)
-	{
-		var p = BStrand.originPoint_T;
-		var dist = p.dist2d(Mouse);
-
-		if (dist < 15)
-		{
-			Mouse.held_object = BStrand.originPoint;
-		}
-	}*/
-
 
 
 

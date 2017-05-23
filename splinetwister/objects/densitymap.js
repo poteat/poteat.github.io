@@ -272,16 +272,11 @@ DensityMap.prototype.createFromMRC = function()
 				if (density > density_threshold)
 				{
 					var scale = this.scale;
-					/*				var p = new Point(((x + this.xorigin) - x_avg) * scale,
-										((y + this.yorigin) - y_avg) * scale, ((z +
-											this.zorigin) - z_avg) * scale);*/
-
 
 					var p = new Point(
 						x * scale + this.xorigin - x_avg,
 						y * scale + this.yorigin - y_avg,
 						z * scale + this.zorigin - z_avg);
-
 
 					var p2 = new Point(0, 0, 0);
 					this.points.push(p);
@@ -328,7 +323,7 @@ DensityMap.prototype.draw = function()
 
 	if (t == lim)
 	{
-		if (BSurface.finished != true)
+		if (BSurface.finished == false)
 		{
 			this.updateProjection();
 		}
@@ -342,19 +337,6 @@ DensityMap.prototype.draw = function()
 	{
 		var p = this.points[i];
 		var p_draw = this.points_T[i]
-			//coords = BSurface.calc(p.t, p.u);
-
-		/*
-		var proj = new Point(coords[0], coords[1], coords[2]);
-		proj.scaleFactor(zoom);
-		proj.rotateY(yaw);
-		proj.rotateX(pitch);
-		proj.draw(false);
-
-		ctx.beginPath();
-		ctx.moveTo(p_draw.x2d, p_draw.y2d);
-		ctx.lineTo(proj.x2d, proj.y2d);
-		ctx.stroke();*/
 	}
 
 	ctx.globalAlpha = 1;

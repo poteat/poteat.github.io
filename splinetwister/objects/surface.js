@@ -44,10 +44,6 @@ function Surface(X, Y, T, U)
 	}
 
 
-
-
-
-
 	// resPoints (Resolution points) are the initial estimate points for the 
 	//  heuristic point-projection algorithm.  They are a low-resolution sample 
 	//  of the curve, an array of small enough size that it is not prohibitive 
