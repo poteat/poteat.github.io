@@ -519,9 +519,9 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 
 		var angle_shift = 0;
 
-		var delta = 45;
+		var delta = 20;
 
-		for (var j = 0; j < 20; j++)
+		for (var j = 0; j < 40; j++)
 		{
 			// Calculate the current angle
 			// 
@@ -1497,18 +1497,18 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 		}
 	}
 
+	var map = this.strandMap;
 
 	// Now we do heuristic post-processing with improves accuracy on true
 	// sheets (see blue-ink research page "proposed length-displacement
 	// reduction algorithm".
-
-
+	// 
 	// Drop any samples that do not have left or right neighbors.
+
+	/* Removed for simulated cases
 
 	for (var iterations = 0; iterations < 2; iterations++)
 	{
-		var map = this.strandMap;
-
 		for (var i = map._length; i < map.length; i++)
 		{
 			var strand = map[i];
@@ -1687,6 +1687,8 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 			}
 		}
 	}
+
+	*/ // End region for proposed length displacement reduction heuristic
 
 	// Loop through strands, cleaning up.
 
