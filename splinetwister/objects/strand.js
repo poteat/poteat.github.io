@@ -959,14 +959,9 @@ Strand.prototype.draw = function()
 	}
 
 
-	// TEMPORARILY sample max_index being the center.
-
-	max_index = -1;
 
 
-
-
-	// Loop through pair, and find the minimum twist angle between them.
+	// Loop through pair, and find the minimum and maximum twist angle between them.
 
 	var s1 = map[max_index];
 	var s2 = map[max_index + 1];
@@ -1056,6 +1051,48 @@ Strand.prototype.draw = function()
 
 
 
+	// Calculate "strand coverage" score.  For all voxels, loop through all
+	// strand samples, and find the smallest distance.  Add this distance,
+	// squared, to a sum.  Then divide by num of voxels, then SQRT.
+
+	var sum_dist = 0;
+
+	for (var i = 0; i < DMap.points.length; i++)
+	{
+		var vox = DMap.points[i];
+
+		var min_dist = Infinity;
+
+		for (var j = map._length; j < map.length; j++)
+		{
+			var s = map[j];
+
+			for (var k = s._length; k < s.length - 1; k++)
+			{
+				var p = s[k];
+				var dist = Infinity;
+
+				if (p != undefined)
+				{
+					dist = vox.squareDist(p);
+				}
+
+				if (dist < min_dist)
+				{
+					min_dist = dist;
+				}
+			}
+		}
+
+		sum_dist += min_dist;
+	}
+
+	sum_dist /= DMap.points.length;
+	var coverage_score = Math.sqrt(sum_dist);
+
+
+
+
 
 
 	ctx.fillText("Min twist angle: " + min_angle, 10, 90);
@@ -1063,6 +1100,8 @@ Strand.prototype.draw = function()
 
 	ctx.fillText("MinAvg twist angle: " + min_avg_angle, 10, 120);
 	ctx.fillText("MaxAvg twist angle: " + max_avg_angle, 10, 130);
+
+	ctx.fillText("Coverage score: " + coverage_score, 10, 150);
 
 
 
