@@ -1,6 +1,3 @@
-
-
-
 // Camera and animation parameters
 var fps = 30;
 var fov = 250;
@@ -740,21 +737,33 @@ function loadStrandFile(evt)
 
 			var words = line.split(/ +/g);
 
-			var x = words[6];
-			var y = words[7];
-			var z = words[8];
+			// Loop through each line, only processing those N, CA, C
 
-			// Transform to DMap logical space.
+			var type = words[0];
+			var element = words[2];
 
-			x -= DMap.x_avg;
-			y -= DMap.y_avg;
-			z -= DMap.z_avg;
+			var backbone = element == "N" || element == "CA" || element == "C";
 
-			var p = new Point(x, y, z);
+			if (type == "ATOM" && backbone)
+			{
+				console.log(type);
 
-			p.rotateAxis(DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz);
+				var x = words[6];
+				var y = words[7];
+				var z = words[8];
 
-			points.push(p);
+				// Transform to DMap logical space.
+
+				x -= DMap.x_avg;
+				y -= DMap.y_avg;
+				z -= DMap.z_avg;
+
+				var p = new Point(x, y, z);
+
+				p.rotateAxis(DMap.rot_theta, DMap.rot_ux, DMap.rot_uy, DMap.rot_uz);
+
+				points.push(p);
+			}
 		}
 
 		BStrand.importStrands(points);

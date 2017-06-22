@@ -278,6 +278,8 @@ DensityMap.prototype.createFromMRC = function()
 						y * scale + this.yorigin - y_avg,
 						z * scale + this.zorigin - z_avg);
 
+					p.density = density;
+
 					var p2 = new Point(0, 0, 0);
 					this.points.push(p);
 					this.points_T.push(p2);
@@ -400,7 +402,7 @@ DensityMap.prototype.score = function()
 		var p = this.points[i];
 		var coords = BSurface.calc(p.t, p.u);
 		var proj = new Point(coords[0], coords[1], coords[2]);
-		sum_dist += Math.pow(p.dist(proj), 2);
+		sum_dist += p.density * Math.pow(p.dist(proj), 2);
 	}
 
 	this.saved_score = Math.sqrt(sum_dist / this.points.length);

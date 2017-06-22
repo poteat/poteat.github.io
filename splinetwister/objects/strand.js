@@ -22,7 +22,7 @@ Strand.prototype.initialize = function()
 	optimize_button = Create_ToggleButton(550, 30, 70, 25, "Optimize");
 	angle_slider = Create_Slider(550, 60, 150, 20, "Angle", 10, 0, 179.99, 45);
 	offset_slider = Create_Slider(550, 90, 150, 20, "Offset", 10, -1.99, 2, 0);
-	gap_slider = Create_Slider(550, 120, 150, 20, "Gap", 10, 4, 5, 4.5);
+	gap_slider = Create_Slider(550, 120, 150, 20, "Gap", 10, 4, 5, 4.92);
 
 	this.optimize_button = ToggleButtons[optimize_button];
 	this.angle_slider = Sliders[angle_slider];
@@ -37,7 +37,7 @@ Strand.prototype.initialize = function()
 
 	this.angle = 45;
 	this.offset = 0;
-	this.strand_gap = 4.5;
+	this.strand_gap = 4.92;
 
 	this.updateStrandMap(this.angle, this.offset, this.strand_gap);
 }
@@ -156,12 +156,28 @@ Strand.prototype.importStrands = function(points)
 	}
 
 
+	this.optimizeToTrueStructure();
 
-	this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[this.central_strand]);
+	this.truePoints_T = new Array();
 
+	for (var i = 0; i < this.truePoints.length; i++)
+	{
+		this.truePoints_T.push(new Array());
 
+		for (var j = 0; j < this.truePoints[i].length; j++)
+		{
+			var color = "Black";
+			color = i == min_id ? "Red" : color;
 
+			var p = new Point(0, 0, 0, color, 3);
+			p.transform(this.truePoints[i][j]);
+			this.truePoints_T[i].push(p);
+		}
+	}
+}
 
+Strand.prototype.optimizeToTrueStructure = function()
+{
 	// We have the scoring function, so now we call an initial optimization to
 	// improve the matching between strands.
 
@@ -309,8 +325,8 @@ Strand.prototype.importStrands = function(points)
 
 	// Find the strand_gap which best matches the true structure
 
-	var gap_center = 4.5;
-	var gap_delta = 1;
+	var gap_center = 4.75;
+	var gap_delta = .5;
 
 	var N = 100;
 
@@ -333,10 +349,14 @@ Strand.prototype.importStrands = function(points)
 		{
 			if (map[j].length - map[j]._length > 0)
 			{
-				var change = this.scoreViaTrueStrand(this.strandMap[j], this.truePoints[j +
-					this.central_strand]);
+				if (this.truePoints[j + this.central_strand] != undefined)
+				{
+					var change = this.scoreViaTrueStrand(this.strandMap[j],
+						this.truePoints[j + this.central_strand]);
 
-				score += change
+					score += change
+				}
+
 			}
 		}
 
@@ -348,29 +368,6 @@ Strand.prototype.importStrands = function(points)
 	}
 
 	this.updateStrandMap(best_angle, best_offset, best_gap);
-
-
-
-
-
-
-
-	this.truePoints_T = new Array();
-
-	for (var i = 0; i < this.truePoints.length; i++)
-	{
-		this.truePoints_T.push(new Array());
-
-		for (var j = 0; j < this.truePoints[i].length; j++)
-		{
-			var color = "Black";
-			color = i == min_id ? "Red" : color;
-
-			var p = new Point(0, 0, 0, color, 3);
-			p.transform(this.truePoints[i][j]);
-			this.truePoints_T[i].push(p);
-		}
-	}
 }
 
 Strand.prototype.setOrigin = function(t, u)
@@ -1108,7 +1105,108 @@ Strand.prototype.draw = function()
 
 
 
+	if (this.optimize_button.isActivated())
+	{
+		// Optimize (maximize) maximum angle of longest strand pair region.
 
+		// Begin by searching 20x angle space.
+
+		var N = 20;
+		var max_score = -Infinity;
+		var max_ang = -Infinity;
+
+		for (var i = 0; i < N; i++)
+		{
+			var ang = i / N * 180;
+
+			this.updateStrandMap(ang, this.offset, this.strand_gap);
+
+			var score = this.maxTwistAngleScore();
+
+			if (score > max_score)
+			{
+				max_score = score;
+				max_ang = ang;
+			}
+		}
+
+		this.angle = max_ang;
+
+		// Then search 20x offset space
+
+		var N = 20;
+		var max_score = -Infinity;
+		var max_val = -Infinity;
+		var min_offset = -2;
+		var max_offset = 2;
+
+		for (var i = 0; i < N; i++)
+		{
+			var t = i / (N - 1);
+			var offset = min_offset + (max_offset - min_offset) * t;
+
+			this.updateStrandMap(this.angle, offset, this.strand_gap);
+
+			var score = this.maxTwistAngleScore();
+
+			if (score > max_score)
+			{
+				max_score = score;
+				max_val = offset;
+			}
+		}
+
+		this.offset = max_val;
+
+		// Finally, search 20x 20x in both spaces, in a subregion
+
+		var N = 20;
+		var M = 20;
+
+		var ang_delta = 10; // Plus or minus this many degrees to search
+		var offset_delta = 1;
+
+		var min_s_ang = this.angle - ang_delta;
+		var min_s_offset = this.offset - offset_delta;
+
+		var max_score = -Infinity;
+		var best_angle = -Infinity;
+		var best_offset = -Infinity;
+
+		for (var i = 0; i < N; i++)
+		{
+			var t_ang = i / (N - 1);
+
+			var ang = min_s_ang + ang_delta * 2 * t_ang;
+
+			for (var j = 0; j < M; j++)
+			{
+				var t_offset = j / (M - 1);
+
+				var offset = min_s_offset + offset_delta * 2 * t_offset;
+
+				this.updateStrandMap(ang, offset, this.strand_gap);
+
+				var score = this.maxTwistAngleScore();
+
+				console.log(angle, offset, score);
+
+				if (score > max_score)
+				{
+					max_score = score;
+					best_angle = ang;
+					best_offset = offset;
+				}
+			}
+		}
+
+		this.angle = best_angle;
+		this.offset = best_offset;
+
+		this.updateStrandMap(this.angle, this.offset, this.strand_gap);
+
+		this.optimize_button.toggle();
+	}
 
 
 
@@ -1204,6 +1302,70 @@ Strand.prototype.drawMap = function()
 	}
 }
 
+Strand.prototype.maxTwistAngleScore = function()
+{
+	var map = this.strandMap;
+
+	// Find pair of simulated strands with most shared connections.
+	var max_count = -Infinity;
+	var max_index = -Infinity;
+	for (var i = map._length; i < map.length - 1; i++)
+	{
+		var s1 = map[i];
+		var s2 = map[i + 1];
+
+		// Loop through s1, counting how many elements also exist in s2.
+		var count = 0;
+		for (var j = s1._length; j < s1.length; j++)
+		{
+			if (s1[j] != undefined && s2[j] != undefined)
+			{
+				count++;
+			}
+		}
+
+		if (count > max_count)
+		{
+			max_count = count;
+			max_index = i;
+		}
+	}
+
+	var s1 = map[max_index];
+	var s2 = map[max_index + 1];
+
+	var min_angle = Infinity;
+	var max_angle = -Infinity;
+
+	for (var i = s1._length; i < s1.length - 1; i++)
+	{
+		var s1_1 = s1[i];
+		var s1_2 = s1[i + 1];
+
+		var s2_1 = s2[i];
+		var s2_2 = s2[i + 1];
+
+		var defined = s1_1 && s1_2 && s2_1 && s2_2;
+
+		if (defined)
+		{
+			var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+
+			if (angle < min_angle)
+			{
+				min_angle = angle;
+			}
+
+			if (angle > max_angle)
+			{
+				max_angle = angle;
+			}
+		}
+	}
+
+	return max_angle;
+}
+
 Strand.prototype.drawTrueStrands = function()
 {
 	if (this.truePoints_T != undefined)
@@ -1225,73 +1387,32 @@ Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand)
 
 	var score = 0;
 
-	for (var i = sim_strand._length; i < sim_strand.length; i++)
+	if (true_strand == undefined)
 	{
-		var p = sim_strand[i];
+		return 0;
+	}
 
-		if (p != undefined)
+	// Loop through all true samples, finding their minimum distance to a sim
+
+	for (var i = 0; i < true_strand.length; i++)
+	{
+		var p = true_strand[i];
+
+		var min_dist = Infinity;
+
+		for (var j = sim_strand._length; j < sim_strand.length; j++)
 		{
-			var min_dist = Infinity;
-			var min_index = -1;
+			var sim_point = sim_strand[j];
 
-			for (var j = 0; j < true_strand.samples.length; j++)
+			var dist = p.dist(sim_point);
+
+			if (dist < min_dist)
 			{
-				var sample = true_strand.samples[j];
-				if (sample != undefined)
-				{
-					var dist = p.squareDist(sample);
-
-					if (dist < min_dist)
-					{
-						min_dist = dist;
-						min_index = j;
-					}
-				}
-			}
-
-			// We have min_dist, so find the direction we need to search for the
-			// local minimum. (Or if we even need to search further)
-
-			var left_dist = min_index ?
-				p.squareDist(true_strand[min_index - 1]) : Infinity;
-
-			var right_dist = min_index - true_strand.length ?
-				p.squareDist(true_strand[min_index + 1]) : Infinity;
-
-			var direction;
-
-			if (left_dist < right_dist && left_dist < min_dist)
-			{
-				direction = -1;
-			}
-			else if (right_dist < left_dist && right_dist < min_dist)
-			{
-				direction = 1;
-			}
-			else
-			{
-				score += min_dist;
-				continue;
-			}
-
-			while (true)
-			{
-				min_index += direction;
-				var dist = min_index ?
-					p.squareDist(true_strand[min_index + direction]) : Infinity;
-
-				if (dist < min_dist)
-				{
-					min_dist = dist;
-				}
-				else
-				{
-					min_index += direction;
-					score += min_dist;
-					break;
-				}
+				min_dist = dist;
 			}
 		}
+
+		score += min_dist;
 	}
 
 	return Math.sqrt(score / sim_strand.length);
@@ -1329,6 +1450,10 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 	this.angle = angle;
 	this.offset = offset;
 	this.strand_gap = strand_gap;
+
+	this.angle_slider.setValue(angle);
+	this.offset_slider.setValue(offset);
+	this.gap_slider.setValue(strand_gap);
 
 	this.strandMap = new Array();
 
@@ -1544,7 +1669,7 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 	// 
 	// Drop any samples that do not have left or right neighbors.
 
-	/* Removed for simulated cases
+	// Removed for simulated cases
 
 	for (var iterations = 0; iterations < 2; iterations++)
 	{
@@ -1727,7 +1852,7 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 		}
 	}
 
-	*/ // End region for proposed length displacement reduction heuristic
+	// End region for proposed length displacement reduction heuristic
 
 	// Loop through strands, cleaning up.
 
@@ -1757,7 +1882,7 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
 
 
-
+	/* Dihedral angle calculation, completely unimportant for now
 	console.clear();
 
 	console.log("Strand dihedral angles:");
@@ -1805,7 +1930,7 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
 	console.log("Total average: " + total_average)
 
-
+	*/
 
 	// Create transposed version of strandMap
 
