@@ -49,7 +49,8 @@ function main()
 {
 	ctx.clearRect(0, 0, cvs.width, cvs.height);
 
-	DMap.draw();
+	if (DMap != undefined)
+		DMap.draw();
 
 	// Draw all toggle button and slider objects.
 	for (var i = 0; i < ToggleButtons.length; i++)

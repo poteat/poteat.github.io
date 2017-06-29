@@ -495,7 +495,7 @@ Surface.prototype.basis = function(t, i, n)
 
 Surface.prototype.optimizeControlPoint = function(p)
 {
-	var iterations = 9;
+	var iterations = 15;
 
 	var delta_x = 1;
 	var delta_y = 1;
@@ -503,7 +503,7 @@ Surface.prototype.optimizeControlPoint = function(p)
 
 	// var threshold = .0003;
 
-	var threshold = .001
+	var threshold = .0001
 
 	var score = DMap.score();
 

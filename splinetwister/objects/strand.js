@@ -300,7 +300,7 @@ Strand.prototype.optimizeToTrueStructure = function()
 			var score = this.scoreViaTrueStrand(this.strandMap[0], this.truePoints[this
 				.central_strand]);
 
-			console.log(angle, offset, score);
+			console.log(ang, offset, score);
 
 			if (score < min_score)
 			{
@@ -1052,40 +1052,7 @@ Strand.prototype.draw = function()
 	// strand samples, and find the smallest distance.  Add this distance,
 	// squared, to a sum.  Then divide by num of voxels, then SQRT.
 
-	var sum_dist = 0;
-
-	for (var i = 0; i < DMap.points.length; i++)
-	{
-		var vox = DMap.points[i];
-
-		var min_dist = Infinity;
-
-		for (var j = map._length; j < map.length; j++)
-		{
-			var s = map[j];
-
-			for (var k = s._length; k < s.length - 1; k++)
-			{
-				var p = s[k];
-				var dist = Infinity;
-
-				if (p != undefined)
-				{
-					dist = vox.squareDist(p);
-				}
-
-				if (dist < min_dist)
-				{
-					min_dist = dist;
-				}
-			}
-		}
-
-		sum_dist += min_dist;
-	}
-
-	sum_dist /= DMap.points.length;
-	var coverage_score = Math.sqrt(sum_dist);
+	var coverage_score = this.coverageScore();
 
 
 
@@ -1107,103 +1074,7 @@ Strand.prototype.draw = function()
 
 	if (this.optimize_button.isActivated())
 	{
-		// Optimize (maximize) maximum angle of longest strand pair region.
-
-		// Begin by searching 20x angle space.
-
-		var N = 20;
-		var max_score = -Infinity;
-		var max_ang = -Infinity;
-
-		for (var i = 0; i < N; i++)
-		{
-			var ang = i / N * 180;
-
-			this.updateStrandMap(ang, this.offset, this.strand_gap);
-
-			var score = this.maxTwistAngleScore();
-
-			if (score > max_score)
-			{
-				max_score = score;
-				max_ang = ang;
-			}
-		}
-
-		this.angle = max_ang;
-
-		// Then search 20x offset space
-
-		var N = 20;
-		var max_score = -Infinity;
-		var max_val = -Infinity;
-		var min_offset = -2;
-		var max_offset = 2;
-
-		for (var i = 0; i < N; i++)
-		{
-			var t = i / (N - 1);
-			var offset = min_offset + (max_offset - min_offset) * t;
-
-			this.updateStrandMap(this.angle, offset, this.strand_gap);
-
-			var score = this.maxTwistAngleScore();
-
-			if (score > max_score)
-			{
-				max_score = score;
-				max_val = offset;
-			}
-		}
-
-		this.offset = max_val;
-
-		// Finally, search 20x 20x in both spaces, in a subregion
-
-		var N = 20;
-		var M = 20;
-
-		var ang_delta = 10; // Plus or minus this many degrees to search
-		var offset_delta = 1;
-
-		var min_s_ang = this.angle - ang_delta;
-		var min_s_offset = this.offset - offset_delta;
-
-		var max_score = -Infinity;
-		var best_angle = -Infinity;
-		var best_offset = -Infinity;
-
-		for (var i = 0; i < N; i++)
-		{
-			var t_ang = i / (N - 1);
-
-			var ang = min_s_ang + ang_delta * 2 * t_ang;
-
-			for (var j = 0; j < M; j++)
-			{
-				var t_offset = j / (M - 1);
-
-				var offset = min_s_offset + offset_delta * 2 * t_offset;
-
-				this.updateStrandMap(ang, offset, this.strand_gap);
-
-				var score = this.maxTwistAngleScore();
-
-				console.log(angle, offset, score);
-
-				if (score > max_score)
-				{
-					max_score = score;
-					best_angle = ang;
-					best_offset = offset;
-				}
-			}
-		}
-
-		this.angle = best_angle;
-		this.offset = best_offset;
-
-		this.updateStrandMap(this.angle, this.offset, this.strand_gap);
+		this.optimizePrediction();
 
 		this.optimize_button.toggle();
 	}
@@ -1232,6 +1103,149 @@ Strand.prototype.draw = function()
 
 	}
 
+}
+
+Strand.prototype.optimizePrediction = function()
+{
+	// Optimize (maximize) maximum angle of longest strand pair region.
+
+	// Begin by searching 20x angle space.
+
+	var N = 20;
+	var max_score = -Infinity;
+	var max_ang = -Infinity;
+
+	for (var i = 0; i < N; i++)
+	{
+		var ang = i / N * 180;
+
+		this.updateStrandMap(ang, this.offset, this.strand_gap);
+
+		var score = this.maxTwistAngleScore();
+
+		if (score > max_score)
+		{
+			max_score = score;
+			max_ang = ang;
+		}
+	}
+
+	this.angle = max_ang;
+
+	// Then search 20x offset space
+
+	var N = 20;
+	var max_score = -Infinity;
+	var max_val = -Infinity;
+	var min_offset = -2;
+	var max_offset = 2;
+
+	for (var i = 0; i < N; i++)
+	{
+		var t = i / (N - 1);
+		var offset = min_offset + (max_offset - min_offset) * t;
+
+		this.updateStrandMap(this.angle, offset, this.strand_gap);
+
+		var score = this.maxTwistAngleScore();
+
+		if (score > max_score)
+		{
+			max_score = score;
+			max_val = offset;
+		}
+	}
+
+	this.offset = max_val;
+
+	// Finally, search 20x 20x in both spaces, in a subregion
+
+	var N = 20;
+	var M = 20;
+
+	var ang_delta = 10; // Plus or minus this many degrees to search
+	var offset_delta = 1;
+
+	var min_s_ang = this.angle - ang_delta;
+
+	if (min_s_ang < 0)
+	{
+		min_s_ang = 0;
+	}
+
+	var min_s_offset = this.offset - offset_delta;
+
+	var max_score = -Infinity;
+	var best_angle = -Infinity;
+	var best_offset = -Infinity;
+
+	for (var i = 0; i < N; i++)
+	{
+		var t_ang = i / (N - 1);
+
+		var ang = min_s_ang + ang_delta * 2 * t_ang;
+
+		for (var j = 0; j < M; j++)
+		{
+			var t_offset = j / (M - 1);
+
+			var offset = min_s_offset + offset_delta * 2 * t_offset;
+
+			this.updateStrandMap(ang, offset, this.strand_gap);
+
+			var score = this.maxTwistAngleScore();
+
+			console.log(ang, offset, score);
+
+			if (score > max_score)
+			{
+				max_score = score;
+				best_angle = ang;
+				best_offset = offset;
+			}
+		}
+	}
+
+	this.angle = best_angle;
+	this.offset = best_offset;
+
+
+	console.log("Beginning strand coverage optimization");
+
+	// Do 20x search on minimizing coverage score.
+
+	var N = 100;
+
+	var low_offset = -2;
+	var high_offset = 2;
+
+	var min_score = Infinity;
+	var best_offset = Infinity;
+
+	for (var i = 0; i < N; i++)
+	{
+		var t = i / (N - 1);
+
+		var offset = low_offset + (high_offset - low_offset) * t;
+
+		this.updateStrandMap(this.angle, offset, this.strand_gap);
+
+		var score = this.coverageScore();
+
+		if (score < min_score)
+		{
+			min_score = score;
+			best_offset = offset;
+		}
+
+		console.log(offset, score);
+	}
+
+
+	this.updateStrandMap(this.angle, best_offset, this.strand_gap);
+
+	console.log("Best found parameters:");
+	console.log(this.angle, this.offset, this.strand_gap);
 }
 
 Strand.prototype.drawMap = function()
@@ -1364,6 +1378,48 @@ Strand.prototype.maxTwistAngleScore = function()
 	}
 
 	return max_angle;
+}
+
+Strand.prototype.coverageScore = function()
+{
+	var sum_dist = 0;
+
+	var map = this.strandMap;
+
+	for (var i = 0; i < DMap.points.length; i++)
+	{
+		var vox = DMap.points[i];
+
+		var min_dist = Infinity;
+
+		for (var j = map._length; j < map.length; j++)
+		{
+			var s = map[j];
+
+			for (var k = s._length; k < s.length - 1; k++)
+			{
+				var p = s[k];
+				var dist = Infinity;
+
+				if (p != undefined)
+				{
+					dist = vox.squareDist(p);
+				}
+
+				if (dist < min_dist)
+				{
+					min_dist = dist;
+				}
+			}
+		}
+
+		sum_dist += min_dist;
+	}
+
+	sum_dist /= DMap.points.length;
+	var coverage_score = Math.sqrt(sum_dist);
+
+	return coverage_score;
 }
 
 Strand.prototype.drawTrueStrands = function()
