@@ -12,6 +12,11 @@ var ctx = cvs.getContext('2d');
 var dl = document.getElementById('surface_download_link');
 var fit_dl = document.getElementById('fit_download_link');
 var strand_dl = document.getElementById('strand_download_link');
+var set_dl = document.getElementById('set_download_link');
+
+
+zip.workerScriptsPath = "/SplineTwister/zip/";
+//zip.useWebWorkers = false;
 
 // Global object declarations
 var Mouse = new Mouse();
@@ -1246,6 +1251,20 @@ strand_dl.addEventListener('mouseover', function(evt)
 }, false);
 
 
+set_dl.addEventListener('mouseover', function(evt)
+{
+	if (BStrand && BStrand.generatedSet != true)
+	{
+		console.log("MOUSEOVER EVENT");
+
+		var angle_delta = Number(document.getElementById("sampleset_angle").value);
+		var offset_min = Number(document.getElementById("sampleset_offset_min").value);
+		var offset_max = Number(document.getElementById("sampleset_offset_max").value);
+		var offset_num = Number(document.getElementById("sampleset_offset_num").value);
+
+		BStrand.generateSampleSet(angle_delta, offset_min, offset_max, offset_num);
+	}
+}, false);
 
 
 

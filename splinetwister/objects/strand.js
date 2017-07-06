@@ -758,6 +758,169 @@ Strand.prototype.cullExteriorPoints = function(points)
 	}
 }
 
+Strand.prototype.generateStrandString = function(angle, offset, gap)
+{
+	console.log(angle, offset, gap);
+	this.updateStrandMap(angle, offset, gap);
+
+	var sample_points = new Array();
+
+	var map = this.strandMap;
+
+	for (var i = map._length; i < map.length; i++)
+	{
+		for (var j = map[i]._length; j < map[i].length; j++)
+		{
+			var p = map[i][j];
+
+			if (p != undefined)
+			{
+				var p_copy = new Point(p.x, p.y, p.z);
+
+				sample_points.push(p_copy);
+			}
+		}
+	}
+
+	// Undo plane and centering transformations
+	for (var i = 0; i < sample_points.length; i++)
+	{
+		sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy,
+			DMap.rot_uz)
+
+		sample_points[i].x += DMap.x_avg
+		sample_points[i].y += DMap.y_avg
+		sample_points[i].z += DMap.z_avg
+	}
+
+	var string = generatePDBString(sample_points);
+
+	return string;
+}
+
+Strand.prototype.getFilename = function()
+{
+	var filename = DMap.filename;
+	var exploded_filename = filename.split(".");
+
+	var strand_filename = "";
+
+	for (var i = 0; i < exploded_filename.length - 2; i++)
+	{
+		strand_filename += (exploded_filename[i] + ".");
+	}
+	strand_filename += (exploded_filename[i]);
+
+	return strand_filename;
+}
+
+Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
+	offset_max, offset_num)
+{
+	this.generatedSet = true;
+
+	// First, generate an array of strings, each string being a file.
+	// Also generate an array of filenames
+
+	var files = new Array();
+	var filenames = new Array();
+
+	var angle = 0;
+
+	var offset_delta = offset_max - offset_min;
+
+	while (angle < 360)
+	{
+		for (var i = 0; i < offset_num; i++)
+		{
+			var offset = offset_min + i / (offset_num - 1) * offset_delta;
+
+			console.log("Generating a" + angle + "_o" + offset);
+
+			var file = this.generateStrandString(angle, offset, 4.92);
+			var filename = this.getFilename() + "_a" + angle.toFixed(0) + "_o" +
+				offset.toFixed(2) + "_Strands.pdb";
+
+			files.push(file);
+			filenames.push(filename);
+		}
+
+		angle += angle_delta;
+	}
+
+	var zip_name = this.getFilename() + "_StrandSet.zip";
+	set_dl.download = zip_name;
+
+	zip.createWriter(new zip.BlobWriter("application/zip"), function(writer)
+	{
+		var f = 0;
+
+		function nextFile(f)
+		{
+			writer.add(filenames[f], new zip.TextReader(files[f]), function()
+			{
+				console.log(f);
+				f++;
+				if (f < files.length)
+				{
+					nextFile(f);
+				}
+				else close();
+			});
+		}
+
+		function close()
+		{
+			writer.close(function(blob)
+			{
+				zip_file = window.URL.createObjectURL(blob);
+				console.log(zip_file);
+				set_dl.href = zip_file;
+			});
+		}
+
+		nextFile(f);
+
+	}, onerror)
+
+
+
+
+
+	/*
+
+
+			zip.createWriter(new zip.BlobWriter(), function(writer)
+			{
+				{
+					writer.add(strand_filename, new zip.TextReader(strand_text), function()
+					{
+						// onsuccess callback
+					}, function(currentIndex, totalIndex)
+					{
+						// onprogress callback
+					});
+				}
+
+				angle_index += angle_delta;
+			}
+
+			writer.close(function(blob)
+			{
+				// blob contains the zip file as a Blob object
+				file = window.URL.createObjectURL(blob);
+				console.log(file);
+
+				set_dl.href = file;
+
+			});
+		},
+		function(error)
+		{
+			console.log(error);
+		});*/
+}
+
 Strand.prototype.updateDownload = function()
 {
 

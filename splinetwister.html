@@ -5,6 +5,9 @@
 <head>
 	<title>Michael's Lab</title>
 	<link rel=stylesheet href="splinetwister/splinetwister.css" type="text/css">
+	<script type="text/javascript" src="/SplineTwister/zip/zip.js"></script>
+	<script type="text/javascript" src="/SplineTwister/zip/deflate.js"></script>
+	<script type="text/javascript" src="/SplineTwister/zip/inflate.js"></script>
 </head>
 
 <body>
@@ -31,7 +34,20 @@
 			Download Fit Data
 	</a>
 	<a class="button" download="" id="strand_download_link">
-			Download Strand PDB Render
+			Download Current Strand (PDB)
+	</a>
+	<br>
+	<br> Angle Delta:
+	<input type="text" value="20" id="sampleset_angle"></input>
+	<br> Offset Num:
+	<input type="text" value="5" id="sampleset_offset_num"></input>
+	<br> Offset Min:
+	<input type="text" value="-2" id="sampleset_offset_min"></input>
+	<br> Offset Max:
+	<input type="text" value="2" id="sampleset_offset_max"></input>
+	<br>
+	<a class="button" download="" id="set_download_link">
+			Download Strand Set (ZIP)
 	</a>
 	<p></p>
 	<canvas id="canvas" width="750" height="750"> </canvas>
