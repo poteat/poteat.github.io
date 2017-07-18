@@ -15,7 +15,7 @@ var strand_dl = document.getElementById('strand_download_link');
 var set_dl = document.getElementById('set_download_link');
 
 
-zip.workerScriptsPath = "/SplineTwister/zip/";
+zip.workerScriptsPath = "/splinetwister/zip/";
 //zip.useWebWorkers = false;
 
 // Global object declarations
