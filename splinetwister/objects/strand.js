@@ -842,7 +842,6 @@ Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
 				offset.toFixed(2) + "_Strands.pdb";
 
 			files.push(file);
-			filenames.push(filename);
 		}
 
 		angle += angle_delta;
@@ -857,7 +856,7 @@ Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
 
 		function nextFile(f)
 		{
-			writer.add(filenames[f], new zip.TextReader(files[f]), function()
+			writer.add(filenames[f], new zip.TextReader(files), function()
 			{
 				console.log(f);
 				f++;
@@ -1890,6 +1889,8 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
 	// Removed for simulated cases
 
+	/*
+
 	for (var iterations = 0; iterations < 2; iterations++)
 	{
 		for (var i = map._length; i < map.length; i++)
@@ -2070,6 +2071,8 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 			}
 		}
 	}
+
+	*/
 
 	// End region for proposed length displacement reduction heuristic
 
