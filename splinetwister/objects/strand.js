@@ -623,37 +623,6 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
     {
         var p = points[i];
 
-        /*
-
-        var delta = 0.1;
-
-        var dt = _cos * delta;
-        var du = _sin * delta;
-
-        dist = p.distToParameter(p.t + sign * dt, p.u + sign * du);
-
-        while (Math.abs(dist - strand_gap) > 0.001)
-        {
-        	if (dist > strand_gap)
-        	{
-        		delta /= 2;
-
-        		dt -= _cos * delta;
-        		du -= _sin * delta;
-        	}
-        	else
-        	{
-        		dt += _cos * delta;
-        		du += _sin * delta;
-        	}
-
-        	dist = p.distToParameter(p.t + sign * dt, p.u + sign * du);
-        }
-
-        //*/
-
-        // New linear code START
-
         var delta = this.linearInterpolate(x_array, y_array, i);
 
         var shift_angle = this.linearInterpolate(x_ang_array, y_ang_array, i);
@@ -662,11 +631,6 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
 
         var dt = Math.cos(adjusted_ang) * delta;
         var du = Math.sin(adjusted_ang) * delta;
-
-        //*/
-        // New linear code END
-
-
 
         var coords = BSurface.calc(p.t + sign * dt, p.u + sign * du);
 
@@ -882,48 +846,10 @@ Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
         nextFile(f);
 
     }, onerror)
-
-
-
-
-
-    /*
-
-
-    		zip.createWriter(new zip.BlobWriter(), function(writer)
-    		{
-    			{
-    				writer.add(strand_filename, new zip.TextReader(strand_text), function()
-    				{
-    					// onsuccess callback
-    				}, function(currentIndex, totalIndex)
-    				{
-    					// onprogress callback
-    				});
-    			}
-
-    			angle_index += angle_delta;
-    		}
-
-    		writer.close(function(blob)
-    		{
-    			// blob contains the zip file as a Blob object
-    			file = window.URL.createObjectURL(blob);
-    			console.log(file);
-
-    			set_dl.href = file;
-
-    		});
-    	},
-    	function(error)
-    	{
-    		console.log(error);
-    	});*/
 }
 
 Strand.prototype.updateDownload = function()
 {
-
     // We now happily have the full set of strand sample points, so we can 
     // generate a pdb file and hook it to the button (magic)
 
@@ -1890,6 +1816,8 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 
     // Removed for simulated cases
 
+    /*
+
     for (var iterations = 0; iterations < 2; iterations++)
     {
         for (var i = map._length; i < map.length; i++)
@@ -2070,6 +1998,8 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
             }
         }
     }
+
+    */
 
     // End region for proposed length displacement reduction heuristic
 
