@@ -1131,7 +1131,7 @@ Strand.prototype.draw = function()
                 min_avg_angle = sumtwist;
             }
 
-            if (sumtwist > min_avg_angle)
+            if (sumtwist > max_avg_angle)
             {
                 max_avg_angle = sumtwist;
             }
