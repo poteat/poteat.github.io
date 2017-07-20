@@ -3,70 +3,68 @@
 <html>
 
 <head>
-	<title>Michael's Lab</title>
-	<link rel=stylesheet href="splinetwister/splinetwister.css" type="text/css">
-	<script type="text/javascript" src="/splinetwister/zip/zip.js"></script>
-	<script type="text/javascript" src="/splinetwister/zip/deflate.js"></script>
-	<script type="text/javascript" src="/splinetwister/zip/inflate.js"></script>
+    <title>Michael's Lab</title>
+    <link rel=stylesheet href="splinetwister/splinetwister.css" type="text/css">
+    <script type="text/javascript" src="/splinetwister/zip/zip.js"></script>
+    <script type="text/javascript" src="/splinetwister/zip/deflate.js"></script>
+    <script type="text/javascript" src="/splinetwister/zip/inflate.js"></script>
 </head>
 
 <body>
-	<h1>Michael's Lab</h1>
-
-	<script src="csi.js"></script>
-	<script src="navbar.js"></script>
-	<div data-include="navbar.html"></div>
-
-	<h2>Auto-fitting Spline Surface</h2> Density File:
-	<input type="file" accept=".mrc, .pdb" id="mrc_file"></input>
-	<input type="text" value="0.293" id="density_threshold"></input>
-	<p></p>
-	Fitting File:
-	<input type="file" accept=".fit" id="fit_file"></input>
-	<p></p>
-	True Strands File:
-	<input type="file" accept=".pdb" id="strand_file"></input>
-	<p></p>
-	<a class="button" download="" id="surface_download_link">
+    <h1>Michael's Lab</h1>
+    <script src="csi.js"></script>
+    <script src="navbar.js"></script>
+    <div data-include="navbar.html"></div>
+    <h2>Auto-fitting Spline Surface</h2> Density File:
+    <input type="file" accept=".mrc, .pdb" id="mrc_file"></input>
+    <input type="text" value="0.293" id="density_threshold"></input>
+    <p></p>
+    Fitting File:
+    <input type="file" accept=".fit" id="fit_file"></input>
+    <p></p>
+    True Strands File:
+    <input type="file" accept=".pdb" id="strand_file"></input>
+    <p></p>
+    <a class="button" download="" id="surface_download_link">
 			Download Surface PDB
 	</a>
-	<a class="button" download="" id="fit_download_link">
+    <a class="button" download="" id="fit_download_link">
 			Download Fit Data
 	</a>
-	<a class="button" download="" id="strand_download_link">
+    <a class="button" download="" id="strand_download_link">
 			Download Current Strand (PDB)
 	</a>
-	<br>
-	<br> Angle Delta:
-	<input type="text" value="20" id="sampleset_angle"></input>
-	<br> Offset Num:
-	<input type="text" value="5" id="sampleset_offset_num"></input>
-	<br> Offset Min:
-	<input type="text" value="-2" id="sampleset_offset_min"></input>
-	<br> Offset Max:
-	<input type="text" value="2" id="sampleset_offset_max"></input>
-	<br>
-	<a class="button" download="" id="set_download_link">
-			Download Strand Set (ZIP)
+    <br>
+    <br> Angle Delta:
+    <input type="text" value="20" id="sampleset_angle"></input>
+    <br> Offset Num:
+    <input type="text" value="5" id="sampleset_offset_num"></input>
+    <br> Offset Min:
+    <input type="text" value="-2" id="sampleset_offset_min"></input>
+    <br> Offset Max:
+    <input type="text" value="2" id="sampleset_offset_max"></input>
+    <br>
+    <a class="button" download="" id="set_download_link">
+			Generate Strand Set
 	</a>
-	<p></p>
-	<canvas id="canvas" width="750" height="750"> </canvas>
-	<p></p>
-	<div id="footer"></div>
-	<!-- Dependencies -->
-	<script type="text/javascript" src="splinetwister/utilities/delaunay.js"></script>
-	<script type="text/javascript" src="splinetwister/utilities/concavehull.js"></script>
-	<script type="text/javascript" src="splinetwister/utilities/hullintersection.js"></script>
-	<!-- Class Javascript Files -->
-	<script type="text/javascript" src="splinetwister/objects/densitymap.js"></script>
-	<script type="text/javascript" src="splinetwister/objects/perimeter.js"></script>
-	<script type="text/javascript" src="splinetwister/objects/plane.js"></script>
-	<script type="text/javascript" src="splinetwister/objects/point.js"></script>
-	<script type="text/javascript" src="splinetwister/objects/projection.js"></script>
-	<script type="text/javascript" src="splinetwister/objects/strand.js"></script>
-	<script type="text/javascript" src="splinetwister/objects/surface.js"></script>
-	<!-- Main Javascript Code -->
-	<script type="text/javascript" src="splinetwister/splinetwister_main.js"></script>
+    <p></p>
+    <canvas id="canvas" width="750" height="750"> </canvas>
+    <p></p>
+    <div id="footer"></div>
+    <!-- Dependencies -->
+    <script type="text/javascript" src="splinetwister/utilities/delaunay.js"></script>
+    <script type="text/javascript" src="splinetwister/utilities/concavehull.js"></script>
+    <script type="text/javascript" src="splinetwister/utilities/hullintersection.js"></script>
+    <!-- Class Javascript Files -->
+    <script type="text/javascript" src="splinetwister/objects/densitymap.js"></script>
+    <script type="text/javascript" src="splinetwister/objects/perimeter.js"></script>
+    <script type="text/javascript" src="splinetwister/objects/plane.js"></script>
+    <script type="text/javascript" src="splinetwister/objects/point.js"></script>
+    <script type="text/javascript" src="splinetwister/objects/projection.js"></script>
+    <script type="text/javascript" src="splinetwister/objects/strand.js"></script>
+    <script type="text/javascript" src="splinetwister/objects/surface.js"></script>
+    <!-- Main Javascript Code -->
+    <script type="text/javascript" src="splinetwister/splinetwister_main.js"></script>
 </body>
 
 </html>

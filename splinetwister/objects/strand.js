@@ -837,6 +837,11 @@ Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
         {
             writer.close(function(blob)
             {
+
+                var set_dl = document.getElementById('set_download_link');
+
+                set_dl.text = "Set Finished. Click to download"
+
                 zip_file = window.URL.createObjectURL(blob);
                 console.log(zip_file);
                 set_dl.href = zip_file;
