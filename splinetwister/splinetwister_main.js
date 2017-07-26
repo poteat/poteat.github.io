@@ -91,6 +91,8 @@ function main()
         ctx.fillText("Score: " + score, 10, 20);
         ctx.fillText("Number of points: " + DMap.points.length, 10, 40);
 
+        ctx.fillText("Foldedness: " + DMap.foldedness(), 10, 180);
+
         if (BSurface.finished)
         {
             if (BSurface.X < desired_control_points)
