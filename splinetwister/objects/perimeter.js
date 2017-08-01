@@ -23,6 +23,8 @@ function Perimeter(ConcaveHull)
 		var calc = BSurface.calc(t, u);
 
 		var p = new Point(calc[0], calc[1], calc[2]);
+		p.t = t;
+		p.u = u;
 
 		var p_T = new Point(0, 0, 0, "black", 3);
 
@@ -76,8 +78,6 @@ function Perimeter(ConcaveHull)
 	}
 
 
-
-
 	this.surfacePointsY = new Array(R);
 	this.surfacePointsY_T = new Array(R);
 
@@ -119,6 +119,62 @@ function Perimeter(ConcaveHull)
 		}
 	}
 
+	// Create uniform sampling on surface, but in boundary
+
+	var sampling_dist = .05;
+
+	var t_range = DMap.max_t - DMap.min_t;
+	var u_range = DMap.max_u - DMap.min_u;
+
+	this.surfaceSamples = new Array();
+
+	for (var i = DMap.min_t; i < DMap.max_t; i += sampling_dist)
+	{
+		for (var j = DMap.min_u; j < DMap.max_u; j += sampling_dist)
+		{
+			var p = BSurface.sample(i, j);
+			this.surfaceSamples.push(p);
+		}
+	}
+
+
+	var central_coords = this.getSurfaceCentroid();
+	this.centralPoint = BSurface.sample(central_coords[0], central_coords[1]);
+	this.centralPoint_T = new Point(0, 0, 0, "purple", 5);
+
+
+	// Artificially increase size of perimeter
+
+	var central_coords = this.getSurfaceCentroid();
+	var center_t = central_coords[0];
+	var center_u = central_coords[1];
+
+	var multiplier = 1.05;
+
+	for (var i = 0; i < this.points.length; i++)
+	{
+		var p = this.points[i];
+
+		p.t = center_t + (p.t - center_t) * multiplier;
+		p.u = center_u + (p.u - center_u) * multiplier;
+
+		p = BSurface.sample(p.t, p.u);
+
+		this.points[i] = p;
+	}
+
+	for (var i = 0; i < this.vertices.length; i++)
+	{
+		var v = this.vertices[i];
+		v[0] = center_t + (v[0] - center_t) * multiplier;
+		v[1] = center_u + (v[1] - center_u) * multiplier;
+
+		this.vertices[i] = v;
+	}
+
+
+
+
 	this.updateBoundingLine();
 
 	this.updateTransformedPoints();
@@ -137,7 +193,7 @@ Perimeter.prototype.getSurfaceCentroid = function()
 	 * hull vertex that defines the polygonal boundary.
 	 */
 
-	Hull = BPerimeter.vertices;
+	Hull = this.vertices;
 
 	var avgt = 1;
 	var avgu = 1;
@@ -378,6 +434,12 @@ Perimeter.prototype.updateColorError = function()
 
 Perimeter.prototype.updateTransformedPoints = function()
 {
+
+	this.centralPoint_T.moveTo(this.centralPoint);
+	this.centralPoint_T.scaleFactor(zoom);
+	this.centralPoint_T.rotateY(yaw);
+	this.centralPoint_T.rotateX(pitch);
+
 	for (var i = 0; i < this.points_T.length; i++)
 	{
 		this.points_T[i].moveTo(this.points[i]);
@@ -586,7 +648,7 @@ Perimeter.prototype.draw = function()
 		ctx.stroke();
 	}
 
-
+	this.centralPoint_T.draw();
 
 	// Draw bounding line points
 

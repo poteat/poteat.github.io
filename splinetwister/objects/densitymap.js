@@ -402,12 +402,19 @@ DensityMap.prototype.score = function()
         var p = this.points[i];
         var coords = BSurface.calc(p.t, p.u);
         var proj = new Point(coords[0], coords[1], coords[2]);
-        sum_dist += Math.pow(p.density, 2) * Math.pow(p.dist(proj), 3);
+        sum_dist += Math.pow(p.density, 2) * Math.pow(p.dist(proj), 2);
     }
 
     this.saved_score = Math.sqrt(sum_dist / this.points.length);
 
-    return this.saved_score + this.foldedness();
+    if (DMap.X < 4)
+    {
+        return this.saved_score + this.foldedness();
+    }
+    else
+    {
+        return this.saved_score;
+    }
 };
 
 DensityMap.prototype.foldedness = function()
@@ -441,7 +448,7 @@ DensityMap.prototype.foldedness = function()
 
     var foldedness = fold_term_1 + fold_term_2 + fold_term_3 + fold_term_4;
 
-    return foldedness / 2000;
+    return foldedness / 100;
 }
 
 DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)

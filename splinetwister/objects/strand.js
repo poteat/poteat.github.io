@@ -22,7 +22,7 @@ Strand.prototype.initialize = function()
     optimize_button = Create_ToggleButton(550, 30, 70, 25, "Optimize");
     angle_slider = Create_Slider(550, 60, 150, 20, "Angle", 10, 0, 179.99, 45);
     offset_slider = Create_Slider(550, 90, 150, 20, "Offset", 10, -1.99, 2, 0);
-    gap_slider = Create_Slider(550, 120, 150, 20, "Gap", 10, 4, 5, 4.92);
+    gap_slider = Create_Slider(550, 120, 150, 20, "Gap", 10, 4, 5, 4.85);
 
     this.optimize_button = ToggleButtons[optimize_button];
     this.angle_slider = Sliders[angle_slider];
@@ -37,7 +37,7 @@ Strand.prototype.initialize = function()
 
     this.angle = 45;
     this.offset = 0;
-    this.strand_gap = 4.92;
+    this.strand_gap = 4.85;
 
     this.updateStrandMap(this.angle, this.offset, this.strand_gap);
 }
@@ -1016,10 +1016,6 @@ Strand.prototype.draw = function()
     }
 
 
-    this.drawMap();
-    this.drawTrueStrands();
-
-
 
 
     var map = this.strandMap;
@@ -1163,6 +1159,52 @@ Strand.prototype.draw = function()
 
 
 
+
+
+    // Calculate max twist of region 1 and region 2 in center point.
+
+    var dist_limit = 4; // Angstroms
+
+    var ang1 = this.maxAngleOfStrand(-1, dist_limit);
+    var ang2 = this.maxAngleOfStrand(0, dist_limit);
+
+    var max_ang = Math.max(ang1, ang2);
+
+    ctx.fillText("Central Max Ang: " + max_ang, 10, 170);
+
+
+    // Loop through all strand points and set color depending on distance to center
+
+    var map = this.strandMap;
+
+    for (var i = map._length; i < map.length; i++)
+    {
+        var s = map[i];
+        for (var j = s._length; j < s.length; j++)
+        {
+            var p = s[j];
+            var p_draw = this.strandMap_T[i][j];
+
+            if (p != undefined)
+            {
+                if (p.dist(BPerimeter.centralPoint) > dist_limit)
+                {
+                    p_draw.color = "black";
+                    p_draw.size = 1;
+                }
+                else
+                {
+                    p_draw.color = "red";
+                    p_draw.size = 3;
+                }
+            }
+        }
+    }
+
+
+
+    this.drawMap();
+    this.drawTrueStrands();
 
 
 
@@ -1412,6 +1454,7 @@ Strand.prototype.drawMap = function()
 
 Strand.prototype.maxTwistAngleScore = function()
 {
+    /*
     var map = this.strandMap;
 
     // Find pair of simulated strands with most shared connections.
@@ -1471,6 +1514,68 @@ Strand.prototype.maxTwistAngleScore = function()
         }
     }
 
+    return max_angle;*/
+
+    var dist_limit = 4; // Angstroms
+
+    var ang1 = this.maxAngleOfStrand(-1, dist_limit);
+    var ang2 = this.maxAngleOfStrand(0, dist_limit);
+
+    var max_ang = Math.max(ang1, ang2);
+
+    return max_ang;
+}
+
+Strand.prototype.maxAngleOfStrand = function(strand_num, dist_limit)
+{
+    var map = this.strandMap
+
+    var s1 = map[strand_num];
+    var s2 = map[strand_num + 1];
+
+    var min_angle = Infinity;
+    var max_angle = -Infinity;
+
+    var center = BPerimeter.centralPoint;
+
+    for (var i = s1._length; i < s1.length - 1; i++)
+    {
+        var s1_1 = s1[i];
+        var s1_2 = s1[i + 1];
+
+        var s2_1 = s2[i];
+        var s2_2 = s2[i + 1];
+
+        var defined = s1_1 && s1_2 && s2_1 && s2_2;
+
+        if (defined)
+        {
+            var in_range = s1_1.dist(center) < dist_limit ||
+                           s1_2.dist(center) < dist_limit ||
+                           s2_1.dist(center) < dist_limit ||
+                           s2_2.dist(center) < dist_limit;
+        }
+        else
+        {
+            var in_range = false;
+        }
+
+        if (defined && in_range)
+        {
+            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+
+            if (angle < min_angle)
+            {
+                min_angle = angle;
+            }
+
+            if (angle > max_angle)
+            {
+                max_angle = angle;
+            }
+        }
+    }
+
     return max_angle;
 }
 
@@ -1480,9 +1585,24 @@ Strand.prototype.coverageScore = function()
 
     var map = this.strandMap;
 
-    for (var i = 0; i < DMap.points.length; i++)
+    var strand_count = 0;
+
+    for (var i = map._length; i < map.length; i++)
     {
-        var vox = DMap.points[i];
+        var s = map[i];
+        for (var j = s._length; j < s.length; j++)
+        {
+            if (j != undefined)
+            {
+                strand_count += 1;
+                break;
+            }
+        }
+    }
+
+    for (var i = 0; i < BPerimeter.surfaceSamples.length; i++)
+    {
+        var vox = BPerimeter.surfaceSamples[i];
 
         var min_dist = Infinity;
 
@@ -1510,10 +1630,10 @@ Strand.prototype.coverageScore = function()
         sum_dist += min_dist;
     }
 
-    sum_dist /= DMap.points.length;
-    var coverage_score = Math.sqrt(sum_dist);
+    sum_dist /= BPerimeter.surfaceSamples.length;
+    var coverage_score = sum_dist;
 
-    return coverage_score;
+    return coverage_score + strand_count;
 }
 
 Strand.prototype.drawTrueStrands = function()
