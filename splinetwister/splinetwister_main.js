@@ -34,8 +34,7 @@ var BPerimeter;
 var BStrand;
 
 // Program entry point, runs once at initialization of application.
-function init()
-{
+function init() {
     loadServerMRC("density_map.mrc");
 
     BSurface = new Surface(4, 4, 30, 30);
@@ -45,43 +44,35 @@ function init()
     updateTransformedPoints();
 }
 
-var desired_control_points = 4;
+var desired_control_points = 3;
 
 var updated_pdb = false;
 
 // Main program control loop, responsible for draw calls.
-function main()
-{
+function main() {
     ctx.clearRect(0, 0, cvs.width, cvs.height);
 
     if (DMap != undefined)
         DMap.draw();
 
     // Draw all toggle button and slider objects.
-    for (var i = 0; i < ToggleButtons.length; i++)
-    {
+    for (var i = 0; i < ToggleButtons.length; i++) {
         ToggleButtons[i].draw();
     }
 
-    for (var i = 0; i < Sliders.length; i++)
-    {
+    for (var i = 0; i < Sliders.length; i++) {
         Sliders[i].draw();
     }
 
     BSurface.draw();
-    if (DMap != undefined && BSurface.finished == false)
-    {
+    if (DMap != undefined && BSurface.finished == false) {
         DMap.draw();
     }
 
-    if (DMap != undefined)
-    {
-        if (!BSurface.finished)
-        {
+    if (DMap != undefined) {
+        if (!BSurface.finished) {
             var score = DMap.score();
-        }
-        else
-        {
+        } else {
             var score = DMap.saved_score;
         }
 
@@ -93,26 +84,20 @@ function main()
 
         ctx.fillText("Foldedness: " + DMap.foldedness(), 10, 180);
 
-        if (BSurface.finished)
-        {
-            if (BSurface.X < desired_control_points)
-            {
+        if (BSurface.finished) {
+            if (BSurface.X < desired_control_points) {
                 BSurface.incrementControlPoints();
                 BSurface.finished = false;
                 updated_pdb = false;
-            }
-            else
-            {
+            } else {
                 ctx.fillText("Surface-Fitting Completed", 10, 60);
                 dl.innerHTML = "Download Surface PDB";
 
-                if (updated_pdb == false)
-                {
+                if (updated_pdb == false) {
                     var sample_points = DMap.generateCroppedSurface(200, 200);
 
                     // Undo plane and centering transformations
-                    for (var i = 0; i < sample_points.length; i++)
-                    {
+                    for (var i = 0; i < sample_points.length; i++) {
                         sample_points[i].rotateAxis(-DMap.rot_theta,
                             DMap.rot_ux, DMap.rot_uy, DMap.rot_uz)
 
@@ -144,8 +129,7 @@ function main()
 
                     var output_filename = "";
 
-                    for (var i = 0; i < exploded_filename.length - 2; i++)
-                    {
+                    for (var i = 0; i < exploded_filename.length - 2; i++) {
                         output_filename += (exploded_filename[i] + ".");
                     }
                     output_filename += (exploded_filename[i]);
@@ -164,8 +148,7 @@ function main()
                 // Now that the surface is finished optimizing itself, we can
                 // calculate the projected concave hull!
 
-                if (first_execution)
-                {
+                if (first_execution) {
                     DMap.updateProjection(true);
                     BSurface.updatePoints();
 
@@ -175,8 +158,7 @@ function main()
 
                     var Vertices = new Array();
 
-                    for (var i = 0; i < DMap.points.length; i++)
-                    {
+                    for (var i = 0; i < DMap.points.length; i++) {
                         var p = DMap.points[i];
 
                         var t = p.t;
@@ -189,8 +171,7 @@ function main()
 
                     var ConcaveHull = new Array()
 
-                    for (var i = 0; i < ConcaveVertices.length; i++)
-                    {
+                    for (var i = 0; i < ConcaveVertices.length; i++) {
                         var V_i = ConcaveVertices[i];
                         var V = Vertices[V_i];
 
@@ -211,9 +192,7 @@ function main()
 
                 // End post-process handling area.
             }
-        }
-        else
-        {
+        } else {
             dl.innerHTML = "Waiting...";
             dl.href = "";
             updated_pdb = false;
@@ -221,10 +200,8 @@ function main()
 
     }
 
-    if (DMap != undefined)
-    {
-        if (BPlane.finished == false)
-        {
+    if (DMap != undefined) {
+        if (BPlane.finished == false) {
             var change = BPlane.optimize();
             var score = BPlane.score();
 
@@ -233,8 +210,7 @@ function main()
             ctx.fillText("Plane Score: " + score, 10, 60);
             ctx.fillText("Change: " + change, 10, 70);
 
-            if (change < .000001)
-            {
+            if (change < .000001) {
                 // Rotate DMap
                 BPlane.finished = true;
 
@@ -261,8 +237,7 @@ function main()
     }
 }
 
-function initializeStrandFit()
-{
+function initializeStrandFit() {
     BStrand = new Strand();
 }
 
@@ -274,51 +249,36 @@ function initializeStrandFit()
 // yaw and pitch camera angles respectively.  There is also a scaling
 // transformation for zoom.
 
-function updateTransformedPoints()
-{
+function updateTransformedPoints() {
     BSurface.updateTransformedPoints();
-    if (DMap != undefined)
-    {
+    if (DMap != undefined) {
         DMap.updateTransformedPoints();
     }
 
     BProj.updateTransformedPoints();
 
-    if (BPerimeter != null)
-    {
+    if (BPerimeter != null) {
         BPerimeter.updateTransformedPoints();
     }
 
-    if (BStrand != null)
-    {
+    if (BStrand != null) {
         BStrand.updateTransformedPoints();
     }
 }
 
-function generatePDBString(points)
-{
+function generatePDBString(points) {
     var string = "";
 
-    for (var i = 0; i < points.length; i++)
-    {
-        if (i + 1 < 10)
-        {
+    for (var i = 0; i < points.length; i++) {
+        if (i + 1 < 10) {
             var space = "     ";
-        }
-        else if (i + 1 < 100)
-        {
+        } else if (i + 1 < 100) {
             var space = "    ";
-        }
-        else if (i + 1 < 1000)
-        {
+        } else if (i + 1 < 1000) {
             var space = "   ";
-        }
-        else if (i + 1 < 10000)
-        {
+        } else if (i + 1 < 10000) {
             var space = "  ";
-        }
-        else
-        {
+        } else {
             var space = " ";
         }
 
@@ -328,72 +288,51 @@ function generatePDBString(points)
 
         var precision = 5;
 
-        if (x > -1 && x < 1)
-        {
+        if (x > -1 && x < 1) {
             var x = points[i].x.toPrecision(precision - 1);
 
-            if (x > -.1 && x < .1)
-            {
+            if (x > -.1 && x < .1) {
                 var x = points[i].x.toPrecision(precision - 2);
             }
-        }
-        else
-        {
+        } else {
             var x = points[i].x.toPrecision(precision);
         }
 
-        if (x < 0)
-        {
+        if (x < 0) {
             var x_space = "";
-        }
-        else
-        {
+        } else {
             var x_space = " ";
         }
 
-        if (y > -1 && y < 1)
-        {
+        if (y > -1 && y < 1) {
             var y = points[i].y.toPrecision(precision - 1);
 
-            if (y > -.1 && y < .1)
-            {
+            if (y > -.1 && y < .1) {
                 var y = points[i].y.toPrecision(precision - 2);
             }
-        }
-        else
-        {
+        } else {
             var y = points[i].y.toPrecision(precision);
         }
 
-        if (y < 0)
-        {
+        if (y < 0) {
             var y_space = "";
-        }
-        else
-        {
+        } else {
             var y_space = " ";
         }
 
-        if (z > -1 && z < 1)
-        {
+        if (z > -1 && z < 1) {
             var z = points[i].z.toPrecision(precision - 1);
 
-            if (z > -.1 && z < .1)
-            {
+            if (z > -.1 && z < .1) {
                 var z = points[i].z.toPrecision(precision - 2);
             }
-        }
-        else
-        {
+        } else {
             var z = points[i].z.toPrecision(precision);
         }
 
-        if (z < 0)
-        {
+        if (z < 0) {
             var z_space = "";
-        }
-        else
-        {
+        } else {
             var z_space = " ";
         }
 
@@ -405,8 +344,7 @@ function generatePDBString(points)
     return string;
 }
 
-function generateFitString()
-{
+function generateFitString() {
     var string = "" + density_threshold + "\n";
 
     string += DMap.x_avg + " " + DMap.y_avg + " " + DMap.z_avg + "\n";
@@ -420,10 +358,8 @@ function generateFitString()
 
     string += BSurface.X + " " + BSurface.Y + "\n";
 
-    for (var i = 0; i < BSurface.X; i++)
-    {
-        for (var j = 0; j < BSurface.Y; j++)
-        {
+    for (var i = 0; i < BSurface.X; i++) {
+        for (var j = 0; j < BSurface.Y; j++) {
             var p = BSurface.controlPoints[i][j];
             string += p.x + " " + p.y + " " + p.z + "\n";
         }
@@ -432,10 +368,8 @@ function generateFitString()
     return string;
 }
 
-function generateTextFile(string)
-{
-    var data = new Blob([string],
-    {
+function generateTextFile(string) {
+    var data = new Blob([string], {
         type: 'text/plain'
     });
 
@@ -453,26 +387,22 @@ function generateTextFile(string)
 // ----------------------------------------------------------------------
 
 // sign(x) returns -1 if x is negative, 1 if x is positive, and 0 if x is zero.
-function sign(x)
-{
+function sign(x) {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
 }
 
 // binomial(n,k) returns the binomial coefficient of n, k.  i.e. N select K.  
 // Used primarily for generating surface points.
-function binomial(n, k)
-{
+function binomial(n, k) {
     var prod = 1;
-    for (i = 1; i <= k; i++)
-    {
+    for (i = 1; i <= k; i++) {
         prod *= (n + 1 - i) / i;
     }
 
     return prod;
 }
 
-function clamp(num, min, max)
-{
+function clamp(num, min, max) {
     return num < min ? min : num > max ? max : num;
 }
 
@@ -484,17 +414,14 @@ function clamp(num, min, max)
 
 
 
-function loadServerMRC(file)
-{
+function loadServerMRC(file) {
     var oReq = new XMLHttpRequest();
     oReq.open("GET", "/" + file, true);
     oReq.responseType = "arraybuffer";
 
-    oReq.onload = function(oEvent)
-    {
+    oReq.onload = function(oEvent) {
         var arrayBuffer = oReq.response; // Note: not oReq.responseText
-        if (arrayBuffer)
-        {
+        if (arrayBuffer) {
             var byteArray = new Uint8Array(arrayBuffer);
 
             dataView = new DataView(arrayBuffer);
@@ -519,8 +446,7 @@ var density_threshold = 0.293;
 document.getElementById('density_threshold').addEventListener('change',
     changeDensity, false);
 
-function changeDensity(evt)
-{
+function changeDensity(evt) {
     density_threshold = evt.target.value;
 
     BPlane = new Plane(1, -3, 1, 2);
@@ -541,8 +467,7 @@ function changeDensity(evt)
 document.getElementById('mrc_file').addEventListener('change', loadLocalMRC,
     false);
 
-function loadLocalMRC(evt)
-{
+function loadLocalMRC(evt) {
     var file = evt.target.files[0];
 
     var exploded_filename = (file.name).split(".");
@@ -550,15 +475,12 @@ function loadLocalMRC(evt)
 
     var fileReader = new FileReader();
 
-    if (extension == 'mrc')
-    {
+    if (extension == 'mrc') {
         fileReader.readAsArrayBuffer(file);
 
-        fileReader.onload = function(oEvent)
-        {
+        fileReader.onload = function(oEvent) {
             var arrayBuffer = oEvent.target.result;
-            if (arrayBuffer)
-            {
+            if (arrayBuffer) {
                 var byteArray = new Uint8Array(arrayBuffer);
 
                 dataView = new DataView(arrayBuffer);
@@ -570,21 +492,17 @@ function loadLocalMRC(evt)
 
                 updateTransformedPoints();
 
-                if (BPlane != undefined)
-                {
+                if (BPlane != undefined) {
                     BPlane = new Plane(1, -3, 1, 2);
                     BSurface.finished = false;
                     // Refit the new image
                 }
             }
         };
-    }
-    else if (extension == 'pdb')
-    {
+    } else if (extension == 'pdb') {
         fileReader.readAsText(file);
 
-        fileReader.onload = function(oEvent)
-        {
+        fileReader.onload = function(oEvent) {
             var pdb_string = oEvent.target.result;
 
             DMap = new DensityMap(pdb_string);
@@ -594,8 +512,7 @@ function loadLocalMRC(evt)
 
             updateTransformedPoints();
 
-            if (BPlane != undefined)
-            {
+            if (BPlane != undefined) {
                 BPlane = new Plane(1, -3, 1, 2);
                 BSurface.finished = false;
                 // Refit the new image
@@ -611,14 +528,12 @@ function loadLocalMRC(evt)
 document.getElementById('fit_file').addEventListener('change', loadFittingFile,
     false);
 
-function loadFittingFile(evt)
-{
+function loadFittingFile(evt) {
     var file = evt.target.files[0];
     var fileReader = new FileReader();
     fileReader.readAsText(file);
 
-    fileReader.onload = function(oEvent)
-    {
+    fileReader.onload = function(oEvent) {
         var fit_string = oEvent.target.result;
 
         var lines = fit_string.split("\n");
@@ -656,16 +571,13 @@ function loadFittingFile(evt)
         var array_of_points = new Array(X);
 
         // Declare 2d array
-        for (var i = 0; i < X; i++)
-        {
+        for (var i = 0; i < X; i++) {
             array_of_points[i] = new Array(Y);
         }
 
         var i = 6;
-        for (var x_i = 0; x_i < X; x_i++)
-        {
-            for (var y_i = 0; y_i < Y; y_i++)
-            {
+        for (var x_i = 0; x_i < X; x_i++) {
+            for (var y_i = 0; y_i < Y; y_i++) {
                 var val = lines[i].split(" ");
                 var x = val[0];
                 var y = val[1];
@@ -694,25 +606,21 @@ function loadFittingFile(evt)
     };
 }
 
-function readInt(i)
-{
+function readInt(i) {
     i *= 4;
     return dataView.getInt32(i, true);
 }
 
-function readFloat(i)
-{
+function readFloat(i) {
     i *= 4;
     return dataView.getFloat32(i, true);
 }
 
-function createArray(length)
-{
+function createArray(length) {
     var arr = new Array(length || 0),
         i = length;
 
-    if (arguments.length > 1)
-    {
+    if (arguments.length > 1) {
         var args = Array.prototype.slice.call(arguments, 1);
         while (i--) arr[length - 1 - i] = createArray.apply(this, args);
     }
@@ -725,22 +633,19 @@ document.getElementById('strand_file').addEventListener('change',
     loadStrandFile,
     false);
 
-function loadStrandFile(evt)
-{
+function loadStrandFile(evt) {
     var file = evt.target.files[0];
     var fileReader = new FileReader();
     fileReader.readAsText(file);
 
-    fileReader.onload = function(oEvent)
-    {
+    fileReader.onload = function(oEvent) {
         var fit_string = oEvent.target.result;
 
         var lines = fit_string.split("\n");
 
         var points = new Array();
 
-        for (var i = 0; i < lines.length; i++)
-        {
+        for (var i = 0; i < lines.length; i++) {
             var line = lines[i];
 
             var words = line.split(/ +/g);
@@ -752,8 +657,7 @@ function loadStrandFile(evt)
 
             var backbone = element == "N" || element == "CA" || element == "C";
 
-            if (type == "ATOM" && backbone)
-            {
+            if (type == "ATOM" && backbone) {
                 console.log(type);
 
                 var x = words[6];
@@ -808,8 +712,7 @@ function loadStrandFile(evt)
 
 
 
-function Mouse()
-{
+function Mouse() {
     this.x = 0;
     this.y = 0;
     this.down = false;
@@ -820,18 +723,15 @@ function Mouse()
     this.drawPoint_T;
 }
 
-Mouse.draw = function()
-{
+Mouse.draw = function() {
     /*ctx.beginPath();
     ctx.arc(Mouse.x, Mouse.y, 5, 0, Math.PI*2, true);
     ctx.fill();*/
 
-    if (BSurface.finished)
-    {
+    if (BSurface.finished) {
         // If the Bsurface was only just finished, initialize the drawPoint 
         // object.
-        if (this.drawPoint_T == undefined)
-        {
+        if (this.drawPoint_T == undefined) {
             BSurface.updateNumberofResPoints(10, 10);
             BSurface.updatePoints();
 
@@ -843,15 +743,13 @@ Mouse.draw = function()
     }
 };
 
-Mouse.updatePos = function(evt)
-{
+Mouse.updatePos = function(evt) {
     var rect = cvs.getBoundingClientRect();
     this.x = evt.clientX - rect.left - 1;
     this.y = evt.clientY - rect.top - 1;
 };
 
-cvs.addEventListener('mousemove', function(evt)
-{
+cvs.addEventListener('mousemove', function(evt) {
     var old_x = Mouse.x;
     var old_y = Mouse.y;
     Mouse.updatePos(evt)
@@ -862,24 +760,20 @@ cvs.addEventListener('mousemove', function(evt)
 
     // if BSurface is optimized, find the mouse projection onto the surface
     // These variables are "t" and "u" of mouse.
-    if (BSurface.finished)
-    {
+    if (BSurface.finished) {
         // Find which surface resPoint is closest to mouse
 
         var min_dist = 99999;
         var min_x = -1;
         var min_y = -1;
 
-        for (var x = 0; x < BSurface.RX; x++)
-        {
-            for (var y = 0; y < BSurface.RY; y++)
-            {
+        for (var x = 0; x < BSurface.RX; x++) {
+            for (var y = 0; y < BSurface.RY; y++) {
                 var p = BSurface.resPoints_T[x][y];
 
                 var dist = p.dist2d(Mouse);
 
-                if (dist < min_dist)
-                {
+                if (dist < min_dist) {
                     min_dist = dist;
                     min_x = x;
                     min_y = y;
@@ -913,8 +807,7 @@ cvs.addEventListener('mousemove', function(evt)
         // More than 2 almost never finds any minima
         // 1 or less does not converge
 
-        for (var i = 0; i < N; i++)
-        {
+        for (var i = 0; i < N; i++) {
             delta_t /= div_rate;
             delta_u /= div_rate;
 
@@ -968,21 +861,16 @@ cvs.addEventListener('mousemove', function(evt)
             // If either of the distances are smaller, set the new t before we
             //  optimize for u.
 
-            if (dist_plus < dist && dist_plus < dist_minus && t_plus < 1.1)
-            {
+            if (dist_plus < dist && dist_plus < dist_minus && t_plus < 1.1) {
                 // Adding delta_t is better
                 t = t_plus;
                 //console.log("Increased t: ", t, delta_t)
-            }
-            else if (dist_minus < dist && dist_minus < dist_plus &&
-                t_minus > -1.1)
-            {
+            } else if (dist_minus < dist && dist_minus < dist_plus &&
+                t_minus > -1.1) {
                 // Subtracting delta_t is better
                 t = t_minus;
                 //console.log("Decreased t: ", t, -delta_t)
-            }
-            else
-            {
+            } else {
                 //console.log("Did not change t: ", t, 0)
             }
 
@@ -1043,21 +931,16 @@ cvs.addEventListener('mousemove', function(evt)
             // If either of the distances are smaller, set the new t before we
             // optimize for u.
 
-            if (dist_plus < dist && dist_plus < dist_minus && u_plus < 1.1)
-            {
+            if (dist_plus < dist && dist_plus < dist_minus && u_plus < 1.1) {
                 // Adding delta_u is better
                 u = u_plus;
                 //console.log("Increased u: ", u, delta_u)
-            }
-            else if (dist_minus < dist && dist_minus < dist_plus &&
-                u_minus > -1.1)
-            {
+            } else if (dist_minus < dist && dist_minus < dist_plus &&
+                u_minus > -1.1) {
                 // Subtracting delta_u is better
                 u = u_minus;
                 //console.log("Decreased u: ", u, -delta_u)
-            }
-            else
-            {
+            } else {
                 //console.log("Did not change u: ", u, 0)
             }
 
@@ -1074,15 +957,12 @@ cvs.addEventListener('mousemove', function(evt)
 
 
     // Used for strand movement code
-    if (Mouse.down)
-    {
-        if (Mouse.held_object != undefined)
-        {
+    if (Mouse.down) {
+        if (Mouse.held_object != undefined) {
             Mouse.holding = true;
             var p = Mouse.held_object; // equals BStrand.originPoint;
 
-            if (p == BStrand.originPoint)
-            {
+            if (p == BStrand.originPoint) {
                 BStrand.setOrigin(Mouse.t, Mouse.u);
             }
         }
@@ -1090,28 +970,20 @@ cvs.addEventListener('mousemove', function(evt)
 
 
 
-    if (Mouse.down)
-    {
-        if (Mouse.holding)
-        {
-            if (Mouse.held_type == 0)
-            {
+    if (Mouse.down) {
+        if (Mouse.holding) {
+            if (Mouse.held_type == 0) {
                 BSurface.finished = false;
                 BSurface.moveControlPointTo2D(Mouse.held_id[0],
                     Mouse.held_id[1], Mouse.x, Mouse.y);
                 BSurface.updatePoints();
-            }
-            else if (Mouse.held_type == 1)
-            {
+            } else if (Mouse.held_type == 1) {
                 BProj.movePointTo2D(Mouse.held_id, Mouse.x, Mouse.y)
             }
-        }
-        else if (changed && !this.hover)
-        {
+        } else if (changed && !this.hover) {
             delta_pitch = (new_y - old_y) * .006;
             if (pitch + delta_pitch <= 90 / 180 * 3.1415 && pitch +
-                delta_pitch >= -90 / 180 * 3.1415)
-            {
+                delta_pitch >= -90 / 180 * 3.1415) {
                 pitch += delta_pitch;
             }
 
@@ -1123,41 +995,33 @@ cvs.addEventListener('mousemove', function(evt)
     }
 }, false);
 
-cvs.addEventListener('mousedown', function(evt)
-{
+cvs.addEventListener('mousedown', function(evt) {
     Mouse.down = true;
 
     // Check if mouse is over a button or slider
 
     var any = false;
-    for (var i = 0; i < Sliders.length; i++)
-    {
+    for (var i = 0; i < Sliders.length; i++) {
         var S = Sliders[i];
 
-        if (S.hover)
-        {
+        if (S.hover) {
             any = true;
             break;
         }
     }
 
-    for (var i = 0; i < ToggleButtons.length; i++)
-    {
+    for (var i = 0; i < ToggleButtons.length; i++) {
         var T = ToggleButtons[i];
 
-        if (T.hover)
-        {
+        if (T.hover) {
             any = true;
             break;
         }
     }
 
-    if (any)
-    {
+    if (any) {
         this.hover = true;
-    }
-    else
-    {
+    } else {
         this.hover = false;
     }
 
@@ -1167,15 +1031,13 @@ cvs.addEventListener('mousedown', function(evt)
     // If the sheet is already optimized and the underlying data is hidden, do 
     // not check.
 
-    if (!BSurface.finished)
-    {
+    if (!BSurface.finished) {
         var closest_id = BSurface.closestControlPoint2D(Mouse);
         var closest_control_point = BSurface.controlPoints_T[closest_id[0]]
             [closest_id[1]];
 
         var closest_dist = closest_control_point.dist2d(Mouse);
-        if (closest_dist < 15)
-        {
+        if (closest_dist < 15) {
             BSurface.finished = false;
             Mouse.holding = true;
             Mouse.held_id = closest_id;
@@ -1183,8 +1045,7 @@ cvs.addEventListener('mousedown', function(evt)
         }
 
         var closest_id = BProj.closestPoint2D(Mouse, 15)
-        if (closest_id != -1)
-        {
+        if (closest_id != -1) {
             Mouse.holding = true;
             Mouse.held_id = closest_id;
             Mouse.held_type = 1;
@@ -1192,8 +1053,7 @@ cvs.addEventListener('mousedown', function(evt)
     }
 }, false);
 
-cvs.addEventListener('mouseleave', function(evt)
-{
+cvs.addEventListener('mouseleave', function(evt) {
     Mouse.holding = false;
     Mouse.objHeld = null;
 
@@ -1202,8 +1062,7 @@ cvs.addEventListener('mouseleave', function(evt)
     Mouse.down = false;
 }, false);
 
-cvs.addEventListener('mouseup', function(evt)
-{
+cvs.addEventListener('mouseup', function(evt) {
     Mouse.holding = false;
     Mouse.objHeld = null;
 
@@ -1212,8 +1071,7 @@ cvs.addEventListener('mouseup', function(evt)
     Mouse.down = false;
 }, false);
 
-cvs.addEventListener('mousewheel', function(evt)
-{
+cvs.addEventListener('mousewheel', function(evt) {
     var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
 
     zoom *= (1 + delta * .1)
@@ -1224,8 +1082,7 @@ cvs.addEventListener('mousewheel', function(evt)
     return false;
 }, false);
 
-cvs.addEventListener("DOMMouseScroll", function(evt)
-{
+cvs.addEventListener("DOMMouseScroll", function(evt) {
     var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
 
     zoom *= (1 + delta * .1)
@@ -1244,19 +1101,15 @@ cvs.addEventListener("DOMMouseScroll", function(evt)
 
 // Add event listener for the strand download button: That way, we can update 
 // the strand render when we need to.
-strand_dl.addEventListener('mouseover', function(evt)
-{
-    if (BStrand && !BStrand.updated)
-    {
+strand_dl.addEventListener('mouseover', function(evt) {
+    if (BStrand && !BStrand.updated) {
         BStrand.updateDownload();
     }
 }, false);
 
 
-set_dl.addEventListener('mouseup', function(evt)
-{
-    if (BStrand && BStrand.generatedSet != true)
-    {
+set_dl.addEventListener('mouseup', function(evt) {
+    if (BStrand && BStrand.generatedSet != true) {
         console.log("MOUSECLICK EVENT");
         set_dl.text = "Zipping files..."
 
@@ -1277,8 +1130,7 @@ set_dl.addEventListener('mouseup', function(evt)
 var Sliders = new Array();
 
 function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val,
-    default_val)
-{
+    default_val) {
     var id = Sliders.length;
     Sliders.push(new Slider(x, y, width, height, text, bar_width, min_val,
         max_val, default_val, id));
@@ -1287,8 +1139,7 @@ function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val,
 }
 
 function Slider(x, y, width, height, text, bar_width, min_val, max_val,
-    default_val, id)
-{
+    default_val, id) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -1305,24 +1156,18 @@ function Slider(x, y, width, height, text, bar_width, min_val, max_val,
 
     var setting = (default_val - min_val) / (max_val - min_val);
 
-    if (setting >= 0 && setting <= 1)
-    {
+    if (setting >= 0 && setting <= 1) {
         this.setting = setting;
-    }
-    else if (setting < 0)
-    {
+    } else if (setting < 0) {
         this.setting = 0;
-    }
-    else if (setting > 1)
-    {
+    } else if (setting > 1) {
         this.setting = 1;
     }
 
     this.id = id;
 }
 
-Slider.prototype.draw = function()
-{
+Slider.prototype.draw = function() {
     ctx.beginPath();
     ctx.rect(this.x, this.y, this.width, this.height);
     ctx.fillStyle = "silver";
@@ -1341,64 +1186,45 @@ Slider.prototype.draw = function()
     var box_bottom = box_ypos + box_height;
 
 
-    if (this.held)
-    {
+    if (this.held) {
         var setting = (Mouse.x - this.x - box_width / 2) / (this.width -
             box_width);
-        if (setting >= 0 && setting <= 1)
-        {
+        if (setting >= 0 && setting <= 1) {
             this.setting = setting;
-        }
-        else if (setting < 0)
-        {
+        } else if (setting < 0) {
             this.setting = 0;
-        }
-        else if (setting > 1)
-        {
+        } else if (setting > 1) {
             this.setting = 1;
         }
     }
 
 
     if (Mouse.x > box_xpos && Mouse.x < box_right && Mouse.y > box_ypos &&
-        Mouse.y < box_bottom)
-    {
+        Mouse.y < box_bottom) {
         this.hover = true;
 
-        if (this.activated == false)
-        {
+        if (this.activated == false) {
             ctx.fillStyle = "darkgrey";
-        }
-        else if (this.activated == true)
-        {
+        } else if (this.activated == true) {
             ctx.fillStyle = "limegreen";
         }
 
-        if (Mouse.down == true)
-        {
+        if (Mouse.down == true) {
             BStrand.optimized = false;
             this.held = true;
-        }
-        else if (Mouse.down != true)
-        {
+        } else if (Mouse.down != true) {
             this.held = false;
         }
-    }
-    else
-    {
+    } else {
         this.hover = false;
 
-        if (this.activated == false)
-        {
+        if (this.activated == false) {
             ctx.fillStyle = "grey";
-        }
-        else if (this.activated == true)
-        {
+        } else if (this.activated == true) {
             ctx.fillStyle = "lightgreen";
         }
 
-        if (Mouse.down != true)
-        {
+        if (Mouse.down != true) {
             this.held = false;
         }
     }
@@ -1417,14 +1243,12 @@ Slider.prototype.draw = function()
         this.height / 2);
 };
 
-Slider.prototype.setValue = function(val)
-{
+Slider.prototype.setValue = function(val) {
     this.setting = (val - this.min_val) / (this.max_val - this.min_val);
     this.value = val;
 }
 
-Slider.prototype.setActive = function(activated)
-{
+Slider.prototype.setActive = function(activated) {
     this.activated = activated;
 };
 
@@ -1443,8 +1267,7 @@ var ToggleButtons = new Array();
 // Used by anything to create a new toggle button object,
 // returns id, which the calling function can use to access the object through
 // ToggleButtons array.
-function Create_ToggleButton(x, y, width, height, text)
-{
+function Create_ToggleButton(x, y, width, height, text) {
     var id = ToggleButtons.length;
     ToggleButtons.push(new ToggleButton(x, y, width, height, text, id));
 
@@ -1453,17 +1276,14 @@ function Create_ToggleButton(x, y, width, height, text)
 
 // Used by anything to destroy a toggle button with a given id.  Silently fails 
 // if the id is not valid.
-function Destroy_ToggleButton(id)
-{
-    if (id >= 0 && id < ToggleButtons.length)
-    {
+function Destroy_ToggleButton(id) {
+    if (id >= 0 && id < ToggleButtons.length) {
         ToggleButtons.splice(id, 1);
     }
 }
 
 // Constructor of ToggleButton object, used to create new toggle buttons.
-function ToggleButton(x, y, width, height, text, id)
-{
+function ToggleButton(x, y, width, height, text, id) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -1481,21 +1301,15 @@ function ToggleButton(x, y, width, height, text, id)
 // Draws this particular button, called by main in a loop of all toggle buttons,
 // to draw all of them. Drawing state depends on whether the button is activated
 // or not.
-ToggleButton.prototype.draw = function()
-{
+ToggleButton.prototype.draw = function() {
     if (Mouse.x > this.x && Mouse.x < this.x + this.width && Mouse.y > this.y &&
-        Mouse.y < this.y + this.height)
-    {
+        Mouse.y < this.y + this.height) {
         this.hover = true;
-        if (Mouse.down == true)
-        {
+        if (Mouse.down == true) {
             BStrand.optimized = false;
             this.pressed = true;
-        }
-        else if (Mouse.down == false)
-        {
-            if (this.pressed == true)
-            {
+        } else if (Mouse.down == false) {
+            if (this.pressed == true) {
                 // Mouse was pressed, now it's still hovering, but it's not 
                 // pressing.  Ergo, a click!
                 this.toggle();
@@ -1504,31 +1318,22 @@ ToggleButton.prototype.draw = function()
 
             this.pressed = false;
         }
-    }
-    else
-    {
+    } else {
         this.hover = false;
         this.pressed = false;
     }
 
-    if (this.hover == false)
-    {
+    if (this.hover == false) {
         ctx.fillStyle = 'lightgrey';
-    }
-    else if (this.hover == true)
-    {
-        if (this.pressed == false)
-        {
+    } else if (this.hover == true) {
+        if (this.pressed == false) {
             ctx.fillStyle = 'silver';
-        }
-        else if (this.pressed == true)
-        {
+        } else if (this.pressed == true) {
             ctx.fillStyle = 'grey';
         }
     }
 
-    if (this.activated)
-    {
+    if (this.activated) {
         ctx.fillStyle = "lightgreen";
     }
 
@@ -1545,20 +1350,15 @@ ToggleButton.prototype.draw = function()
 };
 
 // Called by anything to see if the button is active or not.
-ToggleButton.prototype.isActivated = function()
-{
+ToggleButton.prototype.isActivated = function() {
     return this.activated;
 };
 
 // Called by the Mouse singleton to "toggle" the activation state.
-ToggleButton.prototype.toggle = function()
-{
-    if (this.activated == false)
-    {
+ToggleButton.prototype.toggle = function() {
+    if (this.activated == false) {
         this.activated = true;
-    }
-    else if (this.activated == true)
-    {
+    } else if (this.activated == true) {
         this.activated = false;
     }
 };

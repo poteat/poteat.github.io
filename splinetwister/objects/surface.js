@@ -1,5 +1,4 @@
-function Surface(X, Y, T, U)
-{
+function Surface(X, Y, T, U) {
     this.X = X;
     this.Y = Y;
     this.T = T;
@@ -17,8 +16,7 @@ function Surface(X, Y, T, U)
     this.controlPoints = new Array(X);
     this.controlPoints_T = new Array(X);
 
-    for (var i = 0; i < X; i++)
-    {
+    for (var i = 0; i < X; i++) {
         this.controlPoints[i] = new Array(Y);
         this.controlPoints_T[i] = new Array(Y);
     }
@@ -26,10 +24,8 @@ function Surface(X, Y, T, U)
     var lower = -50;
     var upper = 50;
 
-    for (var i = 0; i < X; i++)
-    {
-        for (var j = 0; j < Y; j++)
-        {
+    for (var i = 0; i < X; i++) {
+        for (var j = 0; j < Y; j++) {
             var x = lower + i / (X - 1) * (upper - lower);
             var z = lower + j / (X - 1) * (upper - lower);
 
@@ -59,18 +55,15 @@ function Surface(X, Y, T, U)
     this.resPoints = new Array(RX);
     this.resPoints_T = new Array(RX);
 
-    for (var i = 0; i < RX; i++)
-    {
+    for (var i = 0; i < RX; i++) {
         this.resPoints[i] = new Array(RY);
         this.resPoints_T[i] = new Array(RY);
     }
 
     // We only need to allocate the object array here.  The correct values will 
     // be calculated in updatePoints();
-    for (var i = 0; i < RX; i++)
-    {
-        for (var j = 0; j < RY; j++)
-        {
+    for (var i = 0; i < RX; i++) {
+        for (var j = 0; j < RY; j++) {
             this.resPoints[i][j] = new Point(0, 0, 0)
             this.resPoints_T[i][j] = new Point(0, 0, 0, "blue", 1);
         }
@@ -87,18 +80,15 @@ function Surface(X, Y, T, U)
     this.drawPoints = new Array(T);
     this.drawPoints_T = new Array(T);
 
-    for (var i = 0; i < T; i++)
-    {
+    for (var i = 0; i < T; i++) {
         this.drawPoints[i] = new Array(U);
         this.drawPoints_T[i] = new Array(U);
     }
 
     // We only need to allocate the object array of draw points here; the point 
     // locations are calculated in the updatePoints() function.
-    for (var i = 0; i < T; i++)
-    {
-        for (var j = 0; j < U; j++)
-        {
+    for (var i = 0; i < T; i++) {
+        for (var j = 0; j < U; j++) {
             this.drawPoints[i][j] = new Point(0, 0, 0);
             this.drawPoints_T[i][j] = new Point(0, 0, 0);
         }
@@ -107,47 +97,40 @@ function Surface(X, Y, T, U)
     this.updatePoints();
 };
 
-Surface.prototype.updateNumberofResPoints = function(RX, RY)
-{
+Surface.prototype.updateNumberofResPoints = function(RX, RY) {
     this.RX = RX;
     this.RY = RY;
 
     this.resPoints = new Array(RX);
     this.resPoints_T = new Array(RX);
 
-    for (var i = 0; i < RX; i++)
-    {
+    for (var i = 0; i < RX; i++) {
         this.resPoints[i] = new Array(RY);
         this.resPoints_T[i] = new Array(RY);
     }
 
     // We only need to allocate the object array here.  The correct values will 
     // be calculated in updatePoints();
-    for (var i = 0; i < RX; i++)
-    {
-        for (var j = 0; j < RY; j++)
-        {
+    for (var i = 0; i < RX; i++) {
+        for (var j = 0; j < RY; j++) {
             this.resPoints[i][j] = new Point(0, 0, 0)
             this.resPoints_T[i][j] = new Point(0, 0, 0, "blue", 1);
         }
     }
 }
 
-Surface.prototype.setControlPoints = function(array_of_points)
-{
+Surface.prototype.setControlPoints = function(array_of_points) {
     this.X = array_of_points.length;
     this.Y = array_of_points[0].length;
 
     this.controlPoints = new Array(this.X);
     this.controlPoints_T = new Array(this.X);
 
-    for (var i = 0; i < this.X; i++)
-    {
+    for (var i = 0; i < this.X; i++) {
         this.controlPoints[i] = new Array(this.Y);
         this.controlPoints_T[i] = new Array(this.Y);
 
-        for (var j = 0; j < this.Y; j++)
-        {
+        for (var j = 0; j < this.Y; j++) {
             var p_original = array_of_points[i][j]
             var p = new Point(0, 0, 0);
             p.moveTo(p_original);
@@ -162,21 +145,15 @@ Surface.prototype.setControlPoints = function(array_of_points)
     DMap.updateProjection();
 }
 
-Surface.prototype.updatePoints = function()
-{
-    for (var i = 0; i < this.T; i++)
-    {
-        for (var j = 0; j < this.U; j++)
-        {
-            if (DMap != undefined)
-            {
+Surface.prototype.updatePoints = function() {
+    for (var i = 0; i < this.T; i++) {
+        for (var j = 0; j < this.U; j++) {
+            if (DMap != undefined) {
                 var size_t = DMap.max_t - DMap.min_t;
                 var size_u = DMap.max_u - DMap.min_u;
                 var min_t = DMap.min_t;
                 var min_u = DMap.min_u;
-            }
-            else
-            {
+            } else {
                 var size_t = 1;
                 var size_u = 1;
                 var min_t = 0;
@@ -195,10 +172,8 @@ Surface.prototype.updatePoints = function()
         }
     }
 
-    for (var i = 0; i < this.RX; i++)
-    {
-        for (var j = 0; j < this.RY; j++)
-        {
+    for (var i = 0; i < this.RX; i++) {
+        for (var j = 0; j < this.RY; j++) {
             var t = i / (this.RX - 1);
             var u = j / (this.RY - 1);
 
@@ -216,21 +191,16 @@ var opt_t = 0;
 var opt_lim = 20;
 var count = 0;
 
-Surface.prototype.draw = function()
-{
-    if (!BPlane.finished || this.finished)
-    {
+Surface.prototype.draw = function() {
+    if (!BPlane.finished || this.finished) {
         opt_t = 0;
     }
 
-    if (opt_t == opt_lim)
-    {
+    if (opt_t == opt_lim) {
         var score = DMap.score();
 
-        for (var i = 0; i < this.X; i++)
-        {
-            for (var j = 0; j < this.Y; j++)
-            {
+        for (var i = 0; i < this.X; i++) {
+            for (var j = 0; j < this.Y; j++) {
                 var p = this.controlPoints[i][j];
                 this.optimizeControlPoint(p);
             }
@@ -240,35 +210,26 @@ Surface.prototype.draw = function()
 
         var new_score = DMap.score();
 
-        if (score == new_score)
-        {
-            if (count > 3)
-            {
+        if (score == new_score) {
+            if (count > 3) {
                 this.finished = true;
                 count = 0;
             }
             count++;
-        }
-        else
-        {
+        } else {
             count = 0;
         }
 
         opt_t = 0;
-    }
-    else
-    {
+    } else {
         opt_t++;
     }
 
-    if (this.drawSurface)
-    {
+    if (this.drawSurface) {
         // 'Draw' surface points to calculate their 'scale' (if negative, 
         // outside of cam space)
-        for (var i = 0; i < this.T; i++)
-        {
-            for (var j = 0; j < this.U; j++)
-            {
+        for (var i = 0; i < this.T; i++) {
+            for (var j = 0; j < this.U; j++) {
                 this.drawPoints_T[i][j].draw(false);
             }
         }
@@ -281,36 +242,27 @@ Surface.prototype.draw = function()
 
         var needToMove = false;
 
-        for (var i = 0; i < this.T; i++)
-        {
+        for (var i = 0; i < this.T; i++) {
             var j = 0;
 
             var p = this.drawPoints_T[i][j];
 
-            if (p.scale > 0)
-            {
+            if (p.scale > 0) {
                 ctx.moveTo(p.x2d, p.y2d);
-            }
-            else
-            {
+            } else {
                 needToMove = true;
             }
 
 
 
-            for (var j = 0; j < this.U; j++)
-            {
+            for (var j = 0; j < this.U; j++) {
                 var p = this.drawPoints_T[i][j];
 
 
-                if (p.scale > 0)
-                {
-                    if (!needToMove)
-                    {
+                if (p.scale > 0) {
+                    if (!needToMove) {
                         ctx.lineTo(p.x2d, p.y2d);
-                    }
-                    else
-                    {
+                    } else {
                         ctx.moveTo(p.x2d, p.y2d);
                         needToMove = false;
                     }
@@ -320,33 +272,24 @@ Surface.prototype.draw = function()
 
         var needToMove = false;
 
-        for (var i = 0; i < this.U; i++)
-        {
+        for (var i = 0; i < this.U; i++) {
             var j = 0;
 
             var p = this.drawPoints_T[j][i];
 
-            if (p.scale > 0)
-            {
+            if (p.scale > 0) {
                 ctx.moveTo(p.x2d, p.y2d)
-            }
-            else
-            {
+            } else {
                 needToMove = true;
             }
 
 
-            for (var j = 0; j < this.T; j++)
-            {
+            for (var j = 0; j < this.T; j++) {
                 var p = this.drawPoints_T[j][i];
-                if (p.scale > 0)
-                {
-                    if (!needToMove)
-                    {
+                if (p.scale > 0) {
+                    if (!needToMove) {
                         ctx.lineTo(p.x2d, p.y2d);
-                    }
-                    else
-                    {
+                    } else {
                         ctx.moveTo(p.x2d, p.y2d);
                         needToMove = false;
                     }
@@ -361,56 +304,43 @@ Surface.prototype.draw = function()
 
 
 
-    if (this.drawControlPoints)
-    {
+    if (this.drawControlPoints) {
         // Draw resolution points
-        for (var i = 0; i < this.RX; i++)
-        {
-            for (var j = 0; j < this.RY; j++)
-            {
+        for (var i = 0; i < this.RX; i++) {
+            for (var j = 0; j < this.RY; j++) {
                 this.resPoints_T[i][j].draw();
             }
         }
 
 
         // Draw control points
-        for (var i = 0; i < this.X; i++)
-        {
-            for (var j = 0; j < this.Y; j++)
-            {
+        for (var i = 0; i < this.X; i++) {
+            for (var j = 0; j < this.Y; j++) {
                 this.controlPoints_T[i][j].draw();
             }
         }
-    }
-    else
-    {
+    } else {
         // Even if don't draw, still update their screen positions invisibly
         //  so that the mouse object can use them for its initial heuristic
         //  surface projection method.
-        for (var i = 0; i < this.RX; i++)
-        {
-            for (var j = 0; j < this.RY; j++)
-            {
+        for (var i = 0; i < this.RX; i++) {
+            for (var j = 0; j < this.RY; j++) {
                 this.resPoints_T[i][j].draw(false);
             }
         }
     }
 };
 
-Surface.prototype.closestControlPoint2D = function(obj)
-{
+Surface.prototype.closestControlPoint2D = function(obj) {
     var closest = 999999;
     var closest_id = -1;
 
-    for (var i = 0; i < this.controlPoints_T.length; i++)
-    {
-        for (var j = 0; j < this.controlPoints_T[i].length; j++)
-        {
+    for (var i = 0; i < this.controlPoints_T.length; i++) {
+        for (var j = 0; j < this.controlPoints_T[i].length; j++) {
             var p = this.controlPoints_T[i][j];
             var dist = p.dist2d(obj);
 
-            if (dist < closest)
-            {
+            if (dist < closest) {
                 closest = dist;
                 closest_surface_x = i;
                 closest_surface_y = j;
@@ -421,8 +351,7 @@ Surface.prototype.closestControlPoint2D = function(obj)
     return [closest_surface_x, closest_surface_y];
 };
 
-Surface.prototype.moveControlPointTo2D = function(i, j, x2d, y2d)
-{
+Surface.prototype.moveControlPointTo2D = function(i, j, x2d, y2d) {
     var p = this.controlPoints_T[i][j];
 
     var scale = p.scale;
@@ -443,8 +372,7 @@ Surface.prototype.moveControlPointTo2D = function(i, j, x2d, y2d)
     this.controlPoints[i][j].moveTo(p_world);
 };
 
-Surface.prototype.sample = function(t, u)
-{
+Surface.prototype.sample = function(t, u) {
     var coords = this.calc(t, u);
     var p = new Point(coords[0], coords[1], coords[2]);
     p.t = t;
@@ -453,17 +381,14 @@ Surface.prototype.sample = function(t, u)
     return p;
 }
 
-Surface.prototype.calc = function(t, u)
-{
+Surface.prototype.calc = function(t, u) {
     var sum_x = 0;
     var sum_y = 0;
     var sum_z = 0;
 
     // Loop through control points
-    for (var x = 0; x < this.X; x++)
-    {
-        for (var y = 0; y < this.Y; y++)
-        {
+    for (var x = 0; x < this.X; x++) {
+        for (var y = 0; y < this.Y; y++) {
             var control_point = this.controlPoints[x][y];
             var control_x = control_point.x;
             var control_y = control_point.y;
@@ -481,13 +406,11 @@ Surface.prototype.calc = function(t, u)
     return [sum_x, sum_y, sum_z];
 }
 
-Surface.prototype.basis = function(t, i, n)
-{
+Surface.prototype.basis = function(t, i, n) {
     return binomial(n, i) * Math.pow(t, i) * Math.pow(1 - t, n - i);
 };
 
-Surface.prototype.optimizeControlPoint = function(p)
-{
+Surface.prototype.optimizeControlPoint = function(p) {
     var iterations = 15;
 
     var delta_x = 1;
@@ -496,11 +419,10 @@ Surface.prototype.optimizeControlPoint = function(p)
 
     // var threshold = .0003;
 
-    var threshold = .0001;
+    var threshold = .0003;
 
-    if (DMap.X >= 4)
-    {
-        threshold = .00001;
+    if (DMap.X >= 4) {
+        threshold = .0003;
     }
 
     var score = DMap.score();
@@ -509,36 +431,26 @@ Surface.prototype.optimizeControlPoint = function(p)
     var previous_state_y = 0;
     var previous_state_z = 0;
 
-    for (var i = 0; i < iterations; i++)
-    {
+    for (var i = 0; i < iterations; i++) {
         p.x += delta_x;
         var score_inc = DMap.score();
         p.x -= 2 * delta_x;
         var score_dec = DMap.score();
         p.x += delta_x;
 
-        if (score_inc < score_dec)
-        {
-            if (score - score_inc > threshold)
-            {
+        if (score_inc < score_dec) {
+            if (score - score_inc > threshold) {
                 p.x += delta_x;
                 score = score_inc;
-            }
-            else if (previous_state_x == 1)
-            {
+            } else if (previous_state_x == 1) {
                 delta_x /= 2;
             }
             previous_state_x = 1;
-        }
-        else if (score_dec < score_inc)
-        {
-            if (score - score_dec > threshold)
-            {
+        } else if (score_dec < score_inc) {
+            if (score - score_dec > threshold) {
                 p.x -= delta_x;
                 score = score_dec;
-            }
-            else if (previous_state_x == -1)
-            {
+            } else if (previous_state_x == -1) {
                 delta_x /= 2;
             }
             previous_state_x = -1;
@@ -550,28 +462,19 @@ Surface.prototype.optimizeControlPoint = function(p)
         var score_dec = DMap.score();
         p.y += delta_y;
 
-        if (score_inc < score_dec)
-        {
-            if (score - score_inc > threshold)
-            {
+        if (score_inc < score_dec) {
+            if (score - score_inc > threshold) {
                 p.y += delta_y;
                 score = score_inc;
-            }
-            else if (previous_state_y == 1)
-            {
+            } else if (previous_state_y == 1) {
                 delta_y /= 2;
             }
             previous_state_y = 1;
-        }
-        else if (score_dec < score_inc)
-        {
-            if (score - score_dec > threshold)
-            {
+        } else if (score_dec < score_inc) {
+            if (score - score_dec > threshold) {
                 p.y -= delta_y;
                 score = score_dec;
-            }
-            else if (previous_state_y == -1)
-            {
+            } else if (previous_state_y == -1) {
                 delta_y /= 2;
             }
             previous_state_y = -1;
@@ -583,28 +486,19 @@ Surface.prototype.optimizeControlPoint = function(p)
         var score_dec = DMap.score();
         p.z += delta_z;
 
-        if (score_inc < score_dec)
-        {
-            if (score - score_inc > threshold)
-            {
+        if (score_inc < score_dec) {
+            if (score - score_inc > threshold) {
                 p.z += delta_z;
                 score = score_inc;
-            }
-            else if (previous_state_z == 1)
-            {
+            } else if (previous_state_z == 1) {
                 delta_z /= 2;
             }
             previous_state_z = 1;
-        }
-        else if (score_dec < score_inc)
-        {
-            if (score - score_dec > threshold)
-            {
+        } else if (score_dec < score_inc) {
+            if (score - score_dec > threshold) {
                 p.z -= delta_z;
                 score = score_dec;
-            }
-            else if (previous_state_z == -1)
-            {
+            } else if (previous_state_z == -1) {
                 delta_z /= 2;
             }
             previous_state_z = -1;
@@ -614,12 +508,9 @@ Surface.prototype.optimizeControlPoint = function(p)
 
 };
 
-Surface.prototype.updateTransformedPoints = function()
-{
-    for (var i = 0; i < this.X; i++)
-    {
-        for (var j = 0; j < this.Y; j++)
-        {
+Surface.prototype.updateTransformedPoints = function() {
+    for (var i = 0; i < this.X; i++) {
+        for (var j = 0; j < this.Y; j++) {
             this.controlPoints_T[i][j].moveTo(this.controlPoints[i][j]);
             this.controlPoints_T[i][j].scaleFactor(zoom);
             this.controlPoints_T[i][j].rotateY(yaw);
@@ -627,10 +518,8 @@ Surface.prototype.updateTransformedPoints = function()
         }
     }
 
-    for (var i = 0; i < this.T; i++)
-    {
-        for (var j = 0; j < this.U; j++)
-        {
+    for (var i = 0; i < this.T; i++) {
+        for (var j = 0; j < this.U; j++) {
             this.drawPoints_T[i][j].moveTo(this.drawPoints[i][j]);
             this.drawPoints_T[i][j].scaleFactor(zoom);
             this.drawPoints_T[i][j].rotateY(yaw);
@@ -638,10 +527,8 @@ Surface.prototype.updateTransformedPoints = function()
         }
     }
 
-    for (var i = 0; i < this.RX; i++)
-    {
-        for (var j = 0; j < this.RY; j++)
-        {
+    for (var i = 0; i < this.RX; i++) {
+        for (var j = 0; j < this.RY; j++) {
             this.resPoints_T[i][j].moveTo(this.resPoints[i][j]);
             this.resPoints_T[i][j].scaleFactor(zoom);
             this.resPoints_T[i][j].rotateY(yaw);
@@ -650,21 +537,18 @@ Surface.prototype.updateTransformedPoints = function()
     }
 }
 
-Surface.prototype.incrementControlPoints = function()
-{
+Surface.prototype.incrementControlPoints = function() {
     var x = this.X + 1;
     var y = this.Y + 1;
 
     var controlPoints = new Array(x);
     var controlPoints_T = new Array(x);
 
-    for (var i = 0; i < x; i++)
-    {
+    for (var i = 0; i < x; i++) {
         controlPoints[i] = new Array(y);
         controlPoints_T[i] = new Array(y);
 
-        for (var j = 0; j < y; j++)
-        {
+        for (var j = 0; j < y; j++) {
             var t = i / (x - 1)
             var u = j / (y - 1)
 

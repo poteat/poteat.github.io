@@ -1,18 +1,13 @@
-function DensityMap(pdb_string)
-{
-    if (pdb_string == undefined)
-    {
+function DensityMap(pdb_string) {
+    if (pdb_string == undefined) {
         this.createFromMRC();
-    }
-    else
-    {
+    } else {
         lines = pdb_string.split("\n");
 
         this.points = new Array();
         this.points_T = new Array();
 
-        for (var i = 0; i < lines.length; i++)
-        {
+        for (var i = 0; i < lines.length; i++) {
             var current_line = lines[i];
 
             // Replace multiple space segments in line with one space each:
@@ -20,8 +15,7 @@ function DensityMap(pdb_string)
 
             var datum = current_line_min.split(" ");
             var type = datum[0];
-            if (type == "ATOM")
-            {
+            if (type == "ATOM") {
                 var coord_substring = current_line.substring(30, 55);
                 coord_substring = coord_substring.replace(/  +/g, ' ');
                 var coord_datum = coord_substring.split(" ");
@@ -44,8 +38,7 @@ function DensityMap(pdb_string)
         var avgy = 0;
         var avgz = 0;
 
-        for (var i = 0; i < this.points.length; i++)
-        {
+        for (var i = 0; i < this.points.length; i++) {
             var p = this.points[i];
 
             avgx += p.x;
@@ -64,8 +57,7 @@ function DensityMap(pdb_string)
 
         // Renormalize points WRT avg position
 
-        for (var i = 0; i < this.points.length; i++)
-        {
+        for (var i = 0; i < this.points.length; i++) {
             var p = this.points[i];
 
             p.x -= avgx;
@@ -89,8 +81,7 @@ function DensityMap(pdb_string)
 }
 
 DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta,
-    rot_ux, rot_uy, rot_uz, min_t, max_t, min_u, max_u)
-{
+    rot_ux, rot_uy, rot_uz, min_t, max_t, min_u, max_u) {
     this.nx = readInt(0);
     this.ny = readInt(1);
     this.nz = readInt(2);
@@ -142,16 +133,12 @@ DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta,
     this.points = new Array(); // Immutable data points
     this.points_T = new Array(); // Points in camera space
 
-    for (var z = 0; z < this.nz; z++)
-    {
-        for (var y = 0; y < this.ny; y++)
-        {
-            for (var x = 0; x < this.nx; x++)
-            {
+    for (var z = 0; z < this.nz; z++) {
+        for (var y = 0; y < this.ny; y++) {
+            for (var x = 0; x < this.nx; x++) {
                 var density = readFloat(256 + (z * this.nx * this.ny + y *
                     this.nx + x));
-                if (density > density_threshold)
-                {
+                if (density > density_threshold) {
                     var scale = this.scale;
                     var p = new Point(((x + this.xorigin) - x_avg) * scale,
                         ((y + this.yorigin) - y_avg) * scale, ((z +
@@ -177,8 +164,7 @@ DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta,
     this.max_u = max_u;
 }
 
-DensityMap.prototype.createFromMRC = function()
-{
+DensityMap.prototype.createFromMRC = function() {
     this.nx = readInt(0);
     this.ny = readInt(1);
     this.nz = readInt(2);
@@ -230,16 +216,12 @@ DensityMap.prototype.createFromMRC = function()
     var num = 0;
 
     // Find center of data points (above threshold)
-    for (var z = 0; z < this.nz; z++)
-    {
-        for (var y = 0; y < this.ny; y++)
-        {
-            for (var x = 0; x < this.nx; x++)
-            {
+    for (var z = 0; z < this.nz; z++) {
+        for (var y = 0; y < this.ny; y++) {
+            for (var x = 0; x < this.nx; x++) {
                 var density = readFloat(256 + (z * this.nx * this.ny + y *
                     this.nx + x));
-                if (density > density_threshold)
-                {
+                if (density > density_threshold) {
                     num++;
 
                     x_avg += (x * this.scale + this.xorigin);
@@ -261,16 +243,12 @@ DensityMap.prototype.createFromMRC = function()
     this.points = new Array(); // Immutable data points
     this.points_T = new Array(); // Points in camera space
 
-    for (var z = 0; z < this.nz; z++)
-    {
-        for (var y = 0; y < this.ny; y++)
-        {
-            for (var x = 0; x < this.nx; x++)
-            {
+    for (var z = 0; z < this.nz; z++) {
+        for (var y = 0; y < this.ny; y++) {
+            for (var x = 0; x < this.nx; x++) {
                 var density = readFloat(256 + (z * this.nx * this.ny + y *
                     this.nx + x));
-                if (density > density_threshold)
-                {
+                if (density > density_threshold) {
                     var scale = this.scale;
 
                     var p = new Point(
@@ -289,10 +267,8 @@ DensityMap.prototype.createFromMRC = function()
     }
 };
 
-DensityMap.prototype.updateTransformedPoints = function()
-{
-    for (var i = 0; i < this.points.length; i++)
-    {
+DensityMap.prototype.updateTransformedPoints = function() {
+    for (var i = 0; i < this.points.length; i++) {
         this.points_T[i].moveTo(this.points[i]);
         this.points_T[i].scaleFactor(zoom);
         this.points_T[i].rotateY(yaw);
@@ -303,40 +279,31 @@ DensityMap.prototype.updateTransformedPoints = function()
 var t = 0;
 var lim = 20;
 
-DensityMap.prototype.draw = function()
-{
-    if (BSurface.finished)
-    {
+DensityMap.prototype.draw = function() {
+    if (BSurface.finished) {
         // If the surface has been matched, lets draw the voxels transparently.
 
         ctx.globalAlpha = .5;
     }
 
-    for (var i = 0; i < this.points.length; i++)
-    {
+    for (var i = 0; i < this.points.length; i++) {
         this.points_T[i].draw();
 
-        if (this.extension == 'pdb')
-        {
+        if (this.extension == 'pdb') {
             // alert(this.points_T[i].x + " " + this.points_T[i].y + " " + 
             // this.points_T[i].z);
         }
     }
 
-    if (t == lim)
-    {
-        if (BSurface.finished == false)
-        {
+    if (t == lim) {
+        if (BSurface.finished == false) {
             this.updateProjection();
         }
-    }
-    else
-    {
+    } else {
         t++;
     }
 
-    for (var i = 0; i < this.points.length; i++)
-    {
+    for (var i = 0; i < this.points.length; i++) {
         var p = this.points[i];
         var p_draw = this.points_T[i]
     }
@@ -344,36 +311,30 @@ DensityMap.prototype.draw = function()
     ctx.globalAlpha = 1;
 };
 
-DensityMap.prototype.updateProjection = function(permissive)
-{
+DensityMap.prototype.updateProjection = function(permissive) {
     var min_t = 1;
     var max_t = 0;
     var min_u = 1;
     var max_u = 0;
 
-    for (var i = 0; i < this.points.length; i++)
-    {
+    for (var i = 0; i < this.points.length; i++) {
         var p = this.points[i];
         p.findClosestResPoint();
         p.refineProjection(permissive);
 
-        if (p.t < min_t)
-        {
+        if (p.t < min_t) {
             min_t = p.t;
         }
 
-        if (p.t > max_t)
-        {
+        if (p.t > max_t) {
             max_t = p.t;
         }
 
-        if (p.u < min_u)
-        {
+        if (p.u < min_u) {
             min_u = p.u;
         }
 
-        if (p.u > max_u)
-        {
+        if (p.u > max_u) {
             max_u = p.u;
         }
 
@@ -385,20 +346,16 @@ DensityMap.prototype.updateProjection = function(permissive)
     t = 0;
 }
 
-DensityMap.prototype.rotateAxis = function(ang, ux, uy, uz)
-{
-    for (var i = 0; i < this.points.length; i++)
-    {
+DensityMap.prototype.rotateAxis = function(ang, ux, uy, uz) {
+    for (var i = 0; i < this.points.length; i++) {
         this.points[i].rotateAxis(ang, ux, uy, uz);
     }
 };
 
-DensityMap.prototype.score = function()
-{
+DensityMap.prototype.score = function() {
     var sum_dist = 0;
 
-    for (var i = 0; i < this.points.length; i++)
-    {
+    for (var i = 0; i < this.points.length; i++) {
         var p = this.points[i];
         var coords = BSurface.calc(p.t, p.u);
         var proj = new Point(coords[0], coords[1], coords[2]);
@@ -407,18 +364,14 @@ DensityMap.prototype.score = function()
 
     this.saved_score = Math.sqrt(sum_dist / this.points.length);
 
-    if (DMap.X < 4)
-    {
+    if (DMap.X < 4) {
         return this.saved_score + this.foldedness();
-    }
-    else
-    {
-        return this.saved_score;
+    } else {
+        return this.saved_score + this.foldedness();
     }
 };
 
-DensityMap.prototype.foldedness = function()
-{
+DensityMap.prototype.foldedness = function() {
     var X = BSurface.X - 1;
     var Y = BSurface.Y - 1;
 
@@ -451,8 +404,7 @@ DensityMap.prototype.foldedness = function()
     return foldedness / 100;
 }
 
-DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
-{
+DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y) {
     this.updateProjection();
 
     var size_t = this.max_t - this.min_t;
@@ -463,18 +415,15 @@ DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
 
     // Instantiate a bit array of dimensions [num_x, num_y] to false.
     var bit_array = new Array(num_X);
-    for (var i = 0; i < num_X; i++)
-    {
+    for (var i = 0; i < num_X; i++) {
         bit_array[i] = new Array(num_Y);
 
-        for (var j = 0; j < num_Y; j++)
-        {
+        for (var j = 0; j < num_Y; j++) {
             bit_array[i][j] = false;
         }
     }
 
-    for (var i = 0; i < this.points.length; i++)
-    {
+    for (var i = 0; i < this.points.length; i++) {
         var p = this.points[i];
         var t = p.t;
         var u = p.u;
@@ -489,12 +438,9 @@ DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
 
     var points = new Array();
 
-    for (var i = 0; i < num_X; i++)
-    {
-        for (var j = 0; j < num_Y; j++)
-        {
-            if (bit_array[i][j] == true)
-            {
+    for (var i = 0; i < num_X; i++) {
+        for (var j = 0; j < num_Y; j++) {
+            if (bit_array[i][j] == true) {
                 var t = i * delta_t + this.min_t;
                 var u = j * delta_u + this.min_u;
 
@@ -509,12 +455,10 @@ DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
     return points;
 }
 
-DensityMap.prototype.calculateBoundingBox = function()
-{
+DensityMap.prototype.calculateBoundingBox = function() {
     var avgx = 0;
     var avgz = 0;
-    for (var i = 0; i < this.points.length; i++)
-    {
+    for (var i = 0; i < this.points.length; i++) {
         avgx += this.points[i].x;
         avgz += this.points[i].z;
     }
@@ -525,8 +469,7 @@ DensityMap.prototype.calculateBoundingBox = function()
     var vr_x = 0; // Variance of x
     var vr_z = 0; // Variance of z
     var covr = 0; // Covariance of x and z
-    for (var i = 0; i < this.points.length; i++)
-    {
+    for (var i = 0; i < this.points.length; i++) {
         var delta_x = this.points[i].x - avgx;
         var delta_z = this.points[i].z - avgz;
 
@@ -554,18 +497,15 @@ DensityMap.prototype.calculateBoundingBox = function()
     var m = slope;
     var b = intersect;
 
-    for (var i = 0; i < this.points.length; i++)
-    {
+    for (var i = 0; i < this.points.length; i++) {
         var dist = this.points[i].distFromLine(m, b);
 
-        if (dist < min_dist)
-        {
+        if (dist < min_dist) {
             min_dist = dist;
             min_dist_id = i;
         }
 
-        if (dist > max_dist)
-        {
+        if (dist > max_dist) {
             max_dist = dist;
             max_dist_id = i;
         }
@@ -581,14 +521,12 @@ DensityMap.prototype.calculateBoundingBox = function()
         var proj_dist = direction * Math.sqrt(Math.pow(projection_x - avgx, 2) +
             Math.pow(projection_z - avgz, 2));
 
-        if (proj_dist < min_proj_dist)
-        {
+        if (proj_dist < min_proj_dist) {
             min_proj_dist = proj_dist;
             min_proj_dist_id = i;
         }
 
-        if (proj_dist > max_proj_dist)
-        {
+        if (proj_dist > max_proj_dist) {
             max_proj_dist = proj_dist;
             max_proj_dist_id = i;
         }
