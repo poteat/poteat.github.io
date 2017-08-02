@@ -137,7 +137,7 @@ function Perimeter(ConcaveHull) {
     var center_t = central_coords[0];
     var center_u = central_coords[1];
 
-    var multiplier = 1.00;
+    var multiplier = 1.2;
 
     for (var i = 0; i < this.points.length; i++) {
         var p = this.points[i];
