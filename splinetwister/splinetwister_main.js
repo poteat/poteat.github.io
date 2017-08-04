@@ -38,7 +38,7 @@ function init()
 {
     loadServerMRC("density_map.mrc");
 
-    BSurface = new Surface(4, 4, 10, 10);
+    BSurface = new Surface(4, 4, 20, 20);
     BPlane = new Plane(1, -3, 1, 2);
     BProj = new Projection();
 
@@ -88,7 +88,7 @@ function main()
 
         ctx.fillStyle = "black";
 
-        ctx.fillText("Score: " + (score - DMap.foldedness()), 10, 20);
+        ctx.fillText("Score: " + (score), 10, 20);
         ctx.fillText("Number of points: " + DMap.points.length, 10, 40);
 
         ctx.fillText("Foldedness: " + DMap.foldedness(), 10, 180);

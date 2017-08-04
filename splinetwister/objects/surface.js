@@ -213,7 +213,7 @@ Surface.prototype.updatePoints = function()
 };
 
 var opt_t = 0;
-var opt_lim = 20;
+var opt_lim = 10;
 var count = 0;
 
 Surface.prototype.draw = function()
@@ -490,9 +490,9 @@ Surface.prototype.optimizeControlPoint = function(p)
 {
     var iterations = 15;
 
-    var delta_x = 1;
-    var delta_y = 1;
-    var delta_z = 1;
+    var delta_x = .25;
+    var delta_y = .25;
+    var delta_z = .25;
 
     // var threshold = .0003;
 

@@ -498,7 +498,7 @@ DensityMap.prototype.foldedness = function()
                 var vertical_twist = this.angleBetweenThreePoints(p5, p2, p3);
                 var horizontal_twist = this.angleBetweenThreePoints(p4, p1, p2);
 
-                var foldedness = (Math.abs(vertical_twist) +
+                var foldedness = Math.max(Math.abs(vertical_twist),
                     Math.abs(horizontal_twist)) / 2;
 
                 if (foldedness > max_folded)
@@ -509,7 +509,7 @@ DensityMap.prototype.foldedness = function()
         }
     }
 
-    return max_folded;
+    return max_folded * max_folded;
 }
 
 DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
