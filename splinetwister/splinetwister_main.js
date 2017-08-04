@@ -38,14 +38,14 @@ function init()
 {
     loadServerMRC("density_map.mrc");
 
-    BSurface = new Surface(4, 4, 30, 30);
+    BSurface = new Surface(4, 4, 10, 10);
     BPlane = new Plane(1, -3, 1, 2);
     BProj = new Projection();
 
     updateTransformedPoints();
 }
 
-var desired_control_points = 3;
+var desired_control_points = 4;
 
 var updated_pdb = false;
 

@@ -417,38 +417,99 @@ DensityMap.prototype.score = function()
     }
 };
 
+DensityMap.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2)
+{
+    var l1 = Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2) + Math.pow(z1, 2));
+    var l2 = Math.sqrt(Math.pow(x2, 2) + Math.pow(y2, 2) + Math.pow(z2, 2));
+
+    var dot = x1 * x2 + y1 * y2 + z1 * z2;
+
+    var ang = Math.acos(dot / l1 / l2);
+
+    // Twist direction calculation
+
+    var cross_x = y1 * z2 - z1 * y2;
+    var cross_y = z1 * x2 - x1 * z2;
+    var cross_z = x1 * y2 - y1 * x2;
+
+    var delta_x = x1 - x2;
+    var delta_y = y1 - y2;
+    var delta_z = z1 - z2;
+
+    var dot_dir = cross_x * delta_x + cross_y * delta_y + cross_z * delta_z;
+
+    var dir = sign(dot_dir);
+
+    return dir * ang;
+}
+
+DensityMap.prototype.angleBetweenThreePoints = function(p1, p2, p3)
+{
+    var x1 = p2.x - p1.x;
+    var y1 = p2.y - p1.y;
+    var z1 = p2.z - p1.z;
+
+    var x2 = p3.x - p2.x;
+    var y2 = p3.y - p2.y;
+    var z2 = p3.z - p3.z;
+
+    return this.angleBetweenTwoVectors(x1, y1, z1, x2, y2, z2);
+}
+
 DensityMap.prototype.foldedness = function()
 {
-    var X = BSurface.X - 1;
-    var Y = BSurface.Y - 1;
+    // New foldedness heuristic.  Use surface sample points to calculate
+    // the maximum foldedness of the sheet.  If the maximum foldedness is
+    // violated, increase the score dramatically.
 
-    var p1 = BSurface.controlPoints[0][0];
-    var p2 = BSurface.controlPoints[X][0];
-    var p3 = BSurface.controlPoints[0][Y];
-    var p4 = BSurface.controlPoints[X][Y];
+    var grid = BSurface.drawPoints;
 
-    var top = p1.dist(p2);
-    var right = p2.dist(p4);
-    var bottom = p3.dist(p4);
-    var left = p1.dist(p3);
-    var forwardslash = p3.dist(p2);
-    var backslash = p1.dist(p4);
+    var max_folded = -Infinity;
 
-    /*
-    var fold_term_1 = (top + left) / 2 - backslash;
-    var fold_term_2 = (top + right) / 2 - forwardslash;
-    var fold_term_3 = (bottom + left) / 2 - forwardslash;
-    var fold_term_4 = (bottom + right) / 2 - backslash;
-    */
+    for (var i = 0; i < grid.length; i++)
+    {
+        var row = grid[i];
 
-    var fold_term_1 = Math.max(top, left) - backslash;
-    var fold_term_2 = Math.max(top, right) - forwardslash;
-    var fold_term_3 = Math.max(bottom, left) - forwardslash;
-    var fold_term_4 = Math.max(bottom, right) - backslash;
+        for (var j = 0; j < row.length; j++)
+        {
+            var r1 = grid[i - 1];
+            var r2 = grid[i];
+            var r3 = grid[i + 1];
 
-    var foldedness = fold_term_1 + fold_term_2 + fold_term_3 + fold_term_4;
+            var valid = r1 != undefined && r2 != undefined && r3 != undefined;
 
-    return foldedness / 100;
+            if (!valid)
+            {
+                break;
+            }
+
+            var p1 = grid[i][j];
+            var p2 = grid[i + 1][j];
+            var p3 = grid[i][j - 1];
+            var p4 = grid[i - 1][j];
+            var p5 = grid[i][j + 1];
+
+            var valid = (p1 != undefined && p2 != undefined &&
+                p3 != undefined && p4 != undefined &&
+                p5 != undefined);
+
+            if (valid)
+            {
+                var vertical_twist = this.angleBetweenThreePoints(p5, p2, p3);
+                var horizontal_twist = this.angleBetweenThreePoints(p4, p1, p2);
+
+                var foldedness = (Math.abs(vertical_twist) +
+                    Math.abs(horizontal_twist)) / 2;
+
+                if (foldedness > max_folded)
+                {
+                    max_folded = foldedness;
+                }
+            }
+        }
+    }
+
+    return max_folded;
 }
 
 DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)

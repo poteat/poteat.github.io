@@ -500,7 +500,7 @@ Surface.prototype.optimizeControlPoint = function(p)
 
     if (DMap.X >= 4)
     {
-        threshold = .0003;
+        threshold = .000001;
     }
 
     var score = DMap.score();
