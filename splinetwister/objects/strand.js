@@ -1,4 +1,5 @@
-function Strand() {
+function Strand()
+{
     this.originPoint;
 
     this.optimize_button;
@@ -14,7 +15,8 @@ function Strand() {
     this.initialize();
 }
 
-Strand.prototype.initialize = function() {
+Strand.prototype.initialize = function()
+{
     this.originPoint = new Point(0, 0, 0);
 
     optimize_button = Create_ToggleButton(550, 30, 70, 25, "Optimize");
@@ -40,7 +42,8 @@ Strand.prototype.initialize = function() {
     this.updateStrandMap(this.angle, this.offset, this.strand_gap);
 }
 
-Strand.prototype.importStrands = function(points) {
+Strand.prototype.importStrands = function(points)
+{
     // We first define an array of arrays, each array representing a strand.
     // They initially are in arbitrary order, and we need to solve a matching
     // problem to find out their true relationship with the simulated strands.
@@ -55,16 +58,20 @@ Strand.prototype.importStrands = function(points) {
 
     var s = 0;
 
-    for (var i = 0; i < points.length; i++) {
+    for (var i = 0; i < points.length; i++)
+    {
         var p = points[i];
 
         var dist = p.dist(prev_p);
 
         console.log(dist);
 
-        if (p.dist(prev_p) < epsilon) {
+        if (p.dist(prev_p) < epsilon)
+        {
             this.truePoints[s].push(p);
-        } else {
+        }
+        else
+        {
             this.truePoints[s + 1] = new Array();
             s++;
             this.truePoints[s].push(p);
@@ -78,14 +85,16 @@ Strand.prototype.importStrands = function(points) {
     var L = this.truePoints.length;
     var avg = new Array();
 
-    for (var i = 0; i < L; i++) {
+    for (var i = 0; i < L; i++)
+    {
         var s = this.truePoints[i];
 
         var sum_x = 0;
         var sum_y = 0;
         var sum_z = 0;
 
-        for (var j = 0; j < s.length; j++) {
+        for (var j = 0; j < s.length; j++)
+        {
             var p = s[j];
 
             sum_x += p.x;
@@ -107,12 +116,14 @@ Strand.prototype.importStrands = function(points) {
     var min_dist = Infinity;
     var min_id = -1;
 
-    for (var i = 0; i < avg.length; i++) {
+    for (var i = 0; i < avg.length; i++)
+    {
         var p = avg[i];
 
         var dist = p.dist(this.originPoint);
 
-        if (dist < min_dist) {
+        if (dist < min_dist)
+        {
             min_dist = dist;
             min_id = i;
         }
@@ -126,14 +137,16 @@ Strand.prototype.importStrands = function(points) {
 
     M = 10;
 
-    for (var i = 0; i < this.truePoints.length; i++) {
+    for (var i = 0; i < this.truePoints.length; i++)
+    {
         var s = this.truePoints[i];
 
         var range = s.length - 1;
 
         s.samples = new Array();
 
-        for (var j = 0; j < M; j++) {
+        for (var j = 0; j < M; j++)
+        {
             var t = j / (M - 1);
 
             var index = Math.round(t * range);
@@ -147,10 +160,12 @@ Strand.prototype.importStrands = function(points) {
 
     this.truePoints_T = new Array();
 
-    for (var i = 0; i < this.truePoints.length; i++) {
+    for (var i = 0; i < this.truePoints.length; i++)
+    {
         this.truePoints_T.push(new Array());
 
-        for (var j = 0; j < this.truePoints[i].length; j++) {
+        for (var j = 0; j < this.truePoints[i].length; j++)
+        {
             var color = "Black";
             color = i == min_id ? "Red" : color;
 
@@ -161,7 +176,8 @@ Strand.prototype.importStrands = function(points) {
     }
 }
 
-Strand.prototype.optimizeToTrueStructure = function() {
+Strand.prototype.optimizeToTrueStructure = function()
+{
     // We have the scoring function, so now we call an initial optimization to
     // improve the matching between strands.
 
@@ -174,7 +190,8 @@ Strand.prototype.optimizeToTrueStructure = function() {
     var ang_min = 0;
     var ang_max = 180;
 
-    for (var i = 0; i < N; i++) {
+    for (var i = 0; i < N; i++)
+    {
         var t = i / (N - 1);
         var ang = t * (180 - 180 / N);
 
@@ -190,10 +207,12 @@ Strand.prototype.optimizeToTrueStructure = function() {
     var min_score = Infinity;
     var min_index = -1;
 
-    for (var i = 0; i < ang_scores.length; i++) {
+    for (var i = 0; i < ang_scores.length; i++)
+    {
         var score = ang_scores[i][1];
 
-        if (score < min_score) {
+        if (score < min_score)
+        {
             min_score = score;
             min_index = i;
         }
@@ -209,7 +228,8 @@ Strand.prototype.optimizeToTrueStructure = function() {
 
     var search_range = 4;
 
-    for (var i = 0; i < N; i++) {
+    for (var i = 0; i < N; i++)
+    {
         var t = i / (N - 1);
         var offset = search_range * t - search_range / 2;
 
@@ -226,10 +246,12 @@ Strand.prototype.optimizeToTrueStructure = function() {
     var min_score = Infinity;
     var min_index = -1;
 
-    for (var i = 0; i < ang_scores.length; i++) {
+    for (var i = 0; i < ang_scores.length; i++)
+    {
         var score = offset_scores[i][1];
 
-        if (score < min_score) {
+        if (score < min_score)
+        {
             min_score = score;
             min_index = i;
         }
@@ -259,10 +281,12 @@ Strand.prototype.optimizeToTrueStructure = function() {
     var best_angle = this.angle;
     var best_offset = this.offset;
 
-    for (var i = 0; i < N; i++) {
+    for (var i = 0; i < N; i++)
+    {
         scores[i] = new Array(N);
 
-        for (var j = 0; j < N; j++) {
+        for (var j = 0; j < N; j++)
+        {
             var t1 = i / (N - 1);
             var t2 = j / (N - 1);
 
@@ -278,7 +302,8 @@ Strand.prototype.optimizeToTrueStructure = function() {
 
             console.log(ang, offset, score);
 
-            if (score < min_score) {
+            if (score < min_score)
+            {
                 min_score = score;
                 best_angle = angle;
                 best_offset = offset;
@@ -310,7 +335,8 @@ Strand.prototype.optimizeToTrueStructure = function() {
 
     var map = this.strandMap;
 
-    for (var i = 0; i < N; i++) {
+    for (var i = 0; i < N; i++)
+    {
         var t = i / (N - 1);
 
         var min_gap = gap_center - gap_delta / 2;
@@ -319,9 +345,12 @@ Strand.prototype.optimizeToTrueStructure = function() {
         this.updateStrandMap(this.angle, this.offset, strand_gap);
 
         var score = 0;
-        for (var j = map._length; j < map.length; j++) {
-            if (map[j].length - map[j]._length > 0) {
-                if (this.truePoints[j + this.central_strand] != undefined) {
+        for (var j = map._length; j < map.length; j++)
+        {
+            if (map[j].length - map[j]._length > 0)
+            {
+                if (this.truePoints[j + this.central_strand] != undefined)
+                {
                     var change = this.scoreViaTrueStrand(this.strandMap[j],
                         this.truePoints[j + this.central_strand]);
 
@@ -331,7 +360,8 @@ Strand.prototype.optimizeToTrueStructure = function() {
             }
         }
 
-        if (score < min_score) {
+        if (score < min_score)
+        {
             min_score = score;
             best_gap = strand_gap;
         }
@@ -340,7 +370,8 @@ Strand.prototype.optimizeToTrueStructure = function() {
     this.updateStrandMap(best_angle, best_offset, best_gap);
 }
 
-Strand.prototype.setOrigin = function(t, u) {
+Strand.prototype.setOrigin = function(t, u)
+{
     var coords = BSurface.calc(t, u);
 
     this.originPoint.x = coords[0];
@@ -351,7 +382,8 @@ Strand.prototype.setOrigin = function(t, u) {
     this.originPoint.u = u;
 }
 
-Strand.prototype.twistAngle = function(s1_1, s1_2, s2_1, s2_2) {
+Strand.prototype.twistAngle = function(s1_1, s1_2, s2_1, s2_2)
+{
     var x1 = s1_2.x - s1_1.x;
     var y1 = s1_2.y - s1_1.y;
     var z1 = s1_2.z - s1_1.z;
@@ -366,7 +398,8 @@ Strand.prototype.twistAngle = function(s1_1, s1_2, s2_1, s2_2) {
 }
 
 Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2, p1,
-    p3) {
+    p3)
+{
     var l1 = Math.sqrt(Math.pow(x1, 2) + Math.pow(y1, 2) + Math.pow(z1, 2));
     var l2 = Math.sqrt(Math.pow(x2, 2) + Math.pow(y2, 2) + Math.pow(z2, 2));
 
@@ -391,31 +424,37 @@ Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2, p1,
     return dir * ang;
 }
 
-Strand.prototype.distBetweenSamples = function(x1, y1, z1, x2, y2, z2) {
+Strand.prototype.distBetweenSamples = function(x1, y1, z1, x2, y2, z2)
+{
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 -
         z2, 2));
 }
 
-Strand.prototype.linearInterpolate = function(x_array, y_array, x) {
+Strand.prototype.linearInterpolate = function(x_array, y_array, x)
+{
     // Linearly interpolates to find x from a table x_array; y_array
     // such that x_array and y_array have the same length, and are
     // sorted in terms of x_array.
 
     // Returns y extrema if x is outside of bounds (i.e. does no extrapolation)
 
-    if (x_array.length == 0) {
+    if (x_array.length == 0)
+    {
         return 0;
     }
 
-    if (x <= x_array[0]) {
+    if (x <= x_array[0])
+    {
         return y_array[0];
     }
 
-    for (var i = 1; i < x_array.length; i++) {
+    for (var i = 1; i < x_array.length; i++)
+    {
         var upper_bound = x_array[i];
         var lower_bound = x_array[i - 1];
 
-        if (x <= upper_bound) {
+        if (x <= upper_bound)
+        {
             var range = upper_bound - lower_bound;
             var delta = x - lower_bound;
             var slope = (y_array[i] - y_array[i - 1]) / range;
@@ -426,19 +465,24 @@ Strand.prototype.linearInterpolate = function(x_array, y_array, x) {
         }
     }
 
-    if (x > x_array[x_array.length - 1]) {
+    if (x > x_array[x_array.length - 1])
+    {
         return y_array[x_array.length - 1];
     }
 }
 
-Strand.prototype.euclideanShift = function(points, ang, dist) {
+Strand.prototype.euclideanShift = function(points, ang, dist)
+{
     // Takes in angle in degrees
     // 
     var projected = new Array();
 
-    if (dist > 0) {
+    if (dist > 0)
+    {
         var sign = 1;
-    } else {
+    }
+    else
+    {
         dist = Math.abs(dist);
         var sign = -1;
     }
@@ -456,7 +500,8 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
     var x_ang_array = new Array();
     var y_ang_array = new Array();
 
-    for (var t = 0; t <= 1; t += 1 / (N - 1)) {
+    for (var t = 0; t <= 1; t += 1 / (N - 1))
+    {
         var range = (points.length - 1) - points._length;
 
         var i = Math.round(points._length + t * range);
@@ -464,7 +509,8 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
         var p1 = points[i];
         var p2 = points[i + 1];
 
-        if (p2 == undefined) {
+        if (p2 == undefined)
+        {
             break;
         }
 
@@ -472,7 +518,8 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
 
         var delta = 20;
 
-        for (var j = 0; j < 40; j++) {
+        for (var j = 0; j < 40; j++)
+        {
             // Calculate the current angle
             // 
             var dt = p1.t + Math.cos((ang + angle_shift) / 180 * Math.PI) * eps_dist;
@@ -492,17 +539,21 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
             var p3 = BSurface.sample(dt, du);
             var delta_angle_minus = Math.abs(this.angleBetween(p1, p2, p3));
 
-            if (Math.abs(delta_angle_plus - 90) < Math.abs(delta_angle_minus - 90)) {
+            if (Math.abs(delta_angle_plus - 90) < Math.abs(delta_angle_minus - 90))
+            {
                 angle_shift += 2 * delta;
             }
 
             delta /= 2;
         }
 
-        if (i != points.length - 1) {
+        if (i != points.length - 1)
+        {
             x_ang_array.push(i);
             y_ang_array.push(angle_shift);
-        } else {
+        }
+        else
+        {
             x_ang_array.push(points.length - 1)
             y_ang_array.push(0);
         }
@@ -518,7 +569,8 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
     var x_array = new Array();
     var y_array = new Array();
 
-    for (var t = 0; t <= 1; t += 1 / (N - 1)) {
+    for (var t = 0; t <= 1; t += 1 / (N - 1))
+    {
         var range = (points.length - 1) - points._length;
 
         var i = Math.round(points._length + t * range);
@@ -541,13 +593,17 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
 
         dist = p.distToParameter(p.t + sign * dt, p.u + sign * du);
 
-        while (Math.abs(dist - strand_gap) > 0.001) {
-            if (dist > strand_gap) {
+        while (Math.abs(dist - strand_gap) > 0.001)
+        {
+            if (dist > strand_gap)
+            {
                 delta /= 2;
 
                 dt -= _cos * delta;
                 du -= _sin * delta;
-            } else {
+            }
+            else
+            {
                 dt += _cos * delta;
                 du += _sin * delta;
             }
@@ -563,7 +619,8 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
 
     var neg_length = 0;
 
-    for (var i = points._length; i < points.length; i++) {
+    for (var i = points._length; i < points.length; i++)
+    {
         var p = points[i];
 
         var delta = this.linearInterpolate(x_array, y_array, i);
@@ -581,10 +638,14 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
         p_new.t = p.t + sign * dt;
         p_new.u = p.u + sign * du;
 
-        if (i >= 0) {
+        if (i >= 0)
+        {
             projected[i] = p_new;
-        } else {
-            if (neg_length == 0) {
+        }
+        else
+        {
+            if (neg_length == 0)
+            {
                 neg_length = -i;
             }
 
@@ -598,11 +659,13 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
     return projected;
 }
 
-Strand.prototype.cullExteriorPoints = function(points) {
+Strand.prototype.cullExteriorPoints = function(points)
+{
     // Returns set of points which are inside of the hull boundary.  If none of the 
     // given points are inside the hull boundary, returns false.
 
-    if (points.length == 0 && points._length == 0) {
+    if (points.length == 0 && points._length == 0)
+    {
         return false;
     }
 
@@ -611,25 +674,30 @@ Strand.prototype.cullExteriorPoints = function(points) {
 
     // Find minimum element that is inside the hull boundary.
 
-    for (var i = points._length; i < points.length; i++) {
+    for (var i = points._length; i < points.length; i++)
+    {
         var p = points[i];
 
-        if (isInsidePolygon(p.t, p.u, BPerimeter.vertices)) {
+        if (isInsidePolygon(p.t, p.u, BPerimeter.vertices))
+        {
             min = i;
             break;
         }
     }
 
-    for (var i = points.length - 1; i >= points._length; i--) {
+    for (var i = points.length - 1; i >= points._length; i--)
+    {
         var p = points[i];
 
-        if (isInsidePolygon(p.t, p.u, BPerimeter.vertices)) {
+        if (isInsidePolygon(p.t, p.u, BPerimeter.vertices))
+        {
             max = i;
             break;
         }
     }
 
-    if (min == -Infinity || max == Infinity) {
+    if (min == -Infinity || max == Infinity)
+    {
         return false;
     }
 
@@ -639,18 +707,23 @@ Strand.prototype.cullExteriorPoints = function(points) {
 
     culled._length = min;
 
-    for (var i = min; i <= max; i++) {
+    for (var i = min; i <= max; i++)
+    {
         culled[i] = points[i];
     }
 
-    if (culled.length > 0 || culled._length < 0) {
+    if (culled.length > 0 || culled._length < 0)
+    {
         return culled;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
 
-Strand.prototype.generateStrandString = function(angle, offset, gap) {
+Strand.prototype.generateStrandString = function(angle, offset, gap)
+{
     console.log(angle, offset, gap);
     this.updateStrandMap(angle, offset, gap);
 
@@ -658,11 +731,14 @@ Strand.prototype.generateStrandString = function(angle, offset, gap) {
 
     var map = this.strandMap;
 
-    for (var i = map._length; i < map.length; i++) {
-        for (var j = map[i]._length; j < map[i].length; j++) {
+    for (var i = map._length; i < map.length; i++)
+    {
+        for (var j = map[i]._length; j < map[i].length; j++)
+        {
             var p = map[i][j];
 
-            if (p != undefined) {
+            if (p != undefined)
+            {
                 var p_copy = new Point(p.x, p.y, p.z);
 
                 sample_points.push(p_copy);
@@ -671,7 +747,8 @@ Strand.prototype.generateStrandString = function(angle, offset, gap) {
     }
 
     // Undo plane and centering transformations
-    for (var i = 0; i < sample_points.length; i++) {
+    for (var i = 0; i < sample_points.length; i++)
+    {
         sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy,
             DMap.rot_uz)
 
@@ -685,13 +762,15 @@ Strand.prototype.generateStrandString = function(angle, offset, gap) {
     return string;
 }
 
-Strand.prototype.getFilename = function() {
+Strand.prototype.getFilename = function()
+{
     var filename = DMap.filename;
     var exploded_filename = filename.split(".");
 
     var strand_filename = "";
 
-    for (var i = 0; i < exploded_filename.length - 2; i++) {
+    for (var i = 0; i < exploded_filename.length - 2; i++)
+    {
         strand_filename += (exploded_filename[i] + ".");
     }
     strand_filename += (exploded_filename[i]);
@@ -700,7 +779,8 @@ Strand.prototype.getFilename = function() {
 }
 
 Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
-    offset_max, offset_num) {
+    offset_max, offset_num)
+{
     this.generatedSet = true;
 
     // First, generate an array of strings, each string being a file.
@@ -713,8 +793,10 @@ Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
 
     var offset_delta = offset_max - offset_min;
 
-    while (angle < 360) {
-        for (var i = 0; i < offset_num; i++) {
+    while (angle < 360)
+    {
+        for (var i = 0; i < offset_num; i++)
+        {
             var offset = offset_min + i / (offset_num - 1) * offset_delta;
 
             console.log("Generating a" + angle + "_o" + offset);
@@ -733,21 +815,28 @@ Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
     var zip_name = this.getFilename() + "_StrandSet.zip";
     set_dl.download = zip_name;
 
-    zip.createWriter(new zip.BlobWriter("application/zip"), function(writer) {
+    zip.createWriter(new zip.BlobWriter("application/zip"), function(writer)
+    {
         var f = 0;
 
-        function nextFile(f) {
-            writer.add(filenames[f], new zip.TextReader(files[f]), function() {
+        function nextFile(f)
+        {
+            writer.add(filenames[f], new zip.TextReader(files[f]), function()
+            {
                 console.log(f);
                 f++;
-                if (f < files.length) {
+                if (f < files.length)
+                {
                     nextFile(f);
-                } else close();
+                }
+                else close();
             });
         }
 
-        function close() {
-            writer.close(function(blob) {
+        function close()
+        {
+            writer.close(function(blob)
+            {
 
                 var set_dl = document.getElementById('set_download_link');
 
@@ -764,7 +853,8 @@ Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
     }, onerror)
 }
 
-Strand.prototype.updateDownload = function() {
+Strand.prototype.updateDownload = function()
+{
     // We now happily have the full set of strand sample points, so we can 
     // generate a pdb file and hook it to the button (magic)
 
@@ -774,11 +864,14 @@ Strand.prototype.updateDownload = function() {
 
     var map = this.strandMap;
 
-    for (var i = map._length; i < map.length; i++) {
-        for (var j = map[i]._length; j < map[i].length; j++) {
+    for (var i = map._length; i < map.length; i++)
+    {
+        for (var j = map[i]._length; j < map[i].length; j++)
+        {
             var p = map[i][j];
 
-            if (p != undefined) {
+            if (p != undefined)
+            {
                 var p_copy = new Point(p.x, p.y, p.z);
 
                 sample_points.push(p_copy);
@@ -787,7 +880,8 @@ Strand.prototype.updateDownload = function() {
     }
 
     // Undo plane and centering transformations
-    for (var i = 0; i < sample_points.length; i++) {
+    for (var i = 0; i < sample_points.length; i++)
+    {
         sample_points[i].rotateAxis(-DMap.rot_theta, DMap.rot_ux, DMap.rot_uy,
             DMap.rot_uz)
 
@@ -809,7 +903,8 @@ Strand.prototype.updateDownload = function() {
 
     var strand_filename = "";
 
-    for (var i = 0; i < exploded_filename.length - 2; i++) {
+    for (var i = 0; i < exploded_filename.length - 2; i++)
+    {
         strand_filename += (exploded_filename[i] + ".");
     }
     strand_filename += (exploded_filename[i]);
@@ -820,7 +915,8 @@ Strand.prototype.updateDownload = function() {
 
 }
 
-Strand.prototype.crossProduct = function(v1, v2) {
+Strand.prototype.crossProduct = function(v1, v2)
+{
     var v = new Array(3);
 
     v[0] = v1[1] * v2[2] - v1[2] * v2[1];
@@ -830,7 +926,8 @@ Strand.prototype.crossProduct = function(v1, v2) {
     return v;
 }
 
-Strand.prototype.dotProduct = function(v1, v2) {
+Strand.prototype.dotProduct = function(v1, v2)
+{
     var v = new Array(3);
 
     v[0] = v1[0] * v2[0];
@@ -840,7 +937,8 @@ Strand.prototype.dotProduct = function(v1, v2) {
     return v[0] + v[1] + v[2];
 }
 
-Strand.prototype.subtractVector = function(v1, v2) {
+Strand.prototype.subtractVector = function(v1, v2)
+{
     var v = new Array(3);
 
     v[0] = v1[0] - v2[0];
@@ -850,12 +948,14 @@ Strand.prototype.subtractVector = function(v1, v2) {
     return v;
 }
 
-Strand.prototype.absoluteVector = function(v) {
+Strand.prototype.absoluteVector = function(v)
+{
     return Math.sqrt(
         Math.pow(v[0], 2) + Math.pow(v[1], 2) + Math.pow(v[2], 2));
 }
 
-Strand.prototype.divideVector = function(v1, divisor) {
+Strand.prototype.divideVector = function(v1, divisor)
+{
     var v = new Array(3);
 
     v[0] = v1[0] / divisor;
@@ -865,7 +965,8 @@ Strand.prototype.divideVector = function(v1, divisor) {
     return v;
 }
 
-Strand.prototype.dihedralAngle = function(p1, p2, p3, p4) {
+Strand.prototype.dihedralAngle = function(p1, p2, p3, p4)
+{
     var p1 = [p1.x, p1.y, p1.z];
     var p2 = [p2.x, p2.y, p2.z];
     var p3 = [p3.x, p3.y, p3.z];
@@ -890,18 +991,23 @@ Strand.prototype.dihedralAngle = function(p1, p2, p3, p4) {
     return angle;
 }
 
-Strand.prototype.draw = function() {
-    if (!this.ignoreChanges) {
+Strand.prototype.draw = function()
+{
+    if (!this.ignoreChanges)
+    {
         if ((this.angle_slider.value != this.angle) ||
             (this.offset_slider.value != this.offset) ||
-            (this.gap_slider.value != this.strand_gap)) {
+            (this.gap_slider.value != this.strand_gap))
+        {
             this.angle = this.angle_slider.value;
             this.offset = this.offset_slider.value;
             this.strand_gap = this.gap_slider.value;
 
             this.updateStrandMap(this.angle, this.offset, this.strand_gap);
         }
-    } else {
+    }
+    else
+    {
         this.angle_slider.setValue(this.angle);
         this.offset_slider.setValue(this.offset);
         this.gap_slider.setValue(this.strand_gap);
@@ -917,19 +1023,23 @@ Strand.prototype.draw = function() {
     // Find pair of simulated strands with most shared connections.
     var max_count = -Infinity;
     var max_index = -Infinity;
-    for (var i = map._length; i < map.length - 1; i++) {
+    for (var i = map._length; i < map.length - 1; i++)
+    {
         var s1 = map[i];
         var s2 = map[i + 1];
 
         // Loop through s1, counting how many elements also exist in s2.
         var count = 0;
-        for (var j = s1._length; j < s1.length; j++) {
-            if (s1[j] != undefined && s2[j] != undefined) {
+        for (var j = s1._length; j < s1.length; j++)
+        {
+            if (s1[j] != undefined && s2[j] != undefined)
+            {
                 count++;
             }
         }
 
-        if (count > max_count) {
+        if (count > max_count)
+        {
             max_count = count;
             max_index = i;
         }
@@ -946,7 +1056,8 @@ Strand.prototype.draw = function() {
     var min_angle = Infinity;
     var max_angle = -Infinity;
 
-    for (var i = s1._length; i < s1.length - 1; i++) {
+    for (var i = s1._length; i < s1.length - 1; i++)
+    {
         var s1_1 = s1[i];
         var s1_2 = s1[i + 1];
 
@@ -955,14 +1066,17 @@ Strand.prototype.draw = function() {
 
         var defined = s1_1 && s1_2 && s2_1 && s2_2;
 
-        if (defined) {
+        if (defined)
+        {
             var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
 
-            if (angle < min_angle) {
+            if (angle < min_angle)
+            {
                 min_angle = angle;
             }
 
-            if (angle > max_angle) {
+            if (angle > max_angle)
+            {
                 max_angle = angle;
             }
         }
@@ -979,10 +1093,12 @@ Strand.prototype.draw = function() {
 
     var N = 4;
 
-    for (var i = s1._length; i < s1.length - N; i++) {
+    for (var i = s1._length; i < s1.length - N; i++)
+    {
         var sumtwist = 0;
 
-        for (var j = 0; j < N; j++) {
+        for (var j = 0; j < N; j++)
+        {
             var s1_1 = s1[i + j];
             var s1_2 = s1[i + j + 1];
 
@@ -991,22 +1107,28 @@ Strand.prototype.draw = function() {
 
             var defined = s1_1 && s1_2 && s2_1 && s2_2;
 
-            if (defined) {
+            if (defined)
+            {
                 var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
 
                 sumtwist += angle;
-            } else {
+            }
+            else
+            {
                 sumtwist = NaN;
                 break;
             }
         }
 
-        if (sumtwist == sumtwist) {
-            if (sumtwist < min_avg_angle) {
+        if (sumtwist == sumtwist)
+        {
+            if (sumtwist < min_avg_angle)
+            {
                 min_avg_angle = sumtwist;
             }
 
-            if (sumtwist > max_avg_angle) {
+            if (sumtwist > max_avg_angle)
+            {
                 max_avg_angle = sumtwist;
             }
         }
@@ -1055,17 +1177,23 @@ Strand.prototype.draw = function() {
 
     var map = this.strandMap;
 
-    for (var i = map._length; i < map.length; i++) {
+    for (var i = map._length; i < map.length; i++)
+    {
         var s = map[i];
-        for (var j = s._length; j < s.length; j++) {
+        for (var j = s._length; j < s.length; j++)
+        {
             var p = s[j];
             var p_draw = this.strandMap_T[i][j];
 
-            if (p != undefined) {
-                if (p.dist(BPerimeter.centralPoint) > dist_limit) {
+            if (p != undefined)
+            {
+                if (p.dist(BPerimeter.centralPoint) > dist_limit)
+                {
                     p_draw.color = "black";
                     p_draw.size = 1;
-                } else {
+                }
+                else
+                {
                     p_draw.color = "red";
                     p_draw.size = 3;
                 }
@@ -1080,7 +1208,8 @@ Strand.prototype.draw = function() {
 
 
 
-    if (this.optimize_button.isActivated()) {
+    if (this.optimize_button.isActivated())
+    {
         this.optimizePrediction();
 
         this.optimize_button.toggle();
@@ -1089,13 +1218,16 @@ Strand.prototype.draw = function() {
 
 
 
-    if (this.truePoints != undefined) {
+    if (this.truePoints != undefined)
+    {
         // We call "scoreViaTrueStrand" to find the matching between a given
         // simulated strand and a given true strand.
 
         var score = 0;
-        for (var j = map._length; j < map.length; j++) {
-            if (map[j].length - map[j]._length > 0) {
+        for (var j = map._length; j < map.length; j++)
+        {
+            if (map[j].length - map[j]._length > 0)
+            {
                 var change = this.scoreViaTrueStrand(this.strandMap[j], this.truePoints[j +
                     this.central_strand]);
 
@@ -1109,7 +1241,8 @@ Strand.prototype.draw = function() {
 
 }
 
-Strand.prototype.optimizePrediction = function() {
+Strand.prototype.optimizePrediction = function()
+{
     // Optimize (maximize) maximum angle of longest strand pair region.
 
     // Begin by searching 20x angle space.
@@ -1118,14 +1251,16 @@ Strand.prototype.optimizePrediction = function() {
     var max_score = -Infinity;
     var max_ang = -Infinity;
 
-    for (var i = 0; i < N; i++) {
+    for (var i = 0; i < N; i++)
+    {
         var ang = i / N * 180;
 
         this.updateStrandMap(ang, 0, this.strand_gap);
 
         var score = this.maxTwistAngleScore();
 
-        if (score > max_score) {
+        if (score > max_score)
+        {
             max_score = score;
             max_ang = ang;
         }
@@ -1171,7 +1306,8 @@ Strand.prototype.optimizePrediction = function() {
 
     var min_s_ang = this.angle - ang_delta;
 
-    if (min_s_ang < 0) {
+    if (min_s_ang < 0)
+    {
         min_s_ang = 0;
     }
 
@@ -1181,7 +1317,8 @@ Strand.prototype.optimizePrediction = function() {
     var best_angle = -Infinity;
     var best_offset = -Infinity;
 
-    for (var i = 0; i < N; i++) {
+    for (var i = 0; i < N; i++)
+    {
         var t_ang = i / (N - 1);
 
         var ang = min_s_ang + ang_delta * 2 * t_ang;
@@ -1192,7 +1329,8 @@ Strand.prototype.optimizePrediction = function() {
 
         console.log(ang, 0, score);
 
-        if (score > max_score) {
+        if (score > max_score)
+        {
             max_score = score;
             best_angle = ang;
         }
@@ -1237,7 +1375,8 @@ Strand.prototype.optimizePrediction = function() {
     var min_score = Infinity;
     var best_offset = Infinity;
 
-    for (var i = 0; i < N; i++) {
+    for (var i = 0; i < N; i++)
+    {
         var t = i / (N - 1);
 
         var offset = low_offset + (high_offset - low_offset) * t;
@@ -1246,7 +1385,8 @@ Strand.prototype.optimizePrediction = function() {
 
         var score = this.coverageScore();
 
-        if (score < min_score) {
+        if (score < min_score)
+        {
             min_score = score;
             best_offset = offset;
         }
@@ -1261,16 +1401,20 @@ Strand.prototype.optimizePrediction = function() {
     console.log(this.angle, this.offset, this.strand_gap);
 }
 
-Strand.prototype.drawMap = function() {
+Strand.prototype.drawMap = function()
+{
     // Draw all strand map points:
 
     var map = this.strandMap_T;
 
-    for (var i = map._length; i < map.length; i++) {
-        for (var j = map[i]._length; j < map[i].length; j++) {
+    for (var i = map._length; i < map.length; i++)
+    {
+        for (var j = map[i]._length; j < map[i].length; j++)
+        {
             var p = map[i][j];
 
-            if (p != undefined) {
+            if (p != undefined)
+            {
                 p.draw();
             }
         }
@@ -1281,13 +1425,17 @@ Strand.prototype.drawMap = function() {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
 
-    for (var i = map._length; i < map.length; i++) {
-        for (var j = map[i]._length; j < map[i].length - 1; j++) {
+    for (var i = map._length; i < map.length; i++)
+    {
+        for (var j = map[i]._length; j < map[i].length - 1; j++)
+        {
             var p1 = map[i][j];
             var p2 = map[i][j + 1];
 
-            if (p1 != undefined && p2 != undefined) {
-                if (p1.visible() || p2.visible()) {
+            if (p1 != undefined && p2 != undefined)
+            {
+                if (p1.visible() || p2.visible())
+                {
                     ctx.beginPath();
                     ctx.moveTo(p1.x2d, p1.y2d);
                     ctx.lineTo(p2.x2d, p2.y2d);
@@ -1300,13 +1448,17 @@ Strand.prototype.drawMap = function() {
     // Loop through all strands from left to right, drawing if both exist, and
     // at least one is visible.
 
-    for (var i = map._length; i < map.length - 1; i++) {
-        for (var j = map[i]._length; j < map[i].length; j++) {
+    for (var i = map._length; i < map.length - 1; i++)
+    {
+        for (var j = map[i]._length; j < map[i].length; j++)
+        {
             var p1 = map[i][j];
             var p2 = map[i + 1][j];
 
-            if (p1 != undefined && p2 != undefined) {
-                if (p1.visible() || p2.visible()) {
+            if (p1 != undefined && p2 != undefined)
+            {
+                if (p1.visible() || p2.visible())
+                {
                     ctx.beginPath();
                     ctx.moveTo(p1.x2d, p1.y2d);
                     ctx.lineTo(p2.x2d, p2.y2d);
@@ -1317,7 +1469,8 @@ Strand.prototype.drawMap = function() {
     }
 }
 
-Strand.prototype.maxTwistAngleScore = function() {
+Strand.prototype.maxTwistAngleScore = function()
+{
     /*
     var map = this.strandMap;
 
@@ -1390,7 +1543,8 @@ Strand.prototype.maxTwistAngleScore = function() {
     return max_ang;
 }
 
-Strand.prototype.maxAngleOfStrand = function(strand_num, dist_limit) {
+Strand.prototype.maxAngleOfStrand = function(strand_num, dist_limit)
+{
     var map = this.strandMap
 
     var s1 = map[strand_num];
@@ -1401,7 +1555,8 @@ Strand.prototype.maxAngleOfStrand = function(strand_num, dist_limit) {
 
     var center = BPerimeter.centralPoint;
 
-    for (var i = s1._length; i < s1.length - 1; i++) {
+    for (var i = s1._length; i < s1.length - 1; i++)
+    {
         var s1_1 = s1[i];
         var s1_2 = s1[i + 1];
 
@@ -1410,23 +1565,29 @@ Strand.prototype.maxAngleOfStrand = function(strand_num, dist_limit) {
 
         var defined = s1_1 && s1_2 && s2_1 && s2_2;
 
-        if (defined) {
+        if (defined)
+        {
             var in_range = s1_1.dist(center) < dist_limit ||
                 s1_2.dist(center) < dist_limit ||
                 s2_1.dist(center) < dist_limit ||
                 s2_2.dist(center) < dist_limit;
-        } else {
+        }
+        else
+        {
             var in_range = false;
         }
 
-        if (defined && in_range) {
+        if (defined && in_range)
+        {
             var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
 
-            if (angle < min_angle) {
+            if (angle < min_angle)
+            {
                 min_angle = angle;
             }
 
-            if (angle > max_angle) {
+            if (angle > max_angle)
+            {
                 max_angle = angle;
             }
         }
@@ -1435,40 +1596,49 @@ Strand.prototype.maxAngleOfStrand = function(strand_num, dist_limit) {
     return max_angle;
 }
 
-Strand.prototype.coverageScore = function() {
+Strand.prototype.coverageScore = function()
+{
     var sum_dist = 0;
 
     var map = this.strandMap;
 
     var strand_count = 0;
 
-    for (var i = map._length; i < map.length; i++) {
+    for (var i = map._length; i < map.length; i++)
+    {
         var s = map[i];
-        for (var j = s._length; j < s.length; j++) {
-            if (j != undefined) {
+        for (var j = s._length; j < s.length; j++)
+        {
+            if (j != undefined)
+            {
                 strand_count += 1;
                 break;
             }
         }
     }
 
-    for (var i = 0; i < BPerimeter.surfaceSamples.length; i++) {
+    for (var i = 0; i < BPerimeter.surfaceSamples.length; i++)
+    {
         var vox = BPerimeter.surfaceSamples[i];
 
         var min_dist = Infinity;
 
-        for (var j = map._length; j < map.length; j++) {
+        for (var j = map._length; j < map.length; j++)
+        {
             var s = map[j];
 
-            for (var k = s._length; k < s.length - 1; k++) {
+            for (var k = s._length; k < s.length - 1; k++)
+            {
                 var p = s[k];
                 var dist = Infinity;
 
-                if (p != undefined) {
+                if (p != undefined)
+                {
                     dist = vox.squareDist(p);
                 }
 
-                if (dist < min_dist) {
+                if (dist < min_dist)
+                {
                     min_dist = dist;
                 }
             }
@@ -1483,10 +1653,14 @@ Strand.prototype.coverageScore = function() {
     return coverage_score; // + strand_count;
 }
 
-Strand.prototype.drawTrueStrands = function() {
-    if (this.truePoints_T != undefined) {
-        for (var i = 0; i < this.truePoints_T.length; i++) {
-            for (var j = 0; j < this.truePoints_T[i].length; j++) {
+Strand.prototype.drawTrueStrands = function()
+{
+    if (this.truePoints_T != undefined)
+    {
+        for (var i = 0; i < this.truePoints_T.length; i++)
+        {
+            for (var j = 0; j < this.truePoints_T[i].length; j++)
+            {
                 var p = this.truePoints_T[i][j];
                 p.draw();
             }
@@ -1494,28 +1668,33 @@ Strand.prototype.drawTrueStrands = function() {
     }
 }
 
-Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand) {
+Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand)
+{
     // First, we find the closest M-point (for each sim-point).
 
     var score = 0;
 
-    if (true_strand == undefined) {
+    if (true_strand == undefined)
+    {
         return 0;
     }
 
     // Loop through all true samples, finding their minimum distance to a sim
 
-    for (var i = 0; i < true_strand.length; i++) {
+    for (var i = 0; i < true_strand.length; i++)
+    {
         var p = true_strand[i];
 
         var min_dist = Infinity;
 
-        for (var j = sim_strand._length; j < sim_strand.length; j++) {
+        for (var j = sim_strand._length; j < sim_strand.length; j++)
+        {
             var sim_point = sim_strand[j];
 
             var dist = p.dist(sim_point);
 
-            if (dist < min_dist) {
+            if (dist < min_dist)
+            {
                 min_dist = dist;
             }
         }
@@ -1526,7 +1705,8 @@ Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand) {
     return Math.sqrt(score / sim_strand.length);
 }
 
-Strand.prototype.angleBetween = function(p1, p2, p3) {
+Strand.prototype.angleBetween = function(p1, p2, p3)
+{
     // Returns the angle between p2-p1 and p3-p1.
 
     var x1 = p2.x - p1.x;
@@ -1544,7 +1724,8 @@ Strand.prototype.angleBetween = function(p1, p2, p3) {
     return Math.acos(dot / l1 / l2) / Math.PI * 180;
 }
 
-Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
+Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
+{
     /**
      * We may store the strand samples as a 2-dimensional arbitrary indice map,
      * the first dimension specifying the strand (0 being the central strand).
@@ -1628,11 +1809,15 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
     dx2 = this.originPoint.t + (dx2 - this.originPoint.t) / l2;
     dy2 = this.originPoint.u + (dy2 - this.originPoint.u) / l2;
 
-    if (l3 + 0.001 < l1 + l2) {
-        if (l1 < l2) {
+    if (l3 + 0.001 < l1 + l2)
+    {
+        if (l1 < l2)
+        {
             dx1 = this.originPoint.t - (dx1 - this.originPoint.t);
             dy1 = this.originPoint.u - (dy1 - this.originPoint.u);
-        } else {
+        }
+        else
+        {
             dx2 = this.originPoint.t - (dx2 - this.originPoint.t);
             dy2 = this.originPoint.u - (dy2 - this.originPoint.u);
         }
@@ -1644,7 +1829,8 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
 
     var scale = len;
 
-    for (var t = delta; t <= 1; t += delta) {
+    for (var t = delta; t <= 1; t += delta)
+    {
         var dx = this.originPoint.t + scale * t * (dx1 - this.originPoint.t);
         var dy = this.originPoint.u + scale * t * (dy1 - this.originPoint.u);
 
@@ -1660,7 +1846,8 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
 
     var i = 0;
 
-    for (var t = delta; t <= 1; t += delta) {
+    for (var t = delta; t <= 1; t += delta)
+    {
         var dx = this.originPoint.t + scale * t * (dx2 - this.originPoint.t);
         var dy = this.originPoint.u + scale * t * (dy2 - this.originPoint.u);
 
@@ -1677,7 +1864,8 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
 
     // Euclidean shift the central strand once in left and right directions.
 
-    for (var sign = -1; sign <= 1; sign += 2) {
+    for (var sign = -1; sign <= 1; sign += 2)
+    {
         var shifted = this.euclideanShift(this.strandMap[0], this.angle,
             sign * this.strand_gap);
 
@@ -1692,9 +1880,12 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
 
     var culled = this.cullExteriorPoints(this.strandMap[0]);
 
-    if (culled._length != undefined) {
+    if (culled._length != undefined)
+    {
         this.strandMap[0] = culled;
-    } else {
+    }
+    else
+    {
         console.log("Culled central strand is zero length.")
         return;
     }
@@ -1708,10 +1899,12 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
     // We now take the left strand, extend it, and cull it, iteratively.
     // We also do the right strand side using the for-sign idiom.
 
-    for (var sign = -1; sign <= 1; sign += 2) {
+    for (var sign = -1; sign <= 1; sign += 2)
+    {
         var i = 1 * sign;
 
-        while (true) {
+        while (true)
+        {
             var extended = this.euclideanShift(this.strandMap[i], this.angle,
                 sign * this.strand_gap);
 
@@ -1719,10 +1912,13 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
 
             // var culled = this.strandMap[i];
 
-            if (culled._length != undefined) {
+            if (culled._length != undefined)
+            {
                 this.strandMap[i] = culled;
                 this.strandMap[i + sign] = extended;
-            } else {
+            }
+            else
+            {
                 // if (culled != false)
 
                 /**
@@ -1746,7 +1942,8 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
             i += sign;
         }
 
-        if (sign == -1) {
+        if (sign == -1)
+        {
             this.strandMap._length = i;
         }
     }
@@ -1950,18 +2147,23 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
 
     // Loop through strands, cleaning up.
 
-    for (var i = map._length; i < map.length; i++) {
+    for (var i = map._length; i < map.length; i++)
+    {
         var min = map[i]._length;
         var max = map[i].length;
 
         var found_valid_thus_far = false;
 
-        for (var j = map[i]._length; j < map[i].length; j++) {
+        for (var j = map[i]._length; j < map[i].length; j++)
+        {
             var p = map[i][j];
 
-            if (p == undefined && found_valid_thus_far == false) {
+            if (p == undefined && found_valid_thus_far == false)
+            {
                 min = j + 1;
-            } else {
+            }
+            else
+            {
                 found_valid_thus_far = true;
             }
         }
@@ -2026,14 +2228,17 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
     this.strandMap_T = new Array();
     this.strandMap_T._length = this.strandMap._length;
 
-    for (var i = this.strandMap._length; i < this.strandMap.length; i++) {
+    for (var i = this.strandMap._length; i < this.strandMap.length; i++)
+    {
         this.strandMap_T[i] = new Array();
         this.strandMap_T[i]._length = this.strandMap[i]._length;
 
-        for (var j = this.strandMap[i]._length; j < this.strandMap[i].length; j++) {
+        for (var j = this.strandMap[i]._length; j < this.strandMap[i].length; j++)
+        {
             var p = this.strandMap[i][j];
 
-            if (p != undefined) {
+            if (p != undefined)
+            {
                 this.strandMap_T[i][j] = p.clone("black", 1);
                 this.strandMap_T[i][j].transform(p);
             }
@@ -2042,22 +2247,29 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap) {
 
 }
 
-Strand.prototype.updateTransformedPoints = function() {
+Strand.prototype.updateTransformedPoints = function()
+{
     var map = this.strandMap_T;
 
-    for (var i = map._length; i < map.length; i++) {
-        for (var j = map[i]._length; j < map[i].length; j++) {
+    for (var i = map._length; i < map.length; i++)
+    {
+        for (var j = map[i]._length; j < map[i].length; j++)
+        {
             var p = map[i][j];
 
-            if (p != undefined) {
+            if (p != undefined)
+            {
                 p.transform(this.strandMap[i][j]);
             }
         }
     }
 
-    if (this.truePoints_T != undefined) {
-        for (var i = 0; i < this.truePoints_T.length; i++) {
-            for (var j = 0; j < this.truePoints_T[i].length; j++) {
+    if (this.truePoints_T != undefined)
+    {
+        for (var i = 0; i < this.truePoints_T.length; i++)
+        {
+            for (var j = 0; j < this.truePoints_T[i].length; j++)
+            {
                 var p = this.truePoints_T[i][j];
                 p.transform(this.truePoints[i][j]);
             }
