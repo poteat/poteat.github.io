@@ -448,10 +448,10 @@ Strand.prototype.euclideanShift = function(points, ang, dist) {
 
 
 
-    var eps_dist = 0.01;
+    var eps_dist = 0.001;
     var ang = this.angle;
 
-    var N = 10;
+    var N = 40;
 
     var x_ang_array = new Array();
     var y_ang_array = new Array();
@@ -1114,14 +1114,14 @@ Strand.prototype.optimizePrediction = function() {
 
     // Begin by searching 20x angle space.
 
-    var N = 20;
+    var N = 50;
     var max_score = -Infinity;
     var max_ang = -Infinity;
 
     for (var i = 0; i < N; i++) {
         var ang = i / N * 180;
 
-        this.updateStrandMap(ang, this.offset, this.strand_gap);
+        this.updateStrandMap(ang, 0, this.strand_gap);
 
         var score = this.maxTwistAngleScore();
 
@@ -1134,6 +1134,8 @@ Strand.prototype.optimizePrediction = function() {
     this.angle = max_ang;
 
     // Then search 20x offset space
+    // 
+    /*
 
     var N = 20;
     var max_score = -Infinity;
@@ -1157,9 +1159,11 @@ Strand.prototype.optimizePrediction = function() {
 
     this.offset = max_val;
 
+    */
+
     // Finally, search 20x 20x in both spaces, in a subregion
 
-    var N = 20;
+    var N = 50;
     var M = 20;
 
     var ang_delta = 10; // Plus or minus this many degrees to search
@@ -1182,6 +1186,19 @@ Strand.prototype.optimizePrediction = function() {
 
         var ang = min_s_ang + ang_delta * 2 * t_ang;
 
+        this.updateStrandMap(ang, 0, this.strand_gap);
+
+        var score = this.maxTwistAngleScore();
+
+        console.log(ang, 0, score);
+
+        if (score > max_score) {
+            max_score = score;
+            best_angle = ang;
+        }
+
+        /*
+
         for (var j = 0; j < M; j++) {
             var t_offset = j / (M - 1);
 
@@ -1199,10 +1216,13 @@ Strand.prototype.optimizePrediction = function() {
                 best_offset = offset;
             }
         }
+
+        */
     }
 
     this.angle = best_angle;
-    this.offset = best_offset;
+    this.offset = 0;
+
 
 
     console.log("Beginning strand coverage optimization");
