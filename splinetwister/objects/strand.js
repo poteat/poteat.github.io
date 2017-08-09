@@ -1533,7 +1533,7 @@ Strand.prototype.maxTwistAngleScore = function()
 
     return max_angle;*/
 
-    var dist_limit = 4; // Angstroms
+    var dist_limit = 6; // Angstroms
 
     var ang1 = this.maxAngleOfStrand(-1, dist_limit);
     var ang2 = this.maxAngleOfStrand(0, dist_limit);
