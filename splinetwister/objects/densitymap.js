@@ -175,6 +175,8 @@ DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta,
     this.max_t = max_t;
     this.min_u = min_u;
     this.max_u = max_u;
+
+    BSurface.finished = true;
 }
 
 DensityMap.prototype.createFromMRC = function()
@@ -301,7 +303,7 @@ DensityMap.prototype.updateTransformedPoints = function()
 };
 
 var t = 0;
-var lim = 20;
+var lim = 0;
 
 DensityMap.prototype.draw = function()
 {
@@ -400,6 +402,7 @@ DensityMap.prototype.score = function()
     for (var i = 0; i < this.points.length; i++)
     {
         var p = this.points[i];
+
         var coords = BSurface.calc(p.t, p.u);
         var proj = new Point(coords[0], coords[1], coords[2]);
         sum_dist += Math.pow(p.density, 2) * Math.pow(p.dist(proj), 2);
@@ -462,7 +465,19 @@ DensityMap.prototype.foldedness = function()
     // the maximum foldedness of the sheet.  If the maximum foldedness is
     // violated, increase the score dramatically.
 
+
     var grid = BSurface.drawPoints;
+
+    for (var i = 0; i < grid; i++)
+    {
+        var p = grid[i];
+
+        var coords = BSurface.calc(p.t, p.u);
+
+        p.x = coords[0];
+        p.y = coords[1];
+        p.z = coords[2];
+    }
 
     var max_folded = -Infinity;
 
