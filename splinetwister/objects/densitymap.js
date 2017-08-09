@@ -232,9 +232,9 @@ DensityMap.prototype.createFromMRC = function()
     var num = 0;
 
     // Find center of data points (above threshold)
-    for (var z = 0; z < this.nz; z++)
+    for (var z = 0; z < this.nz; z += 2)
     {
-        for (var y = 0; y < this.ny; y++)
+        for (var y = 0; y < this.ny; y += 2)
         {
             for (var x = 0; x < this.nx; x++)
             {
@@ -263,9 +263,9 @@ DensityMap.prototype.createFromMRC = function()
     this.points = new Array(); // Immutable data points
     this.points_T = new Array(); // Points in camera space
 
-    for (var z = 0; z < this.nz; z++)
+    for (var z = 0; z < this.nz; z += 2)
     {
-        for (var y = 0; y < this.ny; y++)
+        for (var y = 0; y < this.ny; y += 2)
         {
             for (var x = 0; x < this.nx; x++)
             {
