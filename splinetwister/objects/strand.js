@@ -1537,8 +1537,9 @@ Strand.prototype.maxTwistAngleScore = function()
 
     var ang1 = this.maxAngleOfStrand(-1, dist_limit);
     var ang2 = this.maxAngleOfStrand(0, dist_limit);
+    var ang3 = this.maxAngleOfStrand(1, dist_limit);
 
-    var max_ang = (ang1 + ang2) / 2;
+    var max_ang = Math.max(ang1, ang2, ang3);
 
     return max_ang;
 }
