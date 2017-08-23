@@ -27,6 +27,11 @@ function showRoboMenu()
 
 window.onmouseover = function(e)
 {
+	if (e.target.parentNode == null)
+	{
+		return;
+	}
+
 	keep_sim_menu = (e.target.id == "sim_button") || (e.target.parentNode.id ==
 		"sim_menu");
 	keep_bio_menu = (e.target.id == "bio_button") || (e.target.parentNode.id ==
