@@ -1270,7 +1270,7 @@ Strand.prototype.optimizePrediction = function()
 
     // Then search 20x offset space
     // 
-    /*
+    
 
     var N = 20;
     var max_score = -Infinity;
@@ -1294,11 +1294,9 @@ Strand.prototype.optimizePrediction = function()
 
     this.offset = max_val;
 
-    */
-
     // Finally, search 20x 20x in both spaces, in a subregion
 
-    var N = 50;
+    var N = 20;
     var M = 20;
 
     var ang_delta = 10; // Plus or minus this many degrees to search
@@ -1335,8 +1333,6 @@ Strand.prototype.optimizePrediction = function()
             best_angle = ang;
         }
 
-        /*
-
         for (var j = 0; j < M; j++) {
             var t_offset = j / (M - 1);
 
@@ -1354,12 +1350,10 @@ Strand.prototype.optimizePrediction = function()
                 best_offset = offset;
             }
         }
-
-        */
     }
 
     this.angle = best_angle;
-    this.offset = 0;
+    this.offset = best_offset;
 
 
 
@@ -1533,12 +1527,13 @@ Strand.prototype.maxTwistAngleScore = function()
 
     return max_angle;*/
 
-    var dist_limit = 6; // Angstroms
+    var dist_limit = 4; // Angstroms
 
     var ang1 = this.maxAngleOfStrand(-1, dist_limit);
     var ang2 = this.maxAngleOfStrand(0, dist_limit);
+    var ang3 = this.maxAngleOfStrand(1, dist_limit);
 
-    var max_ang = (ang1 + ang2) / 2;
+    var max_ang = Math.max(ang1, ang2, ang3);
 
     return max_ang;
 }

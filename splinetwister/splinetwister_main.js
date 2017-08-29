@@ -514,7 +514,7 @@ function loadServerMRC(file)
 
 var DMap;
 var dataView;
-var density_threshold = 0.293;
+var density_threshold = 0.31;
 
 document.getElementById('density_threshold').addEventListener('change',
     changeDensity, false);
