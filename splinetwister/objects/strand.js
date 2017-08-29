@@ -1550,43 +1550,53 @@ Strand.prototype.maxAngleOfStrand = function(strand_num, dist_limit)
 
     var center = BPerimeter.centralPoint;
 
-    for (var i = s1._length; i < s1.length - 1; i++)
+    for (var j = 1; j < 3; j++)
     {
-        var s1_1 = s1[i];
-        var s1_2 = s1[i + 1];
+    	if (j == 2)
+    	{
+    		s2 = map[strand_num - 1];
+    	}
 
-        var s2_1 = s2[i];
-        var s2_2 = s2[i + 1];
+	    for (var i = s1._length; i < s1.length - 1; i++)
+	    {
+	        var s1_1 = s1[i];
+	        var s1_2 = s1[i + 1];
 
-        var defined = s1_1 && s1_2 && s2_1 && s2_2;
+	        var s2_1 = s2[i];
+	        var s2_2 = s2[i + 1];
 
-        if (defined)
-        {
-            var in_range = s1_1.dist(center) < dist_limit ||
-                s1_2.dist(center) < dist_limit ||
-                s2_1.dist(center) < dist_limit ||
-                s2_2.dist(center) < dist_limit;
-        }
-        else
-        {
-            var in_range = false;
-        }
+	        var defined = s1_1 && s1_2 && s2_1 && s2_2;
 
-        if (defined && in_range)
-        {
-            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+	        if (defined)
+	        {
+	            var in_range = s1_1.dist(center) < dist_limit ||
+	                s1_2.dist(center) < dist_limit ||
+	                s2_1.dist(center) < dist_limit ||
+	                s2_2.dist(center) < dist_limit;
+	        }
+	        else
+	        {
+	            var in_range = false;
+	        }
 
-            if (angle < min_angle)
-            {
-                min_angle = angle;
-            }
+	        if (defined && in_range)
+	        {
+	            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
 
-            if (angle > max_angle)
-            {
-                max_angle = angle;
-            }
-        }
+	            if (angle < min_angle)
+	            {
+	                min_angle = angle;
+	            }
+
+	            if (angle > max_angle)
+	            {
+	                max_angle = angle;
+	            }
+	        }
+	    }    	
     }
+
+
 
     return max_angle;
 }
