@@ -1729,6 +1729,15 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
      * actual boundary of the surface.
      */
 
+    if (angle > 180)
+    {
+       angle = 180;
+    }
+    else if (angle < -180)
+    {
+        angle = -180;
+    }
+
     this.angle = angle;
     this.offset = offset;
     this.strand_gap = strand_gap;
