@@ -66,20 +66,109 @@ PixelCanvas.prototype.grassfire = function()
 {
 	var imagedata = ctx.getImageData(0, 0, this.width, this.height);
 
-	for (var x = 0; x < this.width; x++)
+	var grid = new Array(this.width);
+	for (var i = 0; i < grid.length; i++)
 	{
-		for (var y = 0; y < this.height; y++)
+		grid[i] = new Array(this.height);
+		for (var j = 0; j < grid[i].length; j++)
 		{
-			var i = (x + y*this.height)*4;
+			var pixel_index = (i + j*this.height)*4;
+			var pixel_value = imagedata.data[pixel_index+3];
 
-			if (imagedata.data[i] == 0)
+			if (pixel_value == 0)
 			{
-				imagedata.data[i] = 128;
-				imagedata.data[i+1] = 128;
-				imagedata.data[i+2] = 128;
+				pixel_value = 0;
+			}
+			else
+			{
+				pixel_value = 1;
+			}
+
+			grid[i][j] = pixel_value;
+		}
+	}
+
+
+	for (var i = 0; i < grid.length; i++)
+	{
+		for (var j = 0; j < grid[i].length; j++)
+		{
+			try{var north = grid[i][j-1];}
+			catch(e){var north = 0;}
+			
+			try{var west = grid[i-1][j];}
+			catch(e){var west = 0;}
+
+			if (grid[i][j] != 0)
+			{
+				grid[i][j] = 1 + Math.min(north, west);
 			}
 		}
 	}
+
+	for (var i = grid.length - 1; i >= 0; i--)
+	{
+		for (var j = grid[i].length - 1; j >= 0; j--)
+		{
+			try{var south = grid[i][j+1];}
+			catch(e){var south = 0;}
+
+			try{var east = grid[i+1][j];}
+			catch(e){var east = 0;}
+
+			if (grid[i][j] != 0)
+			{
+				grid[i][j] = 1 + Math.min(grid[i][j], south, east);
+			}
+		}
+	}
+
+
+
+	// find max grid number
+
+	var max = 0;
+
+	for (var i = 0; i < grid.length; i++)
+	{
+		for (var j = 0; j < grid[i].length; j++)
+		{
+			var v = grid[i][j];
+
+			if (v > max)
+			{
+				max = v;
+			}
+		}
+	}
+
+	console.log(max);
+
+
+
+	// Go through grid and set number based on percentage of max (*255);
+
+	for (var i = 0; i < grid.length; i++)
+	{
+		for (var j = 0; j < grid[i].length; j++)
+		{
+			grid[i][j] = grid[i][j] / max * 255;
+			var pixel_index = (i + j*this.height)*4;
+			var value = grid[i][j];
+
+			if (value == 0)
+			{
+				value = 255;
+			}
+
+			imagedata.data[pixel_index] = value;
+			imagedata.data[pixel_index + 1] = value;
+			imagedata.data[pixel_index + 2] = value;
+			imagedata.data[pixel_index + 3] = 255;
+		}
+	}
+
+
 
 	ctx.putImageData(imagedata, 0, 0);
 }
