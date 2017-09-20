@@ -1198,9 +1198,9 @@ Strand.prototype.draw = function()
             s = map[i];
             for (j = s._length; j < s.length; j++)
             {
-                if (s.length - s._length == longest_strand_length)
+                if (s.length - s._length == longest_strand_length && i != longest_strand)
                 {
-                    ctx.fillText("Error: multiple strands are tied in length.", 10, 170);
+                    ctx.fillText("Error: multiple strands are tied in length.", 10, 200);
                 }
             }
         }
@@ -1237,6 +1237,7 @@ Strand.prototype.draw = function()
         this.drawMap();
         this.drawTrueStrands();
     }
+    
     //Twist generation from the max angle of the two longest strands
     else if (ang_generation_method== 2)
     {
@@ -1247,13 +1248,17 @@ Strand.prototype.draw = function()
         var second_largest = 0;
         var map = this.strandMap;
 
-        for (i= map._length; i<=map.length; i++)
+        for (var i = map._length; i < map.length; i++)
         {
-            if (map[i].length + map[i]._length < longest_strand_length)
+            var s = map[i];
+            for (var j = s._length; j < s.length; j++)
             {
-                longest_strand_length = map[i].length + map[i]._length
-                second_largest = longest_strand;
-                longest_strand = i;
+                if (s.length - s._length > longest_strand_length)
+                {
+                    longest_strand_length = s.length - s._length
+                    second_largest = longest_strand;
+                    longest_strand = i;
+                }
             }
         }
 
@@ -1304,13 +1309,17 @@ Strand.prototype.draw = function()
         var second_largest = 0;
         var map = this.strandMap;
 
-        for (i= map._length; i<=map.length; i++)
+        for (var i = map._length; i < map.length; i++)
         {
-            if (map[i].length + map[i]._length < longest_strand_length)
+            var s = map[i];
+            for (var j = s._length; j < s.length; j++)
             {
-                longest_strand_length = map[i].length + map[i]._length
-                second_largest = longest_strand;
-                longest_strand = i;
+                if (s.length - s._length > longest_strand_length)
+                {
+                    longest_strand_length = s.length - s._length
+                    second_largest = longest_strand;
+                    longest_strand = i;
+                }
             }
         }
 
@@ -1533,6 +1542,7 @@ Strand.prototype.draw = function()
     else
     {
         // Calculate max twist of region 1 and region 2 in center point.
+        var map = this.strandMap;
 
         var dist_limit = 4; // Angstroms
 
@@ -1545,8 +1555,6 @@ Strand.prototype.draw = function()
 
 
         // Loop through all strand points and set color depending on distance to center
-
-        var map = this.strandMap;
 
         for (var i = map._length; i < map.length; i++)
         {
