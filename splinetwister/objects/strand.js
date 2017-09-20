@@ -1237,7 +1237,7 @@ Strand.prototype.draw = function()
         this.drawMap();
         this.drawTrueStrands();
     }
-    
+
     //Twist generation from the max angle of the two longest strands
     else if (ang_generation_method== 2)
     {
@@ -1443,7 +1443,7 @@ Strand.prototype.draw = function()
                 if (p != undefined)
                 {
                         p_draw.color = "red";
-                        p_draw.size = 1;
+                        p_draw.size = 3;
                 }
             }
         }
@@ -1459,7 +1459,6 @@ Strand.prototype.draw = function()
         var map = this.strandMap
         var denominator = 0;
         var total_angle = 0;
-        var dist_limit = Infinity; 
 
        
         for (var i = map._length; i < map.length; i++)
@@ -1489,23 +1488,9 @@ Strand.prototype.draw = function()
 
                     if (defined)
                     {
-                        var in_range = s1_1.dist(center) < dist_limit ||
-                            s1_2.dist(center) < dist_limit ||
-                            s2_1.dist(center) < dist_limit ||
-                            s2_2.dist(center) < dist_limit;
-                    }
-                    else
-                    {
-                        var in_range = false;
-                    }
-
-                    if (defined && in_range)
-                    {
-                        var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
-
                         denominator++;
+                        var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
                         total_angle = total_angle + angle;
-
                     }
                 }       
             }
@@ -1528,7 +1513,7 @@ Strand.prototype.draw = function()
                 if (p != undefined)
                 {
                         p_draw.color = "red";
-                        p_draw.size = 1;
+                        p_draw.size = 3;
                 }
             }
         }
@@ -2668,4 +2653,14 @@ Strand.prototype.updateTransformedPoints = function()
             }
         }
     }
+}
+
+Strand.prototype.longestStrands = function(longest_strand, longest_strand_length, second_largest)
+{
+
+
+
+
+
+
 }
