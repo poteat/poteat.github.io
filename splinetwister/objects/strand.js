@@ -1180,20 +1180,26 @@ Strand.prototype.draw = function()
         var longest_strand = 0;
         var map = this.strandMap;
 
-        for (var i= map._length; i<=map.length; i++)
+        for (var i = map._length; i < map.length; i++)
         {
-            if (map[i].length - map[i]._length < longest_strand_length)
+            var s = map[i];
+            for (var j = s._length; j < s.length; j++)
             {
-                longest_strand_length = map[i].length + map[i]._length
-                longest_strand = i;
-            }
+                if (s.length - s._length > longest_strand_length)
+                {
+                    longest_strand_length = s.length - s._length
+                    longest_strand = i;
+                }
         }
 
         //indicator if two strands tie for longest
 
-        for (i= map._length; i<=map.length; i++)
+        for (i = map._length; i < map.length; i++)
         {
-            if (map[i].length - map[i]._length == longest_strand_length)
+            s = map[i];
+            for (j = s._length; j < s.length; j++)
+            {
+                if (s.length - s._length == longest_strand_length)
                 {
                     ctx.fillText("Error: multiple strands are tied in length.", 10, 170);
                 }
@@ -1204,13 +1210,13 @@ Strand.prototype.draw = function()
         ctx.fillText("Longest Strand Av Ang: " + max_ang, 10, 170);
 
 
-        for (var i = map._length; i < map.length; i++)
+        for (i = map._length; i < map.length; i++)
         {
-            var s = map[i];
-            for (var j = s._length; j < s.length; j++)
+            s = map[i];
+            for (j = s._length; j < s.length; j++)
             {
-                var p = s[j];
-                var p_draw = this.strandMap_T[i][j];
+                p = s[j];
+                p_draw = this.strandMap_T[i][j];
 
                 if (p != undefined)
                 {
@@ -1240,6 +1246,7 @@ Strand.prototype.draw = function()
         var longest_strand_length = 0;
         var longest_strand = 0;
         var second_largest = 0;
+        var map = this.strandMap;
 
         for (i= map._length; i<=map.length; i++)
         {
@@ -1296,6 +1303,7 @@ Strand.prototype.draw = function()
         var longest_strand_length = 0;
         var longest_strand = 0;
         var second_largest = 0;
+        var map = this.strandMap;
 
         for (i= map._length; i<=map.length; i++)
         {
@@ -1309,7 +1317,6 @@ Strand.prototype.draw = function()
 
         // take two longest strands and find average of surronding angles
 
-        var map = this.strandMap
         var denominator = 0;
         var total_angle = 0;
         var dist_limit = Infinity; 
@@ -1377,7 +1384,6 @@ Strand.prototype.draw = function()
         
         ctx.fillText("2 Strands Av Ang: " + av_ang, 10, 170);
 
-        var map = this.strandMap;
 
                         for (var i = map._length; i < map.length; i++)
                         {
@@ -1410,14 +1416,13 @@ Strand.prototype.draw = function()
     //Twist generation from the maximum angle found
     else if (ang_generation_method == 4) 
     {
+        var map = this.strandMap;
         var ang1 = this.maxAngleOfStrand(-1, map._length);
         var ang2 = this.maxAngleOfStrand(0, map.length);
 
         var max_ang = Math.max(ang1, ang2);
 
         ctx.fillText("Max Ang: " + max_ang, 10, 170);
-
-        var map = this.strandMap;
 
         for (var i = map._length; i < map.length; i++)
         {
