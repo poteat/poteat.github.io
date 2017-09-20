@@ -14,7 +14,6 @@ var fit_dl = document.getElementById('fit_download_link');
 var strand_dl = document.getElementById('strand_download_link');
 var set_dl = document.getElementById('set_download_link');
 
-
 zip.workerScriptsPath = "/splinetwister/zip/";
 //zip.useWebWorkers = false;
 

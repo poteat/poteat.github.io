@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+y<!DOCTYPE html>
 <meta charset="UTF-8">
 <html>
 
@@ -47,6 +47,19 @@
     <a class="button" download="" id="set_download_link">
 			Generate Strand Set
 	</a>
+    <br>
+    <br> Angle Optimization Method: 
+    <select id= "twist_menu">
+                <option value= 0>Automatically Generated Center</option>
+                <option value= 1>Longest Strand</option>
+                <option value= 2>2 Longest Strands, Max Angle</option>
+                <option value= 3>2 Longest Strands, Average Angle</option>
+                <option value= 4>Maximum Angle</option>
+                <option value= 5>Average Angle</option>
+                <!--Twist By Region option later -->
+    </select>
+
+
     <p></p>
     <canvas id="canvas" width="750" height="750"> </canvas>
     <p></p>

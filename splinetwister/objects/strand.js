@@ -3,6 +3,9 @@ function Strand()
     this.originPoint;
 
     this.optimize_button;
+
+// add this.menu? or add a listening event
+
     this.angle_slider;
     this.offset_slider;
 
@@ -1154,58 +1157,424 @@ Strand.prototype.draw = function()
 
     ctx.fillText("MinAvg twist angle: " + min_avg_angle, 10, 120);
     ctx.fillText("MaxAvg twist angle: " + max_avg_angle, 10, 130);
-
     ctx.fillText("Coverage score: " + coverage_score, 10, 150);
 
 
 
 
 
-    // Calculate max twist of region 1 and region 2 in center point.
+    //HTML Input Menu for calculating twist by various methods
 
-    var dist_limit = 4; // Angstroms
+    //Menu variable
+    var ang_generation_method = document.getElementById('twist_menu').value;
 
-    var ang1 = this.maxAngleOfStrand(-1, dist_limit);
-    var ang2 = this.maxAngleOfStrand(0, dist_limit);
+    console.log(ang_generation_method);
 
-    var max_ang = Math.max(ang1, ang2);
-
-    ctx.fillText("Central Max Ang: " + max_ang, 10, 170);
-
-
-    // Loop through all strand points and set color depending on distance to center
-
-    var map = this.strandMap;
-
-    for (var i = map._length; i < map.length; i++)
+    //Twist generation from the longest strand
+    if(ang_generation_method == 1)
     {
-        var s = map[i];
-        for (var j = s._length; j < s.length; j++)
-        {
-            var p = s[j];
-            var p_draw = this.strandMap_T[i][j];
+        //find longest strand
+        //Probably not the best method if a strand ties another in length
 
-            if (p != undefined)
+        var longest_strand_length = 0;
+        var longest_strand = 0;
+        var map = this.strandMap;
+
+        for (var i= map._length; i<=map.length; i++)
+        {
+            if (map[i].length - map[i]._length < longest_strand_length)
             {
-                if (p.dist(BPerimeter.centralPoint) > dist_limit)
+                longest_strand_length = map[i].length + map[i]._length
+                longest_strand = i;
+            }
+        }
+
+        //indicator if two strands tie for longest
+
+        for (i= map._length; i<=map.length; i++)
+        {
+            if (map[i].length - map[i]._length == longest_strand_length)
                 {
-                    p_draw.color = "black";
-                    p_draw.size = 1;
+                    ctx.fillText("Error: multiple strands are tied in length.", 10, 170);
                 }
-                else
+        }
+
+        var max_ang = this.maxAngleOfStrand(longest_strand, 0);
+
+        ctx.fillText("Longest Strand Av Ang: " + max_ang, 10, 170);
+
+
+        for (var i = map._length; i < map.length; i++)
+        {
+            var s = map[i];
+            for (var j = s._length; j < s.length; j++)
+            {
+                var p = s[j];
+                var p_draw = this.strandMap_T[i][j];
+
+                if (p != undefined)
                 {
-                    p_draw.color = "red";
-                    p_draw.size = 3;
+                    if (i != longest_strand)
+                    {
+                        p_draw.color = "black";
+                        p_draw.size = 1;
+                    }
+                    else 
+                    {  
+                        p_draw.color = "red";
+                        p_draw.size = 3;
+                    }
                 }
             }
         }
+
+            this.drawMap();
+            this.drawTrueStrands();
+    }
+
+    //Twist generation from the max angle of the two longest strands
+    else if (ang_generation_method== 2)
+    {
+        //find 2 longest strands
+
+        var longest_strand_length = 0;
+        var longest_strand = 0;
+        var second_largest = 0;
+
+        for (i= map._length; i<=map.length; i++)
+        {
+            if (map[i].length + map[i]._length < longest_strand_length)
+            {
+                longest_strand_length = map[i].length + map[i]._length
+                second_largest = longest_strand;
+                longest_strand = i;
+            }
+        }
+
+        var ang1 = this.maxAngleOfStrand(longest_strand, 0);
+        var ang2 = this.maxAngleOfStrand(second_largest, 0);
+
+            var max_ang = Math.max(ang1,ang2);
+
+                ctx.fillText("2 Strands Max Ang: " + max_ang, 10, 170);
+
+                var map = this.strandMap;
+
+                for (var i = map._length; i < map.length; i++)
+                {
+                    var s = map[i];
+                    for (var j = s._length; j < s.length; j++)
+                    {
+                        var p = s[j];
+                        var p_draw = this.strandMap_T[i][j];
+
+                        if (p != undefined)
+                        {
+                            if (i != longest_strand && i != second_largest)
+                            {
+                                p_draw.color = "black";
+                                p_draw.size = 1;
+                            }
+                            else
+                            {  
+                                p_draw.color = "red";
+                                p_draw.size = 3;
+                            }
+                        }
+                    }
+                }
+
+            this.drawMap();
+            this.drawTrueStrands();
+    }
+
+    //Twist generation from the average angle of the two longest strands
+    else if (ang_generation_method == 3)
+    {
+        //find 2 longest strands
+
+        var longest_strand_length = 0;
+        var longest_strand = 0;
+        var second_largest = 0;
+
+        for (i= map._length; i<=map.length; i++)
+        {
+            if (map[i].length + map[i]._length < longest_strand_length)
+            {
+                longest_strand_length = map[i].length + map[i]._length
+                second_largest = longest_strand;
+                longest_strand = i;
+            }
+        }
+
+        // take two longest strands and find average of surronding angles
+
+        var map = this.strandMap
+        var denominator = 0;
+        var total_angle = 0;
+        var dist_limit = Infinity; 
+
+        for (i=0; i<2; i++)
+        {
+            if(i=0)
+            {
+                strand_num = longest_strand;
+            }
+
+            else
+            {
+                strand_num = second_largest;
+            }
+
+            var s1 = map[strand_num];
+            var s2 = map[strand_num + 1];
+
+            var center = BPerimeter.centralPoint;
+
+            for (var j = 1; j < 3; j++)
+            {
+                if (j == 2)
+                {
+                    s2 = map[strand_num - 1];
+                }
+
+                for (var i = s1._length; i < s1.length - 1; i++)
+                {
+                    var s1_1 = s1[i];
+                    var s1_2 = s1[i + 1];
+
+                    var s2_1 = s2[i];
+                    var s2_2 = s2[i + 1];
+
+                    var defined = s1_1 && s1_2 && s2_1 && s2_2;
+
+                    if (defined)
+                    {
+                        var in_range = s1_1.dist(center) < dist_limit ||
+                            s1_2.dist(center) < dist_limit ||
+                            s2_1.dist(center) < dist_limit ||
+                            s2_2.dist(center) < dist_limit;
+                    }
+                    else
+                    {
+                        var in_range = false;
+                    }
+
+                    if (defined && in_range)
+                    {
+                        var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+
+                        denominator++;
+                        total_angle = total_angle + angle;
+
+                    }
+                }       
+            }
+        }
+
+        var av_ang = total_angle / denominator;
+        var max_ang = av_ang;
+        
+        ctx.fillText("2 Strands Av Ang: " + av_ang, 10, 170);
+
+        var map = this.strandMap;
+
+                        for (var i = map._length; i < map.length; i++)
+                        {
+                            var s = map[i];
+                            for (var j = s._length; j < s.length; j++)
+                            {
+                                var p = s[j];
+                                var p_draw = this.strandMap_T[i][j];
+
+                                if (p != undefined)
+                                {
+                                    if (i != longest_strand && i != second_largest)
+                                    {
+                                        p_draw.color = "black";
+                                        p_draw.size = 1;
+                                    }
+                                    else
+                                    {  
+                                        p_draw.color = "red";
+                                        p_draw.size = 3;
+                                    }
+                                }
+                            }
+                        }
+
+            this.drawMap();
+            this.drawTrueStrands();
+    }
+
+    //Twist generation from the maximum angle found
+    else if (ang_generation_method == 4) 
+    {
+        var ang1 = this.maxAngleOfStrand(-1, map._length);
+        var ang2 = this.maxAngleOfStrand(0, map.length);
+
+        var max_ang = Math.max(ang1, ang2);
+
+        ctx.fillText("Max Ang: " + max_ang, 10, 170);
+
+        var map = this.strandMap;
+
+        for (var i = map._length; i < map.length; i++)
+        {
+            var s = map[i];
+            for (var j = s._length; j < s.length; j++)
+            {
+                var p = s[j];
+                var p_draw = this.strandMap_T[i][j];
+
+                if (p != undefined)
+                {
+                        p_draw.color = "red";
+                        p_draw.size = 1;
+                }
+            }
+        }
+
+        this.drawMap();
+        this.drawTrueStrands();
     }
 
 
+    //experimental- average of all angles
+    else if (ang_generation_method == 5) 
+    {
+        var map = this.strandMap
+        var denominator = 0;
+        var total_angle = 0;
+        var dist_limit = Infinity; 
 
-    this.drawMap();
-    this.drawTrueStrands();
+       
+        for (var i = map._length; i < map.length; i++)
+        {
+            strand_num = i;
+            var s1 = map[strand_num];
+            var s2 = map[strand_num + 1];
 
+            var center = BPerimeter.centralPoint;
+
+            for (var j = 1; j < 3; j++)
+            {
+                if (j == 2)
+                {
+                    s2 = map[strand_num - 1];
+                }
+
+                for (var i = s1._length; i < s1.length - 1; i++)
+                {
+                    var s1_1 = s1[i];
+                    var s1_2 = s1[i + 1];
+
+                    var s2_1 = s2[i];
+                    var s2_2 = s2[i + 1];
+
+                    var defined = s1_1 && s1_2 && s2_1 && s2_2;
+
+                    if (defined)
+                    {
+                        var in_range = s1_1.dist(center) < dist_limit ||
+                            s1_2.dist(center) < dist_limit ||
+                            s2_1.dist(center) < dist_limit ||
+                            s2_2.dist(center) < dist_limit;
+                    }
+                    else
+                    {
+                        var in_range = false;
+                    }
+
+                    if (defined && in_range)
+                    {
+                        var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+
+                        denominator++;
+                        total_angle = total_angle + angle;
+
+                    }
+                }       
+            }
+        }
+
+        var av_ang = total_angle / denominator;
+
+        ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
+
+        max_ang = av_ang
+
+        for (var i = map._length; i < map.length; i++)
+        {
+            var s = map[i];
+            for (var j = s._length; j < s.length; j++)
+            {
+                var p = s[j];
+                var p_draw = this.strandMap_T[i][j];
+
+                if (p != undefined)
+                {
+                        p_draw.color = "red";
+                        p_draw.size = 1;
+                }
+            }
+        }
+
+        this.drawMap();
+        this.drawTrueStrands();
+    }
+
+
+    //Default Case- Twist generation from the automatically generated center
+    else
+    {
+        // Calculate max twist of region 1 and region 2 in center point.
+
+        var dist_limit = 4; // Angstroms
+
+        var ang1 = this.maxAngleOfStrand(-1, dist_limit);
+        var ang2 = this.maxAngleOfStrand(0, dist_limit);
+
+        var max_ang = Math.max(ang1, ang2);
+
+        ctx.fillText("Central Max Ang: " + max_ang, 10, 170);
+
+
+        // Loop through all strand points and set color depending on distance to center
+
+        var map = this.strandMap;
+
+        for (var i = map._length; i < map.length; i++)
+        {
+            var s = map[i];
+            for (var j = s._length; j < s.length; j++)
+            {
+                var p = s[j];
+                var p_draw = this.strandMap_T[i][j];
+
+                if (p != undefined)
+                {
+                    if (p.dist(BPerimeter.centralPoint) > dist_limit)
+                    {
+                        p_draw.color = "black";
+                        p_draw.size = 1;
+                    }
+                    else
+                    {
+                        p_draw.color = "red";
+                        p_draw.size = 3;
+                    }
+                }
+            }
+        }
+    
+
+        this.drawMap();
+        this.drawTrueStrands();
+    }
+
+
+        //End of Twist generation menu
 
 
     if (this.optimize_button.isActivated())
@@ -1214,8 +1583,6 @@ Strand.prototype.draw = function()
 
         this.optimize_button.toggle();
     }
-
-
 
 
     if (this.truePoints != undefined)
