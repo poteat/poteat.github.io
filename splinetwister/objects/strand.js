@@ -1168,8 +1168,6 @@ Strand.prototype.draw = function()
     //Menu variable
     var ang_generation_method = document.getElementById('twist_menu').value;
 
-    console.log(ang_generation_method);
-
     //Twist generation from the longest strand
     if(ang_generation_method == 1)
     {
@@ -1190,6 +1188,7 @@ Strand.prototype.draw = function()
                     longest_strand_length = s.length - s._length
                     longest_strand = i;
                 }
+            }
         }
 
         //indicator if two strands tie for longest
@@ -1203,6 +1202,7 @@ Strand.prototype.draw = function()
                 {
                     ctx.fillText("Error: multiple strands are tied in length.", 10, 170);
                 }
+            }
         }
 
         var max_ang = this.maxAngleOfStrand(longest_strand, 0);
@@ -1234,10 +1234,9 @@ Strand.prototype.draw = function()
             }
         }
 
-            this.drawMap();
-            this.drawTrueStrands();
+        this.drawMap();
+        this.drawTrueStrands();
     }
-
     //Twist generation from the max angle of the two longest strands
     else if (ang_generation_method== 2)
     {
