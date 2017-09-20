@@ -225,6 +225,177 @@ DensityMap.prototype.createFromMRC = function()
 
     voxel = createArray(this.nx, this.ny, this.nz);
 
+    // Populate voxel with points
+
+    
+
+    var USE_GRASSFIRE = true;
+
+    for (var i = 0; i < this.nx; i++)
+    {
+        for (var j = 0; j < this.ny; j++)
+        {
+            for (var k = 0; k < this.nz; k++)
+            {
+                var density = readFloat(256 + (k * this.nx * this.ny + j *
+                    this.nx + i));
+
+                if (density > density_threshold)
+                {
+                    if (USE_GRASSFIRE)
+                    {
+                        voxel[i][j][k] = -1;
+                    }
+                    else
+                    {
+                        voxel[i][j][k] = density;
+                    }
+                }
+                else
+                {
+                    voxel[i][j][k] = 0;
+                }
+            }
+        }
+    }
+
+
+    
+    if (USE_GRASSFIRE)
+    {
+        var finished = false;
+        var depth = 0;
+
+        while (finished == false)
+        {
+            finished = true;
+
+            for (var i = 0; i < this.nx; i++)
+            {
+                for (var j = 0; j < this.ny; j++)
+                {
+                    for (var k = 0; k < this.nz; k++)
+                    {
+                        if (voxel[i][j][k] == -1)
+                        {
+                            var _left  = voxel[i-1][j][k] == depth;
+                            var _right = voxel[i+1][j][k] == depth;
+                            var _down  = voxel[i][j-1][k] == depth;
+                            var _up    = voxel[i][j+1][k] == depth;
+                            var _out   = voxel[i][j][k-1] == depth;
+                            var _in    = voxel[i][j][k+1] == depth;
+
+                            if (_left || _right || _down || _up || _out || _in)
+                            {
+                                voxel[i][j][k] = depth + 1;
+                                finished = false
+                            }
+                        }
+                    }
+                }
+            }
+
+            depth++;
+        }
+
+        var max_depth = depth - 1;
+
+        // Normalize all depth values.
+
+        for (var i = 0; i < this.nx; i++)
+        {
+            for (var j = 0; j < this.ny; j++)
+            {
+                for (var k = 0; k < this.nz; k++)
+                {
+                    voxel[i][j][k] /= max_depth;
+                }
+            }
+        }
+
+        // Multiply voxel depth values with original file densities
+
+        for (var i = 0; i < this.nx; i++)
+        {
+            for (var j = 0; j < this.ny; j++)
+            {
+                for (var k = 0; k < this.nz; k++)
+                {
+                    voxel[i][j][k] *= readFloat(256 + (k * this.nx * this.ny + j *
+                        this.nx + i));
+                }
+            }
+        }        
+    }
+
+
+
+
+
+    // Convert voxel to traditional point set.
+
+    var x_sum = 0;
+    var y_sum = 0;
+    var z_sum = 0;
+
+    var count = 0;
+
+    for (var i = 0; i < this.nx; i++)
+    {
+        for (var j = 0; j < this.ny; j++)
+        {
+            for (var k = 0; k < this.nz; k++)
+            {
+                var density = voxel[i][j][k];
+
+                if (density)
+                {
+                    count++;
+
+                    x_sum += (i * this.scale + this.xorigin);
+                    y_sum += (j * this.scale + this.yorigin);
+                    z_sum += (k * this.scale + this.zorigin);
+                }
+            }
+        }
+    }
+
+    this.x_avg = x_sum / count;
+    this.y_avg = y_sum / count;
+    this.z_avg = z_sum / count;
+
+    this.points = new Array();
+    this.points_T = new Array();
+
+    for (var i = 0; i < this.nx; i++)
+    {
+        for (var j = 0; j < this.ny; j++)
+        {
+            for (var k = 0; k < this.nz; k++)
+            {
+                var density = voxel[i][j][k];
+
+                if (density)
+                {
+                    var p = new Point(0, 0, 0);
+                    p.x = i * this.scale + this.xorigin - this.x_avg;
+                    p.y = j * this.scale + this.yorigin - this.y_avg;
+                    p.z = k * this.scale + this.zorigin - this.z_avg;
+                    p.density = density;
+
+                    var p2 = new Point(0, 0, 0);
+
+                    this.points.push(p);
+                    this.points_T.push(p2);            
+                }
+            }
+        }
+    }
+
+    
+
+    /*
+
     var x_avg = 0;
     var y_avg = 0;
     var z_avg = 0;
@@ -232,9 +403,9 @@ DensityMap.prototype.createFromMRC = function()
     var num = 0;
 
     // Find center of data points (above threshold)
-    for (var z = 0; z < this.nz; z += 1)
+    for (var z = 0; z < this.nz; z++)
     {
-        for (var y = 0; y < this.ny; y += 1)
+        for (var y = 0; y < this.ny; y++)
         {
             for (var x = 0; x < this.nx; x++)
             {
@@ -263,9 +434,9 @@ DensityMap.prototype.createFromMRC = function()
     this.points = new Array(); // Immutable data points
     this.points_T = new Array(); // Points in camera space
 
-    for (var z = 0; z < this.nz; z += 2)
+    for (var z = 0; z < this.nz; z++)
     {
-        for (var y = 0; y < this.ny; y += 2)
+        for (var y = 0; y < this.ny; y++)
         {
             for (var x = 0; x < this.nx; x++)
             {
@@ -288,7 +459,7 @@ DensityMap.prototype.createFromMRC = function()
                 }
             }
         }
-    }
+    }*/
 };
 
 DensityMap.prototype.updateTransformedPoints = function()
@@ -348,6 +519,8 @@ DensityMap.prototype.draw = function()
 
 DensityMap.prototype.updateProjection = function(permissive)
 {
+    permissive = true;
+
     var min_t = 1;
     var max_t = 0;
     var min_u = 1;
