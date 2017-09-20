@@ -1,4 +1,5 @@
-y<!DOCTYPE html>
+y
+<!DOCTYPE html>
 <meta charset="UTF-8">
 <html>
 
@@ -26,14 +27,14 @@ y<!DOCTYPE html>
     <input type="file" accept=".pdb" id="strand_file"></input>
     <p></p>
     <a class="button" download="" id="surface_download_link">
-			Download Surface PDB
-	</a>
+            Download Surface PDB
+    </a>
     <a class="button" download="" id="fit_download_link">
-			Download Fit Data
-	</a>
+            Download Fit Data
+    </a>
     <a class="button" download="" id="strand_download_link">
-			Download Current Strand (PDB)
-	</a>
+            Download Current Strand (PDB)
+    </a>
     <br>
     <br> Angle Delta:
     <input type="text" value="20" id="sampleset_angle"></input>
@@ -45,21 +46,19 @@ y<!DOCTYPE html>
     <input type="text" value="2" id="sampleset_offset_max"></input>
     <br>
     <a class="button" download="" id="set_download_link">
-			Generate Strand Set
-	</a>
+            Generate Strand Set
+    </a>
     <br>
-    <br> Angle Optimization Method: 
-    <select id= "twist_menu">
-                <option value= 0>Automatically Generated Center</option>
-                <option value= 1>Longest Strand</option>
-                <option value= 2>2 Longest Strands, Max Angle</option>
-                <option value= 3>2 Longest Strands, Average Angle</option>
-                <option value= 4>Maximum Angle</option>
-                <option value= 5>Average Angle</option>
-                <!--Twist By Region option later -->
+    <br> Angle Optimization Method:
+    <select id="twist_menu">
+        <option value=0>centerStrandMaxScore()</option>
+        <option value=1>longestStrandAvgScore()</option>
+        <option value=2>twoLongestStrandsMaxScore()</option>
+        <option value=3>twoLongestStrandsAvgScore()</option>
+        <option value=4>allStrandsMaxScore()</option>
+        <option value=5>allStrandsAvgScore()</option>
+        <!--Twist By Region option later -->
     </select>
-
-
     <p></p>
     <canvas id="canvas" width="750" height="750"> </canvas>
     <p></p>
