@@ -2651,6 +2651,44 @@ Strand.prototype.updateTransformedPoints = function ()
     }
 };
 
-Strand.prototype.longestStrands = function (longest_strand, longest_strand_length, second_largest) {
+Strand.prototype.centerStrandMaxScore = function()
+{
+
+
+
+};
+
+Strand.prototype.longestStrandAvgScore = function()
+{
+
+
+
+};
+
+Strand.prototype.twoLongestStrandsMaxScore = function()
+{
+
+
+
+};
+
+Strand.prototype.twoLongestStrandsAvgScore = function()
+{
+
+
+
+};
+
+Strand.prototype.allStrandsMaxScore = function()
+{
+
+
+
+};
+
+Strand.prototype.allStrandsAvgScore = function()
+{
+
+
 
 };
