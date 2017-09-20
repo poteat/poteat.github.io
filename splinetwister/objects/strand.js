@@ -1576,7 +1576,7 @@ Strand.prototype.optimizePrediction = function ()
 
         this.updateStrandMap(ang, 0, this.strand_gap);
 
-        var score = this.maxTwistAngleScore();
+        var score = this.calculateScore();
 
         if (score > max_score)
         {
@@ -1603,7 +1603,7 @@ Strand.prototype.optimizePrediction = function ()
 
         this.updateStrandMap(this.angle, offset, this.strand_gap);
 
-        var score = this.maxTwistAngleScore();
+        var score = this.calculateScore();
 
         if (score > max_score)
         {
@@ -1643,7 +1643,7 @@ Strand.prototype.optimizePrediction = function ()
 
         this.updateStrandMap(ang, 0, this.strand_gap);
 
-        var score = this.maxTwistAngleScore();
+        var score = this.calculateScore();
 
         console.log(ang, 0, score);
 
@@ -1661,7 +1661,7 @@ Strand.prototype.optimizePrediction = function ()
 
             this.updateStrandMap(ang, offset, this.strand_gap);
 
-            var score = this.maxTwistAngleScore();
+            var score = this.calculateScore();
 
             console.log(ang, offset, score);
 
@@ -1782,9 +1782,37 @@ Strand.prototype.drawMap = function ()
     }
 };
 
-Strand.prototype.maxTwistAngleScore = function ()
+Strand.prototype.calculateScore = function ()
 {
+    var scoring_function = document.getElementById("twist_menu").value;
+    var score;
+
+    if (scoring_function == 0)
+    {
+        score = centerStrandMaxScore();
+    }
+    else if (scoring_function == 1)
+    {
+        score = longestStrandMaxScore();
+    }
+    else if (scoring_function == 2)
+    {
+        score = twoLongestStrandsMaxScore();
+    }
+    else if (scoring_function == 3)
+    {
+        score = twoLongestStrandsAvgScore();
+    }
+    else if (scoring_function == 4)
+    {
+        score = allStrandsMaxScore();
+    }
+    else if (scoring_function == 5)
+    {
+        score = allStrandsAvgScore();
+    }
     /*
+
     var map = this.strandMap;
 
     // Find pair of simulated strands with most shared connections.
@@ -1846,6 +1874,7 @@ Strand.prototype.maxTwistAngleScore = function ()
 
     return max_angle;*/
 
+    /*
     var dist_limit = 4; // Angstroms
 
     var ang1 = this.maxAngleOfStrand(-1, dist_limit);
@@ -1854,7 +1883,7 @@ Strand.prototype.maxTwistAngleScore = function ()
 
     var max_ang = Math.max(ang1, ang2, ang3);
 
-    return max_ang;
+    return max_ang;*/
 };
 
 Strand.prototype.maxAngleOfStrand = function (strand_num, dist_limit)
