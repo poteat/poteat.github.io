@@ -1,4 +1,5 @@
-function Perimeter(ConcaveHull) {
+function Perimeter(ConcaveHull)
+{
 
     // Old feature of displaying colored perimeter, based on local error of fit 
     // estimation. To enable, set to 'true' - although local error of fit never 
@@ -168,9 +169,10 @@ function Perimeter(ConcaveHull) {
     if (this.colored_perimeter) {
         this.updateColorError();
     }
-}
+};
 
-Perimeter.prototype.getSurfaceCentroid = function() {
+Perimeter.prototype.getSurfaceCentroid = function()
+{
     /**
      * Returns (t,u) coordinates which represent the centroid of the surface,
      * defined via the arithmetic average of the surface coordinates of each
@@ -209,9 +211,10 @@ Perimeter.prototype.getSurfaceCentroid = function() {
 
     return [avgt, avgu];
 
-}
+};
 
-Perimeter.prototype.updateColorError = function() {
+Perimeter.prototype.updateColorError = function()
+{
     var L = this.points.length;
     var P_prev;
     var P_next;
@@ -398,9 +401,10 @@ Perimeter.prototype.updateColorError = function() {
 
         P_T.color = color_string;
     }
-}
+};
 
-Perimeter.prototype.updateTransformedPoints = function() {
+Perimeter.prototype.updateTransformedPoints = function()
+{
 
     this.centralPoint_T.moveTo(this.centralPoint);
     this.centralPoint_T.scaleFactor(zoom);
@@ -435,9 +439,10 @@ Perimeter.prototype.updateTransformedPoints = function() {
             }
         }
     }
-}
+};
 
-Perimeter.prototype.draw = function() {
+Perimeter.prototype.draw = function()
+{
 
     var actually_draw = this.colored_perimeter;
 
@@ -591,9 +596,10 @@ Perimeter.prototype.draw = function() {
     ctx.lineWidth = 1;
 
     ctx.strokeStyle = "black";
-}
+};
 
-Perimeter.prototype.updateBoundingLine = function() {
+Perimeter.prototype.updateBoundingLine = function()
+{
     var v = this.vertices;
     var l = v.length;
 
@@ -687,4 +693,4 @@ Perimeter.prototype.updateBoundingLine = function() {
     this.half_length = Math.sqrt(l1);
 
     // console.log(this.half_length);
-}
+};

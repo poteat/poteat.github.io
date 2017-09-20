@@ -86,7 +86,7 @@ function DensityMap(pdb_string)
     this.max_t = 1;
     this.min_u = 0;
     this.max_u = 1;
-}
+};
 
 DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta,
     rot_ux, rot_uy, rot_uz, min_t, max_t, min_u, max_u)
@@ -177,7 +177,7 @@ DensityMap.prototype.createFromFit = function(x_avg, y_avg, z_avg, rot_theta,
     this.max_u = max_u;
 
     BSurface.finished = true;
-}
+};
 
 DensityMap.prototype.createFromMRC = function()
 {
@@ -460,7 +460,7 @@ DensityMap.prototype.createFromMRC = function()
             }
         }
     }*/
-};
+};;
 
 DensityMap.prototype.updateTransformedPoints = function()
 {
@@ -471,7 +471,7 @@ DensityMap.prototype.updateTransformedPoints = function()
         this.points_T[i].rotateY(yaw);
         this.points_T[i].rotateX(pitch);
     }
-};
+};;
 
 var t = 0;
 var lim = 0;
@@ -515,7 +515,7 @@ DensityMap.prototype.draw = function()
     }
 
     ctx.globalAlpha = 1;
-};
+};;
 
 DensityMap.prototype.updateProjection = function(permissive)
 {
@@ -558,7 +558,7 @@ DensityMap.prototype.updateProjection = function(permissive)
         this.max_u = max_u;
     }
     t = 0;
-}
+};
 
 DensityMap.prototype.rotateAxis = function(ang, ux, uy, uz)
 {
@@ -566,7 +566,7 @@ DensityMap.prototype.rotateAxis = function(ang, ux, uy, uz)
     {
         this.points[i].rotateAxis(ang, ux, uy, uz);
     }
-};
+};;
 
 DensityMap.prototype.score = function()
 {
@@ -591,7 +591,7 @@ DensityMap.prototype.score = function()
     {
         return this.saved_score + this.foldedness();
     }
-};
+};;
 
 DensityMap.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2)
 {
@@ -617,7 +617,7 @@ DensityMap.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2)
     var dir = sign(dot_dir);
 
     return dir * ang;
-}
+};
 
 DensityMap.prototype.angleBetweenThreePoints = function(p1, p2, p3)
 {
@@ -630,7 +630,7 @@ DensityMap.prototype.angleBetweenThreePoints = function(p1, p2, p3)
     var z2 = p3.z - p3.z;
 
     return this.angleBetweenTwoVectors(x1, y1, z1, x2, y2, z2);
-}
+};
 
 DensityMap.prototype.foldedness = function()
 {
@@ -698,7 +698,7 @@ DensityMap.prototype.foldedness = function()
     }
 
     return max_folded * max_folded;
-}
+};
 
 DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
 {
@@ -756,7 +756,7 @@ DensityMap.prototype.generateCroppedSurface = function(num_X, num_Y)
     }
 
     return points;
-}
+};
 
 DensityMap.prototype.calculateBoundingBox = function()
 {
@@ -871,4 +871,4 @@ DensityMap.prototype.calculateBoundingBox = function()
     ];
 
     BSurface.setControlPoints(array);
-};
+};;

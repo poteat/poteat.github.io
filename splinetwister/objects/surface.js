@@ -105,7 +105,7 @@ function Surface(X, Y, T, U)
     }
 
     this.updatePoints();
-};
+};;
 
 Surface.prototype.updateNumberofResPoints = function(RX, RY)
 {
@@ -131,7 +131,7 @@ Surface.prototype.updateNumberofResPoints = function(RX, RY)
             this.resPoints_T[i][j] = new Point(0, 0, 0, "blue", 1);
         }
     }
-}
+};
 
 Surface.prototype.setControlPoints = function(array_of_points)
 {
@@ -160,7 +160,7 @@ Surface.prototype.setControlPoints = function(array_of_points)
 
     this.updatePoints();
     DMap.updateProjection();
-}
+};
 
 Surface.prototype.updatePoints = function()
 {
@@ -210,7 +210,7 @@ Surface.prototype.updatePoints = function()
             p.z = coords[2];
         }
     }
-};
+};;
 
 var opt_t = 0;
 var opt_lim = 10;
@@ -395,7 +395,7 @@ Surface.prototype.draw = function()
             }
         }
     }
-};
+};;
 
 Surface.prototype.closestControlPoint2D = function(obj)
 {
@@ -419,7 +419,7 @@ Surface.prototype.closestControlPoint2D = function(obj)
     }
 
     return [closest_surface_x, closest_surface_y];
-};
+};;
 
 Surface.prototype.moveControlPointTo2D = function(i, j, x2d, y2d)
 {
@@ -441,7 +441,7 @@ Surface.prototype.moveControlPointTo2D = function(i, j, x2d, y2d)
     p_world.scaleFactor(1 / zoom);
 
     this.controlPoints[i][j].moveTo(p_world);
-};
+};;
 
 Surface.prototype.sample = function(t, u)
 {
@@ -451,7 +451,7 @@ Surface.prototype.sample = function(t, u)
     p.u = u;
 
     return p;
-}
+};
 
 Surface.prototype.calc = function(t, u)
 {
@@ -479,12 +479,12 @@ Surface.prototype.calc = function(t, u)
     }
 
     return [sum_x, sum_y, sum_z];
-}
+};
 
 Surface.prototype.basis = function(t, i, n)
 {
     return binomial(n, i) * Math.pow(t, i) * Math.pow(1 - t, n - i);
-};
+};;
 
 Surface.prototype.optimizeControlPoint = function(p)
 {
@@ -605,7 +605,7 @@ Surface.prototype.optimizeControlPoint = function(p)
     }
 
 
-};
+};;
 
 Surface.prototype.updateTransformedPoints = function()
 {
@@ -641,7 +641,7 @@ Surface.prototype.updateTransformedPoints = function()
             this.resPoints_T[i][j].rotateX(pitch);
         }
     }
-}
+};
 
 Surface.prototype.incrementControlPoints = function()
 {
@@ -672,4 +672,4 @@ Surface.prototype.incrementControlPoints = function()
     this.Y++;
     this.controlPoints = controlPoints;
     this.controlPoints_T = controlPoints_T;
-}
+};

@@ -2,7 +2,7 @@ function Projection()
 {
 	this.points = new Array();
 	this.points_T = new Array();
-}
+};
 
 Projection.prototype.appendPoint = function(x, y, z)
 {
@@ -10,7 +10,7 @@ Projection.prototype.appendPoint = function(x, y, z)
 	this.points_T.push(new Point(0, 0, 0, "darkgreen", 4));
 
 	this.updateTransformedPoints();
-}
+};
 
 Projection.prototype.draw = function()
 {
@@ -46,7 +46,7 @@ Projection.prototype.draw = function()
 
 		p.draw();
 	}
-}
+};
 
 Projection.prototype.refineProjection = function(i)
 {
@@ -135,7 +135,7 @@ Projection.prototype.refineProjection = function(i)
 
 	p.t = t;
 	p.u = u;
-}
+};
 
 Projection.prototype.findClosestResPoint = function(i)
 {
@@ -166,7 +166,7 @@ Projection.prototype.findClosestResPoint = function(i)
 	p.u = min_j / (BSurface.RY - 1);
 
 	return [min_i, min_j];
-}
+};
 
 Projection.prototype.closestPoint2D = function(obj, threshold)
 {
@@ -194,7 +194,7 @@ Projection.prototype.closestPoint2D = function(obj, threshold)
 	{
 		return -1;
 	}
-}
+};
 
 Projection.prototype.movePointTo2D = function(i, x2d, y2d)
 {
@@ -216,7 +216,7 @@ Projection.prototype.movePointTo2D = function(i, x2d, y2d)
 	p_world.scaleFactor(1 / zoom);
 
 	this.points[i].moveTo(p_world);
-}
+};
 
 Projection.prototype.updateTransformedPoints = function()
 {
@@ -227,4 +227,4 @@ Projection.prototype.updateTransformedPoints = function()
 		this.points_T[i].rotateY(yaw);
 		this.points_T[i].rotateX(pitch);
 	}
-}
+};

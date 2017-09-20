@@ -440,7 +440,7 @@ function concaveHull(array_of_points, length_threshold)
 
 
 	return ConcaveVertices;
-}
+};
 
 
 function lengthOfEdge(Vertices, Edge)
@@ -454,7 +454,7 @@ function lengthOfEdge(Vertices, Edge)
 	var dist = Math.sqrt(Math.pow(v1[0] - v2[0], 2) + Math.pow(v1[1] - v2[1], 2));
 
 	return dist;
-}
+};
 
 
 // This is an O(n) sorted-array insertion function.  Technically, insertion can be reduced to lg(n) by using
@@ -495,7 +495,7 @@ function insertBoundaryByLength(Vertices, Edges, Boundary_Array, Edge_index)
 		Boundary_Array.push(Edge_index);
 	}
 
-}
+};
 
 
 Array.prototype.indexOf = function(target1, target2)
@@ -535,4 +535,4 @@ Array.prototype.indexOf = function(target1, target2)
 	}
 
 	return -1;
-}
+};

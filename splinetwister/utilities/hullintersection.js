@@ -31,7 +31,7 @@ function isInsidePolygon(x, y, Hull)
 	}
 
 	return crossing & 1;
-}
+};
 
 function getIntersectionPoints(x, y, ang, Hull, permissive)
 {
@@ -239,7 +239,7 @@ function getIntersectionPoints(x, y, ang, Hull, permissive)
 		}
 
 	}
-}
+};
 
 
 function _intersects(x, y, ang, x1, y1, x2, y2)
@@ -275,4 +275,4 @@ function _intersects(x, y, ang, x1, y1, x2, y2)
 	return false;
 
 
-}
+};

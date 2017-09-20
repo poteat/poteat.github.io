@@ -16,7 +16,7 @@ function Strand()
     this.strandMap;
 
     this.initialize();
-}
+};
 
 Strand.prototype.initialize = function()
 {
@@ -43,7 +43,7 @@ Strand.prototype.initialize = function()
     this.strand_gap = 4.85;
 
     this.updateStrandMap(this.angle, this.offset, this.strand_gap);
-}
+};
 
 Strand.prototype.importStrands = function(points)
 {
@@ -177,7 +177,7 @@ Strand.prototype.importStrands = function(points)
             this.truePoints_T[i].push(p);
         }
     }
-}
+};
 
 Strand.prototype.optimizeToTrueStructure = function()
 {
@@ -371,7 +371,7 @@ Strand.prototype.optimizeToTrueStructure = function()
     }
 
     this.updateStrandMap(best_angle, best_offset, best_gap);
-}
+};
 
 Strand.prototype.setOrigin = function(t, u)
 {
@@ -383,7 +383,7 @@ Strand.prototype.setOrigin = function(t, u)
 
     this.originPoint.t = t;
     this.originPoint.u = u;
-}
+};
 
 Strand.prototype.twistAngle = function(s1_1, s1_2, s2_1, s2_2)
 {
@@ -398,7 +398,7 @@ Strand.prototype.twistAngle = function(s1_1, s1_2, s2_1, s2_2)
     var twist = this.angleBetweenTwoVectors(x1, y1, z1, x2, y2, z2, s1_1, s2_1);
 
     return twist;
-}
+};
 
 Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2, p1,
     p3)
@@ -425,13 +425,13 @@ Strand.prototype.angleBetweenTwoVectors = function(x1, y1, z1, x2, y2, z2, p1,
     var dir = sign(dot_dir);
 
     return dir * ang;
-}
+};
 
 Strand.prototype.distBetweenSamples = function(x1, y1, z1, x2, y2, z2)
 {
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 -
         z2, 2));
-}
+};
 
 Strand.prototype.linearInterpolate = function(x_array, y_array, x)
 {
@@ -472,7 +472,7 @@ Strand.prototype.linearInterpolate = function(x_array, y_array, x)
     {
         return y_array[x_array.length - 1];
     }
-}
+};
 
 Strand.prototype.euclideanShift = function(points, ang, dist)
 {
@@ -660,7 +660,7 @@ Strand.prototype.euclideanShift = function(points, ang, dist)
     projected._length = -neg_length;
 
     return projected;
-}
+};
 
 Strand.prototype.cullExteriorPoints = function(points)
 {
@@ -723,7 +723,7 @@ Strand.prototype.cullExteriorPoints = function(points)
     {
         return false;
     }
-}
+};
 
 Strand.prototype.generateStrandString = function(angle, offset, gap)
 {
@@ -763,7 +763,7 @@ Strand.prototype.generateStrandString = function(angle, offset, gap)
     var string = generatePDBString(sample_points);
 
     return string;
-}
+};
 
 Strand.prototype.getFilename = function()
 {
@@ -779,7 +779,7 @@ Strand.prototype.getFilename = function()
     strand_filename += (exploded_filename[i]);
 
     return strand_filename;
-}
+};
 
 Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
     offset_max, offset_num)
@@ -854,7 +854,7 @@ Strand.prototype.generateSampleSet = function(angle_delta, offset_min,
         nextFile(f);
 
     }, onerror)
-}
+};
 
 Strand.prototype.updateDownload = function()
 {
@@ -916,7 +916,7 @@ Strand.prototype.updateDownload = function()
 
     strand_dl.download = strand_filename;
 
-}
+};
 
 Strand.prototype.crossProduct = function(v1, v2)
 {
@@ -927,7 +927,7 @@ Strand.prototype.crossProduct = function(v1, v2)
     v[2] = v1[0] * v2[1] - v1[1] * v2[0];
 
     return v;
-}
+};
 
 Strand.prototype.dotProduct = function(v1, v2)
 {
@@ -938,7 +938,7 @@ Strand.prototype.dotProduct = function(v1, v2)
     v[2] = v1[2] * v2[2];
 
     return v[0] + v[1] + v[2];
-}
+};
 
 Strand.prototype.subtractVector = function(v1, v2)
 {
@@ -949,13 +949,13 @@ Strand.prototype.subtractVector = function(v1, v2)
     v[2] = v1[2] - v2[2];
 
     return v;
-}
+};
 
 Strand.prototype.absoluteVector = function(v)
 {
     return Math.sqrt(
         Math.pow(v[0], 2) + Math.pow(v[1], 2) + Math.pow(v[2], 2));
-}
+};
 
 Strand.prototype.divideVector = function(v1, divisor)
 {
@@ -966,7 +966,7 @@ Strand.prototype.divideVector = function(v1, divisor)
     v[2] = v1[2] / divisor;
 
     return v;
-}
+};
 
 Strand.prototype.dihedralAngle = function(p1, p2, p3, p4)
 {
@@ -992,7 +992,7 @@ Strand.prototype.dihedralAngle = function(p1, p2, p3, p4)
     var angle = Math.atan2(left, right);
 
     return angle;
-}
+};
 
 Strand.prototype.draw = function()
 {
@@ -1603,7 +1603,7 @@ Strand.prototype.draw = function()
 
     }
 
-}
+};
 
 Strand.prototype.optimizePrediction = function()
 {
@@ -1757,7 +1757,7 @@ Strand.prototype.optimizePrediction = function()
 
     console.log("Best found parameters:");
     console.log(this.angle, this.offset, this.strand_gap);
-}
+};
 
 Strand.prototype.drawMap = function()
 {
@@ -1825,7 +1825,7 @@ Strand.prototype.drawMap = function()
             }
         }
     }
-}
+};
 
 Strand.prototype.maxTwistAngleScore = function()
 {
@@ -1900,7 +1900,7 @@ Strand.prototype.maxTwistAngleScore = function()
     var max_ang = Math.max(ang1, ang2, ang3);
 
     return max_ang;
-}
+};
 
 Strand.prototype.maxAngleOfStrand = function(strand_num, dist_limit)
 {
@@ -1963,7 +1963,7 @@ Strand.prototype.maxAngleOfStrand = function(strand_num, dist_limit)
 
 
     return max_angle;
-}
+};
 
 Strand.prototype.coverageScore = function()
 {
@@ -2020,7 +2020,7 @@ Strand.prototype.coverageScore = function()
     var coverage_score = sum_dist;
 
     return coverage_score; // + strand_count;
-}
+};
 
 Strand.prototype.drawTrueStrands = function()
 {
@@ -2035,7 +2035,7 @@ Strand.prototype.drawTrueStrands = function()
             }
         }
     }
-}
+};
 
 Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand)
 {
@@ -2072,7 +2072,7 @@ Strand.prototype.scoreViaTrueStrand = function(sim_strand, true_strand)
     }
 
     return Math.sqrt(score / sim_strand.length);
-}
+};
 
 Strand.prototype.angleBetween = function(p1, p2, p3)
 {
@@ -2091,7 +2091,7 @@ Strand.prototype.angleBetween = function(p1, p2, p3)
     var l2 = Math.sqrt(x2 * x2 + y2 * y2 + z2 * z2);
 
     return Math.acos(dot / l1 / l2) / Math.PI * 180;
-}
+};
 
 Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
 {
@@ -2623,7 +2623,7 @@ Strand.prototype.updateStrandMap = function(angle, offset, strand_gap)
         }
     }
 
-}
+};
 
 Strand.prototype.updateTransformedPoints = function()
 {
@@ -2653,7 +2653,7 @@ Strand.prototype.updateTransformedPoints = function()
             }
         }
     }
-}
+};
 
 Strand.prototype.longestStrands = function(longest_strand, longest_strand_length, second_largest)
 {
@@ -2663,4 +2663,4 @@ Strand.prototype.longestStrands = function(longest_strand, longest_strand_length
 
 
 
-}
+};

@@ -17,7 +17,7 @@ function Point(x, y, z, color, size, id)
     this.size = size;
 
     this.id = id;
-}
+};
 
 Point.prototype.draw = function(actually_draw)
 {
@@ -41,19 +41,19 @@ Point.prototype.draw = function(actually_draw)
             true);
         ctx.fill();
     }
-};
+};;
 
 Point.prototype.dist2d = function(obj)
 {
     return Math.sqrt(Math.pow(this.x2d - obj.x, 2) + Math.pow(this.y2d - obj.y,
         2));
-};
+};;
 
 Point.prototype.dist = function(obj)
 {
     return Math.sqrt(Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y,
         2) + Math.pow(this.z - obj.z, 2));
-};
+};;
 
 Point.prototype.squareDist = function(obj)
 {
@@ -61,27 +61,27 @@ Point.prototype.squareDist = function(obj)
         return Math.pow(this.x - obj.x, 2) + Math.pow(this.y - obj.y,
             2) + Math.pow(this.z - obj.z, 2);
     return 0;
-}
+};
 
 Point.prototype.planeDist = function(A, B, C, D)
 {
     return Math.abs(A * this.x + B * this.y + C * this.z + D) / Math.sqrt(A *
         A + B * B + C * C);
-};
+};;
 
 Point.prototype.moveTo = function(obj)
 {
     this.x = obj.x;
     this.y = obj.y;
     this.z = obj.z;
-};
+};;
 
 Point.prototype.scaleFactor = function(factor)
 {
     this.x *= factor;
     this.y *= factor;
     this.z *= factor;
-};
+};;
 
 Point.prototype.rotateX = function(angle)
 {
@@ -99,7 +99,7 @@ Point.prototype.rotateX = function(angle)
 
     this.y = y;
     this.z = z;
-};
+};;
 
 Point.prototype.rotateY = function(angle)
 {
@@ -117,7 +117,7 @@ Point.prototype.rotateY = function(angle)
 
     this.x = x;
     this.z = z;
-};
+};;
 
 Point.prototype.rotateZ = function(angle)
 {
@@ -137,7 +137,7 @@ Point.prototype.rotateZ = function(angle)
 
     this.x = x;
     this.z = z;
-};
+};;
 
 Point.prototype.rotateAxis = function(ang, ux, uy, uz)
 {
@@ -160,13 +160,13 @@ Point.prototype.rotateAxis = function(ang, ux, uy, uz)
     this.x = x_new;
     this.y = y_new;
     this.z = z_new;
-};
+};;
 
 Point.prototype.distFromLine = function(slope, intersect)
 {
     return (slope * this.x - this.z + intersect) / Math.sqrt(Math.pow(slope,
         2) + 1);
-};
+};;
 
 // Given surface parameters t and u, this function returns the distance to that 
 // surface location.
@@ -178,7 +178,7 @@ Point.prototype.distToParameter = function(t, u)
     var z = coords[2];
     return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2) + Math.pow(
         this.z - z, 2));
-};
+};;
 
 Point.prototype.findClosestResPoint = function()
 {
@@ -207,7 +207,7 @@ Point.prototype.findClosestResPoint = function()
     this.u = min_j / (BSurface.RY - 1);
 
     return [min_i, min_j];
-};
+};;
 
 Point.prototype.refineProjection = function(permissive)
 {
@@ -320,7 +320,7 @@ Point.prototype.refineProjection = function(permissive)
 
     this.t = t;
     this.u = u;
-};
+};;
 
 Point.prototype.clone = function(color, size)
 {
@@ -331,7 +331,7 @@ Point.prototype.clone = function(color, size)
     p.size = size;
 
     return p;
-};
+};;
 
 Point.prototype.transform = function(p)
 {
@@ -339,7 +339,7 @@ Point.prototype.transform = function(p)
     this.scaleFactor(zoom);
     this.rotateY(yaw);
     this.rotateX(pitch);
-};
+};;
 
 Point.prototype.visible = function()
 {
@@ -347,4 +347,4 @@ Point.prototype.visible = function()
     var visible_y = this.y2d >= 0 && this.y2d < cvs.height;
 
     return visible_x && visible_y && this.scale > 0;
-};
+};;

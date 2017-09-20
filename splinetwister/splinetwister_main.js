@@ -42,7 +42,7 @@ function init()
     BProj = new Projection();
 
     updateTransformedPoints();
-}
+};
 
 var desired_control_points = 4;
 
@@ -258,12 +258,12 @@ function main()
             BPlane.draw();
         }
     }
-}
+};
 
 function initializeStrandFit()
 {
     BStrand = new Strand();
-}
+};
 
 // updateTransformedPoints()
 // ----------------------------------------------------------------------
@@ -292,7 +292,7 @@ function updateTransformedPoints()
     {
         BStrand.updateTransformedPoints();
     }
-}
+};
 
 function generatePDBString(points)
 {
@@ -402,7 +402,7 @@ function generatePDBString(points)
     }
 
     return string;
-}
+};
 
 function generateFitString()
 {
@@ -429,7 +429,7 @@ function generateFitString()
     }
 
     return string;
-}
+};
 
 function generateTextFile(string)
 {
@@ -441,7 +441,7 @@ function generateTextFile(string)
     file = window.URL.createObjectURL(data);
 
     return file;
-}
+};
 
 
 
@@ -455,7 +455,7 @@ function generateTextFile(string)
 function sign(x)
 {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
-}
+};
 
 // binomial(n,k) returns the binomial coefficient of n, k.  i.e. N select K.  
 // Used primarily for generating surface points.
@@ -468,12 +468,12 @@ function binomial(n, k)
     }
 
     return prod;
-}
+};
 
 function clamp(num, min, max)
 {
     return num < min ? min : num > max ? max : num;
-}
+};
 
 
 
@@ -509,7 +509,7 @@ function loadServerMRC(file)
     };
 
     oReq.send(null);
-}
+};
 
 var DMap;
 var dataView;
@@ -535,7 +535,7 @@ function changeDensity(evt)
 
     first_execution = true;
     BSurface.drawSurface = true;
-}
+};
 
 document.getElementById('mrc_file').addEventListener('change', loadLocalMRC,
     false);
@@ -605,7 +605,7 @@ function loadLocalMRC(evt)
     first_execution = true;
     BSurface.drawSurface = true;
 
-}
+};
 
 document.getElementById('fit_file').addEventListener('change', loadFittingFile,
     false);
@@ -691,19 +691,19 @@ function loadFittingFile(evt)
 
         updateTransformedPoints();
     };
-}
+};
 
 function readInt(i)
 {
     i *= 4;
     return dataView.getInt32(i, true);
-}
+};
 
 function readFloat(i)
 {
     i *= 4;
     return dataView.getFloat32(i, true);
-}
+};
 
 function createArray(length)
 {
@@ -717,7 +717,7 @@ function createArray(length)
     }
 
     return arr;
-}
+};
 
 
 document.getElementById('strand_file').addEventListener('change',
@@ -775,7 +775,7 @@ function loadStrandFile(evt)
 
         BStrand.importStrands(points);
     };
-}
+};
 
 
 
@@ -817,7 +817,7 @@ function Mouse()
 
     this.drawPoint;
     this.drawPoint_T;
-}
+};
 
 Mouse.draw = function()
 {
@@ -840,14 +840,14 @@ Mouse.draw = function()
 
         this.drawPoint_T.draw();
     }
-};
+};;
 
 Mouse.updatePos = function(evt)
 {
     var rect = cvs.getBoundingClientRect();
     this.x = evt.clientX - rect.left - 1;
     this.y = evt.clientY - rect.top - 1;
-};
+};;
 
 cvs.addEventListener('mousemove', function(evt)
 {
@@ -1120,7 +1120,7 @@ cvs.addEventListener('mousemove', function(evt)
 
         updateTransformedPoints();
     }
-}, false);
+};, false);
 
 cvs.addEventListener('mousedown', function(evt)
 {
@@ -1189,7 +1189,7 @@ cvs.addEventListener('mousedown', function(evt)
             Mouse.held_type = 1;
         }
     }
-}, false);
+};, false);
 
 cvs.addEventListener('mouseleave', function(evt)
 {
@@ -1199,7 +1199,7 @@ cvs.addEventListener('mouseleave', function(evt)
     Mouse.held_object = undefined;
 
     Mouse.down = false;
-}, false);
+};, false);
 
 cvs.addEventListener('mouseup', function(evt)
 {
@@ -1209,7 +1209,7 @@ cvs.addEventListener('mouseup', function(evt)
     Mouse.held_object = undefined;
 
     Mouse.down = false;
-}, false);
+};, false);
 
 cvs.addEventListener('mousewheel', function(evt)
 {
@@ -1221,7 +1221,7 @@ cvs.addEventListener('mousewheel', function(evt)
 
     evt.preventDefault();
     return false;
-}, false);
+};, false);
 
 cvs.addEventListener("DOMMouseScroll", function(evt)
 {
@@ -1233,7 +1233,7 @@ cvs.addEventListener("DOMMouseScroll", function(evt)
 
     evt.preventDefault();
     return false;
-}, false);
+};, false);
 
 
 
@@ -1249,7 +1249,7 @@ strand_dl.addEventListener('mouseover', function(evt)
     {
         BStrand.updateDownload();
     }
-}, false);
+};, false);
 
 
 set_dl.addEventListener('mouseup', function(evt)
@@ -1268,7 +1268,7 @@ set_dl.addEventListener('mouseup', function(evt)
 
         BStrand.generateSampleSet(angle_delta, offset_min, offset_max, offset_num);
     }
-}, false);
+};, false);
 
 
 
@@ -1283,7 +1283,7 @@ function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val,
         max_val, default_val, id));
 
     return id;
-}
+};
 
 function Slider(x, y, width, height, text, bar_width, min_val, max_val,
     default_val, id)
@@ -1318,7 +1318,7 @@ function Slider(x, y, width, height, text, bar_width, min_val, max_val,
     }
 
     this.id = id;
-}
+};
 
 Slider.prototype.draw = function()
 {
@@ -1414,18 +1414,18 @@ Slider.prototype.draw = function()
     ctx.fillStyle = "black";
     ctx.fillText("" + (this.value).toFixed(2), this.x + 13, this.y + 3 +
         this.height / 2);
-};
+};;
 
 Slider.prototype.setValue = function(val)
 {
     this.setting = (val - this.min_val) / (this.max_val - this.min_val);
     this.value = val;
-}
+};
 
 Slider.prototype.setActive = function(activated)
 {
     this.activated = activated;
-};
+};;
 
 
 
@@ -1448,7 +1448,7 @@ function Create_ToggleButton(x, y, width, height, text)
     ToggleButtons.push(new ToggleButton(x, y, width, height, text, id));
 
     return id;
-}
+};
 
 // Used by anything to destroy a toggle button with a given id.  Silently fails 
 // if the id is not valid.
@@ -1458,7 +1458,7 @@ function Destroy_ToggleButton(id)
     {
         ToggleButtons.splice(id, 1);
     }
-}
+};
 
 // Constructor of ToggleButton object, used to create new toggle buttons.
 function ToggleButton(x, y, width, height, text, id)
@@ -1475,7 +1475,7 @@ function ToggleButton(x, y, width, height, text, id)
 
     this.id = id; // This button's index inside the global ToggleButtons array.
     // Should be set correctly by NewToggleButton();
-}
+};
 
 // Draws this particular button, called by main in a loop of all toggle buttons,
 // to draw all of them. Drawing state depends on whether the button is activated
@@ -1541,13 +1541,13 @@ ToggleButton.prototype.draw = function()
     ctx.font = "10px Verdana";
     ctx.fillStyle = "black";
     ctx.fillText(this.text, this.x + 10, this.y + this.height / 1.6);
-};
+};;
 
 // Called by anything to see if the button is active or not.
 ToggleButton.prototype.isActivated = function()
 {
     return this.activated;
-};
+};;
 
 // Called by the Mouse singleton to "toggle" the activation state.
 ToggleButton.prototype.toggle = function()
@@ -1560,7 +1560,7 @@ ToggleButton.prototype.toggle = function()
     {
         this.activated = false;
     }
-};
+};;
 
 
 init();

@@ -15,7 +15,7 @@ function Plane(A, B, C, D)
 	this.generatePoints();
 
 	this.finished = false;
-}
+};
 
 Plane.prototype.generatePoints = function()
 {
@@ -84,7 +84,7 @@ Plane.prototype.generatePoints = function()
 			}
 		}
 	}
-};
+};;
 
 Plane.prototype.draw = function()
 {
@@ -95,7 +95,7 @@ Plane.prototype.draw = function()
 	{
 		this.points_T[i].draw();
 	}
-};
+};;
 
 Plane.prototype.updateTransformedPoints = function()
 {
@@ -106,12 +106,12 @@ Plane.prototype.updateTransformedPoints = function()
 		this.points_T[i].rotateY(yaw);
 		this.points_T[i].rotateX(pitch);
 	}
-}
+};
 
 Plane.prototype.distance = function(p)
 {
 	return this.A * p.x + this.B * p.y + this.C * p.z + this.D;
-};
+};;
 
 Plane.prototype.score = function()
 {
@@ -128,7 +128,7 @@ Plane.prototype.score = function()
 	}
 
 	return score;
-};
+};;
 
 Plane.prototype.optimize = function()
 {
@@ -243,4 +243,4 @@ Plane.prototype.optimize = function()
 	this.delta = new_delta;
 
 	return total_change;
-};
+};;
