@@ -1890,61 +1890,131 @@ Strand.prototype.maxAngleOfStrand = function (strand_num, dist_limit)
 {
     var map = this.strandMap
 
-    var s1 = map[strand_num];
-    var s2 = map[strand_num + 1];
+    var s = map[strand_num];
+    var s_left = map[strand_num - 1];
+    var s_right = map[strand_num + 1];
 
-    var min_angle = Infinity;
     var max_angle = -Infinity;
 
-    var center = BPerimeter.centralPoint;
+    // Loop through all valid angles associated with strand_num and its left neighbor
 
-    for (var j = 1; j < 3; j++)
+    for (var i = s._length; i < s.length; i++)
     {
-        if (j == 2)
+        var p1 = s[i];
+        var p2 = s[i + 1];
+        var p3 = s_left[i];
+        var p4 = s_left[i + 1];
+
+        var defined = p1 && p2 && p3 && p4;
+        var in_range = defined &&
+            s1_1.dist(center) < dist_limit ||
+            s1_2.dist(center) < dist_limit ||
+            s2_1.dist(center) < dist_limit ||
+            s2_2.dist(center) < dist_limit;
+
+        if (in_range)
         {
-            s2 = map[strand_num - 1];
+            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+
+            if (angle > max_angle)
+            {
+                max_angle = angle;
+            }
         }
+    }
 
-        for (var i = s1._length; i < s1.length - 1; i++)
+    // Loop through all valid angles of its right neighbor
+
+    for (var i = s._length; i < s.length; i++)
+    {
+        var p1 = s[i];
+        var p2 = s[i + 1];
+        var p3 = s_right[i];
+        var p4 = s_right[i + 1];
+
+        var defined = p1 && p2 && p3 && p4;
+        var in_range = defined &&
+            s1_1.dist(center) < dist_limit ||
+            s1_2.dist(center) < dist_limit ||
+            s2_1.dist(center) < dist_limit ||
+            s2_2.dist(center) < dist_limit;
+
+        if (in_range)
         {
-            var s1_1 = s1[i];
-            var s1_2 = s1[i + 1];
+            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
 
-            var s2_1 = s2[i];
-            var s2_2 = s2[i + 1];
-
-            var defined = s1_1 && s1_2 && s2_1 && s2_2;
-
-            if (defined)
+            if (angle > max_angle)
             {
-                var in_range = s1_1.dist(center) < dist_limit ||
-                    s1_2.dist(center) < dist_limit ||
-                    s2_1.dist(center) < dist_limit ||
-                    s2_2.dist(center) < dist_limit;
-            }
-            else
-            {
-                var in_range = false;
-            }
-
-            if (defined && in_range)
-            {
-                var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
-
-                if (angle < min_angle)
-                {
-                    min_angle = angle;
-                }
-
-                if (angle > max_angle)
-                {
-                    max_angle = angle;
-                }
+                max_angle = angle;
             }
         }
     }
 
     return max_angle;
+};
+
+Strand.prototype.avgAngleOfStrand = function (strand_num, dist_limit)
+{
+    var map = this.strandMap
+
+    var s = map[strand_num];
+    var s_left = map[strand_num - 1];
+    var s_right = map[strand_num + 1];
+
+    var avg_angle = 0;
+    var count = 0;
+
+    // Loop through all valid angles associated with strand_num and its left neighbor
+
+    for (var i = s._length; i < s.length; i++)
+    {
+        var p1 = s[i];
+        var p2 = s[i + 1];
+        var p3 = s_left[i];
+        var p4 = s_left[i + 1];
+
+        var defined = p1 && p2 && p3 && p4;
+        var in_range = defined &&
+            s1_1.dist(center) < dist_limit ||
+            s1_2.dist(center) < dist_limit ||
+            s2_1.dist(center) < dist_limit ||
+            s2_2.dist(center) < dist_limit;
+
+        if (in_range)
+        {
+            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+
+            avg_angle += angle;
+        }
+    }
+
+    // Loop through all valid angles of its right neighbor
+
+    for (var i = s._length; i < s.length; i++)
+    {
+        var p1 = s[i];
+        var p2 = s[i + 1];
+        var p3 = s_right[i];
+        var p4 = s_right[i + 1];
+
+        var defined = p1 && p2 && p3 && p4;
+        var in_range = defined &&
+            s1_1.dist(center) < dist_limit ||
+            s1_2.dist(center) < dist_limit ||
+            s2_1.dist(center) < dist_limit ||
+            s2_2.dist(center) < dist_limit;
+
+        if (in_range)
+        {
+            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+
+            avg_angle += angle;
+        }
+    }
+
+    avg_angle /= count;
+
+    return avg_angle;
 };
 
 Strand.prototype.coverageScore = function ()
