@@ -1811,71 +1811,11 @@ Strand.prototype.calculateScore = function ()
     {
         score = allStrandsAvgScore();
     }
-    /*
+};
 
-    var map = this.strandMap;
-
-    // Find pair of simulated strands with most shared connections.
-    var max_count = -Infinity;
-    var max_index = -Infinity;
-    for (var i = map._length; i < map.length - 1; i++)
-    {
-        var s1 = map[i];
-        var s2 = map[i + 1];
-
-        // Loop through s1, counting how many elements also exist in s2.
-        var count = 0;
-        for (var j = s1._length; j < s1.length; j++)
-        {
-            if (s1[j] != undefined && s2[j] != undefined)
-            {
-                count++;
-            }
-        }
-
-        if (count > max_count)
-        {
-            max_count = count;
-            max_index = i;
-        }
-    }
-
-    var s1 = map[max_index];
-    var s2 = map[max_index + 1];
-
-    var min_angle = Infinity;
-    var max_angle = -Infinity;
-
-    for (var i = s1._length; i < s1.length - 1; i++)
-    {
-        var s1_1 = s1[i];
-        var s1_2 = s1[i + 1];
-
-        var s2_1 = s2[i];
-        var s2_2 = s2[i + 1];
-
-        var defined = s1_1 && s1_2 && s2_1 && s2_2;
-
-        if (defined)
-        {
-            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
-
-            if (angle < min_angle)
-            {
-                min_angle = angle;
-            }
-
-            if (angle > max_angle)
-            {
-                max_angle = angle;
-            }
-        }
-    }
-
-    return max_angle;*/
-
-    /*
-    var dist_limit = 4; // Angstroms
+Strand.prototype.centerStrandMaxScore = function ()
+{
+    var dist_limit = 4;
 
     var ang1 = this.maxAngleOfStrand(-1, dist_limit);
     var ang2 = this.maxAngleOfStrand(0, dist_limit);
@@ -1883,8 +1823,8 @@ Strand.prototype.calculateScore = function ()
 
     var max_ang = Math.max(ang1, ang2, ang3);
 
-    return max_ang;*/
-};
+    return max_ang;
+}
 
 Strand.prototype.maxAngleOfStrand = function (strand_num, dist_limit)
 {
@@ -1895,6 +1835,8 @@ Strand.prototype.maxAngleOfStrand = function (strand_num, dist_limit)
     var s_right = map[strand_num + 1];
 
     var max_angle = -Infinity;
+
+    var center = BPerimeter.centralPoint;
 
     // Loop through all valid angles associated with strand_num and its left neighbor
 
@@ -1960,6 +1902,8 @@ Strand.prototype.avgAngleOfStrand = function (strand_num, dist_limit)
     var s = map[strand_num];
     var s_left = map[strand_num - 1];
     var s_right = map[strand_num + 1];
+
+    var center = BPerimeter.centralPoint;
 
     var avg_angle = 0;
     var count = 0;
