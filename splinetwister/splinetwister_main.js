@@ -84,7 +84,6 @@ function main()
             var score = DMap.saved_score;
         }
 
-
         ctx.fillStyle = "black";
 
         ctx.fillText("Score: " + (score), 10, 20);
@@ -122,18 +121,14 @@ function main()
 
                     var string = generatePDBString(sample_points);
 
-
-
                     var file = generateTextFile(string);
 
                     dl.href = file;
-
 
                     var fit_string = generateFitString();
                     var fit_file = generateTextFile(fit_string);
 
                     fit_dl.href = fit_file;
-
 
                     // Build filename by appending "_SplineFit" to the end of
                     // the input file
@@ -443,10 +438,6 @@ function generateTextFile(string)
     return file;
 };
 
-
-
-
-
 // ----------------------------------------------------------------------
 // Global mathematical functions.
 // ----------------------------------------------------------------------
@@ -475,21 +466,13 @@ function clamp(num, min, max)
     return num < min ? min : num > max ? max : num;
 };
 
-
-
-
-
-
-
-
-
 function loadServerMRC(file)
 {
     var oReq = new XMLHttpRequest();
     oReq.open("GET", "/" + file, true);
     oReq.responseType = "arraybuffer";
 
-    oReq.onload = function(oEvent)
+    oReq.onload = function (oEvent)
     {
         var arrayBuffer = oReq.response; // Note: not oReq.responseText
         if (arrayBuffer)
@@ -553,7 +536,7 @@ function loadLocalMRC(evt)
     {
         fileReader.readAsArrayBuffer(file);
 
-        fileReader.onload = function(oEvent)
+        fileReader.onload = function (oEvent)
         {
             var arrayBuffer = oEvent.target.result;
             if (arrayBuffer)
@@ -582,7 +565,7 @@ function loadLocalMRC(evt)
     {
         fileReader.readAsText(file);
 
-        fileReader.onload = function(oEvent)
+        fileReader.onload = function (oEvent)
         {
             var pdb_string = oEvent.target.result;
 
@@ -616,7 +599,7 @@ function loadFittingFile(evt)
     var fileReader = new FileReader();
     fileReader.readAsText(file);
 
-    fileReader.onload = function(oEvent)
+    fileReader.onload = function (oEvent)
     {
         var fit_string = oEvent.target.result;
 
@@ -719,7 +702,6 @@ function createArray(length)
     return arr;
 };
 
-
 document.getElementById('strand_file').addEventListener('change',
     loadStrandFile,
     false);
@@ -730,7 +712,7 @@ function loadStrandFile(evt)
     var fileReader = new FileReader();
     fileReader.readAsText(file);
 
-    fileReader.onload = function(oEvent)
+    fileReader.onload = function (oEvent)
     {
         var fit_string = oEvent.target.result;
 
@@ -777,36 +759,6 @@ function loadStrandFile(evt)
     };
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function Mouse()
 {
     this.x = 0;
@@ -819,7 +771,7 @@ function Mouse()
     this.drawPoint_T;
 };
 
-Mouse.draw = function()
+Mouse.draw = function ()
 {
     /*ctx.beginPath();
     ctx.arc(Mouse.x, Mouse.y, 5, 0, Math.PI*2, true);
@@ -840,16 +792,16 @@ Mouse.draw = function()
 
         this.drawPoint_T.draw();
     }
-};;
+};
 
-Mouse.updatePos = function(evt)
+Mouse.updatePos = function (evt)
 {
     var rect = cvs.getBoundingClientRect();
     this.x = evt.clientX - rect.left - 1;
     this.y = evt.clientY - rect.top - 1;
-};;
+};
 
-cvs.addEventListener('mousemove', function(evt)
+cvs.addEventListener('mousemove', function (evt)
 {
     var old_x = Mouse.x;
     var old_y = Mouse.y;
@@ -938,8 +890,6 @@ cvs.addEventListener('mousemove', function(evt)
 
             var dist_plus = search_point_T.dist2d(Mouse);
 
-
-
             // Now we do the same, only for t-minus
 
             var t_minus = t - delta_t;
@@ -963,7 +913,6 @@ cvs.addEventListener('mousemove', function(evt)
 
             var dist_minus = search_point_T.dist2d(Mouse);
 
-
             // If either of the distances are smaller, set the new t before we
             //  optimize for u.
 
@@ -985,13 +934,6 @@ cvs.addEventListener('mousemove', function(evt)
                 //console.log("Did not change t: ", t, 0)
             }
 
-
-
-
-
-
-
-
             var u_plus = u + delta_u;
 
             var coords = BSurface.calc(t, u_plus);
@@ -1012,8 +954,6 @@ cvs.addEventListener('mousemove', function(evt)
             search_point_T.draw(false);
 
             var dist_plus = search_point_T.dist2d(Mouse);
-
-
 
             // Now we do the same, only for t-minus
 
@@ -1038,7 +978,6 @@ cvs.addEventListener('mousemove', function(evt)
 
             var dist_minus = search_point_T.dist2d(Mouse);
 
-
             // If either of the distances are smaller, set the new t before we
             // optimize for u.
 
@@ -1060,17 +999,11 @@ cvs.addEventListener('mousemove', function(evt)
                 //console.log("Did not change u: ", u, 0)
             }
 
-
             Mouse.t = t;
             Mouse.u = u;
         }
 
-
-
-
     }
-
-
 
     // Used for strand movement code
     if (Mouse.down)
@@ -1086,8 +1019,6 @@ cvs.addEventListener('mousemove', function(evt)
             }
         }
     }
-
-
 
     if (Mouse.down)
     {
@@ -1120,9 +1051,9 @@ cvs.addEventListener('mousemove', function(evt)
 
         updateTransformedPoints();
     }
-};, false);
+}, false);
 
-cvs.addEventListener('mousedown', function(evt)
+cvs.addEventListener('mousedown', function (evt)
 {
     Mouse.down = true;
 
@@ -1160,8 +1091,6 @@ cvs.addEventListener('mousedown', function(evt)
         this.hover = false;
     }
 
-
-
     // Check if mouse is over a surface control point
     // If the sheet is already optimized and the underlying data is hidden, do 
     // not check.
@@ -1189,9 +1118,9 @@ cvs.addEventListener('mousedown', function(evt)
             Mouse.held_type = 1;
         }
     }
-};, false);
+}, false);
 
-cvs.addEventListener('mouseleave', function(evt)
+cvs.addEventListener('mouseleave', function (evt)
 {
     Mouse.holding = false;
     Mouse.objHeld = null;
@@ -1199,9 +1128,9 @@ cvs.addEventListener('mouseleave', function(evt)
     Mouse.held_object = undefined;
 
     Mouse.down = false;
-};, false);
+}, false);
 
-cvs.addEventListener('mouseup', function(evt)
+cvs.addEventListener('mouseup', function (evt)
 {
     Mouse.holding = false;
     Mouse.objHeld = null;
@@ -1209,9 +1138,9 @@ cvs.addEventListener('mouseup', function(evt)
     Mouse.held_object = undefined;
 
     Mouse.down = false;
-};, false);
+}, false);
 
-cvs.addEventListener('mousewheel', function(evt)
+cvs.addEventListener('mousewheel', function (evt)
 {
     var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
 
@@ -1221,9 +1150,9 @@ cvs.addEventListener('mousewheel', function(evt)
 
     evt.preventDefault();
     return false;
-};, false);
+}, false);
 
-cvs.addEventListener("DOMMouseScroll", function(evt)
+cvs.addEventListener("DOMMouseScroll", function (evt)
 {
     var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
 
@@ -1233,33 +1162,24 @@ cvs.addEventListener("DOMMouseScroll", function(evt)
 
     evt.preventDefault();
     return false;
-};, false);
-
-
-
-
-
-
+}, false);
 
 // Add event listener for the strand download button: That way, we can update 
 // the strand render when we need to.
-strand_dl.addEventListener('mouseover', function(evt)
+strand_dl.addEventListener('mouseover', function (evt)
 {
     if (BStrand && !BStrand.updated)
     {
         BStrand.updateDownload();
     }
-};, false);
+}, false);
 
-
-set_dl.addEventListener('mouseup', function(evt)
+set_dl.addEventListener('mouseup', function (evt)
 {
     if (BStrand && BStrand.generatedSet != true)
     {
         console.log("MOUSECLICK EVENT");
         set_dl.text = "Zipping files..."
-
-
 
         var angle_delta = Number(document.getElementById("sampleset_angle").value);
         var offset_min = Number(document.getElementById("sampleset_offset_min").value);
@@ -1268,10 +1188,7 @@ set_dl.addEventListener('mouseup', function(evt)
 
         BStrand.generateSampleSet(angle_delta, offset_min, offset_max, offset_num);
     }
-};, false);
-
-
-
+}, false);
 
 var Sliders = new Array();
 
@@ -1320,7 +1237,7 @@ function Slider(x, y, width, height, text, bar_width, min_val, max_val,
     this.id = id;
 };
 
-Slider.prototype.draw = function()
+Slider.prototype.draw = function ()
 {
     ctx.beginPath();
     ctx.rect(this.x, this.y, this.width, this.height);
@@ -1339,7 +1256,6 @@ Slider.prototype.draw = function()
     var box_right = box_xpos + box_width;
     var box_bottom = box_ypos + box_height;
 
-
     if (this.held)
     {
         var setting = (Mouse.x - this.x - box_width / 2) / (this.width -
@@ -1357,7 +1273,6 @@ Slider.prototype.draw = function()
             this.setting = 1;
         }
     }
-
 
     if (Mouse.x > box_xpos && Mouse.x < box_right && Mouse.y > box_ypos &&
         Mouse.y < box_bottom)
@@ -1416,24 +1331,16 @@ Slider.prototype.draw = function()
         this.height / 2);
 };;
 
-Slider.prototype.setValue = function(val)
+Slider.prototype.setValue = function (val)
 {
     this.setting = (val - this.min_val) / (this.max_val - this.min_val);
     this.value = val;
 };
 
-Slider.prototype.setActive = function(activated)
+Slider.prototype.setActive = function (activated)
 {
     this.activated = activated;
 };;
-
-
-
-
-
-
-
-
 
 // Global variable of all toggle button objects, so that the mouse can check for
 //  hovering, and handle it.
@@ -1480,7 +1387,7 @@ function ToggleButton(x, y, width, height, text, id)
 // Draws this particular button, called by main in a loop of all toggle buttons,
 // to draw all of them. Drawing state depends on whether the button is activated
 // or not.
-ToggleButton.prototype.draw = function()
+ToggleButton.prototype.draw = function ()
 {
     if (Mouse.x > this.x && Mouse.x < this.x + this.width && Mouse.y > this.y &&
         Mouse.y < this.y + this.height)
@@ -1499,7 +1406,6 @@ ToggleButton.prototype.draw = function()
                 // pressing.  Ergo, a click!
                 this.toggle();
             }
-
 
             this.pressed = false;
         }
@@ -1544,13 +1450,13 @@ ToggleButton.prototype.draw = function()
 };;
 
 // Called by anything to see if the button is active or not.
-ToggleButton.prototype.isActivated = function()
+ToggleButton.prototype.isActivated = function ()
 {
     return this.activated;
 };;
 
 // Called by the Mouse singleton to "toggle" the activation state.
-ToggleButton.prototype.toggle = function()
+ToggleButton.prototype.toggle = function ()
 {
     if (this.activated == false)
     {
@@ -1561,6 +1467,5 @@ ToggleButton.prototype.toggle = function()
         this.activated = false;
     }
 };;
-
 
 init();

@@ -484,7 +484,7 @@ Strand.prototype.euclideanShift = function (points, ang, dist)
     var eps_dist = 0.001;
     var ang = this.angle;
 
-    var N = 40;
+    var N = 10;
 
     var x_ang_array = new Array();
     var y_ang_array = new Array();
@@ -551,7 +551,7 @@ Strand.prototype.euclideanShift = function (points, ang, dist)
     // For a subset of points defined by N, build a look-up table of euclid
     // shifts.
 
-    var N = 40;
+    var N = 10;
 
     var x_array = new Array();
     var y_array = new Array();
@@ -980,6 +980,11 @@ Strand.prototype.dihedralAngle = function (p1, p2, p3, p4)
 
 Strand.prototype.draw = function ()
 {
+    if (this.optimizing)
+    {
+        return;
+    }
+
     if (!this.ignoreChanges)
     {
         if ((this.angle_slider.value != this.angle) ||
@@ -1566,7 +1571,11 @@ Strand.prototype.optimizePrediction = function ()
 
     // Begin by searching 20x angle space.
 
-    var N = 50;
+    this.optimizing = true;
+
+    console.log("Performing initial angle space search");
+
+    var N = 20;
     var max_score = -Infinity;
     var max_ang = -Infinity;
 
@@ -1577,6 +1586,8 @@ Strand.prototype.optimizePrediction = function ()
         this.updateStrandMap(ang, 0, this.strand_gap);
 
         var score = this.calculateScore();
+
+        console.log(score);
 
         if (score > max_score)
         {
@@ -1616,8 +1627,8 @@ Strand.prototype.optimizePrediction = function ()
 
     // Finally, search 20x 20x in both spaces, in a subregion
 
-    var N = 20;
-    var M = 20;
+    var N = 15;
+    var M = 15;
 
     var ang_delta = 10; // Plus or minus this many degrees to search
     var offset_delta = 1;
@@ -1681,7 +1692,7 @@ Strand.prototype.optimizePrediction = function ()
 
     // Do 20x search on minimizing coverage score.
 
-    var N = 100;
+    var N = 20;
 
     var low_offset = -2;
     var high_offset = 2;
@@ -1712,6 +1723,8 @@ Strand.prototype.optimizePrediction = function ()
 
     console.log("Best found parameters:");
     console.log(this.angle, this.offset, this.strand_gap);
+
+    this.optimizing = false;
 };
 
 Strand.prototype.drawMap = function ()
@@ -1789,28 +1802,30 @@ Strand.prototype.calculateScore = function ()
 
     if (scoring_function == 0)
     {
-        score = centerStrandMaxScore();
+        score = this.centerStrandMaxScore();
     }
     else if (scoring_function == 1)
     {
-        score = longestStrandMaxScore();
+        score = this.longestStrandMaxScore();
     }
     else if (scoring_function == 2)
     {
-        score = twoLongestStrandsMaxScore();
+        score = this.twoLongestStrandsMaxScore();
     }
     else if (scoring_function == 3)
     {
-        score = twoLongestStrandsAvgScore();
+        score = this.twoLongestStrandsAvgScore();
     }
     else if (scoring_function == 4)
     {
-        score = allStrandsMaxScore();
+        score = this.allStrandsMaxScore();
     }
     else if (scoring_function == 5)
     {
-        score = allStrandsAvgScore();
+        score = this.allStrandsAvgScore();
     }
+
+    return score;
 };
 
 Strand.prototype.centerStrandMaxScore = function ()
@@ -1824,7 +1839,7 @@ Strand.prototype.centerStrandMaxScore = function ()
     var max_ang = Math.max(ang1, ang2, ang3);
 
     return max_ang;
-}
+};
 
 Strand.prototype.maxAngleOfStrand = function (strand_num, dist_limit)
 {
@@ -1849,14 +1864,14 @@ Strand.prototype.maxAngleOfStrand = function (strand_num, dist_limit)
 
         var defined = p1 && p2 && p3 && p4;
         var in_range = defined &&
-            s1_1.dist(center) < dist_limit ||
-            s1_2.dist(center) < dist_limit ||
-            s2_1.dist(center) < dist_limit ||
-            s2_2.dist(center) < dist_limit;
+            (p1.dist(center) < dist_limit ||
+                p2.dist(center) < dist_limit ||
+                p3.dist(center) < dist_limit ||
+                p4.dist(center) < dist_limit);
 
         if (in_range)
         {
-            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+            var angle = this.twistAngle(p1, p2, p3, p4);
 
             if (angle > max_angle)
             {
@@ -1876,14 +1891,14 @@ Strand.prototype.maxAngleOfStrand = function (strand_num, dist_limit)
 
         var defined = p1 && p2 && p3 && p4;
         var in_range = defined &&
-            s1_1.dist(center) < dist_limit ||
-            s1_2.dist(center) < dist_limit ||
-            s2_1.dist(center) < dist_limit ||
-            s2_2.dist(center) < dist_limit;
+            (p1.dist(center) < dist_limit ||
+                p2.dist(center) < dist_limit ||
+                p3.dist(center) < dist_limit ||
+                p4.dist(center) < dist_limit);
 
         if (in_range)
         {
-            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+            var angle = this.twistAngle(p1, p2, p3, p4)
 
             if (angle > max_angle)
             {
@@ -1919,14 +1934,14 @@ Strand.prototype.avgAngleOfStrand = function (strand_num, dist_limit)
 
         var defined = p1 && p2 && p3 && p4;
         var in_range = defined &&
-            s1_1.dist(center) < dist_limit ||
-            s1_2.dist(center) < dist_limit ||
-            s2_1.dist(center) < dist_limit ||
-            s2_2.dist(center) < dist_limit;
+            (p1.dist(center) < dist_limit ||
+                p2.dist(center) < dist_limit ||
+                p3.dist(center) < dist_limit ||
+                p4.dist(center) < dist_limit);
 
         if (in_range)
         {
-            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+            var angle = this.twistAngle(p1, p2, p3, p4)
 
             avg_angle += angle;
         }
@@ -1943,14 +1958,14 @@ Strand.prototype.avgAngleOfStrand = function (strand_num, dist_limit)
 
         var defined = p1 && p2 && p3 && p4;
         var in_range = defined &&
-            s1_1.dist(center) < dist_limit ||
-            s1_2.dist(center) < dist_limit ||
-            s2_1.dist(center) < dist_limit ||
-            s2_2.dist(center) < dist_limit;
+            (p1.dist(center) < dist_limit ||
+                p2.dist(center) < dist_limit ||
+                p3.dist(center) < dist_limit ||
+                p4.dist(center) < dist_limit);
 
         if (in_range)
         {
-            var angle = this.twistAngle(s1_1, s1_2, s2_1, s2_2);
+            var angle = this.twistAngle(p1, p2, p3, p4)
 
             avg_angle += angle;
         }
