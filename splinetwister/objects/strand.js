@@ -1296,8 +1296,8 @@ Strand.prototype.draw = function ()
 
         
 
-        var av_ang = (avgAngleOfStrand(longest_strand, Infinity) 
-                    + avgAngleOfStrand(second_largest, Infinity))/2;
+        var av_ang = (this.avgAngleOfStrand(longest_strand, Infinity) 
+                    + this.avgAngleOfStrand(second_largest, Infinity))/2;
 
         ctx.fillText("2 Strands Av Ang: " + av_ang, 10, 170);
 
@@ -1714,8 +1714,6 @@ Strand.prototype.calculateScore = function ()
 {
     var scoring_function = document.getElementById("twist_menu").value;
     var score;
-
-    console.log(scoring_function);
 
     if (scoring_function == 0)
     {
@@ -2570,7 +2568,7 @@ Strand.prototype.updateTransformedPoints = function ()
 
 Strand.prototype.centerStrandMaxScore = function()
 {
-    return maxAngleOfStrand(0,4);
+    return this.maxAngleOfStrand(0,4);
 };
 
 Strand.prototype.longestStrandMaxScore = function()
