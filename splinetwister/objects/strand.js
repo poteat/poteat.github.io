@@ -1587,7 +1587,7 @@ Strand.prototype.optimizePrediction = function ()
 
             this.updateStrandMap(ang, offset, this.strand_gap);
 
-            var score = this.calculateScore();
+            score = this.calculateScore();
 
             console.log(ang, offset, score);
 
@@ -1714,6 +1714,8 @@ Strand.prototype.calculateScore = function ()
 {
     var scoring_function = document.getElementById("twist_menu").value;
     var score;
+
+    console.log(scoring_function);
 
     if (scoring_function == 0)
     {
@@ -2571,7 +2573,7 @@ Strand.prototype.centerStrandMaxScore = function()
     return maxAngleOfStrand(0,4);
 };
 
-Strand.prototype.longestStrandAvgScore = function()
+Strand.prototype.longestStrandMaxScore = function()
 {
   //find longest strand
 
@@ -2592,8 +2594,8 @@ Strand.prototype.longestStrandAvgScore = function()
         }
     }
 
-    var av_ang = this.avgAngleOfStrand(longest_strand, Infinity);
-    return av_ang;
+    var max_ang = this.maxAngleOfStrand(longest_strand, Infinity);
+    return max_ang;
 };
 
 Strand.prototype.twoLongestStrandsMaxScore = function()
