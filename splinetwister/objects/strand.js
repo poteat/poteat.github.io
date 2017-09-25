@@ -896,7 +896,12 @@ Strand.prototype.updateDownload = function ()
     }
     strand_filename += (exploded_filename[i]);
 
-    strand_filename += "_SplineFit_Strands.pdb";
+    strand_filename += "_SplineFit";
+
+    var opt_method = document.getElementById("twist_menu");
+    var optimization_method_name = opt_method.options[opt_method.selectedIndex].text;
+
+    strand_filename += "_" + optimization_method_name + ".pdb";
 
     strand_dl.download = strand_filename;
 
@@ -1294,10 +1299,8 @@ Strand.prototype.draw = function ()
 
         // take two longest strands and find average of surronding angles
 
-        
-
-        var av_ang = (this.avgAngleOfStrand(longest_strand, Infinity) 
-                    + this.avgAngleOfStrand(second_largest, Infinity))/2;
+        var av_ang = (this.avgAngleOfStrand(longest_strand, Infinity) +
+            this.avgAngleOfStrand(second_largest, Infinity)) / 2;
 
         ctx.fillText("2 Strands Av Ang: " + av_ang, 10, 170);
 
@@ -1336,11 +1339,11 @@ Strand.prototype.draw = function ()
 
         var max_ang = 0;
 
-        for(var i = map._length; i < map.length; i++)
+        for (var i = map._length; i < map.length; i++)
         {
             var current_ang = this.maxAngleOfStrand(i, Infinity);
 
-            if(current_ang != Infinity && current_ang != -Infinity)
+            if (current_ang != Infinity && current_ang != -Infinity)
             {
                 if (current_ang > max_ang)
                 {
@@ -1378,12 +1381,11 @@ Strand.prototype.draw = function ()
         var denominator = map.length - map._length;
         var total_angle = 0;
 
-
         for (var i = map._length; i < map.length; i++)
         {
             var current_ang = this.avgAngleOfStrand(i, Infinity);
 
-            if(current_ang != Infinity && current_ang != -Infinity)
+            if (current_ang != Infinity && current_ang != -Infinity)
             {
                 if (current_ang != 0)
                 {
@@ -1392,7 +1394,7 @@ Strand.prototype.draw = function ()
             }
         }
 
-        var av_ang = (total_angle/denominator);
+        var av_ang = (total_angle / denominator);
         console.log(total_angle);
 
         ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
@@ -2582,14 +2584,14 @@ Strand.prototype.updateTransformedPoints = function ()
     }
 };
 
-Strand.prototype.centerStrandMaxScore = function()
+Strand.prototype.centerStrandMaxScore = function ()
 {
-    return this.maxAngleOfStrand(0,4);
+    return this.maxAngleOfStrand(0, 4);
 };
 
-Strand.prototype.longestStrandMaxScore = function()
+Strand.prototype.longestStrandMaxScore = function ()
 {
-  //find longest strand
+    //find longest strand
 
     var longest_strand_length = 0;
     var longest_strand = 0;
@@ -2612,9 +2614,9 @@ Strand.prototype.longestStrandMaxScore = function()
     return max_ang;
 };
 
-Strand.prototype.twoLongestStrandsMaxScore = function()
+Strand.prototype.twoLongestStrandsMaxScore = function ()
 {
- //find 2 longest strands
+    //find 2 longest strands
 
     var longest_strand_length = 0;
     var longest_strand = 0;
@@ -2641,9 +2643,9 @@ Strand.prototype.twoLongestStrandsMaxScore = function()
     return max_ang;
 };
 
-Strand.prototype.twoLongestStrandsAvgScore = function()
+Strand.prototype.twoLongestStrandsAvgScore = function ()
 {
-//find 2 longest strands
+    //find 2 longest strands
 
     var longest_strand_length = 0;
     var longest_strand = 0;
@@ -2654,8 +2656,8 @@ Strand.prototype.twoLongestStrandsAvgScore = function()
     {
         var s = map[i];
         for (var j = s._length; j < s.length; j++)
-         {
-             if (s.length - s._length > longest_strand_length)
+        {
+            if (s.length - s._length > longest_strand_length)
             {
                 longest_strand_length = s.length - s._length;
                 second_largest = longest_strand;
@@ -2666,18 +2668,18 @@ Strand.prototype.twoLongestStrandsAvgScore = function()
 
     // take two longest strands and find average of surronding angles
 
-    var av_ang = (this.avgAngleOfStrand(longest_strand, Infinity) 
-                + this.avgAngleOfStrand(second_largest, Infinity))/2;
+    var av_ang = (this.avgAngleOfStrand(longest_strand, Infinity) +
+        this.avgAngleOfStrand(second_largest, Infinity)) / 2;
 
     return av_ang;
 };
 
-Strand.prototype.allStrandsMaxScore = function()
+Strand.prototype.allStrandsMaxScore = function ()
 {
     var map = this.strandMap;
     var max_ang = 0;
 
-    for(var i = map._length; i < map.length; i++)
+    for (var i = map._length; i < map.length; i++)
     {
         if (this.maxAngleOfStrand(i, Infinity) > max_ang)
         {
@@ -2687,18 +2689,17 @@ Strand.prototype.allStrandsMaxScore = function()
     return max_ang;
 };
 
-Strand.prototype.allStrandsAvgScore = function()
+Strand.prototype.allStrandsAvgScore = function ()
 {
     var map = this.strandMap;
     var denominator = map.length - map._length;
     var total_angle = 0;
 
-
     for (var i = map._length; i < map.length; i++)
     {
         var current_ang = this.avgAngleOfStrand(i, Infinity);
 
-        if(current_ang != Infinity && current_ang != -Infinity)
+        if (current_ang != Infinity && current_ang != -Infinity)
         {
             if (current_ang != 0)
             {
@@ -2707,7 +2708,7 @@ Strand.prototype.allStrandsAvgScore = function()
         }
     }
 
-    var av_ang = (total_angle/denominator);
+    var av_ang = (total_angle / denominator);
     console.log(av_ang);
     console.log(denominator);
     return av_ang;
