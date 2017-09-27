@@ -1428,18 +1428,21 @@ Strand.prototype.draw = function ()
 
         //Use two longest strand pairs to find angle av or max
         //Max angle case
+
         if (ang_pref == 0)
         {
-
+            var ang1 = this.maxAngleOfStrand(maxPair[1], Infinity);
+            var ang2 = this.maxAngleOfStrand(maxPair[3], Infinity);
+            var max_ang = Math.max(ang1, ang2);
 
             ctx.fillText("2 Longest Strand Pair Max Ang" + max_ang, 10, 170);
         }
 
-        //Av angle case
-        else if(ang_pref == 1)
+        else if (ang_pref == 1)
         {
-
-
+            var ang1 = this.avgAngleOfStrand(maxPair[1], Infinity);
+            var ang2 = this.avgAngleOfStrand(maxPair[3], Infinity);
+            var av_ang = (ang1 + ang2)/2;
 
             ctx.fillText("2 Longest Strand Pair Av Ang" + av_ang, 10, 170);
         }
@@ -1821,26 +1824,24 @@ Strand.prototype.calculateScore = function ()
     return score;
 };
 
-Strand.prototype.centerStrandMaxScore = function ()
-{
-    var dist_limit = 4;
-
-    var ang1 = this.maxAngleOfStrand(-1, dist_limit);
-    var ang2 = this.maxAngleOfStrand(0, dist_limit);
-    var ang3 = this.maxAngleOfStrand(1, dist_limit);
-
-    var max_ang = Math.max(ang1, ang2, ang3);
-
-    return max_ang;
-};
-
 Strand.prototype.maxAngleOfStrand = function (strand_num, dist_limit)
 {
+    var scoring_function = document.getElementById("twist_menu").value;
     var map = this.strandMap
 
     var s = map[strand_num];
-    var s_left = map[strand_num - 1];
-    var s_right = map[strand_num + 1];
+
+    if(scoring_function == 4)
+    {
+        var s_left = map[strand_num];
+        var s_right = map[strand_num + 1];
+    }
+
+    else
+    {
+        var s_left = map[strand_num - 1];
+        var s_right = map[strand_num + 1];
+    }
 
     var max_angle = -Infinity;
 
@@ -1905,11 +1906,22 @@ Strand.prototype.maxAngleOfStrand = function (strand_num, dist_limit)
 
 Strand.prototype.avgAngleOfStrand = function (strand_num, dist_limit)
 {
+    var scoring_function = document.getElementById("twist_menu").value;
     var map = this.strandMap
 
     var s = map[strand_num];
-    var s_left = map[strand_num - 1];
-    var s_right = map[strand_num + 1];
+
+    if(scoring_function == 4)
+    {
+        var s_left = map[strand_num];
+        var s_right = map[strand_num + 1];
+    }
+
+    else
+    {
+        var s_left = map[strand_num - 1];
+        var s_right = map[strand_num + 1];
+    }
 
     var center = BPerimeter.centralPoint;
 
@@ -2652,7 +2664,15 @@ Strand.prototype.centerStrandScore = function ()
 
     if (ang_pref == 0)
     {
-        return this.maxAngleOfStrand(0, 4);
+        var dist_limit = 4;
+
+        var ang1 = this.maxAngleOfStrand(-1, dist_limit);
+        var ang2 = this.maxAngleOfStrand(0, dist_limit);
+        var ang3 = this.maxAngleOfStrand(1, dist_limit);
+
+        var max_ang = Math.max(ang1, ang2, ang3);
+
+        return max_ang;
     }
 
     else if (ang_pref == 1)
@@ -2834,9 +2854,21 @@ Strand.prototype.twoLongestPairsScore = function ()
     }
 
     if (ang_pref == 0)
-    {}
+    {
+        var ang1 = this.maxAngleOfStrand(maxPair[1], Infinity);
+        var ang2 = this.maxAngleOfStrand(maxPair[3], Infinity);
+        var max_ang = Math.max(ang1, ang2);
+
+        return max_ang;
+    }
 
     else if (ang_pref == 1)
-    {}
+    {
+        var ang1 = this.avgAngleOfStrand(maxPair[1], Infinity);
+        var ang2 = this.avgAngleOfStrand(maxPair[3], Infinity);
+        var av_ang = (ang1 + ang2)/2;
+
+        return av_ang;
+    }
 
 };
