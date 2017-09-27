@@ -1419,6 +1419,15 @@ Strand.prototype.draw = function ()
         this.drawTrueStrands();
     }
 
+    else if (ang_generation_method == 6)
+    {
+
+
+
+
+
+    }
+
     //Default Case- Twist generation from the automatically generated center
     else
     {
@@ -1754,6 +1763,10 @@ Strand.prototype.calculateScore = function ()
     else if (scoring_function == 5)
     {
         score = this.allStrandsAvgScore();
+    }
+    else if (scoring_function == 6)
+    {
+        score = this.twoLongestPairsScore();
     }
 
     return score;
@@ -2712,4 +2725,15 @@ Strand.prototype.allStrandsAvgScore = function ()
     console.log(av_ang);
     console.log(denominator);
     return av_ang;
+};
+Strand.prototype.twoLongestPairsScore = function ()
+{
+
+
+
+
+
+
+
+
 };
