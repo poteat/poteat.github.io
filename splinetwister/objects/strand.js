@@ -1386,17 +1386,17 @@ Strand.prototype.draw = function ()
 
         for (var i = map._length; i < map.length; i++)
         {
+
             var s = map[i];
-            var s2 = map[i+1];
 
             for (var j = s._length; j < s.length; j++)
             {
                 temp1 = s.length - s._length;
             }
 
-            for (var j = s2._length; j < s2.length; j++)
+            for (var j = map[i+1]._length; j < map[i+1].length; j++)
             {
-                temp2 = s2.length - s2._length;
+                temp2 = map[i+1].length - map[i+1]._length;
             }
 
             if (temp1 > temp2)
@@ -1434,7 +1434,7 @@ Strand.prototype.draw = function ()
             var ang2 = this.maxAngleOfStrand(maxPair[3], Infinity);
             var max_ang = Math.max(ang1, ang2);
 
-            ctx.fillText("2 Longest Strand Pair Max Ang" + max_ang, 10, 170);
+            ctx.fillText("2 Longest Strand Pair Max Ang: " + max_ang, 10, 170);
         }
 
         else if (ang_pref == 1)
@@ -1443,7 +1443,7 @@ Strand.prototype.draw = function ()
             var ang2 = this.avgAngleOfStrand(maxPair[3], Infinity);
             var av_ang = (ang1 + ang2)/2;
 
-            ctx.fillText("2 Longest Strand Pair Av Ang" + av_ang, 10, 170);
+            ctx.fillText("2 Longest Strand Pair Av Ang: " + av_ang, 10, 170);
         }
 
         //draw map on grid
@@ -1499,7 +1499,7 @@ Strand.prototype.draw = function ()
             var av1 = this.avgAngleOfStrand(-1, dist_limit);
             var av2 = this.avgAngleOfStrand(0, dist_limit);
             var av_ang = (av1+av2)/2;
-            ctx.fillText("Central Av Ang" + av_ang, 10, 170);
+            ctx.fillText("Central Av Ang: " + av_ang, 10, 170);
         }
 
         // Loop through all strand points and set color depending on distance to center
@@ -2815,16 +2815,16 @@ Strand.prototype.twoLongestPairsScore = function ()
     for (var i = map._length; i < map.length; i++)
     {
         var s = map[i];
-        var s2 = map[i+1];
+        var strand2 = map[i+1];
 
         for (var j = s._length; j < s.length; j++)
         {
             temp1 = s.length - s._length;
         }
 
-        for (var j = s2._length; j < s2.length; j++)
+        for (var j = strand2._length; j < strand2.length; j++)
         {
-            temp2 = s2.length - s2._length;
+            temp2 = strand2.length - strand2._length;
         }
 
         if (temp1 > temp2)
