@@ -50,13 +50,17 @@
     <br>
     <br> Angle Optimization Method:
     <select id="twist_menu">
-        <option value=0>centerStrandMaxScore()</option>
-        <option value=1>longestStrandAvgScore()</option>
-        <option value=2>twoLongestStrandsMaxScore()</option>
-        <option value=3>twoLongestStrandsAvgScore()</option>
-        <option value=4>allStrandsMaxScore()</option>
-        <option value=5>allStrandsAvgScore()</option>
-        <option value=6>twoLongestPairsScore()</option>
+        <option value=0>Center Strand</option>
+        <option value=1>Longest Strand</option>
+        <option value=2>2 Longest Strands</option>
+        <option value=3>All Strands</option>
+        <option value=4>2 Longest Pairs</option>
+    </select>
+    </v>
+    <br> Angle Preference:
+    <select id="angle_menu">
+        <option value=0>Max Angle</option>
+        <option value=1>Av Angle</option>
     </select>
     <p></p>
     <canvas id="canvas" width="750" height="750"> </canvas>

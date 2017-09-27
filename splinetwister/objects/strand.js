@@ -1142,6 +1142,7 @@ Strand.prototype.draw = function ()
 
     //Menu variable
     var ang_generation_method = document.getElementById('twist_menu').value;
+    var ang_pref = document.getElementById('angle_menu').value;
 
     //Twist generation from the longest strand
     if (ang_generation_method == 1)
@@ -1180,10 +1181,20 @@ Strand.prototype.draw = function ()
             }
         }
 
-        var av_ang = this.avgAngleOfStrand(longest_strand, Infinity);
+        //Max angle
+        if (ang_pref == 0)
+        {
+            var max_ang = this.maxAngleOfStrand(longest_strand, Infinity);
+            ctx.fillText("Longest Strand Max Ang: " + max_ang, 10, 170);
+        }
 
-        ctx.fillText("Longest Strand Av Ang: " + av_ang, 10, 170);
-
+        //Av angle
+        else if (ang_pref == 1)
+        {
+            var av_ang = this.avgAngleOfStrand(longest_strand, Infinity);
+            ctx.fillText("Longest Strand Av Ang: " + av_ang, 10, 170);
+        }
+        
         for (i = map._length; i < map.length; i++)
         {
             s = map[i];
@@ -1212,7 +1223,7 @@ Strand.prototype.draw = function ()
         this.drawTrueStrands();
     }
 
-    //Twist generation from the max angle of the two longest strands
+    //Twist generation from the two longest strands
     else if (ang_generation_method == 2)
     {
         //find 2 longest strands
@@ -1236,73 +1247,29 @@ Strand.prototype.draw = function ()
             }
         }
 
-        var ang1 = this.maxAngleOfStrand(longest_strand, Infinity);
-        var ang2 = this.maxAngleOfStrand(second_largest, Infinity);
-
-        var max_ang = Math.max(ang1, ang2);
-
-        ctx.fillText("2 Strands Max Ang: " + max_ang, 10, 170);
-
-        var map = this.strandMap;
-
-        for (var i = map._length; i < map.length; i++)
+        //Max angle case
+        if (ang_pref == 0)
         {
-            var s = map[i];
-            for (var j = s._length; j < s.length; j++)
-            {
-                var p = s[j];
-                var p_draw = this.strandMap_T[i][j];
-
-                if (p != undefined)
-                {
-                    if (i != longest_strand && i != second_largest)
-                    {
-                        p_draw.color = "black";
-                        p_draw.size = 1;
-                    }
-                    else
-                    {
-                        p_draw.color = "red";
-                        p_draw.size = 3;
-                    }
-                }
-            }
+            var ang1 = this.maxAngleOfStrand(longest_strand, Infinity);
+            var ang2 = this.maxAngleOfStrand(second_largest, Infinity);
+            var max_ang = Math.max(ang1, ang2);
+            ctx.fillText("2 Strands Max Ang: " + max_ang, 10, 170);
         }
 
-        this.drawMap();
-        this.drawTrueStrands();
-    }
-
-    //Twist generation from the average angle of the two longest strands
-    else if (ang_generation_method == 3)
-    {
-        //find 2 longest strands
-
-        var longest_strand_length = 0;
-        var longest_strand = 0;
-        var second_largest = 0;
-        var map = this.strandMap;
-
-        for (var i = map._length; i < map.length; i++)
+        //Av angle case
+        else if (ang_pref == 1)
         {
-            var s = map[i];
-            for (var j = s._length; j < s.length; j++)
-            {
-                if (s.length - s._length > longest_strand_length)
-                {
-                    longest_strand_length = s.length - s._length;
-                    second_largest = longest_strand;
-                    longest_strand = i;
-                }
-            }
-        }
 
-        // take two longest strands and find average of surronding angles
-
-        var av_ang = (this.avgAngleOfStrand(longest_strand, Infinity) +
+            var av_ang = (this.avgAngleOfStrand(longest_strand, Infinity) +
             this.avgAngleOfStrand(second_largest, Infinity)) / 2;
 
-        ctx.fillText("2 Strands Av Ang: " + av_ang, 10, 170);
+            ctx.fillText("2 Strands Av Ang: " + av_ang, 10, 170);
+
+        }
+
+
+
+        var map = this.strandMap;
 
         for (var i = map._length; i < map.length; i++)
         {
@@ -1332,27 +1299,152 @@ Strand.prototype.draw = function ()
         this.drawTrueStrands();
     }
 
-    //Twist generation from the maximum angle found
+    //Twist generation from all strands
+    else if (ang_generation_method == 3)
+    {
+        var map = this.strandMap;
+
+        //Max angle case
+        if (ang_pref == 0)
+        {
+
+            var max_ang = 0;
+
+            for (var i = map._length; i < map.length; i++)
+            {
+                var current_ang = this.maxAngleOfStrand(i, Infinity);
+
+                if (current_ang != Infinity && current_ang != -Infinity)
+                {
+                    if (current_ang > max_ang)
+                    {
+                        max_ang = current_ang;
+                    }
+                }
+            }
+            ctx.fillText("Max Ang: " + max_ang, 10, 170);
+        }
+
+        //Av angle case
+        if (ang_pref == 1)
+        {
+            var denominator = map.length - map._length;
+            var total_angle = 0;
+
+            for (var i = map._length; i < map.length; i++)
+            {
+                var current_ang = this.avgAngleOfStrand(i, Infinity);
+
+                if (current_ang != Infinity && current_ang != -Infinity)
+                {
+                    if (current_ang != 0)
+                    {
+                        total_angle + current_ang;
+                    }
+                }  
+            } 
+
+            var av_ang = (total_angle / denominator);
+            ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
+        }
+
+        for (var i = map._length; i < map.length; i++)
+        {
+            var s = map[i];
+            for (var j = s._length; j < s.length; j++)
+            {
+                var p = s[j];
+                var p_draw = this.strandMap_T[i][j];
+
+                if (p != undefined)
+                {
+                    p_draw.color = "red";
+                    p_draw.size = 3;
+                }
+            }
+        }
+
+
+        this.drawMap();
+        this.drawTrueStrands();
+    }
+
+   
+    //Twist generation from two longest pairs
     else if (ang_generation_method == 4)
     {
-        var map = this.strandMap;
 
-        var max_ang = 0;
+        //find the two longest strand pairs
+        var map = this.strandMap;
+        var maxPair[4];
+        var temp1 = 0;
+        var temp2 = 0;
+
+        for(var i=0; i<5; i++)
+        {
+            maxPair[i] = 0;
+        }
 
         for (var i = map._length; i < map.length; i++)
         {
-            var current_ang = this.maxAngleOfStrand(i, Infinity);
+            var s = map[i];
+            var s2 = map[i+1];
 
-            if (current_ang != Infinity && current_ang != -Infinity)
+            for (var j = s._length; j < s.length; j++)
             {
-                if (current_ang > max_ang)
+                temp1 = s.length - s._length;
+            }
+
+            for (var j = s2._length; j < s2.length; j++)
+            {
+                temp2 = s2.length - s2._length;
+            }
+
+            if (temp1 > temp2)
+            {
+                if (temp2 > maxPair[0] || temp2 == maxPair[0])
                 {
-                    max_ang = current_ang;
+                    maxPair[0] = temp2;
+                    maxPair[3] = maxPair[1];
+                    maxPair[4] = maxPair[2];
+                    maxPair[1] = i;
+                    maxPair[2] = i+1;
+
+                }
+            }
+
+            else 
+            {
+                if(temp1 > maxPair || temp1 == maxPair[0])
+                {
+                    maxPair[0] = temp1;
+                    maxPair[3] = maxPair[1];
+                    maxPair[4] = maxPair[2];
+                    maxPair[1] = i;
+                    maxPair[2] = i + 1;
                 }
             }
         }
 
-        ctx.fillText("Max Ang: " + max_ang, 10, 170);
+        //Use two longest strand pairs to find angle av or max
+        //Max angle case
+        if (ang_pref == 0)
+        {
+
+
+            ctx.fillText("2 Longest Strand Pair Max Ang" + max_ang, 10, 170);
+        }
+
+        //Av angle case
+        else if(ang_pref == 1)
+        {
+
+
+
+            ctx.fillText("2 Longest Strand Pair Av Ang" + av_ang, 10, 170);
+        }
+
+        //draw map on grid
 
         for (var i = map._length; i < map.length; i++)
         {
@@ -1364,68 +1456,22 @@ Strand.prototype.draw = function ()
 
                 if (p != undefined)
                 {
-                    p_draw.color = "red";
-                    p_draw.size = 3;
+                    if(p==maxPair[1] || p==maxPair[2] || p==maxPair[3] || p==maxPair[4])
+                    {
+                        p_draw.color = "red";
+                        p_draw.size = 3;
+                    }
+
+                    else
+                    {
+                        p_draw.color = "black";
+                        p_draw.size = 1;
+                    }
                 }
             }
         }
-
         this.drawMap();
         this.drawTrueStrands();
-    }
-
-    //experimental- average of all angles
-    else if (ang_generation_method == 5)
-    {
-        var map = this.strandMap;
-        var denominator = map.length - map._length;
-        var total_angle = 0;
-
-        for (var i = map._length; i < map.length; i++)
-        {
-            var current_ang = this.avgAngleOfStrand(i, Infinity);
-
-            if (current_ang != Infinity && current_ang != -Infinity)
-            {
-                if (current_ang != 0)
-                {
-                    total_angle + current_ang;
-                }
-            }
-        }
-
-        var av_ang = (total_angle / denominator);
-        console.log(total_angle);
-
-        ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
-
-        for (var i = map._length; i < map.length; i++)
-        {
-            var s = map[i];
-            for (var j = s._length; j < s.length; j++)
-            {
-                var p = s[j];
-                var p_draw = this.strandMap_T[i][j];
-
-                if (p != undefined)
-                {
-                    p_draw.color = "red";
-                    p_draw.size = 3;
-                }
-            }
-        }
-
-        this.drawMap();
-        this.drawTrueStrands();
-    }
-
-    else if (ang_generation_method == 6)
-    {
-
-
-
-
-
     }
 
     //Default Case- Twist generation from the automatically generated center
@@ -1436,12 +1482,23 @@ Strand.prototype.draw = function ()
 
         var dist_limit = 4; // Angstroms
 
-        var ang1 = this.maxAngleOfStrand(-1, dist_limit);
-        var ang2 = this.maxAngleOfStrand(0, dist_limit);
+        //Max angle case
+        if (ang_pref == 0)
+        {
+            var ang1 = this.maxAngleOfStrand(-1, dist_limit);
+            var ang2 = this.maxAngleOfStrand(0, dist_limit);
+            var max_ang = Math.max(ang1, ang2);
+            ctx.fillText("Central Max Ang: " + max_ang, 10, 170);
+        }
 
-        var max_ang = Math.max(ang1, ang2);
-
-        ctx.fillText("Central Max Ang: " + max_ang, 10, 170);
+        //Av angle case
+        else if (ang_pref == 1)
+        {
+            var av1 = this.avgAngleOfStrand(-1, dist_limit);
+            var av2 = this.avgAngleOfStrand(0, dist_limit);
+            var av_ang = (av1+av2)/2;
+            ctx.fillText("Central Av Ang" + av_ang, 10, 170);
+        }
 
         // Loop through all strand points and set color depending on distance to center
 
@@ -1742,29 +1799,21 @@ Strand.prototype.calculateScore = function ()
 
     if (scoring_function == 0)
     {
-        score = this.centerStrandMaxScore();
+        score = this.centerStrandScore();
     }
     else if (scoring_function == 1)
     {
-        score = this.longestStrandMaxScore();
+        score = this.longestStrandScore();
     }
     else if (scoring_function == 2)
     {
-        score = this.twoLongestStrandsMaxScore();
+        score = this.twoLongestStrandsScore();
     }
     else if (scoring_function == 3)
     {
-        score = this.twoLongestStrandsAvgScore();
+        score = this.allStrandsScore();
     }
     else if (scoring_function == 4)
-    {
-        score = this.allStrandsMaxScore();
-    }
-    else if (scoring_function == 5)
-    {
-        score = this.allStrandsAvgScore();
-    }
-    else if (scoring_function == 6)
     {
         score = this.twoLongestPairsScore();
     }
@@ -2597,13 +2646,24 @@ Strand.prototype.updateTransformedPoints = function ()
     }
 };
 
-Strand.prototype.centerStrandMaxScore = function ()
+Strand.prototype.centerStrandScore = function ()
 {
-    return this.maxAngleOfStrand(0, 4);
+    var ang_pref = document.getElementById('angle_menu').value;
+
+    if (ang_pref == 0)
+    {
+        return this.maxAngleOfStrand(0, 4);
+    }
+
+    else if (ang_pref == 1)
+    {
+        return this.avgAngleOfStrand(0, 4);
+    }
 };
 
-Strand.prototype.longestStrandMaxScore = function ()
+Strand.prototype.longestStrandScore = function ()
 {
+    var ang_pref = document.getElementById('angle_menu').value;
     //find longest strand
 
     var longest_strand_length = 0;
@@ -2623,12 +2683,22 @@ Strand.prototype.longestStrandMaxScore = function ()
         }
     }
 
-    var max_ang = this.maxAngleOfStrand(longest_strand, Infinity);
-    return max_ang;
+    if (ang_pref == 0)
+    {
+        var max_ang = this.maxAngleOfStrand(longest_strand, Infinity);
+        return max_ang;
+    }
+
+    else if (ang_pref == 1)
+    {
+        var av_ang = this.avgAngleOfStrand(longest_strand, Infinity);
+        return av_ang;
+    }
 };
 
-Strand.prototype.twoLongestStrandsMaxScore = function ()
+Strand.prototype.twoLongestStrandsScore = function ()
 {
+    var ang_pref = document.getElementById('angle_menu').value;
     //find 2 longest strands
 
     var longest_strand_length = 0;
@@ -2650,90 +2720,123 @@ Strand.prototype.twoLongestStrandsMaxScore = function ()
         }
     }
 
-    var ang1 = this.maxAngleOfStrand(longest_strand, Infinity);
-    var ang2 = this.maxAngleOfStrand(second_largest, Infinity);
-    var max_ang = Math.max(ang1, ang2);
-    return max_ang;
+    if (ang_pref == 0)
+    {
+        var ang1 = this.maxAngleOfStrand(longest_strand, Infinity);
+        var ang2 = this.maxAngleOfStrand(second_largest, Infinity);
+        var max_ang = Math.max(ang1, ang2);
+        return max_ang;
+    }
+
+    else if (ang_pref == 1)
+    {
+         var av_ang = (this.avgAngleOfStrand(longest_strand, Infinity) +
+                this.avgAngleOfStrand(second_largest, Infinity)) / 2;
+        return av_ang;
+    }
 };
 
-Strand.prototype.twoLongestStrandsAvgScore = function ()
+Strand.prototype.allStrandsScore = function ()
 {
-    //find 2 longest strands
-
-    var longest_strand_length = 0;
-    var longest_strand = 0;
-    var second_largest = 0;
+    var ang_pref = document.getElementById('angle_menu').value;
     var map = this.strandMap;
 
-    for (var i = map._length; i < map.length; i++)
+    if (ang_pref == 0)
     {
-        var s = map[i];
-        for (var j = s._length; j < s.length; j++)
+        var max_ang = 0;
+        for (var i = map._length; i < map.length; i++)
         {
-            if (s.length - s._length > longest_strand_length)
+            if (this.maxAngleOfStrand(i, Infinity) > max_ang)
             {
-                longest_strand_length = s.length - s._length;
-                second_largest = longest_strand;
-                longest_strand = i;
+                max_ang = this.maxAngleOfStrand(i, Infinity);
             }
         }
+        return max_ang;
     }
 
-    // take two longest strands and find average of surronding angles
-
-    var av_ang = (this.avgAngleOfStrand(longest_strand, Infinity) +
-        this.avgAngleOfStrand(second_largest, Infinity)) / 2;
-
-    return av_ang;
-};
-
-Strand.prototype.allStrandsMaxScore = function ()
-{
-    var map = this.strandMap;
-    var max_ang = 0;
-
-    for (var i = map._length; i < map.length; i++)
+    else if (ang_pref == 1)
     {
-        if (this.maxAngleOfStrand(i, Infinity) > max_ang)
+        var denominator = map.length - map._length;
+        var total_angle = 0;
+
+        for (var i = map._length; i < map.length; i++)
         {
-            max_ang = this.maxAngleOfStrand(i, Infinity);
-        }
-    }
-    return max_ang;
-};
+            var current_ang = this.avgAngleOfStrand(i, Infinity);
 
-Strand.prototype.allStrandsAvgScore = function ()
-{
-    var map = this.strandMap;
-    var denominator = map.length - map._length;
-    var total_angle = 0;
-
-    for (var i = map._length; i < map.length; i++)
-    {
-        var current_ang = this.avgAngleOfStrand(i, Infinity);
-
-        if (current_ang != Infinity && current_ang != -Infinity)
-        {
-            if (current_ang != 0)
+            if (current_ang != Infinity && current_ang != -Infinity)
             {
-                total_angle + current_ang;
+                if (current_ang != 0)
+                {
+                    total_angle + current_ang;
+                }
             }
         }
-    }
 
-    var av_ang = (total_angle / denominator);
-    console.log(av_ang);
-    console.log(denominator);
-    return av_ang;
+        var av_ang = (total_angle / denominator);
+        return av_ang;
+
+    }
 };
+
 Strand.prototype.twoLongestPairsScore = function ()
 {
+    var ang_pref = document.getElementById('angle_menu').value;
 
+    var map = this.strandMap;
+    var maxPair[4];
+    var temp1 = 0;
+    var temp2 = 0;
 
+    for(var i=0; i<5; i++)
+    {
+        maxPair[i] = 0;
+    }
 
+    for (var i = map._length; i < map.length; i++)
+    {
+        var s = map[i];
+        var s2 = map[i+1];
 
+        for (var j = s._length; j < s.length; j++)
+        {
+            temp1 = s.length - s._length;
+        }
 
+        for (var j = s2._length; j < s2.length; j++)
+        {
+            temp2 = s2.length - s2._length;
+        }
 
+        if (temp1 > temp2)
+        {
+            if (temp2 > maxPair[0] || temp2 == maxPair[0])
+            {
+                maxPair[0] = temp2;
+                maxPair[3] = maxPair[1];
+                maxPair[4] = maxPair[2];
+                maxPair[1] = i;
+                maxPair[2] = i+1;
 
+            }
+        }
+
+        else 
+        {
+            if(temp1 > maxPair || temp1 == maxPair[0])
+            {
+                maxPair[0] = temp1;
+                maxPair[3] = maxPair[1];
+                maxPair[4] = maxPair[2];
+                maxPair[1] = i;
+                maxPair[2] = i + 1;
+            }
+        }
+    }
+
+    if (ang_pref == 0)
+    {}
+
+    else if (ang_pref == 1)
+    {}
 
 };
