@@ -1376,14 +1376,13 @@ Strand.prototype.draw = function ()
 
         //find the two longest strand pairs
         var map = this.strandMap;
-        var maxPair[4];
-        var temp1 = 0;
-        var temp2 = 0;
-
-        for(var i=0; i<5; i++)
+        var maxPair = new Array(4);
+        for (var i=0; i<5; i++)
         {
             maxPair[i] = 0;
         }
+        var temp1 = 0;
+        var temp2 = 0;
 
         for (var i = map._length; i < map.length; i++)
         {
@@ -2803,14 +2802,15 @@ Strand.prototype.twoLongestPairsScore = function ()
     var ang_pref = document.getElementById('angle_menu').value;
 
     var map = this.strandMap;
-    var maxPair[4];
-    var temp1 = 0;
-    var temp2 = 0;
-
-    for(var i=0; i<5; i++)
+    var maxPair = new Array(4);
+    for (var i=0; i<5; i++)
     {
         maxPair[i] = 0;
     }
+    var temp1 = 0;
+    var temp2 = 0;
+
+
 
     for (var i = map._length; i < map.length; i++)
     {
