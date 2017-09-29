@@ -1384,19 +1384,11 @@ Strand.prototype.draw = function ()
         var temp1 = 0;
         var temp2 = 0;
 
-        for (var i = map._length; i < map.length - 1; i++)
+        for (var i = map._length; i < map.length - 2; i++)
         {
             var s = map[i];
-
-            for (var j = s._length; j < s.length; j++)
-            {
-                temp1 = s.length - s._length;
-            }
-
-            for (var j = map[i+1]._length; j < map[i+1].length; j++)
-            {
-                temp2 = map[i+1].length - map[i+1]._length;
-            }
+            temp1 = s.length - s._length;
+            temp2 = map[i+1].length - map[i+1]._length;
 
             if(i != map._length)
             {
@@ -1421,51 +1413,50 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
+        }
 
-            //loop for second pair
+        //loop for second pair
 
-            for (var i = map._length; i < map.length - 1; i++)
+        for (var i = map._length; i < map.length - 2; i++)
+        {
+            var s = map[i];
+
+            temp1 = s.length - s._length;
+            temp2 = map[i+1].length - map[i+1]._length;
+
+            if (i != map._length)
             {
-                var s = map[i];
 
-                for (var j = s._length; j < s.length; j++)
+                if (temp1 > temp2)
                 {
-                    temp1 = s.length - s._length;
-                }
-
-                for (var j = map[i+1]._length; j < map[i+1].length; j++)
-                {
-                    temp2 = map[i+1].length - map[i+1]._length;
-                }
-
-                if (i != map._length)
-                {
-
-                    if (temp1 > temp2)
+                    if ((temp2 > maxPair[5] || temp2 == maxPair[5]) && i != maxPair[1])
                     {
-                        if ((temp2 > maxPair[5] || temp2 == maxPair[5]) && i != maxPair[1])
-                        {
-                            maxPair[5] = temp2;
-                            maxPair[3] = i;
-                            maxPair[4] = i+1;
+                        maxPair[5] = temp2;
+                        maxPair[3] = i;
+                        maxPair[4] = i+1;
 
-                        }
                     }
+                }
 
-                    else
+                else
+                {
+                    if ((temp1 > maxPair[5] || temp1 == maxPair[5]) && i != maxPair[1])
                     {
-                        if ((temp1 > maxPair[5] || temp1 == maxPair[5]) && i != maxPair[1])
-                        {
-                            maxPair[5] = temp1;
-                            maxPair[3] = i;
-                            maxPair[4] = i + 1;
-                        }
+                        maxPair[5] = temp1;
+                        maxPair[3] = i;
+                        maxPair[4] = i + 1;
                     }
                 }
             }
         }
+            
             var loopy = (map.length - 1) - map._length;
-            console.log(loopy);
+            console.log(maxPair[0]);
+            console.log(maxPair[1]);
+            console.log(maxPair[2]);
+            console.log(maxPair[3]);
+            console.log(maxPair[4]);
+            console.log(maxPair[5]);
 
             //Use two longest strand pairs to find angle av or max
             //Max angle case
@@ -2844,70 +2835,56 @@ Strand.prototype.twoLongestPairsScore = function ()
 {
     var ang_pref = document.getElementById('angle_menu').value;
     //find the two longest strand pairs
-    var map = this.strandMap;
-    var maxPair = new Array(6);
-    for (var i=0; i<6; i++)
-    {
-        maxPair[i] = 0;
-    }
-    var temp1 = 0;
-    var temp2 = 0;
-
-    for (var i = map._length; i < map.length-1; i++)
-    {
-        var s = map[i];
-
-        for (var j = s._length; j < s.length; j++)
+     var map = this.strandMap;
+        var maxPair = new Array(6);
+        for (var i=0; i<6; i++)
         {
+            maxPair[i] = 0;
+        }
+        var temp1 = 0;
+        var temp2 = 0;
+
+        for (var i = map._length; i < map.length - 2; i++)
+        {
+            var s = map[i];
             temp1 = s.length - s._length;
-        }
-
-        for (var j = map[i+1]._length; j < map[i+1].length; j++)
-        {
             temp2 = map[i+1].length - map[i+1]._length;
-        }
 
-        if(i+1 != undefined && i != undefined && i != map._length)
-        {
-            if (temp1 > temp2)
+            if(i != map._length)
             {
-                if (temp2 > maxPair[0] || temp2 == maxPair[0])
+                if (temp1 > temp2)
                 {
-                    maxPair[0] = temp2;
-                    maxPair[1] = i;
-                    maxPair[2] = i+1;
+                    if (temp2 > maxPair[0] || temp2 == maxPair[0])
+                    {
+                        maxPair[0] = temp2;
+                        maxPair[1] = i;
+                        maxPair[2] = i+1;
 
+                    }
                 }
-            }
 
-            else
-            {
-                if (temp1 > maxPair[0] || temp1 == maxPair[0])
+                else
                 {
-                    maxPair[0] = temp1;
-                    maxPair[1] = i;
-                    maxPair[2] = i + 1;
+                    if (temp1 > maxPair[0] || temp1 == maxPair[0])
+                    {
+                        maxPair[0] = temp1;
+                        maxPair[1] = i;
+                        maxPair[2] = i + 1;
+                    }
                 }
             }
         }
 
         //loop for second pair
 
-        for (var i = map._length; i < map.length-1; i++)
+        for (var i = map._length; i < map.length - 2; i++)
         {
             var s = map[i];
 
-            for (var j = s._length; j < s.length; j++)
-            {
-                temp1 = s.length - s._length;
-            }
+            temp1 = s.length - s._length;
+            temp2 = map[i+1].length - map[i+1]._length;
 
-            for (var j = map[i+1]._length; j < map[i+1].length; j++)
-            {
-                temp2 = map[i+1].length - map[i+1]._length;
-            }
-
-            if (i+1 != undefined && i != undefined && i != map._length)
+            if (i != map._length)
             {
 
                 if (temp1 > temp2)
@@ -2932,7 +2909,6 @@ Strand.prototype.twoLongestPairsScore = function ()
                 }
             }
         }
-    }
 
     if (ang_pref == 0)
     {
