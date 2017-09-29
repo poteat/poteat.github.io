@@ -1449,14 +1449,8 @@ Strand.prototype.draw = function ()
                 }
             }
         }
-            
+
             var loopy = (map.length - 1) - map._length;
-            console.log(maxPair[0]);
-            console.log(maxPair[1]);
-            console.log(maxPair[2]);
-            console.log(maxPair[3]);
-            console.log(maxPair[4]);
-            console.log(maxPair[5]);
 
             //Use two longest strand pairs to find angle av or max
             //Max angle case
