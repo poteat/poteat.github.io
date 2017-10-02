@@ -1334,15 +1334,8 @@ Strand.prototype.draw = function ()
             for (var i = map._length; i < map.length; i++)
             {
                 var current_ang = this.avgAngleOfStrand(i, Infinity);
-
-                if (current_ang != Infinity && current_ang != -Infinity)
-                {
-                    if (current_ang != 0)
-                    {
-                        total_angle + current_ang;
-                    }
-                }  
-            } 
+                total_angle += current_ang;
+            }
 
             var av_ang = (total_angle / denominator);
             ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
@@ -1449,8 +1442,6 @@ Strand.prototype.draw = function ()
                 }
             }
         }
-
-            var loopy = (map.length - 1) - map._length;
 
             //Use two longest strand pairs to find angle av or max
             //Max angle case
@@ -2832,14 +2823,7 @@ Strand.prototype.allStrandsScore = function ()
         for (var i = map._length; i < map.length; i++)
         {
             var current_ang = this.avgAngleOfStrand(i, Infinity);
-
-            if (current_ang != Infinity && current_ang != -Infinity)
-            {
-                if (current_ang != 0)
-                {
-                    total_angle + current_ang;
-                }
-            }
+            total_angle += current_ang;
         }
 
         var av_ang = (total_angle / denominator);
