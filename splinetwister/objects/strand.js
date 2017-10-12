@@ -904,7 +904,6 @@ Strand.prototype.updateDownload = function ()
     strand_filename += "_" + optimization_method_name + ".pdb";
 
     strand_dl.download = strand_filename;
-
 };
 
 Strand.prototype.crossProduct = function (v1, v2)
@@ -1496,6 +1495,88 @@ Strand.prototype.draw = function ()
             this.drawTrueStrands();
     }
 
+    //Twist generation from all strands except the ones on the end
+    else if (ang_generation_method == 5)
+    {
+        var map = this.strandMap;
+
+        //Max angle case
+        if (ang_pref == 0)
+        {
+
+            var max_ang = 0;
+
+            for (var i = map._length+1; i < map.length-1; i++)
+            {
+                var current_ang = this.maxAngleOfStrand(i, Infinity);
+
+                if (current_ang != Infinity && current_ang != -Infinity)
+                {
+                    if (current_ang > max_ang)
+                    {
+                        max_ang = current_ang;
+                    }
+                }
+            }
+            ctx.fillText("Max Ang: " + max_ang, 10, 170);
+        }
+
+        //Av angle case
+        if (ang_pref == 1)
+        {
+            var denominator = (map.length - map._length)-2;
+            var total_angle = 0;
+
+            for (var i = map._length+1; i < map.length-1; i++)
+            {
+                var current_ang = this.avgAngleOfStrand(i, Infinity);
+                total_angle += current_ang;
+            }
+            console.log(total_angle);
+
+            var av_ang = total_angle/denominator;
+            ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
+        }
+
+        for (var i = map._length; i < map.length; i++)
+        {
+            var s = map[i];
+            for (var j = s._length; j < s.length; j++)
+            {
+                var p = s[j];
+                var p_draw = this.strandMap_T[i][j];
+
+                if (p != undefined)
+                {
+                    p_draw.color = "red";
+                    p_draw.size = 3;
+                }
+            }
+        }
+
+
+        this.drawMap();
+        this.drawTrueStrands();
+    }
+
+    //Automatically choses a method based on protein strand characteristics
+    else if (ang_generation_method ==6)
+    {
+        //Check for number of strands, where the longest strands are, and the shape of the protein
+
+
+        //Rectangle protein with about same size strands
+
+
+        //Circle protein with very few strands
+
+
+        //"Bowtie" protein
+
+
+        //Show the method and the strands utilized
+    }
+
     //Default Case- Twist generation from the automatically generated center
     else
     {
@@ -1838,6 +1919,14 @@ Strand.prototype.calculateScore = function ()
     else if (scoring_function == 4)
     {
         score = this.twoLongestPairsScore();
+    }
+    else if (scoring_function == 5)
+    {
+        score = this.allStrandsExceptLast();
+    }
+    else if (scoring_function == 6)
+    {
+        score = this.automaticMethodSelection();
     }
 
     return score;
@@ -2935,5 +3024,53 @@ Strand.prototype.twoLongestPairsScore = function ()
 
         return av_ang;
     }
+};
+
+Strand.prototype.allStrandsExceptLast = function ()
+{
+    var ang_pref = document.getElementById('angle_menu').value;
+    var map = this.strandMap;
+
+    //Max angle case
+    if (ang_pref == 0)
+    {
+
+        var max_ang = 0;
+
+        for (var i = map._length+1; i < map.length-1; i++)
+        {
+            var current_ang = this.maxAngleOfStrand(i, Infinity);
+
+            if (current_ang != Infinity && current_ang != -Infinity)
+            {
+                if (current_ang > max_ang)
+                {
+                    max_ang = current_ang;
+                }
+            }
+        }
+        ctx.fillText("Max Ang: " + max_ang, 10, 170);
+    }
+
+    //Av angle case
+    if (ang_pref == 1)
+    {
+        var denominator = (map.length - map._length)-2;
+        var total_angle = 0;
+
+        for (var i = map._length+1; i < map.length-1; i++)
+        {
+            var current_ang = this.avgAngleOfStrand(i, Infinity);
+            total_angle += current_ang;
+        }
+        console.log(total_angle);
+
+        var av_ang = total_angle/denominator;
+        ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
+    }
+};
+
+Strand.prototype.automaticMethodSelection = function ()
+{
 
 };
