@@ -1336,8 +1336,9 @@ Strand.prototype.draw = function ()
                 var current_ang = this.avgAngleOfStrand(i, Infinity);
                 total_angle += current_ang;
             }
+            console.log(total_angle);
 
-            var av_ang = (total_angle / denominator);
+            var av_ang = total_angle/denominator;
             ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
         }
 
