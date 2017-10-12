@@ -2211,7 +2211,7 @@ Strand.prototype.updateStrandMap = function (angle, offset, strand_gap)
     // dx1, dy1, dx2, dy2 now represent surface coordinates that we want to
     // generate strand 0 from.
 
-    var number_of_samples = 50;
+    var number_of_samples = 200;
 
     var delta = 1 / number_of_samples;
 
