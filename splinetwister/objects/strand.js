@@ -1946,17 +1946,20 @@ Strand.prototype.draw = function ()
 
         if (sheetSize < 4)
         {
-            ctx.fillText("Selected Mehod: 2 Longest Pairs Av", 10, 190);
+            ctx.fillStyle = "red";
+            ctx.fillText("Selected Mehod: 2 Longest Pairs Av", 10, 210);
         }
 
         else if (sheetSize == 4 || sheetSize == 5)
         {
-            ctx.fillText("Selected Mehod: All Strands Av", 10, 190);
+            ctx.fillStyle = "red";
+            ctx.fillText("Selected Mehod: All Strands Av", 10, 210);
         }
 
         else
         {
-            ctx.fillText("Selected Mehod: All Strands Except Last Av", 10, 190);
+            ctx.fillStyle = "red";
+            ctx.fillText("Selected Mehod: All Strands Except Last Av", 10, 210);
         }
     }
 
