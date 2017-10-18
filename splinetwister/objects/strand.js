@@ -1748,7 +1748,7 @@ Strand.prototype.draw = function ()
     else 
     {
         //Check for number of strands, where the longest strands are, and the shape of the protein
-        var sheetSize = map.length - map._length;
+        var sheetSize = (map.length-1) - (1 + map._length);
 
         ///small strands (<4) use 2 longest pairs
         if (sheetSize < 4)
@@ -1869,7 +1869,7 @@ Strand.prototype.draw = function ()
         }
 
         ///medium strands use all angles
-        else if (sheetSize = 4 || sheetSize = 5)
+        else if (sheetSize == 4 || sheetSize == 5)
         {
             var map = this.strandMap;
             var denominator = (map.length - map._length)-2;
@@ -1949,7 +1949,7 @@ Strand.prototype.draw = function ()
             ctx.fillText("Selected Mehod: 2 Longest Pairs Av", 10, 190);
         }
 
-        else if (sheetSize = 4 || sheetSize = 5)
+        else if (sheetSize == 4 || sheetSize == 5)
         {
             ctx.fillText("Selected Mehod: All Strands Av", 10, 190);
         }
@@ -3411,7 +3411,7 @@ Strand.prototype.automaticMethodSelection = function ()
     var map = this.strandMap;
 
         //Check for number of strands, where the longest strands are, and the shape of the protein
-        var sheetSize = map.length - map._length;
+         var sheetSize = (map.length-1) - (1 + map._length);
 
             ///small strands (<4) use 2 longest pairs
             if (sheetSize < 4)
@@ -3420,7 +3420,7 @@ Strand.prototype.automaticMethodSelection = function ()
             }
 
             ///medium strands use all angles
-            else if (sheetSize = 4 || sheetSize = 5)
+            else if (sheetSize == 4 || sheetSize == 5)
             {
                 score = this.allStrandsScore;
             }
