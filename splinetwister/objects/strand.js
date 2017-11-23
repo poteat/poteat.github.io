@@ -1990,7 +1990,6 @@ Strand.prototype.draw = function ()
         }
 
         ctx.fillText("True-match score: " + score, 10, 80);
-
     }
 };
 
@@ -3373,7 +3372,6 @@ Strand.prototype.allStrandsExceptLast = function ()
         //Max angle case
         if (ang_pref == 0 && scoring_function != 0)
         {
-
             var max_ang = 0;
 
             for (var i = map._length+2; i < map.length-2; i++)
@@ -3412,6 +3410,7 @@ Strand.prototype.allStrandsExceptLast = function ()
 Strand.prototype.automaticMethodSelection = function ()
 {
     var map = this.strandMap;
+    var select_score;
 
         //Check for number of strands, where the longest strands are, and the shape of the protein
          var sheetSize = (map.length-1) - (1 + map._length);
@@ -3419,23 +3418,23 @@ Strand.prototype.automaticMethodSelection = function ()
             ///small strands (<4) use 2 longest pairs
             if (sheetSize < 4)
             {
-                score = this.twoLongestPairsScore;
+                select_score = this.twoLongestPairsScore();
             }
 
             ///medium strands use all angles
             else if (sheetSize == 4 || sheetSize == 5)
             {
-                score = this.allStrandsScore;
+                select_score = this.allStrandsScore();
             }
 
             ///largest strands(5+) use all strands except last two
             else
             {
-                score = this.allStrandsExceptLast;
+                select_score = this.allStrandsExceptLast();
             }
 
 
-     return score;
+     return select_score;
 };
 
 Strand.prototype.twoLongestMiddlePairs = function()
