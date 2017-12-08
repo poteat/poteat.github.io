@@ -3132,9 +3132,9 @@ Strand.prototype.centerStrandScore = function ()
         var ang2 = this.maxAngleOfStrand(0, dist_limit);
         var ang3 = this.maxAngleOfStrand(1, dist_limit);
 
-        console.log("Strand number: ", -1, "Angle: ", ang1);
-        console.log("Strand number: ", 0, "Angle: ", ang2);
-        console.log("Strand number: ", 1, "Angle: ", ang3);
+        console.log("    Strand number: ", -1, "Angle: ", ang1);
+        console.log("    Strand number: ", 0, "Angle: ", ang2);
+        console.log("    Strand number: ", 1, "Angle: ", ang3);
 
         var max_ang = Math.max(ang1, ang2, ang3);
 
@@ -3144,7 +3144,7 @@ Strand.prototype.centerStrandScore = function ()
     else if (ang_pref == 1)
     {
         var av_ang = this.avgAngleOfStrand(0, 4);
-        console.log("Strand number: ", 0, "Angle: ", av_ang);
+        console.log("    Strand number: ", 0, "Angle: ", av_ang);
         return av_ang;
     }
 };
@@ -3174,14 +3174,14 @@ Strand.prototype.longestStrandScore = function ()
     if (ang_pref == 0)
     {
         var max_ang = this.maxAngleOfStrand(longest_strand, Infinity);
-        console.log("Strand number: ", longest_strand, "Angle: ", max_ang);
+        console.log("    Strand number: ", longest_strand, "Angle: ", max_ang);
         return max_ang;
     }
 
     else if (ang_pref == 1)
     {
         var av_ang = this.avgAngleOfStrand(longest_strand, Infinity);
-        console.log("Strand number: ", longest_strand, "Angle: ", av_ang);
+        console.log("    Strand number: ", longest_strand, "Angle: ", av_ang);
         return av_ang;
     }
 };
@@ -3214,8 +3214,8 @@ Strand.prototype.twoLongestStrandsScore = function ()
     {
         var ang1 = this.maxAngleOfStrand(longest_strand, Infinity);
         var ang2 = this.maxAngleOfStrand(second_largest, Infinity);
-        console.log("Strand number: ", longest_strand, "Angle: ", ang1);
-        console.log("Strand number: ", second_largest, "Angle: ", ang2);
+        console.log("    Strand number: ", longest_strand, "Angle: ", ang1);
+        console.log("    Strand number: ", second_largest, "Angle: ", ang2);
         var max_ang = Math.max(ang1, ang2);
         return max_ang;
     }
@@ -3224,8 +3224,8 @@ Strand.prototype.twoLongestStrandsScore = function ()
     {
         var ang1 = this.avgAngleOfStrand(longest_strand, Infinity);
         var ang2 = this.avgAngleOfStrand(second_largest, Infinity);
-        console.log("Strand number: ", longest_strand, "Angle: ", ang1);
-        console.log("Strand number: ", second_largest, "Angle: ", ang2);
+        console.log("    Strand number: ", longest_strand, "Angle: ", ang1);
+        console.log("    Strand number: ", second_largest, "Angle: ", ang2);
         var av_ang = (ang1+ang2) / 2;
         return av_ang;
     }
@@ -3255,6 +3255,7 @@ Strand.prototype.allStrandsScore = function ()
                     }
                 }
             }
+            console.log("    All Strands ", "Angle: ", max_ang);
             return max_ang;
         }
 
@@ -3271,7 +3272,7 @@ Strand.prototype.allStrandsScore = function ()
             }
 
             var av_ang = total_angle/denominator;
-            console.log("All Strands ", "Angle: ", av_ang);         
+            console.log("    All Strands ", "Angle: ", av_ang);         
             return av_ang;
         }
 };
@@ -3360,8 +3361,8 @@ Strand.prototype.twoLongestPairsScore = function ()
     {
         var ang1 = this.maxAngleOfStrand(maxPair[1], Infinity);
         var ang2 = this.maxAngleOfStrand(maxPair[3], Infinity);
-        console.log("Strand number: ", maxPair[1], "Angle: ", ang1);
-        console.log("Strand number: ", maxPair[3], "Angle: ", ang2);
+        console.log("    Strand number: ", maxPair[1], "Angle: ", ang1);
+        console.log("    Strand number: ", maxPair[3], "Angle: ", ang2);
         var max_ang = Math.max(ang1, ang2);
 
         return max_ang;
@@ -3371,8 +3372,8 @@ Strand.prototype.twoLongestPairsScore = function ()
     {
         var ang1 = this.avgAngleOfStrand(maxPair[1], Infinity);
         var ang2 = this.avgAngleOfStrand(maxPair[3], Infinity);
-        console.log("Strand number: ", maxPair[1], "Angle: ", ang1);
-        console.log("Strand number: ", maxPair[2], "Angle: ", ang2);
+        console.log("    Strand number: ", maxPair[1], "Angle: ", ang1);
+        console.log("    Strand number: ", maxPair[2], "Angle: ", ang2);
         var av_ang = (ang1 + ang2) /2 ;
 
         return av_ang;
@@ -3402,7 +3403,7 @@ Strand.prototype.allStrandsExceptLast = function ()
                     }
                 }
             }
-            console.log("All strands except last: ", "Angle: ", max_ang);
+            console.log("    All strands except last: ", "Angle: ", max_ang);
             return max_ang;
         }
 
@@ -3419,7 +3420,7 @@ Strand.prototype.allStrandsExceptLast = function ()
             }
 
             var av_ang = total_angle/denominator;
-            console.log("All strands except last: ", "Angle: ", av_ang);
+            console.log("    All strands except last: ", "Angle: ", av_ang);
             return av_ang;
         }
 };
@@ -3537,8 +3538,8 @@ Strand.prototype.twoLongestMiddlePairs = function()
     {
         var ang1 = this.maxAngleOfStrand(maxPair[1], Infinity);
         var ang2 = this.maxAngleOfStrand(maxPair[3], Infinity);
-        console.log("Strand number: ", maxPair[1], "Angle: ", ang1);
-        console.log("Strand number: ", maxPair[3], "Angle: ", ang2);
+        console.log("    Strand number: ", maxPair[1], "Angle: ", ang1);
+        console.log("    Strand number: ", maxPair[3], "Angle: ", ang2);
         var max_ang = Math.max(ang1, ang2);
 
         return max_ang;
@@ -3549,8 +3550,8 @@ Strand.prototype.twoLongestMiddlePairs = function()
         var ang1 = this.avgAngleOfStrand(maxPair[1], Infinity);
         var ang2 = this.avgAngleOfStrand(maxPair[3], Infinity);
         var av_ang = (ang1 + ang2) /2 ;
-        console.log("Strand number: ", maxPair[1], "Angle: ", ang1);
-        console.log("Strand number: ", maxPair[3], "Angle: ", ang2);
+        console.log("    Strand number: ", maxPair[1], "Angle: ", ang1);
+        console.log("    Strand number: ", maxPair[3], "Angle: ", ang2);
         return av_ang;
     }
 };
