@@ -1175,9 +1175,6 @@ Strand.prototype.draw = function ()
         // Loop through all strand points and set color depending on distance to center
 
 
-
-        if(highlight == 0)
-        {
             for (var i = map._length; i < map.length; i++)
             {
                 var s = map[i];
@@ -1201,7 +1198,6 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
-        }
 
         if(highlight == 1)
         {
@@ -1274,9 +1270,6 @@ Strand.prototype.draw = function ()
             var av_ang = this.avgAngleOfStrand(longest_strand, Infinity);
             ctx.fillText("Longest Strand Av Ang: " + av_ang, 10, 170);
         }
-
-        if(highlight == 0)
-        {
         
             for (i = map._length; i < map.length; i++)
             {
@@ -1301,7 +1294,7 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
-        }
+        
 
         if(highlight == 1)
         {
@@ -1368,9 +1361,6 @@ Strand.prototype.draw = function ()
 
         var map = this.strandMap;
 
-        if(highlight == 0)
-        {
-
             for (var i = map._length; i < map.length; i++)
             {
                 var s = map[i];
@@ -1394,7 +1384,7 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
-        }
+        
 
         if(highlight == 1)
         {
@@ -1518,8 +1508,7 @@ Strand.prototype.draw = function ()
 
             //draw map on grid
 
-        if(highlight == 0)
-        {
+
 
             for (var i = map._length; i < map.length; i++)
             {
@@ -1545,7 +1534,7 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
-        }
+        
 
         if(highlight ==1)
         {
@@ -1667,8 +1656,7 @@ Strand.prototype.draw = function ()
             }
 
             //draw map on grid
-        if(highlight == 0)
-        {
+
 
             for (var i = map._length; i < map.length; i++)
             {
@@ -1694,7 +1682,7 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
-        }
+        
 
         if(highlight == 1)
         {
@@ -1757,9 +1745,6 @@ Strand.prototype.draw = function ()
             ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
         }
 
-        if(highlight == 0)
-        {
-
             for (var i = map._length+1; i < map.length-1; i++)
             {
                 var s = map[i];
@@ -1775,7 +1760,6 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
-        }
 
         if(highlight == 1)
         {
@@ -1839,8 +1823,6 @@ Strand.prototype.draw = function ()
             ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
         }
 
-        if(highlight == 0)
-        {
 
             for (var i = map._length+2; i < map.length-2; i++)
             {
@@ -1857,7 +1839,7 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
-        }
+        
 
         if(highlight == 1)
         {
