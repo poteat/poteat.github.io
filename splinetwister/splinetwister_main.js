@@ -1190,6 +1190,17 @@ set_dl.addEventListener('mouseup', function (evt)
     }
 }, false);
 
+twist_dl.addEventListener('mouseup', function (evt)
+{
+    if(BStrand)
+    {
+        console.log("MOUSECLICK EVENT");
+        twist_dl.text = "Zipping files..."
+
+        BStrand.generateTwistFile();
+    }
+}, false);
+
 var Sliders = new Array();
 
 function Create_Slider(x, y, width, height, text, bar_width, min_val, max_val,

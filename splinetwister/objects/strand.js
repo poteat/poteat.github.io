@@ -1143,6 +1143,8 @@ Strand.prototype.draw = function ()
     //Menu variable
     var ang_generation_method = document.getElementById('twist_menu').value;
     var ang_pref = document.getElementById('angle_menu').value;
+    var highlight = document.getElementById('highlight_menu').value;
+
 
     //Twist generation from the automatically generated center
     if (ang_generation_method == 1)
@@ -1172,29 +1174,51 @@ Strand.prototype.draw = function ()
 
         // Loop through all strand points and set color depending on distance to center
 
-        for (var i = map._length; i < map.length; i++)
-        {
-            var s = map[i];
-            for (var j = s._length; j < s.length; j++)
-            {
-                var p = s[j];
-                var p_draw = this.strandMap_T[i][j];
 
-                if (p != undefined)
+
+        if(highlight == 0)
+        {
+            for (var i = map._length; i < map.length; i++)
+            {
+                var s = map[i];
+                for (var j = s._length; j < s.length; j++)
                 {
-                    if (p.dist(BPerimeter.centralPoint) > dist_limit)
+                    var p = s[j];
+                    var p_draw = this.strandMap_T[i][j];
+
+                    if (p != undefined)
                     {
-                        p_draw.color = "black";
-                        p_draw.size = 1;
-                    }
-                    else
-                    {
-                        p_draw.color = "red";
-                        p_draw.size = 3;
+                        if (p.dist(BPerimeter.centralPoint) > dist_limit)
+                        {
+                            p_draw.color = "black";
+                            p_draw.size = 1;
+                        }
+                        else
+                        {
+                            p_draw.color = "red";
+                            p_draw.size = 3;
+                        }
                     }
                 }
             }
         }
+
+        if(highlight == 1)
+        {
+            if(ang_pref == 0)
+            {
+                this.twistScaleColor(max_ang, 0);
+                this.twistScaleColor(max_ang, -1);
+            }
+
+            if(ang_pref == 1)
+            {
+                this.twistScaleColor(av_ang, 0);
+                this.twistScaleColor(av_ang, -1);
+            }
+        }
+
+
 
         this.drawMap();
         this.drawTrueStrands();
@@ -1250,28 +1274,45 @@ Strand.prototype.draw = function ()
             var av_ang = this.avgAngleOfStrand(longest_strand, Infinity);
             ctx.fillText("Longest Strand Av Ang: " + av_ang, 10, 170);
         }
-        
-        for (i = map._length; i < map.length; i++)
-        {
-            s = map[i];
-            for (j = s._length; j < s.length; j++)
-            {
-                p = s[j];
-                p_draw = this.strandMap_T[i][j];
 
-                if (p != undefined)
+        if(highlight == 0)
+        {
+        
+            for (i = map._length; i < map.length; i++)
+            {
+                s = map[i];
+                for (j = s._length; j < s.length; j++)
                 {
-                    if (i != longest_strand)
+                    p = s[j];
+                    p_draw = this.strandMap_T[i][j];
+
+                    if (p != undefined)
                     {
-                        p_draw.color = "black";
-                        p_draw.size = 1;
-                    }
-                    else
-                    {
-                        p_draw.color = "red";
-                        p_draw.size = 3;
+                        if (i != longest_strand)
+                        {
+                            p_draw.color = "black";
+                            p_draw.size = 1;
+                        }
+                        else
+                        {
+                            p_draw.color = "red";
+                            p_draw.size = 3;
+                        }
                     }
                 }
+            }
+        }
+
+        if(highlight == 1)
+        {
+            if(ang_pref == 0)
+            {
+                this.twistScaleColor(max_ang, longest_strand);
+            }
+            
+            if(ang_pref == 1)
+            {
+                this.twistScaleColor(av_ang, longest_strand);
             }
         }
 
@@ -1327,27 +1368,46 @@ Strand.prototype.draw = function ()
 
         var map = this.strandMap;
 
-        for (var i = map._length; i < map.length; i++)
+        if(highlight == 0)
         {
-            var s = map[i];
-            for (var j = s._length; j < s.length; j++)
-            {
-                var p = s[j];
-                var p_draw = this.strandMap_T[i][j];
 
-                if (p != undefined)
+            for (var i = map._length; i < map.length; i++)
+            {
+                var s = map[i];
+                for (var j = s._length; j < s.length; j++)
                 {
-                    if (i != longest_strand && i != second_largest)
+                    var p = s[j];
+                    var p_draw = this.strandMap_T[i][j];
+
+                    if (p != undefined)
                     {
-                        p_draw.color = "black";
-                        p_draw.size = 1;
-                    }
-                    else
-                    {
-                        p_draw.color = "red";
-                        p_draw.size = 3;
+                        if (i != longest_strand && i != second_largest)
+                        {
+                            p_draw.color = "black";
+                            p_draw.size = 1;
+                        }
+                        else
+                        {
+                            p_draw.color = "red";
+                            p_draw.size = 3;
+                        }
                     }
                 }
+            }
+        }
+
+        if(highlight == 1)
+        {
+            if(ang_pref == 0)
+            {
+                this.twistScaleColor(max_ang, longest_strand);
+                this.twistScaleColor(max_ang, second_largest);
+            }
+            
+            if(ang_pref == 1)
+            {
+                this.twistScaleColor(av_ang, longest_strand);
+                this.twistScaleColor(av_ang, second_largest);
             }
         }
 
@@ -1458,6 +1518,9 @@ Strand.prototype.draw = function ()
 
             //draw map on grid
 
+        if(highlight == 0)
+        {
+
             for (var i = map._length; i < map.length; i++)
             {
                 var s = map[i];
@@ -1482,6 +1545,22 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
+        }
+
+        if(highlight ==1)
+        {
+            if(ang_pref == 0)
+            {
+                this.twistScaleColor(max_ang, maxPair[1]);
+                this.twistScaleColor(max_ang, maxPair[3]);
+            }
+            
+            if(ang_pref == 1)
+            {
+                this.twistScaleColor(av_ang, maxPair[1]);
+                this.twistScaleColor(av_ang, maxPair[3]);
+            }
+        }
 
             this.drawMap();
             this.drawTrueStrands();
@@ -1588,6 +1667,8 @@ Strand.prototype.draw = function ()
             }
 
             //draw map on grid
+        if(highlight == 0)
+        {
 
             for (var i = map._length; i < map.length; i++)
             {
@@ -1613,6 +1694,22 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
+        }
+
+        if(highlight == 1)
+        {
+            if(ang_pref == 0)
+            {
+                this.twistScaleColor(max_ang, maxPair[1]);
+                this.twistScaleColor(max_ang, maxPair[3]);
+            }
+            
+            if(ang_pref == 1)
+            {
+                this.twistScaleColor(av_ang, maxPair[1]);
+                this.twistScaleColor(av_ang, maxPair[3]);
+            }
+        }
 
             this.drawMap();
             this.drawTrueStrands();
@@ -1660,22 +1757,41 @@ Strand.prototype.draw = function ()
             ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
         }
 
-        for (var i = map._length+1; i < map.length-1; i++)
+        if(highlight == 0)
         {
-            var s = map[i];
-            for (var j = s._length; j < s.length; j++)
-            {
-                var p = s[j];
-                var p_draw = this.strandMap_T[i][j];
 
-                if (p != undefined)
+            for (var i = map._length+1; i < map.length-1; i++)
+            {
+                var s = map[i];
+                for (var j = s._length; j < s.length; j++)
                 {
-                    p_draw.color = "red";
-                    p_draw.size = 3;
+                    var p = s[j];
+                    var p_draw = this.strandMap_T[i][j];
+
+                    if (p != undefined)
+                    {
+                        p_draw.color = "red";
+                        p_draw.size = 3;
+                    }
                 }
             }
         }
 
+        if(highlight == 1)
+        {
+            for (var i = map._length+1; i < map.length-1; i++)
+            {
+                if(ang_pref == 0)
+                {
+                    this.twistScaleColor(max_ang, i);
+                }
+
+                if(ang_pref == 1)
+                {
+                    this.twistScaleColor(av_ang, i);
+                }
+            }
+        }
 
         this.drawMap();
         this.drawTrueStrands();
@@ -1723,22 +1839,41 @@ Strand.prototype.draw = function ()
             ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
         }
 
-        for (var i = map._length+2; i < map.length-2; i++)
+        if(highlight == 0)
         {
-            var s = map[i];
-            for (var j = s._length; j < s.length; j++)
-            {
-                var p = s[j];
-                var p_draw = this.strandMap_T[i][j];
 
-                if (p != undefined)
+            for (var i = map._length+2; i < map.length-2; i++)
+            {
+                var s = map[i];
+                for (var j = s._length; j < s.length; j++)
                 {
-                    p_draw.color = "red";
-                    p_draw.size = 3;
+                    var p = s[j];
+                    var p_draw = this.strandMap_T[i][j];
+
+                    if (p != undefined)
+                    {
+                        p_draw.color = "red";
+                        p_draw.size = 3;
+                    }
                 }
             }
         }
 
+        if(highlight == 1)
+        {
+            for (var i = map._length+2; i < map.length-2; i++)
+            {
+                if(ang_pref == 0)
+                {
+                    this.twistScaleColor(max_ang, i);
+                }
+
+                if(ang_pref == 1)
+                {
+                    this.twistScaleColor(av_ang, i);
+                }
+            }
+        }
 
         this.drawMap();
         this.drawTrueStrands();
@@ -1838,6 +1973,8 @@ Strand.prototype.draw = function ()
             ctx.fillText("2 Longest Strand Pair Av Ang: " + av_ang, 10, 170);
 
             //draw map on grid
+        if(highlight == 0)
+        {
 
             for (var i = map._length; i < map.length; i++)
             {
@@ -1863,6 +2000,12 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
+        }
+
+        if(highlight == 1)
+        {
+
+        }
 
             this.drawMap();
             this.drawTrueStrands();
@@ -1884,6 +2027,9 @@ Strand.prototype.draw = function ()
             var av_ang = total_angle/denominator;
             ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
 
+        if(highlight == 0)
+        {
+
             for (var i = map._length+1; i < map.length-1; i++)
             {
                 var s = map[i];
@@ -1899,6 +2045,12 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
+        }
+
+        if(highlight == 1)
+        {
+
+        }
 
             this.drawMap();
             this.drawTrueStrands();
@@ -1920,6 +2072,9 @@ Strand.prototype.draw = function ()
             var av_ang = total_angle/denominator;
             ctx.fillText("Av Overall Ang: " + av_ang, 10, 170);
 
+        if(highlight == 0)
+        {
+
             for (var i = map._length+2; i < map.length-2; i++)
             {
                 var s = map[i];
@@ -1935,7 +2090,12 @@ Strand.prototype.draw = function ()
                     }
                 }
             }
+        }
 
+        if(highlight == 1)
+        {
+
+        }
 
             this.drawMap();
             this.drawTrueStrands();
@@ -2844,6 +3004,8 @@ Strand.prototype.updateStrandMap = function (angle, offset, strand_gap)
             }
         }
 
+        */
+
 
         // Loop through each strand... if the strand has less or eq than 7 samples,
         // destroy it.
@@ -2882,6 +3044,7 @@ Strand.prototype.updateStrandMap = function (angle, offset, strand_gap)
             }
         }
 
+        /*
 
         // On each strand, remove every sample which is outside the hull.
 
@@ -3553,5 +3716,97 @@ Strand.prototype.twoLongestMiddlePairs = function()
         console.log("    Strand number: ", maxPair[1], "Angle: ", ang1);
         console.log("    Strand number: ", maxPair[3], "Angle: ", ang2);
         return av_ang;
+    }
+};
+
+Strand.protoype.twistScaleColor = function(maxOrAv, strand_num)
+{
+    var ang_generation_method = document.getElementById('twist_menu').value;
+    var ang_pref = document.getElementById('angle_menu').value;
+
+    if(ang_generation_method == 1)
+    {
+        dist_limit == 4;
+    }
+    else
+    {
+        dist_limit == Infinity;
+    }
+
+    var map = this.strandMap;
+    var s = map[strand_num];
+    var lowestAng = maxOrAv;
+    var highestAng = maxOrAv;
+
+    for (var i = s._length; i < s.length; i++)
+    {
+
+        if(ang_generation_method != 4 && ang_generation_method != 5)
+        {
+            var p1 = s[i];
+            var p2 = s[i + 1];
+            var p3 = s_left[i];
+            var p4 = s_left[i + 1];
+
+            var defined = p1 && p2 && p3 && p4;
+            var in_range = defined &&
+                (p1.dist(center) < dist_limit ||
+                    p2.dist(center) < dist_limit ||
+                    p3.dist(center) < dist_limit ||
+                    p4.dist(center) < dist_limit);
+
+            if (in_range)
+            {
+                var ang1 = this.twistAngle(p1, p2, p3, p4);
+                if(ang1 != Infinity && ang1 != -Infinity)
+                {
+                    if (ang1 < lowestAng)
+                    (lowestAng = ang1)
+                    if (ang1 > highestAng)
+                    (highestAng = ang1)
+                }
+            }
+        }
+
+        var p1 = s[i];
+        var p2 = s[i + 1];
+        var p3 = s_right[i];
+        var p4 = s_right[i + 1];
+
+        var defined = p1 && p2 && p3 && p4;
+        var in_range = defined &&
+            (p1.dist(center) < dist_limit ||
+                p2.dist(center) < dist_limit ||
+                p3.dist(center) < dist_limit ||
+                p4.dist(center) < dist_limit);
+
+        if (in_range)
+        {
+            if(ang2 != Infinity && ang2 != -Infinity)
+            {
+                var ang2 = this.twistAngle(p1, p2, p3, p4)
+                if (ang2 < lowestAng)
+                (lowestAng = ang2)
+                if (ang2 > highestAng)
+                (highestAng = ang2)
+            }
+        }
+
+
+        if(ang_generation_method != 4 && ang_generation_method != 5)
+        {
+            if(ang_pref == 0)
+            {
+                var angle = Math.max(ang1, ang2);
+            }
+            if(ang_pref == 1)
+            {
+                var angle = (ang1+ang2)/2;
+            }
+        }
+        
+        angle = 255*(angle-lowestAng)/highestAng;
+        p_draw.color = rgb(0,0,angle);
+        p_draw.size = 1;
     }
 };
