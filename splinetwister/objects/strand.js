@@ -3809,4 +3809,7 @@ Strand.protoype.twistScaleColor = function(maxOrAv, strand_num)
         p_draw.color = rgb(0,0,angle);
         p_draw.size = 1;
     }
+
+    this.drawMap();
+    this.drawTrueStrands();
 };
