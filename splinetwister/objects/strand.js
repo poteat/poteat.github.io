@@ -1421,97 +1421,94 @@ Strand.prototype.draw = function ()
 
         for (var i = map._length; i < map.length - 2; i++)
         {
-            var s = map[i];
-            temp1 = s.length - s._length;
-            temp2 = map[i+1].length - map[i+1]._length;
+                var s = map[i];
+                temp1 = s.length - s._length;
+                temp2 = map[i+1].length - map[i+1]._length;
 
-            if(i != map._length)
-            {
-                if (temp1 > temp2)
+                if(i != map._length)
                 {
-                    if (temp2 > maxPair[0] || temp2 == maxPair[0])
+                    if (temp1 > temp2)
                     {
-                        maxPair[0] = temp2;
-                        maxPair[1] = i;
-                        maxPair[2] = i+1;
+                        if (temp2 > maxPair[0] || temp2 == maxPair[0])
+                        {
+                            maxPair[0] = temp2;
+                            maxPair[1] = i;
+                            maxPair[2] = i+1;
 
+                        }
+                    }
+
+                    else
+                    {
+                        if (temp1 > maxPair[0] || temp1 == maxPair[0])
+                        {
+                            maxPair[0] = temp1;
+                            maxPair[1] = i;
+                            maxPair[2] = i + 1;
+                        }
                     }
                 }
-
-                else
-                {
-                    if (temp1 > maxPair[0] || temp1 == maxPair[0])
-                    {
-                        maxPair[0] = temp1;
-                        maxPair[1] = i;
-                        maxPair[2] = i + 1;
-                    }
-                }
-            }
         }
 
         //loop for second pair
 
         for (var i = map._length; i < map.length - 2; i++)
         {
-            var s = map[i];
+                var s = map[i];
 
-            temp1 = s.length - s._length;
-            temp2 = map[i+1].length - map[i+1]._length;
+                temp1 = s.length - s._length;
+                temp2 = map[i+1].length - map[i+1]._length;
 
-            if (i != map._length)
-            {
-
-                if (temp1 > temp2)
+                if (i != map._length)
                 {
-                    if ((temp2 > maxPair[5] || temp2 == maxPair[5]) && i != maxPair[1])
-                    {
-                        maxPair[5] = temp2;
-                        maxPair[3] = i;
-                        maxPair[4] = i+1;
 
+                    if (temp1 > temp2)
+                    {
+                        if ((temp2 > maxPair[5] || temp2 == maxPair[5]) && i != maxPair[1])
+                        {
+                            maxPair[5] = temp2;
+                            maxPair[3] = i;
+                            maxPair[4] = i+1;
+
+                        }
+                    }
+
+                    else
+                    {
+                        if ((temp1 > maxPair[5] || temp1 == maxPair[5]) && i != maxPair[1])
+                        {
+                            maxPair[5] = temp1;
+                            maxPair[3] = i;
+                            maxPair[4] = i + 1;
+                        }
                     }
                 }
-
-                else
-                {
-                    if ((temp1 > maxPair[5] || temp1 == maxPair[5]) && i != maxPair[1])
-                    {
-                        maxPair[5] = temp1;
-                        maxPair[3] = i;
-                        maxPair[4] = i + 1;
-                    }
-                }
-            }
         }
 
-            //Use two longest strand pairs to find angle av or max
-            //Max angle case
+        //Use two longest strand pairs to find angle av or max
+        //Max angle case
 
-            if (ang_pref == 0)
-            {
+        if (ang_pref == 0)
+        {
                 var ang1 = this.maxAngleOfStrand(maxPair[1], Infinity);
                 var ang2 = this.maxAngleOfStrand(maxPair[3], Infinity);
                 var max_ang = Math.max(ang1, ang2);
 
                 ctx.fillText("2 Longest Strand Pair Max Ang: " + max_ang, 10, 170);
-            }
+        }
 
-            else if (ang_pref == 1)
-            {
+        else if (ang_pref == 1)
+        {
                 var ang1 = this.avgAngleOfStrand(maxPair[1], Infinity);
                 var ang2 = this.avgAngleOfStrand(maxPair[3], Infinity);
                 var av_ang = (ang1 + ang2)/2;
 
                 ctx.fillText("2 Longest Strand Pair Av Ang: " + av_ang, 10, 170);
-            }
+        }
 
-            //draw map on grid
-
-
-
-            for (var i = map._length; i < map.length; i++)
-            {
+        //draw map on grid
+        for (var i = map._length; i < map.length; i++)
+        {
                 var s = map[i];
                 for (var j = s._length; j < s.length; j++)
                 {
@@ -1533,11 +1530,11 @@ Strand.prototype.draw = function ()
                         }
                     }
                 }
-            }
+        }
         
 
-            if(highlight ==1)
-            {
+        if(highlight == 1)
+        {
                 if(ang_pref == 0)
                 {
                     this.twistScaleColor(max_ang, maxPair[1]);
@@ -1549,10 +1546,10 @@ Strand.prototype.draw = function ()
                     this.twistScaleColor(av_ang, maxPair[1]);
                     this.twistScaleColor(av_ang, maxPair[3]);
                 }
-            }
+        }
 
-                this.drawMap();
-                this.drawTrueStrands();
+        this.drawMap();
+        this.drawTrueStrands();
     }
 
     //Twist generation with the two longest strand pairs that are not on the ends
@@ -2052,7 +2049,7 @@ Strand.prototype.draw = function ()
 
         this.drawMap();
         this.drawTrueStrands();
-        
+
         }
 
         ///largest strands(5+) use all strands except last two
@@ -3625,7 +3622,7 @@ Strand.prototype.automaticMethodSelection = function ()
      return select_score;
 };
 
-Strand.prototype.twoLongestMiddlePairs = function()
+Strand.prototype.twoLongestMiddlePairs = function ()
 {
  var ang_pref = document.getElementById('angle_menu').value;
     //find the two longest strand pairs
@@ -3726,28 +3723,33 @@ Strand.prototype.twoLongestMiddlePairs = function()
     }
 };
 
-Strand.protoype.twistScaleColor = function(maxOrAv, strand_num)
+Strand.prototype.twistScaleColor = function (maxOrAv, strand_num)
 {
     var ang_generation_method = document.getElementById('twist_menu').value;
     var ang_pref = document.getElementById('angle_menu').value;
 
     if(ang_generation_method == 1)
     {
-        dist_limit == 4;
+        var dist_limit = 4;
     }
     else
     {
-        dist_limit == Infinity;
+        var dist_limit = Infinity;
     }
 
     var map = this.strandMap;
     var s = map[strand_num];
+    var s_left = map[strand_num-1];
+    var s_right = map[strand_num+1];
 
     var lowestAng = maxOrAv;
     var highestAng = maxOrAv;
 
     for (var i = s._length; i < s.length; i++)
     {
+        var p = this.strandMap[i];
+        var center = BPerimeter.centralPoint;
+        var p_draw = this.strandMap_T[strand_num][i];
 
         if(ang_generation_method != 4 && ang_generation_method != 5)
         {
@@ -3813,8 +3815,11 @@ Strand.protoype.twistScaleColor = function(maxOrAv, strand_num)
             }
         }
         
-        angle = 255*(angle-lowestAng)/highestAng;
-        p_draw.color = rgb(0,0,angle);
+        angle = 255*((angle-lowestAng)/highestAng);
+        p_draw.color = "rgb(0,0,angle)";
+        console.log(angle);
+        console.log(lowestAng);
+        console.log(highestAng);
         p_draw.size = 3;
     }
 
