@@ -3727,6 +3727,14 @@ Strand.prototype.twistScaleColor = function (maxOrAv, strand_num)
 {
     var ang_generation_method = document.getElementById('twist_menu').value;
     var ang_pref = document.getElementById('angle_menu').value;
+    var map = this.strandMap;
+    var s = map[strand_num];
+    var s_left = map[strand_num-1];
+    var s_right = map[strand_num+1];
+    var lowestAng = maxOrAv;
+    var highestAng = maxOrAv;
+    var i = strand_num;
+    var center = BPerimeter.centralPoint;
 
     if(ang_generation_method == 1)
     {
@@ -3737,19 +3745,10 @@ Strand.prototype.twistScaleColor = function (maxOrAv, strand_num)
         var dist_limit = Infinity;
     }
 
-    var map = this.strandMap;
-    var s = map[strand_num];
-    var s_left = map[strand_num-1];
-    var s_right = map[strand_num+1];
-
-    var lowestAng = maxOrAv;
-    var highestAng = maxOrAv;
-
-    for (var i = s._length; i < s.length; i++)
+    for (var j = i._length; j < i.length; j++)
     {
-        var p = this.strandMap[i];
-        var center = BPerimeter.centralPoint;
-        var p_draw = this.strandMap_T[strand_num][i];
+        var p = s[j];
+        var p_draw = this.strandMap_T[i][j];
 
         if(ang_generation_method != 4 && ang_generation_method != 5)
         {
@@ -3760,7 +3759,7 @@ Strand.prototype.twistScaleColor = function (maxOrAv, strand_num)
 
             var defined = p1 && p2 && p3 && p4;
             var in_range = defined &&
-                (p1.dist(center) < dist_limit ||
+                (   p1.dist(center) < dist_limit ||
                     p2.dist(center) < dist_limit ||
                     p3.dist(center) < dist_limit ||
                     p4.dist(center) < dist_limit);
@@ -3777,7 +3776,7 @@ Strand.prototype.twistScaleColor = function (maxOrAv, strand_num)
                 }
             }
         }
-
+        
         var p1 = s[i];
         var p2 = s[i + 1];
         var p3 = s_right[i];
@@ -3817,10 +3816,10 @@ Strand.prototype.twistScaleColor = function (maxOrAv, strand_num)
         
         angle = 255*((angle-lowestAng)/highestAng);
         p_draw.color = "rgb(0,0,angle)";
-        console.log(angle);
+        console.log("angle:", angle);
         console.log(lowestAng);
         console.log(highestAng);
-        p_draw.size = 3;
+        p_draw.size = 1;
     }
 
     this.drawMap();
