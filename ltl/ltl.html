@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
+<html>
+	<head>
+		<title>Michael's Lab</title>
+		<link rel=stylesheet href="../main.css" type="text/css">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+
+		<script src="../csi.js"></script>
+		<script src="../navbar.js"></script>
+		<div data-include="../navbar.html"></div>
+
+		<script src="ltl.js"></script>
+		<script src="Queue.src.js"></script> <!-- Performant stack library by Kate Morley -->
+		<script src="mermaid.js"></script> <!-- Generate diagrams via Markdown, MIT license -->
+	</head>
+
+	<body>
+		<h1>Michael's Lab</h1>
+
+		<h2>LTL Parser.</h2>
+
+		<b>Cases to try:</b><br>
+<pre><code>1 1 +     // Should be 2
+20 73 27 + / 3 * 3 +     // Should be 18
+113 355 / 3533 .0003 / 1 - *     // Should be pi to 14 digits</code></pre>
+
+		<p>
+		For now, input a RPN expression with floats and + - * / space-delimited.  The numerical result will be generated.
+		</p>
+
+		<b>LTL Expression:</b><br>
+		<input type="text" id="ltl_expression"><br><br>
+
+		<b>Output:</b><br>
+		<output id="ltl_output"></output><br><br>
+
+		<b>Syntax tree:</b><br>
+		<div class="mermaid" id="syntax_tree"></div><br><br>
+
+		<b>Node list:</b><br>
+		<textarea disabled id="node_list" rows="40" cols="80"></textarea><br><br>
+
+	</body>
+</html>
