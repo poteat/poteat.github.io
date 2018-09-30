@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
+<html>
+
+<head>
+  <title>diagram.cat</title>
+  <link rel=stylesheet href="diagramcat.css" type="text/css">
+</head>
+
+<body>
+
+  <div class="split-container">
+    <div id="left_split" class="split split-horizontal">
+      <p>[DBL-CLICK] for new block<br>
+        [CLICK] things to select<br>
+        [TYPE] to add text to selected thing<br>
+        [DEL] to delete selected thing<br>
+        [CLICK] and [DRAG] mouse to connect blocks<br>
+
+        <div width=100% class="mermaid" id="mermaid_svg"></div>
+    </div>
+
+    <div id="right_split" class="split split-horizontal">
+      <p>mermaid syntax:</p>
+      <textarea id="mermaid_syntax_div" rows="20" cols="60" spellcheck=false></textarea>
+    </div>
+  </div>
+
+
+  <script src="https://unpkg.com/split.js/split.min.js"></script>
+  <script src="https://unpkg.com/mermaid@8.0.0-rc.8/dist/mermaid.js"></script>
+  <script type="text/javascript" src="diagramcat.js"></script>
+</body>
+
+</html>
