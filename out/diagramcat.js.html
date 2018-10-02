@@ -1,4 +1,32 @@
-var lorem_wordlist = [
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: diagramcat.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: diagramcat.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var lorem_wordlist = [
   "ante",
   "condimentum",
   "fringilla",
@@ -171,7 +199,7 @@ var mouseDown = null;
 var mouseUp = null;
 
 var regex = {
-  valid: /(?:^\d+ -->\| .* \| \d+$)|(?:^\d+\[[\w <>?!]+\]$)|(?:^graph (?:TD|LR)$)|(?:classDef \w+ .+$)|(?:^class .+ \w+$)/gm,
+  valid: /(?:^\d+ -->\| .* \| \d+$)|(?:^\d+\[[\w &lt;>?!]+\]$)|(?:^graph (?:TD|LR)$)|(?:classDef \w+ .+$)|(?:^class .+ \w+$)/gm,
   header: /^graph (?:TD|LR)/g,
   block: /^(\d+)(\[)(.+)(\])$/gm,
   blockEmpty: /^(\d+\[)(?=\]$)/gm,
@@ -209,7 +237,7 @@ document.addEventListener("dblclick", evt => {
     evt.target.localName == "body" ||
     evt.target.localName == "p" ||
     evt.target.localName == "svg" ||
-    (evt.target.localName == "div" && evt.target.parentNode.localName == "div")
+    (evt.target.localName == "div" &amp;&amp; evt.target.parentNode.localName == "div")
   ) {
     blocks.push({
       i: blocks.length,
@@ -250,7 +278,7 @@ document.addEventListener("mousedown", evt => {
 document.addEventListener("mousemove", evt => {
   destroyConnectionLine();
 
-  if (mouseDown != null && mouseDown.active && mouseDown.blockId != -1) {
+  if (mouseDown != null &amp;&amp; mouseDown.active &amp;&amp; mouseDown.blockId != -1) {
     var connectionLine = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "line"
@@ -287,7 +315,7 @@ document.addEventListener("mouseup", evt => {
 
   // Detect block/arrow selection click
   if (mouseDown != null) {
-    if (mouseDown.recent && !farEnough) {
+    if (mouseDown.recent &amp;&amp; !farEnough) {
       blockId = getBlockFromClick(evt);
       arrowId = getArrowFromClick(evt);
 
@@ -306,7 +334,7 @@ document.addEventListener("mouseup", evt => {
     fromBlockId = mouseDown.blockId;
     toBlockId = getBlockFromClick(evt);
 
-    if (toBlockId != -1 && farEnough) {
+    if (toBlockId != -1 &amp;&amp; farEnough) {
       blocks[fromBlockId].to.push({
         i: toBlockId,
         s: ""
@@ -325,7 +353,7 @@ document.addEventListener("keyup", evt => {
   // If a block selected, and we pressed alt + num,
   // assign color to block and update mermaid graph
   [selectedBlock, selectedArrow] = getSelectedObject();
-  if (selectedBlock != null && blocks[selectedBlock] && evt.altKey) {
+  if (selectedBlock != null &amp;&amp; blocks[selectedBlock] &amp;&amp; evt.altKey) {
     var index = Number(evt.key);
     var changed = false;
     if (index != NaN) {
@@ -381,7 +409,7 @@ getBlockFromClick = evt => {
 
 getArrowFromClick = evt => {
   if (
-    evt.target.localName == "span" &&
+    evt.target.localName == "span" &amp;&amp;
     evt.target.parentNode.localName == "div"
   ) {
     var arrowElement = evt.target.parentNode.parentNode.parentNode.parentNode;
@@ -389,7 +417,7 @@ getArrowFromClick = evt => {
     // Get index of arrow element
     for (var i = 0; (arrowElement = arrowElement.previousSibling); i++);
     var arrowId = i;
-  } else if (evt.target.localName != "rect" && evt.target.localName != "div") {
+  } else if (evt.target.localName != "rect" &amp;&amp; evt.target.localName != "div") {
     var arrows = document.getElementsByClassName("edgePath");
 
     // Build a list of line segments and their parent arrows
@@ -436,8 +464,8 @@ getArrowFromClick = evt => {
 
       if (len_sq != 0) param = dot / len_sq;
 
-      var xx = param < 0 ? x1 : param > 1 ? x2 : x1 + param * C;
-      var yy = param < 0 ? y1 : param > 1 ? y2 : y1 + param * D;
+      var xx = param &lt; 0 ? x1 : param > 1 ? x2 : x1 + param * C;
+      var yy = param &lt; 0 ? y1 : param > 1 ? y2 : y1 + param * D;
 
       var dx = x - xx;
       var dy = y - yy;
@@ -460,10 +488,10 @@ getArrowFromClick = evt => {
     // Get closest segment if one exists.
     if (segments.length > 0) {
       var closestSegment = segments.reduce((a, b) => {
-        return a.dist < b.dist ? a : b;
+        return a.dist &lt; b.dist ? a : b;
       });
 
-      if (closestSegment.dist < 10) {
+      if (closestSegment.dist &lt; 10) {
         arrowId = closestSegment.arrow;
       } else {
         arrowId = -1;
@@ -492,7 +520,7 @@ selectBlockText = blockId => {
 
   var block = null;
   var reg = new RegExp(regex.block);
-  for (var i = 0; i <= blockId; i++) {
+  for (var i = 0; i &lt;= blockId; i++) {
     block = reg.exec(textArea.value);
     if (Number(block[1]) == blockId) {
       break;
@@ -512,7 +540,7 @@ selectArrow = arrowId => {
 
   var arrow = null;
   var reg = new RegExp(regex.arrow);
-  for (var i = 0; i <= arrowId; i++) {
+  for (var i = 0; i &lt;= arrowId; i++) {
     arrow = reg.exec(textArea.value);
   }
 
@@ -548,7 +576,7 @@ sanitizeMermaidSyntax = mermaid_syntax => {
   var arrows = forEachMatch(regex.arrow, mermaid_syntax, match => {
     var from = Number(match[1]);
     var to = Number(match[5]);
-    if (blockIndices.includes(from) && blockIndices.includes(to)) {
+    if (blockIndices.includes(from) &amp;&amp; blockIndices.includes(to)) {
       return match[0];
     }
   });
@@ -570,7 +598,7 @@ sanitizeMermaidSyntax = mermaid_syntax => {
     return (
       match[1] +
       match[2] +
-      wrap(match[3].replace(/<br>/g, " "), 32, "<br>") +
+      wrap(match[3].replace(/&lt;br>/g, " "), 32, "&lt;br>") +
       match[4]
     );
   });
@@ -587,7 +615,7 @@ getRandomPhrase = (wordlist, n) => {
   s = "";
   words = wordlist.slice();
 
-  for (i = 0; i < n; i++) {
+  for (i = 0; i &lt; n; i++) {
     var rand = Math.floor(Math.random() * (words.length - 1)) + 1;
     s += words[rand] + " ";
     words.splice(rand, 1);
@@ -643,7 +671,7 @@ forEachMatch = (pattern, target, f) => {
   if (fullMatch != null) {
     var numMatches = fullMatch.length;
     var match = null;
-    for (i = 0; i < numMatches; i++) {
+    for (i = 0; i &lt; numMatches; i++) {
       match = pattern.exec(target);
       var result = f(match);
       if (result != undefined) {
@@ -713,7 +741,7 @@ getMermaidSyntax = blocks => {
     t = "class ";
     var found = false;
     for (block of blocks) {
-      if (block && block.color == color) {
+      if (block &amp;&amp; block.color == color) {
         t += block.i + ",";
         found = true;
       }
@@ -740,7 +768,7 @@ getSelectedObject = () => {
     var start = textarea.selectionStart;
 
     forEachMatch(regex.block, textarea.value, match => {
-      if (start >= match.index && start <= match.index + match[0].length) {
+      if (start >= match.index &amp;&amp; start &lt;= match.index + match[0].length) {
         selectedBlock = Number(match[1]);
         return null;
       }
@@ -748,7 +776,7 @@ getSelectedObject = () => {
 
     var currentArrow = 0;
     forEachMatch(regex.arrow, textarea.value, match => {
-      if (start >= match.index && start <= match.index + match[0].length) {
+      if (start >= match.index &amp;&amp; start &lt;= match.index + match[0].length) {
         selectedArrow = currentArrow;
         return null;
       }
@@ -821,3 +849,26 @@ clientCoordsToObject = (x, y, obj) => {
     return null;
   }
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#clientCoordsToObject">clientCoordsToObject</a></li><li><a href="global.html#highlightSelected">highlightSelected</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 02 2018 14:19:30 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
