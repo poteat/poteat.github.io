@@ -2,39 +2,39 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on MP&#39;s Projects and Papers</title>
-    <link>mpote.at/categories/</link>
+    <link>/categories/</link>
     <description>Recent content in Categories on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 25 Jan 2019 20:35:20 -0500</lastBuildDate>
     
-	<atom:link href="mpote.at/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Bioinformatics</title>
-      <link>mpote.at/categories/bioinformatics/</link>
+      <link>/categories/bioinformatics/</link>
       <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       
-      <guid>mpote.at/categories/bioinformatics/</guid>
+      <guid>/categories/bioinformatics/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Life</title>
-      <link>mpote.at/categories/life/</link>
+      <link>/categories/life/</link>
       <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
       
-      <guid>mpote.at/categories/life/</guid>
+      <guid>/categories/life/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Simulation</title>
-      <link>mpote.at/categories/simulation/</link>
+      <link>/categories/simulation/</link>
       <pubDate>Fri, 25 Jan 2019 20:58:30 -0500</pubDate>
       
-      <guid>mpote.at/categories/simulation/</guid>
+      <guid>/categories/simulation/</guid>
       <description></description>
     </item>
     

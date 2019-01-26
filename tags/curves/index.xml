@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Curves on MP&#39;s Projects and Papers</title>
-    <link>mpote.at/tags/curves/</link>
+    <link>/tags/curves/</link>
     <description>Recent content in Curves on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 25 Jan 2019 17:40:45 -0500</lastBuildDate>
     
-	<atom:link href="mpote.at/tags/curves/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/curves/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Quadratic Bezier Curves</title>
-      <link>mpote.at/post/bioinformatics/quadratic-bezier-curves/</link>
+      <link>/post/bioinformatics/quadratic-bezier-curves/</link>
       <pubDate>Fri, 25 Jan 2019 17:40:45 -0500</pubDate>
       
-      <guid>mpote.at/post/bioinformatics/quadratic-bezier-curves/</guid>
+      <guid>/post/bioinformatics/quadratic-bezier-curves/</guid>
       <description>Quadratic Bézier curves are explicit parametric functions of the following form:
  $$ x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\ y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\ t \in \mathbb R[0,1] $$  These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
 Drag the control points around to see the curve change.</description>

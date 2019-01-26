@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Regression on MP&#39;s Projects and Papers</title>
-    <link>mpote.at/tags/regression/</link>
+    <link>/tags/regression/</link>
     <description>Recent content in Regression on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 25 Jan 2019 20:35:20 -0500</lastBuildDate>
     
-	<atom:link href="mpote.at/tags/regression/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/regression/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Oriented Bounding-Box Heuristic</title>
-      <link>mpote.at/post/bioinformatics/oriented-bounding-box-heuristic/</link>
+      <link>/post/bioinformatics/oriented-bounding-box-heuristic/</link>
       <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       
-      <guid>mpote.at/post/bioinformatics/oriented-bounding-box-heuristic/</guid>
+      <guid>/post/bioinformatics/oriented-bounding-box-heuristic/</guid>
       <description>The 2-dimensional minimum-area oriented bounding box problem is as follows: Given a set of coplanar points, how can we efficiently find the smallest rectangle which encloses these points? Additionally, that rectangle oriented at any angle with respect to the coordinate system.
 One interesting estimate for the solution, which guarantees &amp;ldquo;pretty good&amp;rdquo; results in O(n) time is a natural extension of orthogonal linear regression. Specifically, we assume that the minimum rectangle is aligned to the orthogonal &amp;ldquo;line of best fit&amp;rdquo; of the point set.</description>
     </item>
     
     <item>
       <title>One-Dimensional Linear Regression</title>
-      <link>mpote.at/post/bioinformatics/one-dimensional-linear-regression/</link>
+      <link>/post/bioinformatics/one-dimensional-linear-regression/</link>
       <pubDate>Fri, 25 Jan 2019 18:27:02 -0500</pubDate>
       
-      <guid>mpote.at/post/bioinformatics/one-dimensional-linear-regression/</guid>
+      <guid>/post/bioinformatics/one-dimensional-linear-regression/</guid>
       <description>The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
  $$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$  Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.</description>
     </item>
