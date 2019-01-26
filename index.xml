@@ -44,7 +44,7 @@ Angle 2</description>
       <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       
       <guid>/post/bioinformatics/oriented-bounding-box-heuristic/</guid>
-      <description>The 2-dimensional minimum-area oriented bounding box problem is as follows: Given a set of coplanar points, how can we efficiently find the smallest rectangle which encloses these points? Additionally, that rectangle oriented at any angle with respect to the coordinate system.
+      <description>The 2-dimensional minimum-area oriented bounding box problem is as follows: Given a set of coplanar points, how can we efficiently find the smallest rectangle which encloses these points? Additionally, that rectangle can be oriented at any angle with respect to the coordinate system.
 One interesting estimate for the solution, which guarantees &amp;ldquo;pretty good&amp;rdquo; results in O(n) time is a natural extension of orthogonal linear regression. Specifically, we assume that the minimum rectangle is aligned to the orthogonal &amp;ldquo;line of best fit&amp;rdquo; of the point set.</description>
     </item>
     
