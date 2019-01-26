@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Demo on MP&#39;s Projects and Papers</title>
+    <link>mpote.at/tags/demo/</link>
+    <description>Recent content in Demo on MP&#39;s Projects and Papers</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 25 Jan 2019 20:58:30 -0500</lastBuildDate>
+    
+	<atom:link href="mpote.at/tags/demo/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Double Pendulum</title>
+      <link>mpote.at/post/simulation/double-pendulum/</link>
+      <pubDate>Fri, 25 Jan 2019 20:58:30 -0500</pubDate>
+      
+      <guid>mpote.at/post/simulation/double-pendulum/</guid>
+      <description>This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
+   Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer
+Simulation parameters:
+Angle 1
+Angle 2</description>
+    </item>
+    
+    <item>
+      <title>Oriented Bounding-Box Heuristic</title>
+      <link>mpote.at/post/bioinformatics/oriented-bounding-box-heuristic/</link>
+      <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
+      
+      <guid>mpote.at/post/bioinformatics/oriented-bounding-box-heuristic/</guid>
+      <description>The 2-dimensional minimum-area oriented bounding box problem is as follows: Given a set of coplanar points, how can we efficiently find the smallest rectangle which encloses these points? Additionally, that rectangle oriented at any angle with respect to the coordinate system.
+One interesting estimate for the solution, which guarantees &amp;ldquo;pretty good&amp;rdquo; results in O(n) time is a natural extension of orthogonal linear regression. Specifically, we assume that the minimum rectangle is aligned to the orthogonal &amp;ldquo;line of best fit&amp;rdquo; of the point set.</description>
+    </item>
+    
+    <item>
+      <title>One-Dimensional Linear Regression</title>
+      <link>mpote.at/post/bioinformatics/one-dimensional-linear-regression/</link>
+      <pubDate>Fri, 25 Jan 2019 18:27:02 -0500</pubDate>
+      
+      <guid>mpote.at/post/bioinformatics/one-dimensional-linear-regression/</guid>
+      <description>The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
+ $$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$  Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.</description>
+    </item>
+    
+    <item>
+      <title>Quadratic Bezier Curves</title>
+      <link>mpote.at/post/bioinformatics/quadratic-bezier-curves/</link>
+      <pubDate>Fri, 25 Jan 2019 17:40:45 -0500</pubDate>
+      
+      <guid>mpote.at/post/bioinformatics/quadratic-bezier-curves/</guid>
+      <description>Quadratic Bézier curves are explicit parametric functions of the following form:
+ $$ x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\ y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\ t \in \mathbb R[0,1] $$  These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
+Drag the control points around to see the curve change.</description>
+    </item>
+    
+  </channel>
+</rss>
