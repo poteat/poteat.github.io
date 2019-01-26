@@ -6,10 +6,24 @@
     <description>Recent content on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 25 Jan 2019 20:58:30 -0500</lastBuildDate>
+    <lastBuildDate>Sat, 26 Jan 2019 12:14:54 -0500</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Contact</title>
+      <link>/contact/</link>
+      <pubDate>Sat, 26 Jan 2019 12:14:54 -0500</pubDate>
+      
+      <guid>/contact/</guid>
+      <description>You can contact me using the below form. If it&amp;rsquo;s more convenient, I can also be contacted on Github or LinkedIn.
+ f = (s) = {return s.replace(/[a-zA-Z]/g,function(c){return String.fromCharCode((c=(c=c.charCodeAt(0)+13)?c:c-26);});} window.onload = () = {document.getElementById(&#34;contact-form&#34;).action += f(&#34;zr@zcbgr.ng&#34;)};  Your Email
+Your Name
+Message
+
+ </description>
+    </item>
     
     <item>
       <title>Double Pendulum</title>
@@ -73,9 +87,9 @@ Drag the control points around to see the curve change.</description>
       
       <guid>/papers/</guid>
       <description>You can find abstracts, figures, citations and more at my ResearchGate profile.
- Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Quantification of Twist from the Central Lines of β-strands&amp;rdquo;, Journal of Computational Biology (JCB), January 2018, 25 (1): 114-120
+ Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Quantification of Twist from the Central Lines of β-strands&amp;rdquo;, Journal of Computational Biology, January 2018, 25 (1): 114-120
  Poteat, M., He, J. &amp;ldquo;Modeling Beta-sheets using Iterative Bezier Surface Fitting on Cryo-EM Density Maps&amp;rdquo;, Molecular Based Mathematical Biology, Apr 2017; 5:31–39
- Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Analysis of ß-strand Twist from the 3-dimensional Image of a Protein&amp;rdquo;, Computational Structural Bioinformatics Workshop (CSBW) 2017 in conjunction with ACM-BCB 2017, Pages 650-654.</description>
+ Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Analysis of ß-strand Twist from the 3-dimensional Image of a Protein&amp;rdquo;, Computational Structural Bioinformatics Workshop 2017 in conjunction with ACM-BCB 2017, Pages 650-654.</description>
     </item>
     
     <item>
