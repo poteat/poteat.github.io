@@ -6,10 +6,20 @@
     <description>Recent content on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 26 Jan 2019 12:14:54 -0500</lastBuildDate>
+    <lastBuildDate>Mon, 28 Jan 2019 13:59:19 -0500</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Quadtree Particle Simulation</title>
+      <link>/post/simulation/quadtree-particle-simulation/</link>
+      <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
+      
+      <guid>/post/simulation/quadtree-particle-simulation/</guid>
+      <description>A small particle simulation was written in JS, utilizing a simplified (constant depth) quadtree structure. The model includes forces between nearby particles, so rather than invoke a O(n^2) operation to compute the net force for each particle, a quadtree is used so each particle may efficiently access its neighbors.
+The forces used are tuned to provide some amount of clustering, but also to provide global homogeneity to prevent too many particles appearing in one quadtree section (which would decrease cpu-time efficiency).</description>
+    </item>
     
     <item>
       <title>Contact</title>
