@@ -4,3 +4,8 @@ canvas {
   border-width: 1px;
   margin-bottom: 40px;
 }
+
+.monospace {
+  font-family: monospace;
+  white-space: pre;
+}
