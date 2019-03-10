@@ -4,11 +4,11 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Mathematica Steps to LaTeX [Beta]</title>
+	<title>Mathematica Steps to LaTeX [WiP]</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 	<meta name="generator" content="Hugo 0.53" />
-	<meta property="og:title" content="Mathematica Steps to LaTeX [Beta]" />
+	<meta property="og:title" content="Mathematica Steps to LaTeX [WiP]" />
 <meta property="og:description" content="A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
 Mathematica&rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution." />
 <meta property="og:type" content="article" />
@@ -60,7 +60,7 @@ Mathematica&rsquo;s internal algorithms for performing various symbolic computat
 <main class="main" role="main">
 	<article class="post">
 		<header class="post__header">
-			<h1 class="post__title">Mathematica Steps to LaTeX [Beta]</h1>
+			<h1 class="post__title">Mathematica Steps to LaTeX [WiP]</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
 	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
@@ -87,7 +87,7 @@ uses is nothing like the manual way humans would find the solution.</p>
 <p>For simple cases, a workaround is passing your problem to the <code>WolframAlpha[]</code>
 command in Mathematica as a string, and then choosing to see the steps laid out,
 in the way Wolfram Alpha presupposes a human would do it. This has its own
-problems, namely in the limited complexity of problems WolframAlpha can handle,
+problems, namely in the limited complexity of problems WolframAlpha can handle
 as compared to Mathematica. However, it is enough to get the job done in some
 cases.</p>
 
@@ -137,6 +137,7 @@ adjustment.</p>
 		<li class="tags__item"><a class="tags__link btn" href="/tags/math/" rel="tag">math</a></li>
 		<li class="tags__item"><a class="tags__link btn" href="/tags/mathematica/" rel="tag">mathematica</a></li>
 		<li class="tags__item"><a class="tags__link btn" href="/tags/latex/" rel="tag">latex</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/wip/" rel="tag">wip</a></li>
 	</ul>
 </div>
 	</article>
@@ -158,6 +159,9 @@ adjustment.</p>
 	<div class="post-nav__item post-nav__item--prev">
 		<a class="post-nav__link" href="/post/simulation/quadtree-particle-simulation/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Quadtree Particle Simulation</p></a>
 	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/post/algorithms/pythagorean-triple/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Pythagorean Triple Problem in Sub-linear Time</p></a>
+	</div>
 </nav>
 
 
@@ -175,11 +179,11 @@ adjustment.</p>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [Beta]</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [WiP]</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/quadtree-particle-simulation/">Quadtree Particle Simulation</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/double-pendulum/">Double Pendulum</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/bioinformatics/oriented-bounding-box-heuristic/">Oriented Bounding-Box Heuristic</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/life/2019-presidential-luncheon/">2019 Presidential Luncheon</a></li>
 		</ul>
 	</div>
 </div>
@@ -187,6 +191,7 @@ adjustment.</p>
 	<h4 class="widget__title">Categories</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/categories/algorithms">Algorithms</a></li>
 			<li class="widget__item"><a class="widget__link" href="/categories/bioinformatics">Bioinformatics</a></li>
 			<li class="widget__item"><a class="widget__link" href="/categories/life">Life</a></li>
 			<li class="widget__item"><a class="widget__link" href="/categories/simulation">Simulation</a></li>
@@ -198,13 +203,16 @@ adjustment.</p>
 	<div class="widget__content">
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves" title="Curves">Curves</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo" title="Demo">Demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization" title="Factorization">Factorization</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/javascript" title="Javascript">Javascript</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/latex" title="Latex">Latex</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/math" title="Math">Math</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica" title="Mathematica">Mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory" title="Number theory">Number theory</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/physics" title="Physics">Physics</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/regression" title="Regression">Regression</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi" title="Tau beta pi">Tau beta pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip" title="Wip">Wip</a>
 	</div>
 </div>
 </aside>

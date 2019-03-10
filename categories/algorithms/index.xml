@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Algorithms on MP&#39;s Projects and Papers</title>
+    <link>/categories/algorithms/</link>
+    <description>Recent content in Algorithms on MP&#39;s Projects and Papers</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Mar 2019 15:48:49 -0400</lastBuildDate>
+    
+	<atom:link href="/categories/algorithms/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Pythagorean Triple Problem in Sub-linear Time</title>
+      <link>/post/algorithms/pythagorean-triple/</link>
+      <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
+      
+      <guid>/post/algorithms/pythagorean-triple/</guid>
+      <description>The Pythagorean triple problem is as follows. Given an input integer \(n\), return integers \(a\), \(b\), \(c\) such that the two following conditions hold:
+$$ a b c = n $$ $$ a^2 + b^2 = c^2 $$
+I was interested in finding a solution to this problem that was both succint and had good asymptotic complexity. The solution I found runs in O(sqrt(n)) time by deconstructing the problem into the well-known 3SUM problem.</description>
+    </item>
+    
+  </channel>
+</rss>

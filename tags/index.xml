@@ -30,6 +30,15 @@
     </item>
     
     <item>
+      <title>Factorization</title>
+      <link>/tags/factorization/</link>
+      <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
+      
+      <guid>/tags/factorization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Javascript</title>
       <link>/tags/javascript/</link>
       <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
@@ -50,7 +59,7 @@
     <item>
       <title>Math</title>
       <link>/tags/math/</link>
-      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
+      <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
       <guid>/tags/math/</guid>
       <description></description>
@@ -62,6 +71,15 @@
       <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       
       <guid>/tags/mathematica/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Number Theory</title>
+      <link>/tags/number-theory/</link>
+      <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
+      
+      <guid>/tags/number-theory/</guid>
       <description></description>
     </item>
     
@@ -89,6 +107,15 @@
       <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
       
       <guid>/tags/tau-beta-pi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Wip</title>
+      <link>/tags/wip/</link>
+      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
+      
+      <guid>/tags/wip/</guid>
       <description></description>
     </item>
     

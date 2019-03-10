@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Pythagorean Triple Problem in Sub-linear Time</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Pythagorean Triple Problem in Sub-linear Time" />
+<meta property="og:description" content="The Pythagorean triple problem is as follows. Given an input integer \(n\), return integers \(a\), \(b\), \(c\) such that the two following conditions hold:
+$$ a b c = n $$ $$ a^2 &#43; b^2 = c^2 $$
+I was interested in finding a solution to this problem that was both succint and had good asymptotic complexity. The solution I found runs in O(sqrt(n)) time by deconstructing the problem into the well-known 3SUM problem." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/algorithms/pythagorean-triple/" /><meta property="article:published_time" content="2019-03-10T15:48:49-04:00"/>
+<meta property="article:modified_time" content="2019-03-10T15:48:49-04:00"/>
+
+	
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+			<a class="logo__link" href="/" title="MP&#39;s Projects and Papers" rel="home">
+				<div class="logo__title">MP&#39;s Projects and Papers</div>
+				<div class="logo__tagline">Personal portfolio</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact/">Contact</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/papers/">Papers</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Pythagorean Triple Problem in Sub-linear Time</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-03-10T15:48:49">March 10, 2019</time>
+</div>
+
+<div class="meta__item-categories meta__item">
+	<svg class="meta__icon icon icon-category" width="16" height="16" viewBox="0 0 16 16"><path d="m7 2l1 2h8v11h-16v-13z"/></svg>
+	<span class="meta__text"><a class="meta__link" href="/categories/algorithms" rel="category">algorithms</a></span>
+</div>
+</div>
+		</header><div class="content post__content clearfix">
+			
+
+<p>The Pythagorean triple problem is as follows. Given an input integer \(n\),
+return integers \(a\), \(b\), \(c\) such that the two following conditions
+hold:</p>
+
+<p>$$ a b c = n $$
+$$ a^2 + b^2 = c^2 $$</p>
+
+<p>I was interested in finding a solution to this problem that was both succint and
+had good asymptotic complexity. The solution I found runs in <code>O(sqrt(n))</code> time
+by deconstructing the problem into the well-known
+<a href="https://en.wikipedia.org/wiki/3SUM">3SUM problem</a>.</p>
+
+<h2 id="getting-the-divisors">Getting the Divisors</h2>
+
+<p>We know that the three numbers we generate must all multiply together to form
+\(n\). Therefore, each number must be a divisor of \(n\). There is a
+simple <code>O(sqrt(n))</code> time algorithm that generates all divisors of \(n\):</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#888">// @require n &gt;= 1
+</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> divisors <span style="color:#333">=</span> (n: <span style="color:#339;font-weight:bold">number</span>) <span style="color:#333">=&gt;</span> {
+  <span style="color:#080;font-weight:bold">const</span> d <span style="color:#333">=</span> _.times(<span style="color:#007020">Math</span>.sqrt(n) <span style="color:#333">-</span> <span style="color:#00d;font-weight:bold">1</span>)
+    .map(i <span style="color:#333">=&gt;</span> i <span style="color:#333">+</span> <span style="color:#00d;font-weight:bold">1</span>)
+    .filter(i <span style="color:#333">=&gt;</span> n <span style="color:#333">%</span> i <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">0</span>);
+
+  <span style="color:#080;font-weight:bold">return</span> _.uniq(d.concat([...d].reverse().map(i <span style="color:#333">=&gt;</span> n <span style="color:#f00;background-color:#faa">/ i)));</span>
+};</code></pre></div>
+<p>The algorithm is expressed in TypeScript, in a functional form. The algorithm
+takes all numbers in the range of <code>[1 ... sqrt(n)]</code> and filters such numbers
+that \(n\) is divisble by. We are left with all of the divisors up until
+\(\sqrt n\).</p>
+
+<p>To then get the rest of the numbers, concatenate the current array with each
+divisor&rsquo;s pair. This is because if \(i\) is a divisor, \(\frac{n}{i}\) is
+also guaranteed to be a divisor. All references to _ are
+<a href="https://lodash.com/">lodash</a>.</p>
+
+<h2 id="invoking-the-3sum-problem">Invoking the 3SUM Problem</h2>
+
+<p>We now have a list of numbers to search from to achieve the two conditions. The
+length of the list is on order of <code>O(log(n))</code> because that is, up to a constant
+factor, how many divisors a given number has.</p>
+
+<p>On inspection, we expect the second condition to be more &ldquo;stringent&rdquo; i.e. there
+exists fewer combinations which satisfy the condition. Luckily, there exists a
+body of knowledge on solving that sort of problem.</p>
+
+<h3 id="the-3sum-problem">The 3SUM Problem</h3>
+
+<p>The 3SUM problem is to, given a list of numbers \(A\), return a set of three
+numbers \(a\), \(b\), \(c\) such that the following conditions hold:</p>
+
+<p>$$ a + b + c = 0 $$
+$$ a, b, c \in A $$</p>
+
+<p>There are many algorithms to solve this, including a relatively simple
+\(O(n^2)\) solution. However, this does not quite match our problem. However,
+if we squint our eyes a bit, we can see how it may be applied. We may perform
+some simple algebra on our condition:</p>
+
+<p>$$ a^2 + b^2 = c^2 $$
+$$ a^2 + b^2 - c^2 = 0 $$</p>
+
+<p>So we see if we include all negative numbers of our divisor into our search set
+\(A\), we&rsquo;re much better off. As well, we square each number of our original
+divisor set. So, given a divisor set for example, of 30:</p>
+
+<p>$$ {1, 2, 3, 5, 6, 10, 15, 30} $$</p>
+
+<p>We transform this set into the following:</p>
+
+<p>$$ {-900, -225, -100, -36, -25, -9, -4, -1, 1, 4, 9, 25, 36, 100, 225, 900} $$</p>
+
+<p>The 3SUM search is guaranteed to find a 3-set matching our original Pythagorean
+condition. However, it will also match false-positives constructed of more than
+one negative number. To filter these out, we only consider solutions to the
+3SUM problem which possess one negative number.</p>
+
+<h2 id="putting-it-all-together">Putting it all Together</h2>
+
+<p>The following code implements the algorithm described above, taking the divisor
+set, transforming it, applying it to the 3SUM problem, and filtering the
+results. The overall complexity is \(O(\sqrt{n})\) because the complexity of
+constructing the divisors is strictly more expensive than solving the 3SUM
+problem on the divisor set. The complexity could probably be improved via
+Pollard&rsquo;s Rho algorithm, at the cost of sacrificing simplicity.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#888">// Returns [a, b, c] where a^2 + b^2 = c^2 and a * b * c = n
+</span><span style="color:#888">// If no such 3-tuple exists, returns [].
+</span><span style="color:#888">// Runs in O(sqrt(n)) time.
+</span><span style="color:#888">// @require n &gt;= 1
+</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> pythagoreanTriplet <span style="color:#333">=</span> (n: <span style="color:#339;font-weight:bold">number</span>) <span style="color:#333">=&gt;</span> {
+  <span style="color:#080;font-weight:bold">let</span> d <span style="color:#333">=</span> divisors(n).map(x <span style="color:#333">=&gt;</span> x <span style="color:#333">**</span> <span style="color:#00d;font-weight:bold">2</span>);
+  d <span style="color:#333">=</span> [...d]
+    .reverse()
+    .map(x <span style="color:#333">=&gt;</span> <span style="color:#333">-</span>x)
+    .concat(d);
+
+  <span style="color:#888">// O(log(n)^2)
+</span><span style="color:#888"></span>  <span style="color:#080;font-weight:bold">const</span> p <span style="color:#333">=</span> sum3(d)
+    .filter(x <span style="color:#333">=&gt;</span> _.countBy(x, y <span style="color:#333">=&gt;</span> y <span style="color:#333">&lt;</span> <span style="color:#00d;font-weight:bold">0</span>).<span style="color:#080;font-weight:bold">true</span> <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">1</span>)
+    .map(x <span style="color:#333">=&gt;</span> x.map(y <span style="color:#333">=&gt;</span> <span style="color:#007020">Math</span>.sqrt(<span style="color:#007020">Math</span>.abs(y))).sort((a, b) <span style="color:#333">=&gt;</span> a <span style="color:#333">-</span> b))
+    .filter(x <span style="color:#333">=&gt;</span> x.reduce((a, y) <span style="color:#333">=&gt;</span> a <span style="color:#333">*</span> y) <span style="color:#333">===</span> n);
+
+  <span style="color:#080;font-weight:bold">return</span> p.length <span style="color:#333">&gt;</span> <span style="color:#00d;font-weight:bold">0</span> <span style="color:#333">?</span> p[<span style="color:#00d;font-weight:bold">0</span>] <span style="color:#333">:</span> [];
+};</code></pre></div>
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/math/" rel="tag">math</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/number-theory/" rel="tag">number theory</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/factorization/" rel="tag">factorization</a></li>
+	</ul>
+</div>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Michael Poteat</span>
+	</div>
+	<div class="authorbox__description">
+		Coder and researcher, doing graduate studies at Old Dominion University. Interested in machine learning, programming, pure mathematics and many other topics.
+	</div>
+</div>
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/post/simulation/mathematica-steps-to-latex/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Mathematica Steps to LaTeX [WiP]</p></a>
+	</div>
+</nav>
+
+
+			</div>
+			<aside class="sidebar"><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [WiP]</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/simulation/quadtree-particle-simulation/">Quadtree Particle Simulation</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/simulation/double-pendulum/">Double Pendulum</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/bioinformatics/oriented-bounding-box-heuristic/">Oriented Bounding-Box Heuristic</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/categories/algorithms">Algorithms</a></li>
+			<li class="widget__item"><a class="widget__link" href="/categories/bioinformatics">Bioinformatics</a></li>
+			<li class="widget__item"><a class="widget__link" href="/categories/life">Life</a></li>
+			<li class="widget__item"><a class="widget__link" href="/categories/simulation">Simulation</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo" title="Demo">Demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization" title="Factorization">Factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript" title="Javascript">Javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex" title="Latex">Latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math" title="Math">Math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica" title="Mathematica">Mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory" title="Number theory">Number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics" title="Physics">Physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression" title="Regression">Regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi" title="Tau beta pi">Tau beta pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip" title="Wip">Wip</a>
+	</div>
+</div>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2019 MP&#39;s Projects and Papers.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>
