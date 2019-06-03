@@ -6,10 +6,20 @@
     <description>Recent content on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Mar 2019 15:48:49 -0400</lastBuildDate>
+    <lastBuildDate>Mon, 03 Jun 2019 12:37:10 -0700</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Bay Area SSC Meetup</title>
+      <link>/post/life/ssc-meetup/</link>
+      <pubDate>Mon, 03 Jun 2019 12:37:10 -0700</pubDate>
+      
+      <guid>/post/life/ssc-meetup/</guid>
+      <description>I&amp;rsquo;m in SF for the summer, and I was thus able to attend the Slate Star Codex meetup this year in Dolores Park. Met a lot of interesting people, and got to meet Scott. While I&amp;rsquo;m in the Bay Area I hope to get a little more involved in that scene.
+Picture is of the park, not the meetup specifically.</description>
+    </item>
     
     <item>
       <title>Pythagorean Triple Problem in Sub-linear Time</title>
