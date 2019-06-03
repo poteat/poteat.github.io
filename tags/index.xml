@@ -6,31 +6,13 @@
     <description>Recent content in Tags on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 25 Jan 2019 17:40:45 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 10 Mar 2019 15:48:49 -0400</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Curves</title>
-      <link>/tags/curves/</link>
-      <pubDate>Fri, 25 Jan 2019 17:40:45 -0500</pubDate>
-      
-      <guid>/tags/curves/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Demo</title>
-      <link>/tags/demo/</link>
-      <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
-      
-      <guid>/tags/demo/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Factorization</title>
+      <title>factorization</title>
       <link>/tags/factorization/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
@@ -39,25 +21,7 @@
     </item>
     
     <item>
-      <title>Javascript</title>
-      <link>/tags/javascript/</link>
-      <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
-      
-      <guid>/tags/javascript/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Latex</title>
-      <link>/tags/latex/</link>
-      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
-      
-      <guid>/tags/latex/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Math</title>
+      <title>math</title>
       <link>/tags/math/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
@@ -66,16 +30,7 @@
     </item>
     
     <item>
-      <title>Mathematica</title>
-      <link>/tags/mathematica/</link>
-      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
-      
-      <guid>/tags/mathematica/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Number Theory</title>
+      <title>number theory</title>
       <link>/tags/number-theory/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
@@ -84,7 +39,52 @@
     </item>
     
     <item>
-      <title>Physics</title>
+      <title>latex</title>
+      <link>/tags/latex/</link>
+      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
+      
+      <guid>/tags/latex/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mathematica</title>
+      <link>/tags/mathematica/</link>
+      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
+      
+      <guid>/tags/mathematica/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wip</title>
+      <link>/tags/wip/</link>
+      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
+      
+      <guid>/tags/wip/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>demo</title>
+      <link>/tags/demo/</link>
+      <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
+      
+      <guid>/tags/demo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>javascript</title>
+      <link>/tags/javascript/</link>
+      <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
+      
+      <guid>/tags/javascript/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>physics</title>
       <link>/tags/physics/</link>
       <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
       
@@ -93,7 +93,7 @@
     </item>
     
     <item>
-      <title>Regression</title>
+      <title>regression</title>
       <link>/tags/regression/</link>
       <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       
@@ -102,7 +102,7 @@
     </item>
     
     <item>
-      <title>Tau Beta Pi</title>
+      <title>tau-beta-pi</title>
       <link>/tags/tau-beta-pi/</link>
       <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
       
@@ -111,11 +111,11 @@
     </item>
     
     <item>
-      <title>Wip</title>
-      <link>/tags/wip/</link>
-      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
+      <title>curves</title>
+      <link>/tags/curves/</link>
+      <pubDate>Fri, 25 Jan 2019 17:40:45 -0500</pubDate>
       
-      <guid>/tags/wip/</guid>
+      <guid>/tags/curves/</guid>
       <description></description>
     </item>
     

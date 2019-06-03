@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>Algorithms</title>
+      <title>algorithms</title>
       <link>/categories/algorithms/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
@@ -21,7 +21,16 @@
     </item>
     
     <item>
-      <title>Bioinformatics</title>
+      <title>simulation</title>
+      <link>/categories/simulation/</link>
+      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
+      
+      <guid>/categories/simulation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>bioinformatics</title>
       <link>/categories/bioinformatics/</link>
       <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       
@@ -30,20 +39,11 @@
     </item>
     
     <item>
-      <title>Life</title>
+      <title>life</title>
       <link>/categories/life/</link>
       <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
       
       <guid>/categories/life/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Simulation</title>
-      <link>/categories/simulation/</link>
-      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
-      
-      <guid>/categories/simulation/</guid>
       <description></description>
     </item>
     
