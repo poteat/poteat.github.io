@@ -9,14 +9,11 @@
 	<meta name="description" content="">
 	<meta property="og:title" content="Double Pendulum" />
 <meta property="og:description" content="This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
-   Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer
-Simulation parameters:
-Angle 1
-Angle 2" />
+The system is modeled directly from the equations of motion, which were derived using Mathematica (via the Euler-Lagrange formula)." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/simulation/double-pendulum/" />
-<meta property="article:published_time" content="2019-01-25T20:58:30-05:00"/>
-<meta property="article:modified_time" content="2019-01-25T20:58:30-05:00"/>
+<meta property="article:published_time" content="2019-01-25T20:58:30-05:00" />
+<meta property="article:modified_time" content="2019-01-25T20:58:30-05:00" />
 
 	
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -44,13 +41,25 @@ Angle 2" />
 	</button>
 	<ul class="menu__list">
 		<li class="menu__item">
-			<a class="menu__link" href="/about/">About Me</a>
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">About Me</span>
+				
+			</a>
 		</li>
 		<li class="menu__item">
-			<a class="menu__link" href="/contact/">Contact</a>
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
 		</li>
 		<li class="menu__item">
-			<a class="menu__link" href="/papers/">Papers</a>
+			<a class="menu__link" href="/papers/">
+				
+				<span class="menu__text">Papers</span>
+				
+			</a>
 		</li>
 	</ul>
 </nav>
@@ -71,56 +80,26 @@ central pivot under the force of uniform gravity. In addition to being the
 motivating example for chaotic systems (in addition to the Lorenz system, its
 fluid mechanics counterpart), the double pendulum represents some interesting
 challenges.</p>
-
-<canvas id="canvas" width="500" height="500" style="position: absolute; margin-bottom: 0"></canvas>
-<canvas id="tracer" width="500" height="500" style="margin-bottom: 0"></canvas>
-
-<script type="text/javascript" src="/js/simulation/double-pendulum.js"></script>
-
-<div id="controls">
-  <input type="checkbox" id="circlebounds" onclick="circlebounds = document.getElementById('circlebounds').checked"> Draw circle bounds
-  <input type="checkbox" id="cherrytracer" onclick="cherrytracer = document.getElementById('cherrytracer').checked"> Draw cherry tracer
-  <input type="checkbox" id="connections" checked="true" onclick="connections = document.getElementById('connections').checked"> Draw connections
-  <input type="checkbox" id="paused" onclick="paused = document.getElementById('paused').checked"> Pause
-  <br>
-  <button type="button" onclick="ctx_tracer.clearRect(0, 0, cvs_tracer.width, cvs_tracer.height);">Clear cherry tracer</button><br>
-  Simulation parameters:<br>
-  <input type="number" id="ang1" value="90"> Angle 1<br>
-  <input type="number" id="ang2" value="180"> Angle 2<br>
-  <input type="number" id="vang1" value="0"> Radial Velocity 1<br>
-  <input type="number" id="vang2" value="0"> Radial Velocity 2<br>
-  <input type="number" id="L1" value="10"> Length 1<br>
-  <input type="number" id="L2" value="10"> Length 2<br>
-  <input type="number" id="M1" value="1"> Mass 1<br>
-  <input type="number" id="M2" value="1"> Mass 2<br>
-  <button type="button" onclick="reinitialize();">Begin new simulation</button><br>
-  Advanced options:<br>
-  <input type="number" id="g" value="98.0"> Gravity<br>
-  <input type="number" id ="fps_in" value="60"> Frames per second<br>
-  <input type="number" id ="steps" value="10"> Steps per frame<br>
-</div>
-
-<p><div id="fps"></div>
-<br>
-One challenge is that when end mass is much larger than central mass, the
-problem becomes stiff, and consequently the step-size must decrease quite a bit.
-Thus a RK8 numerical integrator called <a href="http://www.mymathlib.com/diffeq/runge-kutta/runge_kutta_verner.html">Verner&rsquo;s
-Method</a> is
-used, which was manually ported from C to Javascript.</p>
-
+<p><!-- raw HTML omitted --><!-- raw HTML omitted -->
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>The system is modeled directly from the equations of motion, which were derived
 using Mathematica (via the Euler-Lagrange formula).</p>
 
 		</div>
-		
+		<footer class="post__footer">
+			
 <div class="post__tags tags clearfix">
-	<svg class="tags__icon icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 	<ul class="tags__list">
 		<li class="tags__item"><a class="tags__link btn" href="/tags/javascript/" rel="tag">javascript</a></li>
 		<li class="tags__item"><a class="tags__link btn" href="/tags/demo/" rel="tag">demo</a></li>
 		<li class="tags__item"><a class="tags__link btn" href="/tags/physics/" rel="tag">physics</a></li>
 	</ul>
 </div>
+		</footer>
 	</article>
 </main>
 
@@ -160,11 +139,11 @@ using Mathematica (via the Euler-Lagrange formula).</p>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/algorithms/shunting-yard/">Dijkstra&#39;s Shunting Yard in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/life/ssc-meetup/">Bay Area SSC Meetup</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [WiP]</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/quadtree-particle-simulation/">Quadtree Particle Simulation</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/simulation/double-pendulum/">Double Pendulum</a></li>
 		</ul>
 	</div>
 </div>
@@ -172,29 +151,42 @@ using Mathematica (via the Euler-Lagrange formula).</p>
 	<h4 class="widget__title">Categories</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/categories/algorithms">Algorithms</a></li>
-			<li class="widget__item"><a class="widget__link" href="/categories/bioinformatics">Bioinformatics</a></li>
-			<li class="widget__item"><a class="widget__link" href="/categories/life">Life</a></li>
-			<li class="widget__item"><a class="widget__link" href="/categories/simulation">Simulation</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">life</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">simulation</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">typescript</a>
+			</li>
 		</ul>
 	</div>
 </div>
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
-		<a class="widget-taglist__link widget__link btn" href="/tags/curves" title="Curves">Curves</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/demo" title="Demo">Demo</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/factorization" title="Factorization">Factorization</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/javascript" title="Javascript">Javascript</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/latex" title="Latex">Latex</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/math" title="Math">Math</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica" title="Mathematica">Mathematica</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory" title="Number theory">Number theory</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/physics" title="Physics">Physics</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/rationality" title="Rationality">Rationality</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/regression" title="Regression">Regression</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi" title="Tau beta pi">Tau beta pi</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/wip" title="Wip">Wip</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
 	</div>
 </div>
 </aside>
@@ -210,6 +202,7 @@ using Mathematica (via the Euler-Lagrange formula).</p>
 </footer>
 	</div>
 <script async defer src="/js/menu.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>latex on MP&#39;s Projects and Papers</title>
@@ -18,7 +18,7 @@
       
       <guid>/post/simulation/mathematica-steps-to-latex/</guid>
       <description>A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
-Mathematica&amp;rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
+Mathematica&#39;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
     </item>
     
   </channel>
