@@ -9,8 +9,7 @@
 	<meta name="description" content="">
 	<meta property="og:title" content="One-Dimensional Linear Regression" />
 <meta property="og:description" content="The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
-Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.
-In this problem, the least-squared distance considered includes only the vertical component." />
+ $$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$  Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/bioinformatics/one-dimensional-linear-regression/" />
 <meta property="article:published_time" content="2019-01-25T18:27:02-05:00" />
@@ -79,12 +78,16 @@ In this problem, the least-squared distance considered includes only the vertica
 			<p>The simple linear regression algorithm is a closed-form solution to a
 least-squared distance minimization problem. Here is demonstrated the
 one-dimensional case of simple linear regression.</p>
-<!-- raw HTML omitted -->
+<div>
+$$
+\min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2
+$$
+</div>
 <p><em>Click and drag</em> the black points to affect the regression. <em>Double click</em> to
 add or remove points. The blue point in the center represents the geometric
 average, through which the fit always passes through.</p>
-<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
+<p><canvas id="canvas" width="500" height="500"></canvas></p>
+<script type="text/javascript" src="/js/bioinformatics/one-dimensional-linear-regression.js"></script>
 <p>In this problem, the least-squared distance considered includes only the
 vertical component. This is what makes the problem &ldquo;one-dimensional&rdquo;, even
 though the visualization of the problem is two-dimensional.</p>

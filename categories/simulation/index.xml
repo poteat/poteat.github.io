@@ -38,7 +38,11 @@ The forces used are tuned to provide some amount of clustering, but also to prov
       
       <guid>/post/simulation/double-pendulum/</guid>
       <description>This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
-The system is modeled directly from the equations of motion, which were derived using Mathematica (via the Euler-Lagrange formula).</description>
+ 
+ Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer
+Simulation parameters:
+Angle 1
+Angle 2</description>
     </item>
     
   </channel>

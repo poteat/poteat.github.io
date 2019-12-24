@@ -70,7 +70,11 @@ The forces used are tuned to provide some amount of clustering, but also to prov
       
       <guid>/post/simulation/double-pendulum/</guid>
       <description>This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
-The system is modeled directly from the equations of motion, which were derived using Mathematica (via the Euler-Lagrange formula).</description>
+ 
+ Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer
+Simulation parameters:
+Angle 1
+Angle 2</description>
     </item>
     
     <item>
@@ -101,8 +105,7 @@ Group photo included.</description>
       
       <guid>/post/bioinformatics/one-dimensional-linear-regression/</guid>
       <description>The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
-Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.
-In this problem, the least-squared distance considered includes only the vertical component.</description>
+ $$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$  Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.</description>
     </item>
     
     <item>
@@ -112,10 +115,8 @@ In this problem, the least-squared distance considered includes only the vertica
       
       <guid>/post/bioinformatics/quadratic-bezier-curves/</guid>
       <description>Quadratic Bézier curves are explicit parametric functions of the following form:
-These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
-Drag the control points around to see the curve change.
-Background The general form of an nth order Bézier curve, with n+1 control points, can be represented explicitly with the following summation:
-The tick marks in the demo correspond to the segment lines of intersection (related to the tangent line) at each point.</description>
+ $$ x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\ y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\ t \in \mathbb R[0,1] $$  These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
+Drag the control points around to see the curve change.</description>
     </item>
     
   </channel>
