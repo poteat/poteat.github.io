@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Dijkstra&#39;s Shunting Yard in Typescript - MP&#39;s Projects and Papers</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	<meta property="og:title" content="Dijkstra&#39;s Shunting Yard in Typescript" />
+<meta property="og:description" content="The shunting yard algorithm converts infix expressions (i.e. 1&#43;2) into reverse Polish notation, i.e. 1 2 &#43;, which lends itself well to execution on a stack machine.
+An aside: I wanted to revisit this algorithm because it was one of the first I implemented in C during self-study five years ago. In a way, reimplementing it is a way of measuring my progress since then.
+The internal details aren&#39;t too complicated - it&#39;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/algorithms/shunting-yard/" />
+<meta property="article:published_time" content="2019-12-23T16:39:53-08:00" />
+<meta property="article:modified_time" content="2019-12-23T16:39:53-08:00" />
+
+	
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+			<a class="logo__link" href="/" title="MP&#39;s Projects and Papers" rel="home">
+				<div class="logo__title">MP&#39;s Projects and Papers</div>
+				<div class="logo__tagline">Personal portfolio</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">About Me</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/papers/">
+				
+				<span class="menu__text">Papers</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Dijkstra&#39;s Shunting Yard in Typescript</h1>
+			
+		</header><div class="content post__content clearfix">
+			<p>The shunting yard algorithm converts infix expressions (i.e. <code>1+2</code>) into reverse Polish notation, i.e. <code>1 2 +</code>, which lends itself well to execution on a stack machine.</p>
+<p><em>An aside: I wanted to revisit this algorithm because it was one of the first I implemented in C during self-study <a href="https://github.com/poteat/infix_to_rpn/blob/master/main.c">five years ago</a>.  In a way, reimplementing it is a way of measuring my progress since then.</em></p>
+<p>The internal details aren't too complicated - it's based on the simple pseudo-code of the Wikipedia article describing the <a href="https://en.wikipedia.org/wiki/Shunting-yard_algorithm#The_algorithm_in_detail">shunting yard algorithm</a>.  However, the interesting parts I think are the high-level design decisions.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> shuntingYard <span style="color:#333">=</span> (operatorDefinition: <span style="color:#339;font-weight:bold">OperatorDefinition</span>) <span style="color:#333">=</span><span style="color:#333">&gt;</span> (
+  tokens: <span style="color:#339;font-weight:bold">string</span>[]
+) <span style="color:#333">=</span><span style="color:#333">&gt;</span> {
+  <span style="color:#080;font-weight:bold">const</span> { outputStack, operatorStack } <span style="color:#333">=</span> tokens.reduce(
+    (
+      {
+        outputStack,
+        operatorStack
+      }<span style="color:#333">:</span> { outputStack: <span style="color:#339;font-weight:bold">string</span>[]; operatorStack: <span style="color:#339;font-weight:bold">string</span>[] },
+      token
+    ) <span style="color:#333">=</span><span style="color:#333">&gt;</span> {
+      <span style="color:#080;font-weight:bold">if</span> (token <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;(&#34;</span>) {
+        <span style="color:#888">// Internal logic... left parens
+</span><span style="color:#888"></span>      } <span style="color:#080;font-weight:bold">else</span> <span style="color:#080;font-weight:bold">if</span> (token <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;)&#34;</span>) {
+        <span style="color:#888">// Internal logic... right parens
+</span><span style="color:#888"></span>      } <span style="color:#080;font-weight:bold">else</span> <span style="color:#080;font-weight:bold">if</span> (operatorDefinition[token] <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">undefined</span>) {
+        <span style="color:#888">// Internal logic... operators
+</span><span style="color:#888"></span>      } <span style="color:#080;font-weight:bold">else</span> {
+        <span style="color:#888">// Internal logic... tokens
+</span><span style="color:#888"></span>      }
+
+      <span style="color:#080;font-weight:bold">return</span> {
+        outputStack,
+        operatorStack
+      };
+    },
+    { outputStack<span style="color:#333">:</span> [], operatorStack<span style="color:#333">:</span> [] }
+  );
+
+  <span style="color:#888">// More parsing logic
+</span><span style="color:#888"></span>
+  <span style="color:#080;font-weight:bold">return</span> outputStack;
+};
+</code></pre></div><p>The entire function is curried on the structure that defines the operations and the input. In other words, the outer function returns a parser specific to a given language definition.  For the purposes of the algorithm, this structure just defines the priority (as in order-of-operations) for each operator.</p>
+<p>We use a <code>reduce</code> method on line 4 to map through the tokens, keeping the two intermediary stacks as parameters and return values of the central parsing function.  As consistent with the algorithm, both stacks start out empty.</p>
+<p>The final interesting thing we do is that we assume any non-recognized token is a item to be operated on.  This allows us to define and process non-numerical fields such as sets or Boolean algebraic expressions, which I demonstrate on <a href="https://github.com/poteat/shunting-yard-typescript/blob/master/test/index.test.ts">Github</a>.  What's more, these structures do not need to be explicitly defined or recognized, as long as the operator functions know how to process them.</p>
+
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/parsing/" rel="tag">parsing</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/dijkstra/" rel="tag">dijkstra</a></li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Michael Poteat</span>
+	</div>
+	<div class="authorbox__description">
+		Coder and researcher, doing graduate studies at Old Dominion University. Does machine learning, programming, pure mathematics and many other topics.
+	</div>
+</div>
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/post/life/ssc-meetup/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Bay Area SSC Meetup</p></a>
+	</div>
+</nav>
+
+
+			</div>
+			<aside class="sidebar"><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/algorithms/shunting-yard/">Dijkstra&#39;s Shunting Yard in Typescript</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/life/ssc-meetup/">Bay Area SSC Meetup</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [WiP]</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/simulation/quadtree-particle-simulation/">Quadtree Particle Simulation</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">life</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">simulation</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">typescript</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
+	</div>
+</div>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2019 MP&#39;s Projects and Papers.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

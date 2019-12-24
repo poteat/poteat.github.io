@@ -9,11 +9,11 @@
 	<meta name="description" content="">
 	<meta property="og:title" content="Mathematica Steps to LaTeX [WiP]" />
 <meta property="og:description" content="A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
-Mathematica&rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution." />
+Mathematica&#39;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/simulation/mathematica-steps-to-latex/" />
-<meta property="article:published_time" content="2019-02-01T15:01:48-05:00"/>
-<meta property="article:modified_time" content="2019-02-01T15:01:48-05:00"/>
+<meta property="article:published_time" content="2019-02-01T15:01:48-05:00" />
+<meta property="article:modified_time" content="2019-02-01T15:01:48-05:00" />
 
 	
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -41,13 +41,25 @@ Mathematica&rsquo;s internal algorithms for performing various symbolic computat
 	</button>
 	<ul class="menu__list">
 		<li class="menu__item">
-			<a class="menu__link" href="/about/">About Me</a>
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">About Me</span>
+				
+			</a>
 		</li>
 		<li class="menu__item">
-			<a class="menu__link" href="/contact/">Contact</a>
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
 		</li>
 		<li class="menu__item">
-			<a class="menu__link" href="/papers/">Papers</a>
+			<a class="menu__link" href="/papers/">
+				
+				<span class="menu__text">Papers</span>
+				
+			</a>
 		</li>
 	</ul>
 </nav>
@@ -63,66 +75,51 @@ Mathematica&rsquo;s internal algorithms for performing various symbolic computat
 			<h1 class="post__title">Mathematica Steps to LaTeX [WiP]</h1>
 			
 		</header><div class="content post__content clearfix">
-			
-
-<p>A common problem when using Mathematica to derive expressions is similar to a
+			<p>A common problem when using Mathematica to derive expressions is similar to a
 big problem plaguing machine learning algorithms today: It is difficult or
 impossible to explain the result due to the internal complexity of the black-box
 which generates it.</p>
-
-<p>Mathematica&rsquo;s internal algorithms for performing various symbolic computation
+<p>Mathematica's internal algorithms for performing various symbolic computation
 are built for speed, not simplicity, and in many cases the method Mathematica
 uses is nothing like the manual way humans would find the solution.</p>
-
 <p>For simple cases, a workaround is passing your problem to the <code>WolframAlpha[]</code>
 command in Mathematica as a string, and then choosing to see the steps laid out,
 in the way Wolfram Alpha presupposes a human would do it. This has its own
 problems, namely in the limited complexity of problems WolframAlpha can handle
 as compared to Mathematica. However, it is enough to get the job done in some
 cases.</p>
-
-<p>However, although Mathematica then displays the steps, it&rsquo;s internal interface
+<p>However, although Mathematica then displays the steps, it's internal interface
 for converting those step-expressions to LaTeX is hit-and-miss, which results in
 trouble when trying to create documentation. However, it does allow generation
 of steps in plaintext format.</p>
-
 <p>Enter this web-page, which converts Mathematica plaintext steps into
 well-formatted LaTeX. The following command will generate the plaintext steps
 for a given simple problem.</p>
-
 <pre><code>ShowSteps[exp_] :=
  WolframAlpha[
   ToString@HoldForm@InputForm@exp, {{&quot;Input&quot;, 2}, &quot;Plaintext&quot;},
   PodStates -&gt; {&quot;Input__Step-by-step solution&quot;}]
-</code></pre>
-
-<p>This app is still in beta, and the parsing is not 100% complete. So, you will
+</code></pre><p>This app is still in beta, and the parsing is not 100% complete. So, you will
 have to manually fix some things until I get time to write a proper parser.
-I&rsquo;ve noticed any instances of <code>integral</code> or <code>bracketing bar</code> still require
+I've noticed any instances of <code>integral</code> or <code>bracketing bar</code> still require
 adjustment.</p>
-
 <h2 id="usage">Usage</h2>
-
 <ol>
 <li>Use the <code>ShowSteps[]</code> command to get the derivation steps in plaintext.</li>
 <li>Copy the plaintext into the input box on this page.</li>
 <li>Copy the output LaTeX into your LaTeX editor of choice.</li>
 </ol>
-
 <h2 id="plaintext-input">Plaintext Input</h2>
-
-<p><textarea id="text-input" class="monospace" rows="20" cols="150"></textarea></p>
-
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
 <h2 id="latex-output">LaTeX Output</h2>
-
-<p><textarea id="text-output" class="monospace" rows="20" cols="150" readonly></textarea></p>
-
-<script type="text/javascript" src="/js/simulation/mathematica-steps-to-latex.js"></script>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
 
 		</div>
-		
+		<footer class="post__footer">
+			
 <div class="post__tags tags clearfix">
-	<svg class="tags__icon icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 	<ul class="tags__list">
 		<li class="tags__item"><a class="tags__link btn" href="/tags/math/" rel="tag">math</a></li>
 		<li class="tags__item"><a class="tags__link btn" href="/tags/mathematica/" rel="tag">mathematica</a></li>
@@ -130,6 +127,7 @@ adjustment.</p>
 		<li class="tags__item"><a class="tags__link btn" href="/tags/wip/" rel="tag">wip</a></li>
 	</ul>
 </div>
+		</footer>
 	</article>
 </main>
 
@@ -169,11 +167,11 @@ adjustment.</p>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/algorithms/shunting-yard/">Dijkstra&#39;s Shunting Yard in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/life/ssc-meetup/">Bay Area SSC Meetup</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [WiP]</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/quadtree-particle-simulation/">Quadtree Particle Simulation</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/simulation/double-pendulum/">Double Pendulum</a></li>
 		</ul>
 	</div>
 </div>
@@ -181,29 +179,42 @@ adjustment.</p>
 	<h4 class="widget__title">Categories</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/categories/algorithms">Algorithms</a></li>
-			<li class="widget__item"><a class="widget__link" href="/categories/bioinformatics">Bioinformatics</a></li>
-			<li class="widget__item"><a class="widget__link" href="/categories/life">Life</a></li>
-			<li class="widget__item"><a class="widget__link" href="/categories/simulation">Simulation</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">life</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">simulation</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">typescript</a>
+			</li>
 		</ul>
 	</div>
 </div>
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
-		<a class="widget-taglist__link widget__link btn" href="/tags/curves" title="Curves">Curves</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/demo" title="Demo">Demo</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/factorization" title="Factorization">Factorization</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/javascript" title="Javascript">Javascript</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/latex" title="Latex">Latex</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/math" title="Math">Math</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica" title="Mathematica">Mathematica</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory" title="Number theory">Number theory</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/physics" title="Physics">Physics</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/rationality" title="Rationality">Rationality</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/regression" title="Regression">Regression</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi" title="Tau beta pi">Tau beta pi</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/wip" title="Wip">Wip</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
 	</div>
 </div>
 </aside>
@@ -219,6 +230,7 @@ adjustment.</p>
 </footer>
 	</div>
 <script async defer src="/js/menu.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>

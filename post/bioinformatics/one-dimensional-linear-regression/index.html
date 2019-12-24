@@ -9,11 +9,12 @@
 	<meta name="description" content="">
 	<meta property="og:title" content="One-Dimensional Linear Regression" />
 <meta property="og:description" content="The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
- $$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$  Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through." />
+Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.
+In this problem, the least-squared distance considered includes only the vertical component." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/bioinformatics/one-dimensional-linear-regression/" />
-<meta property="article:published_time" content="2019-01-25T18:27:02-05:00"/>
-<meta property="article:modified_time" content="2019-01-25T18:27:02-05:00"/>
+<meta property="article:published_time" content="2019-01-25T18:27:02-05:00" />
+<meta property="article:modified_time" content="2019-01-25T18:27:02-05:00" />
 
 	
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -41,13 +42,25 @@
 	</button>
 	<ul class="menu__list">
 		<li class="menu__item">
-			<a class="menu__link" href="/about/">About Me</a>
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">About Me</span>
+				
+			</a>
 		</li>
 		<li class="menu__item">
-			<a class="menu__link" href="/contact/">Contact</a>
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
 		</li>
 		<li class="menu__item">
-			<a class="menu__link" href="/papers/">Papers</a>
+			<a class="menu__link" href="/papers/">
+				
+				<span class="menu__text">Papers</span>
+				
+			</a>
 		</li>
 	</ul>
 </nav>
@@ -66,35 +79,28 @@
 			<p>The simple linear regression algorithm is a closed-form solution to a
 least-squared distance minimization problem. Here is demonstrated the
 one-dimensional case of simple linear regression.</p>
-
-<div>
-$$
-\min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2
-$$
-</div>
-
+<!-- raw HTML omitted -->
 <p><em>Click and drag</em> the black points to affect the regression. <em>Double click</em> to
 add or remove points. The blue point in the center represents the geometric
 average, through which the fit always passes through.</p>
-
-<canvas id="canvas" width="500" height="500"></canvas>
-
-<script type="text/javascript" src="/js/bioinformatics/one-dimensional-linear-regression.js"></script>
-
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
 <p>In this problem, the least-squared distance considered includes only the
 vertical component. This is what makes the problem &ldquo;one-dimensional&rdquo;, even
 though the visualization of the problem is two-dimensional.</p>
 
 		</div>
-		
+		<footer class="post__footer">
+			
 <div class="post__tags tags clearfix">
-	<svg class="tags__icon icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 	<ul class="tags__list">
 		<li class="tags__item"><a class="tags__link btn" href="/tags/javascript/" rel="tag">javascript</a></li>
 		<li class="tags__item"><a class="tags__link btn" href="/tags/demo/" rel="tag">demo</a></li>
 		<li class="tags__item"><a class="tags__link btn" href="/tags/regression/" rel="tag">regression</a></li>
 	</ul>
 </div>
+		</footer>
 	</article>
 </main>
 
@@ -134,11 +140,11 @@ though the visualization of the problem is two-dimensional.</p>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/algorithms/shunting-yard/">Dijkstra&#39;s Shunting Yard in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/life/ssc-meetup/">Bay Area SSC Meetup</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [WiP]</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/quadtree-particle-simulation/">Quadtree Particle Simulation</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/simulation/double-pendulum/">Double Pendulum</a></li>
 		</ul>
 	</div>
 </div>
@@ -146,29 +152,42 @@ though the visualization of the problem is two-dimensional.</p>
 	<h4 class="widget__title">Categories</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/categories/algorithms">Algorithms</a></li>
-			<li class="widget__item"><a class="widget__link" href="/categories/bioinformatics">Bioinformatics</a></li>
-			<li class="widget__item"><a class="widget__link" href="/categories/life">Life</a></li>
-			<li class="widget__item"><a class="widget__link" href="/categories/simulation">Simulation</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">life</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">simulation</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">typescript</a>
+			</li>
 		</ul>
 	</div>
 </div>
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
-		<a class="widget-taglist__link widget__link btn" href="/tags/curves" title="Curves">Curves</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/demo" title="Demo">Demo</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/factorization" title="Factorization">Factorization</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/javascript" title="Javascript">Javascript</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/latex" title="Latex">Latex</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/math" title="Math">Math</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica" title="Mathematica">Mathematica</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory" title="Number theory">Number theory</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/physics" title="Physics">Physics</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/rationality" title="Rationality">Rationality</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/regression" title="Regression">Regression</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi" title="Tau beta pi">Tau beta pi</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/wip" title="Wip">Wip</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
 	</div>
 </div>
 </aside>
@@ -184,6 +203,7 @@ though the visualization of the problem is two-dimensional.</p>
 </footer>
 	</div>
 <script async defer src="/js/menu.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>

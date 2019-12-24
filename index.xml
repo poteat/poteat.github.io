@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>MP&#39;s Projects and Papers</title>
@@ -6,10 +6,21 @@
     <description>Recent content on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Jun 2019 12:37:10 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 23 Dec 2019 16:39:53 -0800</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Dijkstra&#39;s Shunting Yard in Typescript</title>
+      <link>/post/algorithms/shunting-yard/</link>
+      <pubDate>Mon, 23 Dec 2019 16:39:53 -0800</pubDate>
+      
+      <guid>/post/algorithms/shunting-yard/</guid>
+      <description>The shunting yard algorithm converts infix expressions (i.e. 1+2) into reverse Polish notation, i.e. 1 2 +, which lends itself well to execution on a stack machine.
+An aside: I wanted to revisit this algorithm because it was one of the first I implemented in C during self-study five years ago. In a way, reimplementing it is a way of measuring my progress since then.
+The internal details aren&#39;t too complicated - it&#39;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm.</description>
+    </item>
     
     <item>
       <title>Bay Area SSC Meetup</title>
@@ -17,7 +28,7 @@
       <pubDate>Mon, 03 Jun 2019 12:37:10 -0700</pubDate>
       
       <guid>/post/life/ssc-meetup/</guid>
-      <description>I&amp;rsquo;m in SF for the summer, and I was thus able to attend the Slate Star Codex meetup this year in Dolores Park. Met a lot of interesting people, and got to meet Scott. While I&amp;rsquo;m in the Bay Area I hope to get a little more involved in that scene.
+      <description>I&#39;m in SF for the summer, and I was thus able to attend the Slate Star Codex meetup this year in Dolores Park. Met a lot of interesting people, and got to meet Scott. While I&#39;m in the Bay Area I hope to get a little more involved in that scene.
 Picture is of the park, not the meetup specifically.</description>
     </item>
     
@@ -39,7 +50,7 @@ I was interested in finding a solution to this problem that was both succint and
       
       <guid>/post/simulation/mathematica-steps-to-latex/</guid>
       <description>A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
-Mathematica&amp;rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
+Mathematica&#39;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
     </item>
     
     <item>
@@ -58,12 +69,8 @@ The forces used are tuned to provide some amount of clustering, but also to prov
       <pubDate>Sat, 26 Jan 2019 12:14:54 -0500</pubDate>
       
       <guid>/contact/</guid>
-      <description>You can contact me using the below form. If it&amp;rsquo;s more convenient, I can also be contacted on Github or LinkedIn.
- f = (s) = {return s.replace(/[a-zA-Z]/g,function(c){return String.fromCharCode((c=(c=c.charCodeAt(0)+13)?c:c-26);});} window.onload = () = {document.getElementById(&#34;contact-form&#34;).action += f(&#34;zr@zcbgr.ng&#34;)};  Your Email
-Your Name
-Message
-
- </description>
+      <description>You can contact me using the below form. If it&#39;s more convenient, I can also be contacted on Github or LinkedIn.
+Your EmailYour NameMessage</description>
     </item>
     
     <item>
@@ -73,10 +80,7 @@ Message
       
       <guid>/post/simulation/double-pendulum/</guid>
       <description>This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
-   Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer
-Simulation parameters:
-Angle 1
-Angle 2</description>
+The system is modeled directly from the equations of motion, which were derived using Mathematica (via the Euler-Lagrange formula).</description>
     </item>
     
     <item>
@@ -95,7 +99,7 @@ One interesting estimate for the solution, which guarantees &amp;ldquo;pretty go
       <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
       
       <guid>/post/life/2019-presidential-luncheon/</guid>
-      <description>This last Wednesday I had the honor of attending a luncheon with ODU&amp;rsquo;s current president John R. Broderick. This event was a meetup with the local Tau Beta Pi engineering honor society chapter.
+      <description>This last Wednesday I had the honor of attending a luncheon with ODU&#39;s current president John R. Broderick. This event was a meetup with the local Tau Beta Pi engineering honor society chapter.
 The food was delicious! We were able to talk to Broderick about current events on campus, and suggestions we had (especially with regard to on-campus parking).
 Group photo included.</description>
     </item>
@@ -107,7 +111,8 @@ Group photo included.</description>
       
       <guid>/post/bioinformatics/one-dimensional-linear-regression/</guid>
       <description>The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
- $$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$  Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.</description>
+Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.
+In this problem, the least-squared distance considered includes only the vertical component.</description>
     </item>
     
     <item>
@@ -117,8 +122,10 @@ Group photo included.</description>
       
       <guid>/post/bioinformatics/quadratic-bezier-curves/</guid>
       <description>Quadratic Bézier curves are explicit parametric functions of the following form:
- $$ x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\ y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\ t \in \mathbb R[0,1] $$  These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
-Drag the control points around to see the curve change.</description>
+These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
+Drag the control points around to see the curve change.
+Background The general form of an nth order Bézier curve, with n+1 control points, can be represented explicitly with the following summation:
+The tick marks in the demo correspond to the segment lines of intersection (related to the tangent line) at each point.</description>
     </item>
     
     <item>
@@ -128,9 +135,9 @@ Drag the control points around to see the curve change.</description>
       
       <guid>/papers/</guid>
       <description>You can find abstracts, figures, citations and more at my ResearchGate profile.
- Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Quantification of Twist from the Central Lines of β-strands&amp;rdquo;, Journal of Computational Biology, January 2018, 25 (1): 114-120
- Poteat, M., He, J. &amp;ldquo;Modeling Beta-sheets using Iterative Bezier Surface Fitting on Cryo-EM Density Maps&amp;rdquo;, Molecular Based Mathematical Biology, Apr 2017; 5:31–39
- Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Analysis of ß-strand Twist from the 3-dimensional Image of a Protein&amp;rdquo;, Computational Structural Bioinformatics Workshop 2017 in conjunction with ACM-BCB 2017, Pages 650-654.</description>
+  Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Quantification of Twist from the Central Lines of β-strands&amp;rdquo;, Journal of Computational Biology, January 2018, 25 (1): 114-120
+  Poteat, M., He, J. &amp;ldquo;Modeling Beta-sheets using Iterative Bezier Surface Fitting on Cryo-EM Density Maps&amp;rdquo;, Molecular Based Mathematical Biology, Apr 2017; 5:31–39
+  Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Analysis of ß-strand Twist from the 3-dimensional Image of a Protein&amp;rdquo;, Computational Structural Bioinformatics Workshop 2017 in conjunction with ACM-BCB 2017, Pages 650-654.</description>
     </item>
     
     <item>
@@ -139,9 +146,10 @@ Drag the control points around to see the curve change.</description>
       <pubDate>Fri, 25 Jan 2019 16:24:07 -0500</pubDate>
       
       <guid>/about/</guid>
-      <description>Hey there, I&amp;rsquo;m Michael Poteat and this is my online portfolio and blog, where I broadcast and archive personal projects I work on, and discuss/post things I find interesting online.
-Working for Volley Inc in San Francisco for Summer 2019.
-Graduate student attending Old Dominion University. My topic of research is LTL (linear-temporal logic) and its application for monitoring and verification of mission correctness in autonomous robotics. As well, some future research planned will include utilization of machine learning to produce temporal models that detect adverse operational conditions.</description>
+      <description>Hey there, I&#39;m Michael Poteat and this is my online portfolio and blog, where I broadcast and archive personal projects I work on, and discuss/post things I find interesting online.
+Working in the Bay Area for Volley Inc for the foreseeable future as one of our first ten engineers.
+My graduate topic of research was linear-temporal logic and its applications in verification of mission correctness in autonomous robotics.
+My interests include machine learning, pure mathematics, programming, programming language design (especially modern languages like NodeJS and Julia), VR gaming/training development, and a whole host of other topics.</description>
     </item>
     
   </channel>
