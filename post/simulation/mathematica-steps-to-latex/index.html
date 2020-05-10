@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en-us">
+<html class="no-js" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +9,7 @@
 	<meta name="description" content="">
 	<meta property="og:title" content="Mathematica Steps to LaTeX [WiP]" />
 <meta property="og:description" content="A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
-Mathematica&#39;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution." />
+Mathematica&rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/simulation/mathematica-steps-to-latex/" />
 <meta property="article:published_time" content="2019-02-01T15:01:48-05:00" />
@@ -79,7 +79,7 @@ Mathematica&#39;s internal algorithms for performing various symbolic computatio
 big problem plaguing machine learning algorithms today: It is difficult or
 impossible to explain the result due to the internal complexity of the black-box
 which generates it.</p>
-<p>Mathematica's internal algorithms for performing various symbolic computation
+<p>Mathematica&rsquo;s internal algorithms for performing various symbolic computation
 are built for speed, not simplicity, and in many cases the method Mathematica
 uses is nothing like the manual way humans would find the solution.</p>
 <p>For simple cases, a workaround is passing your problem to the <code>WolframAlpha[]</code>
@@ -88,7 +88,7 @@ in the way Wolfram Alpha presupposes a human would do it. This has its own
 problems, namely in the limited complexity of problems WolframAlpha can handle
 as compared to Mathematica. However, it is enough to get the job done in some
 cases.</p>
-<p>However, although Mathematica then displays the steps, it's internal interface
+<p>However, although Mathematica then displays the steps, it&rsquo;s internal interface
 for converting those step-expressions to LaTeX is hit-and-miss, which results in
 trouble when trying to create documentation. However, it does allow generation
 of steps in plaintext format.</p>
@@ -101,7 +101,7 @@ for a given simple problem.</p>
   PodStates -&gt; {&quot;Input__Step-by-step solution&quot;}]
 </code></pre><p>This app is still in beta, and the parsing is not 100% complete. So, you will
 have to manually fix some things until I get time to write a proper parser.
-I've noticed any instances of <code>integral</code> or <code>bracketing bar</code> still require
+I&rsquo;ve noticed any instances of <code>integral</code> or <code>bracketing bar</code> still require
 adjustment.</p>
 <h2 id="usage">Usage</h2>
 <ol>
@@ -121,10 +121,18 @@ adjustment.</p>
 <div class="post__tags tags clearfix">
 	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 	<ul class="tags__list">
-		<li class="tags__item"><a class="tags__link btn" href="/tags/math/" rel="tag">math</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/mathematica/" rel="tag">mathematica</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/latex/" rel="tag">latex</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/wip/" rel="tag">wip</a></li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/math/" rel="tag">math</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/mathematica/" rel="tag">mathematica</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/latex/" rel="tag">latex</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/wip/" rel="tag">wip</a>
+		</li>
 	</ul>
 </div>
 		</footer>
@@ -139,18 +147,11 @@ adjustment.</p>
 		<span class="authorbox__name">About Michael Poteat</span>
 	</div>
 	<div class="authorbox__description">
-		Coder and researcher, doing graduate studies at Old Dominion University. Does machine learning, programming, pure mathematics and many other topics.
+		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
 	</div>
 </div>
 
-<nav class="post-nav flex">
-	<div class="post-nav__item post-nav__item--prev">
-		<a class="post-nav__link" href="/post/simulation/quadtree-particle-simulation/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Quadtree Particle Simulation</p></a>
-	</div>
-	<div class="post-nav__item post-nav__item--next">
-		<a class="post-nav__link" href="/post/algorithms/pythagorean-triple/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Pythagorean Triple Problem in Sub-linear Time</p></a>
-	</div>
-</nav>
+
 
 
 			</div>
@@ -167,11 +168,11 @@ adjustment.</p>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/self-modifying-type-predicates/">Self Modifying Type Predicates in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/shunting-yard/">Dijkstra&#39;s Shunting Yard in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/life/ssc-meetup/">Bay Area SSC Meetup</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [WiP]</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/simulation/quadtree-particle-simulation/">Quadtree Particle Simulation</a></li>
 		</ul>
 	</div>
 </div>
@@ -202,6 +203,7 @@ adjustment.</p>
 	<div class="widget__content">
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
@@ -211,9 +213,12 @@ adjustment.</p>
 		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
 	</div>
 </div>
@@ -223,7 +228,7 @@ adjustment.</p>
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2019 MP&#39;s Projects and Papers.
+			&copy; 2020 MP&#39;s Projects and Papers.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

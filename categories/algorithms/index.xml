@@ -19,7 +19,7 @@
       <guid>/post/algorithms/shunting-yard/</guid>
       <description>The shunting yard algorithm converts infix expressions (i.e. 1+2) into reverse Polish notation, i.e. 1 2 +, which lends itself well to execution on a stack machine.
 An aside: I wanted to revisit this algorithm because it was one of the first I implemented in C during self-study five years ago. In a way, reimplementing it is a way of measuring my progress since then.
-The internal details aren&#39;t too complicated - it&#39;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm.</description>
+The internal details aren&amp;rsquo;t too complicated - it&amp;rsquo;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm.</description>
     </item>
     
     <item>

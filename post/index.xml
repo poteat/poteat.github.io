@@ -6,10 +6,22 @@
     <description>Recent content in Posts on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 23 Dec 2019 16:39:53 -0800</lastBuildDate>
+    <lastBuildDate>Sun, 03 May 2020 19:41:57 -0700</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Self Modifying Type Predicates in Typescript</title>
+      <link>/post/programming/self-modifying-type-predicates/</link>
+      <pubDate>Sun, 03 May 2020 19:41:57 -0700</pubDate>
+      
+      <guid>/post/programming/self-modifying-type-predicates/</guid>
+      <description>Typescript&amp;rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
+Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &amp;ldquo;simulate&amp;rdquo; dependents types, a powerful type feature present in Idris.
+Further explanation on type predicates can be found here.
+The premise of this article is a usage of type predicates I haven&amp;rsquo;t seen discussed online, and thus an application I might consider &amp;ldquo;advanced&amp;rdquo; or at least somewhat obscure.</description>
+    </item>
     
     <item>
       <title>Dijkstra&#39;s Shunting Yard in Typescript</title>
@@ -19,7 +31,7 @@
       <guid>/post/algorithms/shunting-yard/</guid>
       <description>The shunting yard algorithm converts infix expressions (i.e. 1+2) into reverse Polish notation, i.e. 1 2 +, which lends itself well to execution on a stack machine.
 An aside: I wanted to revisit this algorithm because it was one of the first I implemented in C during self-study five years ago. In a way, reimplementing it is a way of measuring my progress since then.
-The internal details aren&#39;t too complicated - it&#39;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm.</description>
+The internal details aren&amp;rsquo;t too complicated - it&amp;rsquo;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm.</description>
     </item>
     
     <item>
@@ -28,7 +40,7 @@ The internal details aren&#39;t too complicated - it&#39;s based on the simple p
       <pubDate>Mon, 03 Jun 2019 12:37:10 -0700</pubDate>
       
       <guid>/post/life/ssc-meetup/</guid>
-      <description>I&#39;m in SF for the summer, and I was thus able to attend the Slate Star Codex meetup this year in Dolores Park. Met a lot of interesting people, and got to meet Scott. While I&#39;m in the Bay Area I hope to get a little more involved in that scene.
+      <description>I&amp;rsquo;m in SF for the summer, and I was thus able to attend the Slate Star Codex meetup this year in Dolores Park. Met a lot of interesting people, and got to meet Scott. While I&amp;rsquo;m in the Bay Area I hope to get a little more involved in that scene.
 Picture is of the park, not the meetup specifically.</description>
     </item>
     
@@ -50,7 +62,7 @@ I was interested in finding a solution to this problem that was both succint and
       
       <guid>/post/simulation/mathematica-steps-to-latex/</guid>
       <description>A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
-Mathematica&#39;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
+Mathematica&amp;rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
     </item>
     
     <item>
@@ -93,7 +105,7 @@ One interesting estimate for the solution, which guarantees &amp;ldquo;pretty go
       <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
       
       <guid>/post/life/2019-presidential-luncheon/</guid>
-      <description>This last Wednesday I had the honor of attending a luncheon with ODU&#39;s current president John R. Broderick. This event was a meetup with the local Tau Beta Pi engineering honor society chapter.
+      <description>This last Wednesday I had the honor of attending a luncheon with ODU&amp;rsquo;s current president John R. Broderick. This event was a meetup with the local Tau Beta Pi engineering honor society chapter.
 The food was delicious! We were able to talk to Broderick about current events on campus, and suggestions we had (especially with regard to on-campus parking).
 Group photo included.</description>
     </item>

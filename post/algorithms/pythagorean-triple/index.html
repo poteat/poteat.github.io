@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en-us">
+<html class="no-js" lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -90,19 +90,19 @@ by deconstructing the problem into the well-known
 \(n\). Therefore, each number must be a divisor of \(n\). There is a
 simple <code>O(sqrt(n))</code> time algorithm that generates all divisors of \(n\):</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#888">// @require n &gt;= 1
-</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> divisors <span style="color:#333">=</span> (n: <span style="color:#339;font-weight:bold">number</span>) <span style="color:#333">=</span><span style="color:#333">&gt;</span> {
+</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> divisors <span style="color:#333">=</span> (n: <span style="color:#339;font-weight:bold">number</span>) <span style="color:#333">=&gt;</span> {
   <span style="color:#080;font-weight:bold">const</span> d <span style="color:#333">=</span> _.times(<span style="color:#007020">Math</span>.sqrt(n) <span style="color:#333">-</span> <span style="color:#00d;font-weight:bold">1</span>)
-    .map(i <span style="color:#333">=</span><span style="color:#333">&gt;</span> i <span style="color:#333">+</span> <span style="color:#00d;font-weight:bold">1</span>)
-    .filter(i <span style="color:#333">=</span><span style="color:#333">&gt;</span> n <span style="color:#333">%</span> i <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">0</span>);
+    .map(i <span style="color:#333">=&gt;</span> i <span style="color:#333">+</span> <span style="color:#00d;font-weight:bold">1</span>)
+    .filter(i <span style="color:#333">=&gt;</span> n <span style="color:#333">%</span> i <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">0</span>);
 
-  <span style="color:#080;font-weight:bold">return</span> _.uniq(d.concat([...d].reverse().map(i <span style="color:#333">=</span><span style="color:#333">&gt;</span> n <span style="color:#333">/</span> i)));
+  <span style="color:#080;font-weight:bold">return</span> _.uniq(d.concat([...d].reverse().map(i <span style="color:#333">=&gt;</span> n <span style="color:#333">/</span> i)));
 };
 </code></pre></div><p>The algorithm is expressed in TypeScript, in a functional form. The algorithm
 takes all numbers in the range of <code>[1 ... sqrt(n)]</code> and filters such numbers
 that \(n\) is divisble by. We are left with all of the divisors up until
 \(\sqrt n\).</p>
 <p>To then get the rest of the numbers, concatenate the current array with each
-divisor's pair. This is because if \(i\) is a divisor, \(\frac{n}{i}\) is
+divisor&rsquo;s pair. This is because if \(i\) is a divisor, \(\frac{n}{i}\) is
 also guaranteed to be a divisor. All references to _ are
 <a href="https://lodash.com/">lodash</a>.</p>
 <h2 id="invoking-the-3sum-problem">Invoking the 3SUM Problem</h2>
@@ -124,7 +124,7 @@ some simple algebra on our condition:</p>
 <p>$$ a^2 + b^2 = c^2 $$
 $$ a^2 + b^2 - c^2 = 0 $$</p>
 <p>So we see if we include all negative numbers of our divisor into our search set
-\(A\), we're much better off. As well, we square each number of our original
+\(A\), we&rsquo;re much better off. As well, we square each number of our original
 divisor set. So, given a divisor set for example, of 30:</p>
 <p>$$ {1, 2, 3, 5, 6, 10, 15, 30} $$</p>
 <p>We transform this set into the following:</p>
@@ -139,23 +139,23 @@ set, transforming it, applying it to the 3SUM problem, and filtering the
 results. The overall complexity is \(O(\sqrt{n})\) because the complexity of
 constructing the divisors is strictly more expensive than solving the 3SUM
 problem on the divisor set. The complexity could probably be improved via
-Pollard's Rho algorithm, at the cost of sacrificing simplicity.</p>
+Pollard&rsquo;s Rho algorithm, at the cost of sacrificing simplicity.</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#888">// Returns [a, b, c] where a^2 + b^2 = c^2 and a * b * c = n
-</span><span style="color:#888"></span><span style="color:#888">// If no such 3-tuple exists, returns [].
-</span><span style="color:#888"></span><span style="color:#888">// Runs in O(sqrt(n)) time.
-</span><span style="color:#888"></span><span style="color:#888">// @require n &gt;= 1
-</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> pythagoreanTriplet <span style="color:#333">=</span> (n: <span style="color:#339;font-weight:bold">number</span>) <span style="color:#333">=</span><span style="color:#333">&gt;</span> {
-  <span style="color:#080;font-weight:bold">let</span> d <span style="color:#333">=</span> divisors(n).map(x <span style="color:#333">=</span><span style="color:#333">&gt;</span> x <span style="color:#333">*</span><span style="color:#333">*</span> <span style="color:#00d;font-weight:bold">2</span>);
+</span><span style="color:#888">// If no such 3-tuple exists, returns [].
+</span><span style="color:#888">// Runs in O(sqrt(n)) time.
+</span><span style="color:#888">// @require n &gt;= 1
+</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> pythagoreanTriplet <span style="color:#333">=</span> (n: <span style="color:#339;font-weight:bold">number</span>) <span style="color:#333">=&gt;</span> {
+  <span style="color:#080;font-weight:bold">let</span> d <span style="color:#333">=</span> divisors(n).map(x <span style="color:#333">=&gt;</span> x <span style="color:#333">**</span> <span style="color:#00d;font-weight:bold">2</span>);
   d <span style="color:#333">=</span> [...d]
     .reverse()
-    .map(x <span style="color:#333">=</span><span style="color:#333">&gt;</span> <span style="color:#333">-</span>x)
+    .map(x <span style="color:#333">=&gt;</span> <span style="color:#333">-</span>x)
     .concat(d);
 
   <span style="color:#888">// O(log(n)^2)
 </span><span style="color:#888"></span>  <span style="color:#080;font-weight:bold">const</span> p <span style="color:#333">=</span> sum3(d)
-    .filter(x <span style="color:#333">=</span><span style="color:#333">&gt;</span> _.countBy(x, y <span style="color:#333">=</span><span style="color:#333">&gt;</span> y <span style="color:#333">&lt;</span> <span style="color:#00d;font-weight:bold">0</span>).<span style="color:#080;font-weight:bold">true</span> <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">1</span>)
-    .map(x <span style="color:#333">=</span><span style="color:#333">&gt;</span> x.map(y <span style="color:#333">=</span><span style="color:#333">&gt;</span> <span style="color:#007020">Math</span>.sqrt(<span style="color:#007020">Math</span>.abs(y))).sort((a, b) <span style="color:#333">=</span><span style="color:#333">&gt;</span> a <span style="color:#333">-</span> b))
-    .filter(x <span style="color:#333">=</span><span style="color:#333">&gt;</span> x.reduce((a, y) <span style="color:#333">=</span><span style="color:#333">&gt;</span> a <span style="color:#333">*</span> y) <span style="color:#333">===</span> n);
+    .filter(x <span style="color:#333">=&gt;</span> _.countBy(x, y <span style="color:#333">=&gt;</span> y <span style="color:#333">&lt;</span> <span style="color:#00d;font-weight:bold">0</span>).<span style="color:#080;font-weight:bold">true</span> <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">1</span>)
+    .map(x <span style="color:#333">=&gt;</span> x.map(y <span style="color:#333">=&gt;</span> <span style="color:#007020">Math</span>.sqrt(<span style="color:#007020">Math</span>.abs(y))).sort((a, b) <span style="color:#333">=&gt;</span> a <span style="color:#333">-</span> b))
+    .filter(x <span style="color:#333">=&gt;</span> x.reduce((a, y) <span style="color:#333">=&gt;</span> a <span style="color:#333">*</span> y) <span style="color:#333">===</span> n);
 
   <span style="color:#080;font-weight:bold">return</span> p.length <span style="color:#333">&gt;</span> <span style="color:#00d;font-weight:bold">0</span> <span style="color:#333">?</span> p[<span style="color:#00d;font-weight:bold">0</span>] <span style="color:#333">:</span> [];
 };
@@ -166,9 +166,15 @@ Pollard's Rho algorithm, at the cost of sacrificing simplicity.</p>
 <div class="post__tags tags clearfix">
 	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 	<ul class="tags__list">
-		<li class="tags__item"><a class="tags__link btn" href="/tags/math/" rel="tag">math</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/number-theory/" rel="tag">number theory</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/factorization/" rel="tag">factorization</a></li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/math/" rel="tag">math</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/number-theory/" rel="tag">number theory</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/factorization/" rel="tag">factorization</a>
+		</li>
 	</ul>
 </div>
 		</footer>
@@ -183,18 +189,11 @@ Pollard's Rho algorithm, at the cost of sacrificing simplicity.</p>
 		<span class="authorbox__name">About Michael Poteat</span>
 	</div>
 	<div class="authorbox__description">
-		Coder and researcher, doing graduate studies at Old Dominion University. Does machine learning, programming, pure mathematics and many other topics.
+		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
 	</div>
 </div>
 
-<nav class="post-nav flex">
-	<div class="post-nav__item post-nav__item--prev">
-		<a class="post-nav__link" href="/post/simulation/mathematica-steps-to-latex/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Mathematica Steps to LaTeX [WiP]</p></a>
-	</div>
-	<div class="post-nav__item post-nav__item--next">
-		<a class="post-nav__link" href="/post/life/ssc-meetup/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Bay Area SSC Meetup</p></a>
-	</div>
-</nav>
+
 
 
 			</div>
@@ -211,11 +210,11 @@ Pollard's Rho algorithm, at the cost of sacrificing simplicity.</p>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/self-modifying-type-predicates/">Self Modifying Type Predicates in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/shunting-yard/">Dijkstra&#39;s Shunting Yard in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/life/ssc-meetup/">Bay Area SSC Meetup</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [WiP]</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/simulation/quadtree-particle-simulation/">Quadtree Particle Simulation</a></li>
 		</ul>
 	</div>
 </div>
@@ -246,6 +245,7 @@ Pollard's Rho algorithm, at the cost of sacrificing simplicity.</p>
 	<div class="widget__content">
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
@@ -255,9 +255,12 @@ Pollard's Rho algorithm, at the cost of sacrificing simplicity.</p>
 		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
 	</div>
 </div>
@@ -267,7 +270,7 @@ Pollard's Rho algorithm, at the cost of sacrificing simplicity.</p>
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2019 MP&#39;s Projects and Papers.
+			&copy; 2020 MP&#39;s Projects and Papers.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

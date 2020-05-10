@@ -29,7 +29,7 @@ I was interested in finding a solution to this problem that was both succint and
       
       <guid>/post/simulation/mathematica-steps-to-latex/</guid>
       <description>A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
-Mathematica&#39;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
+Mathematica&amp;rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
     </item>
     
   </channel>

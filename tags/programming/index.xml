@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>programming on MP&#39;s Projects and Papers</title>
+    <link>/tags/programming/</link>
+    <description>Recent content in programming on MP&#39;s Projects and Papers</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 03 May 2020 19:41:57 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Self Modifying Type Predicates in Typescript</title>
+      <link>/post/programming/self-modifying-type-predicates/</link>
+      <pubDate>Sun, 03 May 2020 19:41:57 -0700</pubDate>
+      
+      <guid>/post/programming/self-modifying-type-predicates/</guid>
+      <description>Typescript&amp;rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
+Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &amp;ldquo;simulate&amp;rdquo; dependents types, a powerful type feature present in Idris.
+Further explanation on type predicates can be found here.
+The premise of this article is a usage of type predicates I haven&amp;rsquo;t seen discussed online, and thus an application I might consider &amp;ldquo;advanced&amp;rdquo; or at least somewhat obscure.</description>
+    </item>
+    
+  </channel>
+</rss>

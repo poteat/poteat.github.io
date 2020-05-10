@@ -3,12 +3,52 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/categories/algorithms/</loc>
-    <lastmod>2019-12-23T16:39:53-08:00</lastmod>
+    <loc>/categories/</loc>
+    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
   </url>
   
   <url>
-    <loc>/categories/</loc>
+    <loc>/tags/design-patterns/</loc>
+    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/programming/</loc>
+    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/programming/self-modifying-type-predicates/</loc>
+    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/type-system/</loc>
+    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/typescript/</loc>
+    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/typescript/</loc>
+    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/algorithms/</loc>
     <lastmod>2019-12-23T16:39:53-08:00</lastmod>
   </url>
   
@@ -23,27 +63,7 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2019-12-23T16:39:53-08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/tags/parsing/</loc>
-    <lastmod>2019-12-23T16:39:53-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2019-12-23T16:39:53-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2019-12-23T16:39:53-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/typescript/</loc>
     <lastmod>2019-12-23T16:39:53-08:00</lastmod>
   </url>
   
@@ -129,6 +149,11 @@
   
   <url>
     <loc>/contact/</loc>
+    <lastmod>2019-01-26T12:14:54-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
     <lastmod>2019-01-26T12:14:54-05:00</lastmod>
   </url>
   
