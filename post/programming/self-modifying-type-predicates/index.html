@@ -9,9 +9,9 @@
 	<meta name="description" content="">
 	<meta property="og:title" content="Self Modifying Type Predicates in Typescript" />
 <meta property="og:description" content="Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
-Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; dependents types, a powerful type feature present in Idris.
+Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; dependent types, a powerful type feature present in Idris.
 Further explanation on type predicates can be found here.
-The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online, and thus an application I might consider &ldquo;advanced&rdquo; or at least somewhat obscure." />
+The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on this because it is an implicit argument." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/programming/self-modifying-type-predicates/" />
 <meta property="article:published_time" content="2020-05-03T19:41:57-07:00" />
@@ -78,9 +78,9 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 			
 		</header><div class="content post__content clearfix">
 			<p>Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.</p>
-<p>Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; <a href="https://en.wikipedia.org/wiki/Dependent_type">dependents types</a>, a powerful type feature present in Idris.</p>
+<p>Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; <a href="https://en.wikipedia.org/wiki/Dependent_type">dependent types</a>, a powerful type feature present in Idris.</p>
 <p>Further explanation on type predicates can be found <a href="https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates">here</a>.</p>
-<p>The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online, and thus an application I might consider &ldquo;advanced&rdquo; or at least somewhat obscure.</p>
+<p>The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on <code>this</code> because it is an implicit argument.</p>
 <p>Essentially, in the context of an <code>interface</code> or <code>class</code>, you may apply a type predicate which applies additional type constraints on <code>this</code>.  To motivate the example, I&rsquo;ll invoke the common <code>Shape</code> class hierarchy, and try to avoid the corresponding quagmires with the Liskov substitution principle.</p>
 <p>First, we will introduce the type <code>ShapeTypes</code>, which will be a mapping from the type <code>'circle' | 'rectangle'</code> to <code>Circle | Rectangle</code>.  Basically, this type converts a string type into a concrete <code>Shape</code> type.</p>
 <p>Usually, every individual type would be in separate files.</p>
