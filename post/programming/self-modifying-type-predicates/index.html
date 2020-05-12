@@ -185,7 +185,7 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
     console.log(<span style="background-color:#fff0f0">`  W: </span><span style="background-color:#eee">${</span>shape.width<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">, H: </span><span style="background-color:#eee">${</span>shape.height<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>);
   }
 }
-</code></pre></div><p>In this form, the compiler knows that on line 128, shape is definitely of <code>Circle</code> type, because of the type predicate. We have implemented the ability to check, at run-time, whether or not a particular object is of a type we specify.  Additionally, through the use of generics and type predicates, we have extended that check to compile-time as well.</p>
+</code></pre></div><p>In this form, the compiler knows that on line 6, shape is definitely of <code>Circle</code> type, because of the type predicate. We have implemented the ability to check, at run-time, whether or not a particular object is of a type we specify.  Additionally, through the use of generics and type predicates, we have extended that check to compile-time as well.</p>
 <h2 id="final-notes">Final Notes</h2>
 <p>For this simple example, a similar functionality can be achieved using the <code>instanceof</code> operator. However, this approach has limitations in that it requires leaf types to specifically be implemented as classes, while the type generic approach works just as well for a pure functional paradigm.</p>
 <p>As well, using self-modifying type predicates is applicable beyond the problem of determining whether an object is of a certain type or not.</p>
