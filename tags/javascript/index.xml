@@ -6,11 +6,7 @@
     <description>Recent content in javascript on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 28 Jan 2019 13:59:19 -0500</lastBuildDate>
-    
-	<atom:link href="/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 28 Jan 2019 13:59:19 -0500</lastBuildDate><atom:link href="/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Quadtree Particle Simulation</title>
       <link>/post/simulation/quadtree-particle-simulation/</link>

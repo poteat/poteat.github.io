@@ -7,32 +7,37 @@
 	<title>Posts - MP&#39;s Projects and Papers</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
-	<meta property="og:title" content="Posts" />
+		<meta property="og:title" content="Posts" />
 <meta property="og:description" content="Personal blog about programming, math, and science." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/post/" />
-<meta property="og:updated_time" content="2020-05-03T19:41:57-07:00" />
+<meta property="og:updated_time" content="2020-12-16T19:41:08-08:00" />
 
-	
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="alternate" type="application/rss+xml" href="/post/index.xml" title="MP's Projects and Papers">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="alternate" type="application/rss+xml" href="/post/index.xml" title="MP's Projects and Papers">
+
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 </head>
 <body class="body">
 	<div class="container container--outer">
 		<header class="header">
-	<div class="container">
-		<div class="logo">
-			<a class="logo__link" href="/" title="MP&#39;s Projects and Papers" rel="home">
-				<div class="logo__title">MP&#39;s Projects and Papers</div>
-				<div class="logo__tagline">Personal portfolio</div>
-			</a>
-		</div>
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="MP&#39;s Projects and Papers" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">MP&#39;s Projects and Papers</div>
+					<div class="logo__tagline">Personal portfolio</div>
+				</div>
+		</a>
+	</div>
 		
 <nav class="menu">
 	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
@@ -73,11 +78,28 @@
 		<h1 class="main__title">Posts</h1>
 	</header><article class="list__item post">
 	<header class="list__header">
-		<h3 class="list__title post__title ">
+		<h2 class="list__title post__title">
+			<a href="/post/programming/enforcing-function-map-constraints/" rel="bookmark">
+			Enforcing Function Map Constraints
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		Some &ldquo;easy to state&rdquo; problems in Typescript can require somewhat sophisticated type constructs.
+Let&rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
+type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&lt;string, (number | string) =&gt; any&gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/enforcing-function-map-constraints/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/programming/self-modifying-type-predicates/" rel="bookmark">
 			Self Modifying Type Predicates in Typescript
 			</a>
-		</h3>
+		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
@@ -91,11 +113,11 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	</div>
 </article><article class="list__item post">
 	<header class="list__header">
-		<h3 class="list__title post__title ">
+		<h2 class="list__title post__title">
 			<a href="/post/algorithms/shunting-yard/" rel="bookmark">
 			Dijkstra&#39;s Shunting Yard in Typescript
 			</a>
-		</h3>
+		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
@@ -108,11 +130,11 @@ The internal details aren&rsquo;t too complicated - it&rsquo;s based on the simp
 	</div>
 </article><article class="list__item post">
 	<header class="list__header">
-		<h3 class="list__title post__title ">
+		<h2 class="list__title post__title">
 			<a href="/post/life/ssc-meetup/" rel="bookmark">
 			Bay Area SSC Meetup
 			</a>
-		</h3>
+		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
@@ -121,11 +143,11 @@ Picture is of the park, not the meetup specifically.
 	</div>
 </article><article class="list__item post">
 	<header class="list__header">
-		<h3 class="list__title post__title ">
+		<h2 class="list__title post__title">
 			<a href="/post/algorithms/pythagorean-triple/" rel="bookmark">
 			Pythagorean Triple Problem in Sub-linear Time
 			</a>
-		</h3>
+		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
@@ -138,11 +160,11 @@ I was interested in finding a solution to this problem that was both succint and
 	</div>
 </article><article class="list__item post">
 	<header class="list__header">
-		<h3 class="list__title post__title ">
+		<h2 class="list__title post__title">
 			<a href="/post/simulation/mathematica-steps-to-latex/" rel="bookmark">
 			Mathematica Steps to LaTeX [WiP]
 			</a>
-		</h3>
+		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
@@ -154,11 +176,11 @@ Mathematica&rsquo;s internal algorithms for performing various symbolic computat
 	</div>
 </article><article class="list__item post">
 	<header class="list__header">
-		<h3 class="list__title post__title ">
+		<h2 class="list__title post__title">
 			<a href="/post/simulation/quadtree-particle-simulation/" rel="bookmark">
 			Quadtree Particle Simulation
 			</a>
-		</h3>
+		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
@@ -170,11 +192,11 @@ The forces used are tuned to provide some amount of clustering, but also to prov
 	</div>
 </article><article class="list__item post">
 	<header class="list__header">
-		<h3 class="list__title post__title ">
+		<h2 class="list__title post__title">
 			<a href="/post/simulation/double-pendulum/" rel="bookmark">
 			Double Pendulum
 			</a>
-		</h3>
+		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
@@ -190,11 +212,11 @@ Angle 2
 	</div>
 </article><article class="list__item post">
 	<header class="list__header">
-		<h3 class="list__title post__title ">
+		<h2 class="list__title post__title">
 			<a href="/post/bioinformatics/oriented-bounding-box-heuristic/" rel="bookmark">
 			Oriented Bounding-Box Heuristic
 			</a>
-		</h3>
+		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
@@ -206,33 +228,17 @@ One interesting estimate for the solution, which guarantees &ldquo;pretty good&r
 	</div>
 </article><article class="list__item post">
 	<header class="list__header">
-		<h3 class="list__title post__title ">
+		<h2 class="list__title post__title">
 			<a href="/post/life/2019-presidential-luncheon/" rel="bookmark">
 			2019 Presidential Luncheon
 			</a>
-		</h3>
+		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		This last Wednesday I had the honor of attending a luncheon with ODU&rsquo;s current president John R. Broderick. This event was a meetup with the local Tau Beta Pi engineering honor society chapter.
 The food was delicious! We were able to talk to Broderick about current events on campus, and suggestions we had (especially with regard to on-campus parking).
 Group photo included.
-	</div>
-</article><article class="list__item post">
-	<header class="list__header">
-		<h3 class="list__title post__title ">
-			<a href="/post/bioinformatics/one-dimensional-linear-regression/" rel="bookmark">
-			One-Dimensional Linear Regression
-			</a>
-		</h3>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
- $$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$  Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/bioinformatics/one-dimensional-linear-regression/">Read more…</a>
 	</div>
 </article>
 </main>
@@ -247,7 +253,7 @@ Group photo included.
 <aside class="sidebar"><div class="widget-search widget">
 	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
 		<label>
-			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
 		</label>
 		<input class="widget-search__submit" type="submit" value="Search">
 		<input type="hidden" name="sitesearch" value="" />
@@ -257,11 +263,11 @@ Group photo included.
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/enforcing-function-map-constraints/">Enforcing Function Map Constraints</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/self-modifying-type-predicates/">Self Modifying Type Predicates in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/shunting-yard/">Dijkstra&#39;s Shunting Yard in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/life/ssc-meetup/">Bay Area SSC Meetup</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/simulation/mathematica-steps-to-latex/">Mathematica Steps to LaTeX [WiP]</a></li>
 		</ul>
 	</div>
 </div>

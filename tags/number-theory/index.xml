@@ -6,11 +6,7 @@
     <description>Recent content in number theory on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Mar 2019 15:48:49 -0400</lastBuildDate>
-    
-	<atom:link href="/tags/number-theory/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 10 Mar 2019 15:48:49 -0400</lastBuildDate><atom:link href="/tags/number-theory/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Pythagorean Triple Problem in Sub-linear Time</title>
       <link>/post/algorithms/pythagorean-triple/</link>

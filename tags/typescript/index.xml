@@ -6,10 +6,17 @@
     <description>Recent content in typescript on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 03 May 2020 19:41:57 -0700</lastBuildDate>
-    
-	<atom:link href="/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Wed, 16 Dec 2020 19:41:08 -0800</lastBuildDate><atom:link href="/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Enforcing Function Map Constraints</title>
+      <link>/post/programming/enforcing-function-map-constraints/</link>
+      <pubDate>Wed, 16 Dec 2020 19:41:08 -0800</pubDate>
+      
+      <guid>/post/programming/enforcing-function-map-constraints/</guid>
+      <description>Some &amp;ldquo;easy to state&amp;rdquo; problems in Typescript can require somewhat sophisticated type constructs.
+Let&amp;rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
+type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&amp;lt;string, (number | string) =&amp;gt; any&amp;gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.</description>
+    </item>
     
     <item>
       <title>Self Modifying Type Predicates in Typescript</title>

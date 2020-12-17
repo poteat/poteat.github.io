@@ -4,7 +4,47 @@
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
+    <lastmod>2020-12-16T19:41:08-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/programming/enforcing-function-map-constraints/</loc>
+    <lastmod>2020-12-16T19:41:08-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2020-12-16T19:41:08-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2020-12-16T19:41:08-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/programming/</loc>
+    <lastmod>2020-12-16T19:41:08-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2020-12-16T19:41:08-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/type-system/</loc>
+    <lastmod>2020-12-16T19:41:08-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/typescript/</loc>
+    <lastmod>2020-12-16T19:41:08-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/typescript/</loc>
+    <lastmod>2020-12-16T19:41:08-08:00</lastmod>
   </url>
   
   <url>
@@ -13,37 +53,7 @@
   </url>
   
   <url>
-    <loc>/post/</loc>
-    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/programming/</loc>
-    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/post/programming/self-modifying-type-predicates/</loc>
-    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/type-system/</loc>
-    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/typescript/</loc>
-    <lastmod>2020-05-03T19:41:57-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/typescript/</loc>
     <lastmod>2020-05-03T19:41:57-07:00</lastmod>
   </url>
   
@@ -149,11 +159,6 @@
   
   <url>
     <loc>/contact/</loc>
-    <lastmod>2019-01-26T12:14:54-05:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/</loc>
     <lastmod>2019-01-26T12:14:54-05:00</lastmod>
   </url>
   
