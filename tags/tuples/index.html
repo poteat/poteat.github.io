@@ -4,13 +4,13 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>type system - MP&#39;s Projects and Papers</title>
+	<title>tuples - MP&#39;s Projects and Papers</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
-		<meta property="og:title" content="type system" />
+		<meta property="og:title" content="tuples" />
 <meta property="og:description" content="Personal blog about programming, math, and science." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="/tags/type-system/" />
+<meta property="og:url" content="/tags/tuples/" />
 <meta property="og:updated_time" content="2021-01-05T20:23:23-08:00" />
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
 
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="/css/custom.css">
-	<link rel="alternate" type="application/rss+xml" href="/tags/type-system/index.xml" title="MP's Projects and Papers">
+	<link rel="alternate" type="application/rss+xml" href="/tags/tuples/index.xml" title="MP's Projects and Papers">
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
@@ -75,7 +75,7 @@
 			
 <main class="main list" role="main">
 	<header class="main__header">
-		<h1 class="main__title">type system</h1>
+		<h1 class="main__title">tuples</h1>
 	</header><article class="list__item post">
 	<header class="list__header">
 		<h2 class="list__title post__title">
@@ -91,41 +91,6 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/chained-tuple-types/">Read more…</a>
-	</div>
-</article><article class="list__item post">
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/programming/enforcing-function-map-constraints/" rel="bookmark">
-			Enforcing Function Map Constraints
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		Some &ldquo;easy to state&rdquo; problems in Typescript can require somewhat sophisticated type constructs.
-Let&rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
-type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&lt;string, (number | string) =&gt; any&gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/enforcing-function-map-constraints/">Read more…</a>
-	</div>
-</article><article class="list__item post">
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/programming/self-modifying-type-predicates/" rel="bookmark">
-			Self Modifying Type Predicates in Typescript
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
-Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; dependent types, a powerful type feature present in Idris.
-Further explanation on type predicates can be found here.
-The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on this because it is an implicit argument.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/self-modifying-type-predicates/">Read more…</a>
 	</div>
 </article>
 </main>

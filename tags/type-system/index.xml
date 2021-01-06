@@ -6,7 +6,17 @@
     <description>Recent content in type system on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Dec 2020 19:41:08 -0800</lastBuildDate><atom:link href="/tags/type-system/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 05 Jan 2021 20:23:23 -0800</lastBuildDate><atom:link href="/tags/type-system/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Chained Tuple Types</title>
+      <link>/post/programming/chained-tuple-types/</link>
+      <pubDate>Tue, 05 Jan 2021 20:23:23 -0800</pubDate>
+      
+      <guid>/post/programming/chained-tuple-types/</guid>
+      <description>With Typescript 4.1, it&amp;rsquo;s now possible to use variadic tuple types to construct large types with what appears to be runtime code. The general idea is that we will utilize a chaining pattern, where each operation on the chain returns an expanded version of the chain&amp;rsquo;s type.
+To motivate the example, let us consider a Set class. Our Set is a chaining class, where you may insert, remove, and check for the existence of numbers.</description>
+    </item>
+    
     <item>
       <title>Enforcing Function Map Constraints</title>
       <link>/post/programming/enforcing-function-map-constraints/</link>

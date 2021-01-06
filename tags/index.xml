@@ -6,20 +6,29 @@
     <description>Recent content in Tags on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Dec 2020 19:41:08 -0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 05 Jan 2021 20:23:23 -0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>programming</title>
       <link>/tags/programming/</link>
-      <pubDate>Wed, 16 Dec 2020 19:41:08 -0800</pubDate>
+      <pubDate>Tue, 05 Jan 2021 20:23:23 -0800</pubDate>
       
       <guid>/tags/programming/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>tuples</title>
+      <link>/tags/tuples/</link>
+      <pubDate>Tue, 05 Jan 2021 20:23:23 -0800</pubDate>
+      
+      <guid>/tags/tuples/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>type system</title>
       <link>/tags/type-system/</link>
-      <pubDate>Wed, 16 Dec 2020 19:41:08 -0800</pubDate>
+      <pubDate>Tue, 05 Jan 2021 20:23:23 -0800</pubDate>
       
       <guid>/tags/type-system/</guid>
       <description></description>
@@ -28,7 +37,7 @@
     <item>
       <title>typescript</title>
       <link>/tags/typescript/</link>
-      <pubDate>Wed, 16 Dec 2020 19:41:08 -0800</pubDate>
+      <pubDate>Tue, 05 Jan 2021 20:23:23 -0800</pubDate>
       
       <guid>/tags/typescript/</guid>
       <description></description>

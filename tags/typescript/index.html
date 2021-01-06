@@ -11,7 +11,7 @@
 <meta property="og:description" content="Personal blog about programming, math, and science." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/tags/typescript/" />
-<meta property="og:updated_time" content="2020-12-16T19:41:08-08:00" />
+<meta property="og:updated_time" content="2021-01-05T20:23:23-08:00" />
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -79,6 +79,22 @@
 	</header><article class="list__item post">
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/programming/chained-tuple-types/" rel="bookmark">
+			Chained Tuple Types
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		With Typescript 4.1, it&rsquo;s now possible to use variadic tuple types to construct large types with what appears to be runtime code. The general idea is that we will utilize a chaining pattern, where each operation on the chain returns an expanded version of the chain&rsquo;s type.
+To motivate the example, let us consider a Set class. Our Set is a chaining class, where you may insert, remove, and check for the existence of numbers.
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/chained-tuple-types/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/programming/enforcing-function-map-constraints/" rel="bookmark">
 			Enforcing Function Map Constraints
 			</a>
@@ -130,11 +146,11 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/enforcing-function-map-constraints/">Enforcing Function Map Constraints</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/self-modifying-type-predicates/">Self Modifying Type Predicates in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/algorithms/shunting-yard/">Dijkstra&#39;s Shunting Yard in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/life/ssc-meetup/">Bay Area SSC Meetup</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/algorithms/pythagorean-triple/">Pythagorean Triple Problem in Sub-linear Time</a></li>
 		</ul>
 	</div>
 </div>
@@ -179,6 +195,7 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="tuples">tuples</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
@@ -190,7 +207,7 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2020 MP&#39;s Projects and Papers.
+			&copy; 2021 MP&#39;s Projects and Papers.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>
