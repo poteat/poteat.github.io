@@ -4,13 +4,13 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>typescript - MP&#39;s Projects and Papers</title>
+	<title>Tags - MP&#39;s Projects and Papers</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
-		<meta property="og:title" content="typescript" />
+		<meta property="og:title" content="Tags" />
 <meta property="og:description" content="Personal blog about programming, math, and science." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="/categories/typescript/" />
+<meta property="og:url" content="/tags/" />
 <meta property="og:updated_time" content="2021-01-09T15:18:24-08:00" />
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
 
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="/css/custom.css">
-	<link rel="alternate" type="application/rss+xml" href="/categories/typescript/index.xml" title="MP's Projects and Papers">
+	<link rel="alternate" type="application/rss+xml" href="/tags/index.xml" title="MP's Projects and Papers">
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
@@ -75,94 +75,38 @@
 			
 <main class="main list" role="main">
 	<header class="main__header">
-		<h1 class="main__title">typescript</h1>
+		<h1 class="main__title">Tags</h1>
 	</header><article class="list__item post">
 	<header class="list__header">
 		<h2 class="list__title post__title">
-			<a href="/post/programming/type-level-dedupe/" rel="bookmark">
-			String Deduplication on the Type Level
+			<a href="/tags/tau-beta-pi/" rel="bookmark">
+			tau-beta-pi
 			</a>
 		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		The string deduplication problem is a canonical one within computer science, serving a similar purpose as fizz-buzz in terms of being an example of a simple problem that a reasonably knowledgable practitioner should be able to solve with minimal effort.
-The problem appears in a few variants, but briefly one such variant is to remove duplicate letters in a given string, such that the string then has only one instance of any given letter.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/type-level-dedupe/">Read more…</a>
+		
 	</div>
 </article><article class="list__item post">
 	<header class="list__header">
 		<h2 class="list__title post__title">
-			<a href="/post/programming/chained-tuple-types/" rel="bookmark">
-			Chained Tuple Types
+			<a href="/tags/curves/" rel="bookmark">
+			curves
 			</a>
 		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		With Typescript 4.1, it&rsquo;s now possible to use variadic tuple types to construct large types with what appears to be runtime code. The general idea is that we will utilize a chaining pattern, where each operation on the chain returns an expanded version of the chain&rsquo;s type.
-To motivate the example, let us consider a Set class. Our Set is a chaining class, where you may insert, remove, and check for the existence of numbers.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/chained-tuple-types/">Read more…</a>
-	</div>
-</article><article class="list__item post">
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/programming/enforcing-function-map-constraints/" rel="bookmark">
-			Enforcing Function Map Constraints
-			</a>
-		</h2>
 		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		Some &ldquo;easy to state&rdquo; problems in Typescript can require somewhat sophisticated type constructs.
-Let&rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
-type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&lt;string, (number | string) =&gt; any&gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/enforcing-function-map-constraints/">Read more…</a>
-	</div>
-</article><article class="list__item post">
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/programming/self-modifying-type-predicates/" rel="bookmark">
-			Self Modifying Type Predicates in Typescript
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
-Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; dependent types, a powerful type feature present in Idris.
-Further explanation on type predicates can be found here.
-The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on this because it is an implicit argument.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/self-modifying-type-predicates/">Read more…</a>
-	</div>
-</article><article class="list__item post">
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/algorithms/shunting-yard/" rel="bookmark">
-			Dijkstra&#39;s Shunting Yard in Typescript
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		The shunting yard algorithm converts infix expressions (i.e. 1+2) into reverse Polish notation, i.e. 1 2 +, which lends itself well to execution on a stack machine.
-An aside: I wanted to revisit this algorithm because it was one of the first I implemented in C during self-study five years ago. In a way, reimplementing it is a way of measuring my progress since then.
-The internal details aren&rsquo;t too complicated - it&rsquo;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/algorithms/shunting-yard/">Read more…</a>
 	</div>
 </article>
 </main>
 
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/tags/page/2/">«</a>
+	<span class="pagination__item pagination__item--current">3/3</span>
+</div>
 
 			</div>
 			

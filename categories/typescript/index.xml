@@ -6,7 +6,17 @@
     <description>Recent content in typescript on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 Jan 2021 20:23:23 -0800</lastBuildDate><atom:link href="/categories/typescript/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 09 Jan 2021 15:18:24 -0800</lastBuildDate><atom:link href="/categories/typescript/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>String Deduplication on the Type Level</title>
+      <link>/post/programming/type-level-dedupe/</link>
+      <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
+      
+      <guid>/post/programming/type-level-dedupe/</guid>
+      <description>The string deduplication problem is a canonical one within computer science, serving a similar purpose as fizz-buzz in terms of being an example of a simple problem that a reasonably knowledgable practitioner should be able to solve with minimal effort.
+The problem appears in a few variants, but briefly one such variant is to remove duplicate letters in a given string, such that the string then has only one instance of any given letter.</description>
+    </item>
+    
     <item>
       <title>Chained Tuple Types</title>
       <link>/post/programming/chained-tuple-types/</link>
