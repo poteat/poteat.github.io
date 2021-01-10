@@ -3,32 +3,62 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/categories/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/programming/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/tuples/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/type-system/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/typescript/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/typescript/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/programming/unchained-tuple-types/</loc>
+    <lastmod>2021-01-09T16:33:40-08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/algorithms/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
   </url>
   
   <url>
     <loc>/categories/algorithms/</loc>
-    <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/</loc>
-    <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/</loc>
-    <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/programming/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
   </url>
   
@@ -43,32 +73,7 @@
   </url>
   
   <url>
-    <loc>/tags/</loc>
-    <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/tuples/</loc>
-    <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/typescript/</loc>
-    <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/typescript/</loc>
-    <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/post/programming/chained-tuple-types/</loc>
-    <lastmod>2021-01-05T20:23:23-08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/type-system/</loc>
     <lastmod>2021-01-05T20:23:23-08:00</lastmod>
   </url>
   

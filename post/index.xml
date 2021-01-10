@@ -6,7 +6,18 @@
     <description>Recent content in Posts on MP&#39;s Projects and Papers</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 09 Jan 2021 15:18:24 -0800</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 09 Jan 2021 16:33:40 -0800</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Unchained Tuple Types</title>
+      <link>/post/programming/unchained-tuple-types/</link>
+      <pubDate>Sat, 09 Jan 2021 16:33:40 -0800</pubDate>
+      
+      <guid>/post/programming/unchained-tuple-types/</guid>
+      <description>The asserts syntax of the as-yet unreleased Typescript 4.2 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
+This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
+const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.</description>
+    </item>
+    
     <item>
       <title>String Deduplication on the Type Level</title>
       <link>/post/programming/type-level-dedupe/</link>

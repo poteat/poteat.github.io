@@ -11,7 +11,7 @@
 <meta property="og:description" content="Personal blog about programming, math, and science." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/tags/tuples/" />
-<meta property="og:updated_time" content="2021-01-09T15:18:24-08:00" />
+<meta property="og:updated_time" content="2021-01-09T16:33:40-08:00" />
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -79,6 +79,23 @@
 	</header><article class="list__item post">
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/programming/unchained-tuple-types/" rel="bookmark">
+			Unchained Tuple Types
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		The asserts syntax of the as-yet unreleased Typescript 4.2 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
+This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
+const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/unchained-tuple-types/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/programming/type-level-dedupe/" rel="bookmark">
 			String Deduplication on the Type Level
 			</a>
@@ -127,11 +144,11 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-dedupe/">String Deduplication on the Type Level</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/enforcing-function-map-constraints/">Enforcing Function Map Constraints</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/self-modifying-type-predicates/">Self Modifying Type Predicates in Typescript</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/algorithms/shunting-yard/">Dijkstra&#39;s Shunting Yard in Typescript</a></li>
 		</ul>
 	</div>
 </div>
