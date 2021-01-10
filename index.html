@@ -85,9 +85,9 @@
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		The asserts syntax of the as-yet unreleased Typescript 4.2 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
+		The asserts syntax introduced with TS 3.7 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
 This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
-const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.
+const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.has(8); // :: true const hasResult2 = set.
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/unchained-tuple-types/">Read more…</a>
