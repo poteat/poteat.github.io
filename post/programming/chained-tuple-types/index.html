@@ -193,21 +193,14 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 </code></pre></div><p>Note that we could have just as well determined whether or not the value was already present, and decided whether or not to insert it. This underlines the isomorphism between the value-level and the type-level - specifically that in a lot of cases, any given operation you could think of has both a value-level component and a type-level component, including array operations, arithmetic, graph operations, etc.</p>
 <p>As well, any given type specification will have multiple possible representations, with differing efficiency, albeit with respect to compilation time and memory in lieu of runtime cost.</p>
 <h2 id="tuple-existence-checks">Tuple Existence Checks</h2>
-<p>For existence check, we need another, similar type-level recursive tuple loop. With some meditation, you may be able to notice the similar structure between <code>Exists</code> and <code>Filter</code> - they operate on the same principle.</p>
-<p>By design, we choose to say that in the case of a generic type <code>number[]</code>, any given number may or may not exist - which we represent via returning <code>boolean</code> rather than explicitly true or false.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Exists&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">N</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
-  <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">false</span>
-  <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> H, ...<span style="color:#080;font-weight:bold">infer</span> R]
-  <span style="color:#333">?</span> H <span style="color:#080;font-weight:bold">extends</span> N
-    <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span>
-    <span style="color:#333">:</span> Exists&lt;<span style="color:#070">R</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">N</span>&gt;
-  <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">boolean</span>;
+<p>For existence check, we can utilize <code>extends</code> - we convert the tuple to a union and perform an extends check to determine whether or not the given element is present in the tuple.</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Has&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">X</span>&gt; <span style="color:#333">=</span> X <span style="color:#080;font-weight:bold">extends</span> T[<span style="color:#339;font-weight:bold">number</span>] <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
 
 <span style="color:#080;font-weight:bold">type</span> Ex5_1 <span style="color:#333">=</span> [<span style="color:#00d;font-weight:bold">2</span>, <span style="color:#00d;font-weight:bold">4</span>, <span style="color:#00d;font-weight:bold">8</span>];
-<span style="color:#080;font-weight:bold">type</span> Ex5_1_HasFour <span style="color:#333">=</span> Exists&lt;<span style="color:#070">Ex5_1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">4</span>&gt;; <span style="color:#888">// true
+<span style="color:#080;font-weight:bold">type</span> Ex5_1_HasFour <span style="color:#333">=</span> Has&lt;<span style="color:#070">Ex5_1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">4</span>&gt;; <span style="color:#888">// true
 </span><span style="color:#888"></span>
 <span style="color:#080;font-weight:bold">type</span> Ex5_2 <span style="color:#333">=</span> <span style="color:#339;font-weight:bold">number</span>[];
-<span style="color:#080;font-weight:bold">type</span> Ex5_2_HasFour <span style="color:#333">=</span> Exists&lt;<span style="color:#070">Ex5_1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">4</span>&gt;; <span style="color:#888">// boolean
+<span style="color:#080;font-weight:bold">type</span> Ex5_2_HasFour <span style="color:#333">=</span> Has&lt;<span style="color:#070">Ex5_1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">4</span>&gt;; <span style="color:#888">// boolean
 </span></code></pre></div><p>We now have enough code to finish our type specification of <code>Set</code>, complete with a type-safe existence check.</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">type</span> Set&lt;<span style="color:#070">Elements</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span><span style="color:#f00;background-color:#faa">[]</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> {
   <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> Set&lt;<span style="color:#070">Elements</span>&gt;;
@@ -222,7 +215,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 
   has&lt;<span style="color:#070">SpecificValue</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span>&gt;(
     x: <span style="color:#339;font-weight:bold">SpecificValue</span>
-  )<span style="color:#333">:</span> Exists&lt;<span style="color:#070">Elements</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">SpecificValue</span>&gt;;
+  )<span style="color:#333">:</span> Has&lt;<span style="color:#070">Elements</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">SpecificValue</span>&gt;;
 
   value()<span style="color:#333">:</span> Elements;
 };
