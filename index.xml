@@ -120,6 +120,7 @@ The forces used are tuned to provide some amount of clustering, but also to prov
       
       <guid>/contact/</guid>
       <description>You can contact me using the below form. If it&amp;rsquo;s more convenient, I can also be contacted on Github or LinkedIn.
+2021 Update: I have no idea if the below form works. YMMV. Best to just email me.
  f = (s) = {return s.replace(/[a-zA-Z]/g,function(c){return String.fromCharCode((c=(c=c.charCodeAt(0)+13)?c:c-26);});} window.onload = () = {document.getElementById(&#34;contact-form&#34;).action += f(&#34;zr@zcbgr.ng&#34;)};  Your Email
 Your Name
 Message
