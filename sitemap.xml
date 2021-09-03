@@ -1,250 +1,152 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>/categories/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/programming/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/tuples/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/type-system/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/typescript/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/categories/typescript/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/programming/unchained-tuple-types/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/algorithms/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/categories/algorithms/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/programming/type-level-dedupe/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/strings/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/programming/chained-tuple-types/</loc>
     <lastmod>2021-01-05T20:23:23-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/programming/enforcing-function-map-constraints/</loc>
     <lastmod>2020-12-16T19:41:08-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/design-patterns/</loc>
     <lastmod>2020-05-03T19:41:57-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/programming/self-modifying-type-predicates/</loc>
     <lastmod>2020-05-03T19:41:57-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/dijkstra/</loc>
     <lastmod>2019-12-23T16:39:53-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/algorithms/shunting-yard/</loc>
     <lastmod>2019-12-23T16:39:53-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/parsing/</loc>
     <lastmod>2019-12-23T16:39:53-08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/life/ssc-meetup/</loc>
     <lastmod>2019-06-03T12:37:10-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/categories/life/</loc>
     <lastmod>2019-06-03T12:37:10-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/rationality/</loc>
     <lastmod>2019-06-03T12:37:10-07:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/factorization/</loc>
     <lastmod>2019-03-10T15:48:49-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/math/</loc>
     <lastmod>2019-03-10T15:48:49-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/number-theory/</loc>
     <lastmod>2019-03-10T15:48:49-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/algorithms/pythagorean-triple/</loc>
     <lastmod>2019-03-10T15:48:49-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/latex/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/mathematica/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/simulation/mathematica-steps-to-latex/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/categories/simulation/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/wip/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/demo/</loc>
     <lastmod>2019-01-28T13:59:19-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/javascript/</loc>
     <lastmod>2019-01-28T13:59:19-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/physics/</loc>
     <lastmod>2019-01-28T13:59:19-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/simulation/quadtree-particle-simulation/</loc>
     <lastmod>2019-01-28T13:59:19-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/contact/</loc>
     <lastmod>2019-01-26T12:14:54-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/simulation/double-pendulum/</loc>
     <lastmod>2019-01-25T20:58:30-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/categories/bioinformatics/</loc>
     <lastmod>2019-01-25T20:35:20-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/bioinformatics/oriented-bounding-box-heuristic/</loc>
     <lastmod>2019-01-25T20:35:20-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/regression/</loc>
     <lastmod>2019-01-25T20:35:20-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/life/2019-presidential-luncheon/</loc>
     <lastmod>2019-01-25T18:58:29-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/tau-beta-pi/</loc>
     <lastmod>2019-01-25T18:58:29-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/bioinformatics/one-dimensional-linear-regression/</loc>
     <lastmod>2019-01-25T18:27:02-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/tags/curves/</loc>
     <lastmod>2019-01-25T17:40:45-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/post/bioinformatics/quadratic-bezier-curves/</loc>
     <lastmod>2019-01-25T17:40:45-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/papers/</loc>
     <lastmod>2019-01-25T17:28:08-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>/about/</loc>
     <lastmod>2019-01-25T16:24:07-05:00</lastmod>
   </url>
-  
 </urlset>

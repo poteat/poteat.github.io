@@ -4,16 +4,17 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Mathematica Steps to LaTeX [WiP] - MP&#39;s Projects and Papers</title>
+	<title>Mathematica Steps to LaTeX [WiP] - Code, lol.</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 		<meta property="og:title" content="Mathematica Steps to LaTeX [WiP]" />
 <meta property="og:description" content="A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
 Mathematica&rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/post/simulation/mathematica-steps-to-latex/" />
+<meta property="og:url" content="/post/simulation/mathematica-steps-to-latex/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2019-02-01T15:01:48-05:00" />
 <meta property="article:modified_time" content="2019-02-01T15:01:48-05:00" />
+
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -32,10 +33,10 @@ Mathematica&rsquo;s internal algorithms for performing various symbolic computat
 	<div class="container header__container">
 		
 	<div class="logo">
-		<a class="logo__link" href="/" title="MP&#39;s Projects and Papers" rel="home">
+		<a class="logo__link" href="/" title="Code, lol." rel="home">
 			<div class="logo__item logo__text">
-					<div class="logo__title">MP&#39;s Projects and Papers</div>
-					<div class="logo__tagline">Personal portfolio</div>
+					<div class="logo__title">Code, lol.</div>
+					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
 				</div>
 		</a>
 	</div>
@@ -100,7 +101,7 @@ of steps in plaintext format.</p>
 <p>Enter this web-page, which converts Mathematica plaintext steps into
 well-formatted LaTeX. The following command will generate the plaintext steps
 for a given simple problem.</p>
-<pre><code>ShowSteps[exp_] :=
+<pre tabindex="0"><code>ShowSteps[exp_] :=
  WolframAlpha[
   ToString@HoldForm@InputForm@exp, {{&quot;Input&quot;, 2}, &quot;Plaintext&quot;},
   PodStates -&gt; {&quot;Input__Step-by-step solution&quot;}]
@@ -115,9 +116,9 @@ adjustment.</p>
 <li>Copy the output LaTeX into your LaTeX editor of choice.</li>
 </ol>
 <h2 id="plaintext-input">Plaintext Input</h2>
-<p><textarea id="text-input" class="monospace" rows="20" cols="150"></textarea></p>
+<textarea id="text-input" class="monospace" rows="20" cols="150"></textarea>
 <h2 id="latex-output">LaTeX Output</h2>
-<p><textarea id="text-output" class="monospace" rows="20" cols="150" readonly></textarea></p>
+<textarea id="text-output" class="monospace" rows="20" cols="150" readonly></textarea>
 <script type="text/javascript" src="/js/simulation/mathematica-steps-to-latex.js"></script>
 
 		</div>
@@ -235,7 +236,7 @@ adjustment.</p>
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2021 MP&#39;s Projects and Papers.
+			&copy; 2021 Code, lol..
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

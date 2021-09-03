@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Unchained Tuple Types - MP&#39;s Projects and Papers</title>
+	<title>Unchained Tuple Types - Code, lol.</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 		<meta property="og:title" content="Unchained Tuple Types" />
@@ -12,9 +12,10 @@
 This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
 const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.has(8); // :: true const hasResult2 = set." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/post/programming/unchained-tuple-types/" />
+<meta property="og:url" content="/post/programming/unchained-tuple-types/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-09T16:33:40-08:00" />
 <meta property="article:modified_time" content="2021-01-09T16:33:40-08:00" />
+
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -33,10 +34,10 @@ const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.rem
 	<div class="container header__container">
 		
 	<div class="logo">
-		<a class="logo__link" href="/" title="MP&#39;s Projects and Papers" rel="home">
+		<a class="logo__link" href="/" title="Code, lol." rel="home">
 			<div class="logo__item logo__text">
-					<div class="logo__title">MP&#39;s Projects and Papers</div>
-					<div class="logo__tagline">Personal portfolio</div>
+					<div class="logo__title">Code, lol.</div>
+					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
 				</div>
 		</a>
 	</div>
@@ -83,7 +84,7 @@ const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.rem
 		</header><div class="content post__content clearfix">
 			<p>The <code>asserts</code> syntax introduced with TS 3.7 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.</p>
 <p>This allows us to do away with the chaining syntax as described in my earlier article, <strong><a href="https://mpote.at/post/programming/chained-tuple-types/">Chained Tuple Types</a></strong>, and express our Set mutations in a much more familiar iterative way:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> <span style="color:#080;font-weight:bold">set</span><span style="color:#333">:</span> Set <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> Set();
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> <span style="color:#080;font-weight:bold">set</span><span style="color:#333">:</span> Set <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> Set();
 
 <span style="color:#080;font-weight:bold">set</span>.insert(<span style="color:#00d;font-weight:bold">2</span>);
 <span style="color:#080;font-weight:bold">set</span>.insert(<span style="color:#00d;font-weight:bold">4</span>);
@@ -98,7 +99,7 @@ const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.rem
 <p>I am not familiar with other mainstream programming languages that can express such a deep level of type safety and compile-time inference.</p>
 <h2 id="addendum-the-gritty-details">Addendum: The Gritty Details</h2>
 <p>Using the <code>Filter</code> and <code>Has</code> utility types discussed in previous articles, as follows is the updated implementation of <code>Set</code> which utilizes the <code>asserts</code> capability.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Filter&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">N</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Filter&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">N</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
   <span style="color:#333">?</span> []
   <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> H, ...<span style="color:#080;font-weight:bold">infer</span> R]
   <span style="color:#333">?</span> H <span style="color:#080;font-weight:bold">extends</span> N
@@ -257,7 +258,7 @@ const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.rem
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2021 MP&#39;s Projects and Papers.
+			&copy; 2021 Code, lol..
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

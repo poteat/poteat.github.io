@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Enforcing Function Map Constraints - MP&#39;s Projects and Papers</title>
+	<title>Enforcing Function Map Constraints - Code, lol.</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 		<meta property="og:title" content="Enforcing Function Map Constraints" />
@@ -12,9 +12,10 @@
 Let&rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
 type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&lt;string, (number | string) =&gt; any&gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/post/programming/enforcing-function-map-constraints/" />
+<meta property="og:url" content="/post/programming/enforcing-function-map-constraints/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2020-12-16T19:41:08-08:00" />
 <meta property="article:modified_time" content="2020-12-16T19:41:08-08:00" />
+
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -33,10 +34,10 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 	<div class="container header__container">
 		
 	<div class="logo">
-		<a class="logo__link" href="/" title="MP&#39;s Projects and Papers" rel="home">
+		<a class="logo__link" href="/" title="Code, lol." rel="home">
 			<div class="logo__item logo__text">
-					<div class="logo__title">MP&#39;s Projects and Papers</div>
-					<div class="logo__tagline">Personal portfolio</div>
+					<div class="logo__title">Code, lol.</div>
+					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
 				</div>
 		</a>
 	</div>
@@ -83,7 +84,7 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 		</header><div class="content post__content clearfix">
 			<p>Some &ldquo;easy to state&rdquo; problems in Typescript can require somewhat sophisticated type constructs.</p>
 <p>Let&rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> PermissibleInput <span style="color:#333">=</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">string</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> PermissibleInput <span style="color:#333">=</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">string</span>;
 
 <span style="color:#080;font-weight:bold">const</span> myFunctionMap <span style="color:#333">=</span> {
   foobar(x: <span style="color:#339;font-weight:bold">number</span>)<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">void</span>;
@@ -109,13 +110,13 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 <h2 id="single-function-case">Single Function Case</h2>
 <p><a href="https://www.typescriptlang.org/play?#code/PTAEGUEsDsHMBsCmoBiBXaBjALpA9tKAMICGAzogFDQkC2iZADiZslHEulrgaRaAG9KoUADMMOfIRqQAbogCCjRvACeAClEAuUOoAeO6GloAjRACdQAH1Bls5mLACUoALwA+UCWiqXAgL6UwqCYBHagtKrsCIhckgRuugagRqYWLh6C-gDcQSIgoAAqABbIMvJeyuZ4LMWgACZ4DCl42KAA7njmANZaweWKymrqkdGcEjzQTtmgBYWqjMgAoubV5gCEoABEdg5wWw1NZC1tiHrYiND126lm5lt5s2AA6mWIiNdk8JCwxdhqoFKJFkkAsEVqMAsqj6ImwC2QAEkyAAFCy0SBkMiQEzjbhSAA8wREKFAZwuV2O+h03l8bk8NOCnlcoGRJHMdEQF3MZHxKHcAG0AAwAXVJ50u9WOu0c1hSxjuoAA-KB7GhkDpRCR4BRcsFxHiEiQhqp8YUxeTJUlqT4MvSfO51ESxDokajzOjMdjcfFoKbPGSJcdVchlWbDIh5OZgn5AsEjSoNKNHN7JtNHgUFMd2sh2t5sAAaFXFDFiCZSUAl6CtLyYViMC71GGVBPqKleG10rLTJ4s6qLSxwxak1ZdUAAWlAegrxyrbRItnsMtHtwsADpKLGCnFJqAALJG4jkKg0ehMFjIbdSfeMPjIISw+GgV1ojFYnGxMsEQkiYnmwNW9taUyBkRCZFk2Q5LkeT5IVRQDCkFz2WBZRXSxlWDUANS1HVHn1H1mzUa9eU-aBrz-BCACVEFCcx6nxaU4ELNsaVtQD3AdJ1RGvF0URfT130vL9BNIo1+W6RBVDwURUBI69hX9cUEODJ0RGVYTrxUzCUgjCxoyyR5QmgcJInUg9mXvH9RDwPATDZNsGOcLJ8ydWzzCsvB1GhOU0nMGNnJEHJHnjQijRGVRTMYNNgkM4zVARaBZC1SB6gixILJEVdMpM2SjX8n8YES756jbGyACtqOwPzgkCuNjWvML4sK5KIu7ApkT7MFB2QCw1i8Y56gYSBzA+DcghPBhmFYYg0DsPB0QALw+FY1l3BgyBIWA72CLqn1491Xy9D8DV9J0SXgy1mI7YCfEZRJWXZegoN5AURXIy0HJQ+UwXQ8w1S0zVtUQXUHyHFAAFUADkiEKBEAHkIYAfV3BRkSRpZdwAISWCiEYACQUcAEeeCj4YAcQR5EFAohRdyWQpsYRwoAE1kSWNLQAR8NI1AGqRDwndgtUIjUvO44qJouiHKY5IWM7Gl2MdH8xG43a3Q9N8UwJCKxIkqSZOOuSFItINfqoJXVP1n0NPNrTwahmH4aRlG0cxhn8cJ4myYpqmabphnmdZvSAgMsI2kiRqkpSnLGDSzjrNc+zFzgKqldc9zPMML7fKcp0CsjkqTHKnAU554HZgAKnLoly9AAARDEVBIVQg0fHquibUAq5-GuFHMWBjEuNo9Z2gByAQxHjuzkgcpwdFkPBkpmNPrIz7y7ln0B58X6uKwS-PkjKiqN63+oZn8EfpxOPqsVgGh3xVPBQGYB7OTBYf4R3ke7ehuHEeR1Haauxxu7ImJMIbk0ptTWm9McYByWCPdc3cd7tTwP2OEoAR4IwviWdWMoYAqkfGPCeNkp46BnnPBep9QDLw8tCHeqFj6UJmHnIqBci6VQoYvHmF8TBoDaMNAAjmgIaHxd4EMWJ-b+Ds-7O0AVjYBBNQFe0gb7GBjMWbwNXNgMg6gABMABmAALAAVicNXYAtUEz1XDnvIqLVciBCAA">Follow along in the TS Sandbox</a></p>
 <p>To illustrate the problem in a minimal way, let&rsquo;s attempt to enforce a constraint on a function passed into a higher-order function:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">function</span> apply(f<span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">string</span>) <span style="color:#333">=&gt;</span> <span style="color:#339;font-weight:bold">any</span>) {}
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">function</span> apply(f<span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">string</span>) <span style="color:#333">=&gt;</span> <span style="color:#339;font-weight:bold">any</span>) {}
 
 <span style="color:#080;font-weight:bold">const</span> mySingleFunction <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">number</span>) <span style="color:#333">=&gt;</span> {}
 
 apply(mySingleFunction) <span style="color:#888">// Type Error! &#34;string&#34; does not extend &#34;number&#34;
 </span></code></pre></div><p>To actually encode this, we need to use a trick that involves deferring the type-check to later in the inference. Namely, we want to first build a &ldquo;helper type&rdquo; that returns the type <code>true</code> or <code>false</code> for an arbitrary function type, referring to whether or not its first parameter is a string or number.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> IsPermissibleFunction<span style="color:#333">&lt;</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> IsPermissibleFunction<span style="color:#333">&lt;</span>
   F <span style="color:#080;font-weight:bold">extends</span> (x: <span style="color:#339;font-weight:bold">any</span>) <span style="color:#333">=&gt;</span> <span style="color:#339;font-weight:bold">any</span>
 <span style="color:#333">&gt;</span> <span style="color:#333">=</span> Parameters&lt;<span style="color:#070">F</span>&gt;[<span style="color:#00d;font-weight:bold">0</span>] <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
 </code></pre></div><p>This type is asking whether or not the first parameter of an arbitrary type <code>F</code> extends <code>number | string</code>. Because we&rsquo;re no longer performing this check <em>in the context of a function parameter</em>, the normal and intuitive rules apply. In other words, if we say <code>A ::&gt; B</code> means <code>A extends B</code>, then:</p>
@@ -125,13 +126,13 @@ apply(mySingleFunction) <span style="color:#888">// Type Error! &#34;string&#34;
 </ul>
 <p>In terms of mathematics, type systems like this do form a meaningfully formal system of logic, that can be understood in terms of decomposable operations and axioms. And in that line of reasoning, there is nothing stopping us from proving these type theorems by hand - although the compiler usually does that for us.</p>
 <p>The trick is to redefine our <code>apply</code> function to cleverly throw a type error if the result of <code>IsPermissibleFunction</code> is false. We do this by then asserting that the input is of the <code>never</code> type - which can never occurr:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">function</span> apply&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#f00;background-color:#faa">(</span><span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">:</span> <span style="color:#00c">any</span><span style="color:#f00;background-color:#faa">)</span> <span style="color:#f00;background-color:#faa">=</span>&gt; <span style="color:#339;font-weight:bold">any</span><span style="color:#333">&gt;</span>(f: 
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">function</span> apply&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#f00;background-color:#faa">(</span><span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">:</span> <span style="color:#00c">any</span><span style="color:#f00;background-color:#faa">)</span> <span style="color:#f00;background-color:#faa">=</span>&gt; <span style="color:#339;font-weight:bold">any</span><span style="color:#333">&gt;</span>(f: 
   <span style="color:#339;font-weight:bold">IsPermissibleFunction</span>&lt;<span style="color:#070">T</span>&gt; <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">?</span> T : <span style="color:#339;font-weight:bold">never</span>
   ) {}
 </code></pre></div><p>Again, if our condition represented by <code>IsPermissibleFunction</code> passes, then we define <code>f</code> to be of type <code>T</code> - if not, we define it to be <code>never</code>, which no value can possibly meet. Because the compiler automatically infers the narrowest type available, <code>T</code> will correspond to the narrowest interpretation of the type we pass in.</p>
 <h2 id="multiple-function-map-case">Multiple-Function Map Case</h2>
 <p>Reusing our <code>IsPermissibleFunction</code> type along with the previously discussed <code>T[keyof T]</code> trick to convert an object type into a union type, we can devise the following function which demonstrates an attribute-level function parameter constraint:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">function</span> applyMap&lt;<span style="color:#070">FunctionMap</span> <span style="color:#00c">extends</span> <span style="color:#00c">Record</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">(</span><span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">:</span> <span style="color:#00c">any</span><span style="color:#f00;background-color:#faa">)</span> <span style="color:#f00;background-color:#faa">=</span>&gt; <span style="color:#339;font-weight:bold">any</span><span style="color:#333">&gt;&gt;</span>(
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">function</span> applyMap&lt;<span style="color:#070">FunctionMap</span> <span style="color:#00c">extends</span> <span style="color:#00c">Record</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">(</span><span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">:</span> <span style="color:#00c">any</span><span style="color:#f00;background-color:#faa">)</span> <span style="color:#f00;background-color:#faa">=</span>&gt; <span style="color:#339;font-weight:bold">any</span><span style="color:#333">&gt;&gt;</span>(
   fMap: <span style="color:#339;font-weight:bold">IsPermissibleFunction</span>&lt;<span style="color:#070">FunctionMap</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">keyof</span> <span style="color:#00c">FunctionMap</span><span style="color:#f00;background-color:#faa">]</span>&gt; <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span>
     <span style="color:#333">?</span> FunctionMap
     : <span style="color:#339;font-weight:bold">never</span>
@@ -140,7 +141,7 @@ apply(mySingleFunction) <span style="color:#888">// Type Error! &#34;string&#34;
 <p>Next, much like in the single case, we check if the type passes our permissible function check. If so, we apply the <code>FunctionMap</code> type to <code>fMap</code> - if not, we make <code>fMap</code> the <code>never</code> type.</p>
 <p>This trick works because our <code>IsPermissibleFunction</code> type accepts unions just fine - because in this case <code>Parameters</code> returns a union for the zeroth parameter of all constituent function types passed, which is then evaluated in the condition as a strict conjunction.</p>
 <p>In the end, we are left with a function type which only accepts function maps that obey our initial condition, and rejects all non-compliant function maps:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> myFunctionMap <span style="color:#333">=</span> {
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> myFunctionMap <span style="color:#333">=</span> {
   foobar(x: <span style="color:#339;font-weight:bold">string</span>) {},
   barfoo(y: <span style="color:#339;font-weight:bold">number</span>) {},
 };
@@ -157,7 +158,7 @@ applyMap(myFunctionMap);
 </span></code></pre></div><h1 id="customizing-error-messages">Customizing Error Messages</h1>
 <p>Admittedly, never-based type errors can be inscrutable if they appear in application code, i.e. code that is using your shared library which enforces this condition in some part of its interface.</p>
 <p>With a bit more work, we can at least display a message to the library-user denoting that something was wrong with the function map passed in. A useful trick common in strongly-typed linear algebra code is error types with particular names, like <code>MATRIX_SIZE_MISMATCH</code>. We can take a similar philosophy here:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> FUNCTION_MAP_MEMBER_HAS_WRONG_PARAMETER_TYPE <span style="color:#333">=</span> { _: <span style="color:#339;font-weight:bold">never</span> };
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> FUNCTION_MAP_MEMBER_HAS_WRONG_PARAMETER_TYPE <span style="color:#333">=</span> { _: <span style="color:#339;font-weight:bold">never</span> };
 
 <span style="color:#080;font-weight:bold">function</span> applyMap&lt;<span style="color:#070">FunctionMap</span> <span style="color:#00c">extends</span> <span style="color:#00c">Record</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">(</span><span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">:</span> <span style="color:#00c">any</span><span style="color:#f00;background-color:#faa">)</span> <span style="color:#f00;background-color:#faa">=</span>&gt; <span style="color:#339;font-weight:bold">any</span><span style="color:#333">&gt;&gt;</span>(
   fMap: <span style="color:#339;font-weight:bold">IsPermissibleFunction</span>&lt;<span style="color:#070">FunctionMap</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">keyof</span> <span style="color:#00c">FunctionMap</span><span style="color:#f00;background-color:#faa">]</span>&gt; <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span>
@@ -300,7 +301,7 @@ applyMap(myInvalidFunctionMap);
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2021 MP&#39;s Projects and Papers.
+			&copy; 2021 Code, lol..
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>
