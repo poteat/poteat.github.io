@@ -2,71 +2,71 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Code, lol.</title>
-    <link>/categories/</link>
+    <link>code.lol/categories/</link>
     <description>Recent content in Categories on Code, lol.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="code.lol/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>mathematics</title>
-      <link>/categories/mathematics/</link>
+      <link>code.lol/categories/mathematics/</link>
       <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       
-      <guid>/categories/mathematics/</guid>
+      <guid>code.lol/categories/mathematics/</guid>
       <description></description>
     </item>
     
     <item>
       <title>programming</title>
-      <link>/categories/programming/</link>
+      <link>code.lol/categories/programming/</link>
       <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       
-      <guid>/categories/programming/</guid>
+      <guid>code.lol/categories/programming/</guid>
       <description></description>
     </item>
     
     <item>
       <title>typescript</title>
-      <link>/categories/typescript/</link>
+      <link>code.lol/categories/typescript/</link>
       <pubDate>Sat, 09 Jan 2021 16:33:40 -0800</pubDate>
       
-      <guid>/categories/typescript/</guid>
+      <guid>code.lol/categories/typescript/</guid>
       <description></description>
     </item>
     
     <item>
       <title>algorithms</title>
-      <link>/categories/algorithms/</link>
+      <link>code.lol/categories/algorithms/</link>
       <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
       
-      <guid>/categories/algorithms/</guid>
+      <guid>code.lol/categories/algorithms/</guid>
       <description></description>
     </item>
     
     <item>
       <title>life</title>
-      <link>/categories/life/</link>
+      <link>code.lol/categories/life/</link>
       <pubDate>Mon, 03 Jun 2019 12:37:10 -0700</pubDate>
       
-      <guid>/categories/life/</guid>
+      <guid>code.lol/categories/life/</guid>
       <description></description>
     </item>
     
     <item>
       <title>simulation</title>
-      <link>/categories/simulation/</link>
+      <link>code.lol/categories/simulation/</link>
       <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       
-      <guid>/categories/simulation/</guid>
+      <guid>code.lol/categories/simulation/</guid>
       <description></description>
     </item>
     
     <item>
       <title>bioinformatics</title>
-      <link>/categories/bioinformatics/</link>
+      <link>code.lol/categories/bioinformatics/</link>
       <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       
-      <guid>/categories/bioinformatics/</guid>
+      <guid>code.lol/categories/bioinformatics/</guid>
       <description></description>
     </item>
     

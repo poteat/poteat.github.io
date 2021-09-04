@@ -2,215 +2,215 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Code, lol.</title>
-    <link>/tags/</link>
+    <link>code.lol/tags/</link>
     <description>Recent content in Tags on Code, lol.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="code.lol/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>lambda calculus</title>
-      <link>/tags/lambda-calculus/</link>
+      <link>code.lol/tags/lambda-calculus/</link>
       <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       
-      <guid>/tags/lambda-calculus/</guid>
+      <guid>code.lol/tags/lambda-calculus/</guid>
       <description></description>
     </item>
     
     <item>
       <title>math</title>
-      <link>/tags/math/</link>
+      <link>code.lol/tags/math/</link>
       <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       
-      <guid>/tags/math/</guid>
+      <guid>code.lol/tags/math/</guid>
       <description></description>
     </item>
     
     <item>
       <title>programming</title>
-      <link>/tags/programming/</link>
+      <link>code.lol/tags/programming/</link>
       <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       
-      <guid>/tags/programming/</guid>
+      <guid>code.lol/tags/programming/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tuples</title>
-      <link>/tags/tuples/</link>
+      <link>code.lol/tags/tuples/</link>
       <pubDate>Sat, 09 Jan 2021 16:33:40 -0800</pubDate>
       
-      <guid>/tags/tuples/</guid>
+      <guid>code.lol/tags/tuples/</guid>
       <description></description>
     </item>
     
     <item>
       <title>type system</title>
-      <link>/tags/type-system/</link>
+      <link>code.lol/tags/type-system/</link>
       <pubDate>Sat, 09 Jan 2021 16:33:40 -0800</pubDate>
       
-      <guid>/tags/type-system/</guid>
+      <guid>code.lol/tags/type-system/</guid>
       <description></description>
     </item>
     
     <item>
       <title>typescript</title>
-      <link>/tags/typescript/</link>
+      <link>code.lol/tags/typescript/</link>
       <pubDate>Sat, 09 Jan 2021 16:33:40 -0800</pubDate>
       
-      <guid>/tags/typescript/</guid>
+      <guid>code.lol/tags/typescript/</guid>
       <description></description>
     </item>
     
     <item>
       <title>algorithms</title>
-      <link>/tags/algorithms/</link>
+      <link>code.lol/tags/algorithms/</link>
       <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
       
-      <guid>/tags/algorithms/</guid>
+      <guid>code.lol/tags/algorithms/</guid>
       <description></description>
     </item>
     
     <item>
       <title>strings</title>
-      <link>/tags/strings/</link>
+      <link>code.lol/tags/strings/</link>
       <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
       
-      <guid>/tags/strings/</guid>
+      <guid>code.lol/tags/strings/</guid>
       <description></description>
     </item>
     
     <item>
       <title>design patterns</title>
-      <link>/tags/design-patterns/</link>
+      <link>code.lol/tags/design-patterns/</link>
       <pubDate>Sun, 03 May 2020 19:41:57 -0700</pubDate>
       
-      <guid>/tags/design-patterns/</guid>
+      <guid>code.lol/tags/design-patterns/</guid>
       <description></description>
     </item>
     
     <item>
       <title>dijkstra</title>
-      <link>/tags/dijkstra/</link>
+      <link>code.lol/tags/dijkstra/</link>
       <pubDate>Mon, 23 Dec 2019 16:39:53 -0800</pubDate>
       
-      <guid>/tags/dijkstra/</guid>
+      <guid>code.lol/tags/dijkstra/</guid>
       <description></description>
     </item>
     
     <item>
       <title>parsing</title>
-      <link>/tags/parsing/</link>
+      <link>code.lol/tags/parsing/</link>
       <pubDate>Mon, 23 Dec 2019 16:39:53 -0800</pubDate>
       
-      <guid>/tags/parsing/</guid>
+      <guid>code.lol/tags/parsing/</guid>
       <description></description>
     </item>
     
     <item>
       <title>rationality</title>
-      <link>/tags/rationality/</link>
+      <link>code.lol/tags/rationality/</link>
       <pubDate>Mon, 03 Jun 2019 12:37:10 -0700</pubDate>
       
-      <guid>/tags/rationality/</guid>
+      <guid>code.lol/tags/rationality/</guid>
       <description></description>
     </item>
     
     <item>
       <title>factorization</title>
-      <link>/tags/factorization/</link>
+      <link>code.lol/tags/factorization/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
-      <guid>/tags/factorization/</guid>
+      <guid>code.lol/tags/factorization/</guid>
       <description></description>
     </item>
     
     <item>
       <title>number theory</title>
-      <link>/tags/number-theory/</link>
+      <link>code.lol/tags/number-theory/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
-      <guid>/tags/number-theory/</guid>
+      <guid>code.lol/tags/number-theory/</guid>
       <description></description>
     </item>
     
     <item>
       <title>latex</title>
-      <link>/tags/latex/</link>
+      <link>code.lol/tags/latex/</link>
       <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       
-      <guid>/tags/latex/</guid>
+      <guid>code.lol/tags/latex/</guid>
       <description></description>
     </item>
     
     <item>
       <title>mathematica</title>
-      <link>/tags/mathematica/</link>
+      <link>code.lol/tags/mathematica/</link>
       <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       
-      <guid>/tags/mathematica/</guid>
+      <guid>code.lol/tags/mathematica/</guid>
       <description></description>
     </item>
     
     <item>
       <title>wip</title>
-      <link>/tags/wip/</link>
+      <link>code.lol/tags/wip/</link>
       <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       
-      <guid>/tags/wip/</guid>
+      <guid>code.lol/tags/wip/</guid>
       <description></description>
     </item>
     
     <item>
       <title>demo</title>
-      <link>/tags/demo/</link>
+      <link>code.lol/tags/demo/</link>
       <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
       
-      <guid>/tags/demo/</guid>
+      <guid>code.lol/tags/demo/</guid>
       <description></description>
     </item>
     
     <item>
       <title>javascript</title>
-      <link>/tags/javascript/</link>
+      <link>code.lol/tags/javascript/</link>
       <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
       
-      <guid>/tags/javascript/</guid>
+      <guid>code.lol/tags/javascript/</guid>
       <description></description>
     </item>
     
     <item>
       <title>physics</title>
-      <link>/tags/physics/</link>
+      <link>code.lol/tags/physics/</link>
       <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
       
-      <guid>/tags/physics/</guid>
+      <guid>code.lol/tags/physics/</guid>
       <description></description>
     </item>
     
     <item>
       <title>regression</title>
-      <link>/tags/regression/</link>
+      <link>code.lol/tags/regression/</link>
       <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       
-      <guid>/tags/regression/</guid>
+      <guid>code.lol/tags/regression/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tau-beta-pi</title>
-      <link>/tags/tau-beta-pi/</link>
+      <link>code.lol/tags/tau-beta-pi/</link>
       <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
       
-      <guid>/tags/tau-beta-pi/</guid>
+      <guid>code.lol/tags/tau-beta-pi/</guid>
       <description></description>
     </item>
     
     <item>
       <title>curves</title>
-      <link>/tags/curves/</link>
+      <link>code.lol/tags/curves/</link>
       <pubDate>Fri, 25 Jan 2019 17:40:45 -0500</pubDate>
       
-      <guid>/tags/curves/</guid>
+      <guid>code.lol/tags/curves/</guid>
       <description></description>
     </item>
     

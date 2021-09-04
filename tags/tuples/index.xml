@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>tuples on Code, lol.</title>
-    <link>/tags/tuples/</link>
+    <link>code.lol/tags/tuples/</link>
     <description>Recent content in tuples on Code, lol.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 09 Jan 2021 16:33:40 -0800</lastBuildDate><atom:link href="/tags/tuples/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 09 Jan 2021 16:33:40 -0800</lastBuildDate><atom:link href="code.lol/tags/tuples/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Unchained Tuple Types</title>
-      <link>/post/programming/unchained-tuple-types/</link>
+      <link>code.lol/post/programming/unchained-tuple-types/</link>
       <pubDate>Sat, 09 Jan 2021 16:33:40 -0800</pubDate>
       
-      <guid>/post/programming/unchained-tuple-types/</guid>
+      <guid>code.lol/post/programming/unchained-tuple-types/</guid>
       <description>The asserts syntax introduced with TS 3.7 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
 This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
 const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.has(8); // :: true const hasResult2 = set.</description>
@@ -20,20 +20,20 @@ const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.rem
     
     <item>
       <title>String Deduplication on the Type Level</title>
-      <link>/post/programming/type-level-dedupe/</link>
+      <link>code.lol/post/programming/type-level-dedupe/</link>
       <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
       
-      <guid>/post/programming/type-level-dedupe/</guid>
+      <guid>code.lol/post/programming/type-level-dedupe/</guid>
       <description>The string deduplication problem is a canonical one within computer science, serving a similar purpose as fizz-buzz in terms of being an example of a simple problem that a reasonably knowledgable practitioner should be able to solve with minimal effort.
 The problem appears in a few variants, but briefly one such variant is to remove duplicate letters in a given string, such that the string then has only one instance of any given letter.</description>
     </item>
     
     <item>
       <title>Chained Tuple Types</title>
-      <link>/post/programming/chained-tuple-types/</link>
+      <link>code.lol/post/programming/chained-tuple-types/</link>
       <pubDate>Tue, 05 Jan 2021 20:23:23 -0800</pubDate>
       
-      <guid>/post/programming/chained-tuple-types/</guid>
+      <guid>code.lol/post/programming/chained-tuple-types/</guid>
       <description>With Typescript 4.1, it&amp;rsquo;s now possible to use variadic tuple types to construct large types with what appears to be runtime code. The general idea is that we will utilize a chaining pattern, where each operation on the chain returns an expanded version of the chain&amp;rsquo;s type.
 To motivate the example, let us consider a Set class. Our Set is a chaining class, where you may insert, remove, and check for the existence of numbers.</description>
     </item>

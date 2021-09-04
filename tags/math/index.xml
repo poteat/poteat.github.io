@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>math on Code, lol.</title>
-    <link>/tags/math/</link>
+    <link>code.lol/tags/math/</link>
     <description>Recent content in math on Code, lol.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="/tags/math/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="code.lol/tags/math/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Programs of Length N: Collatz, Chaitin, and Church</title>
-      <link>/post/programming/programs-of-length-n/</link>
+      <link>code.lol/post/programming/programs-of-length-n/</link>
       <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       
-      <guid>/post/programming/programs-of-length-n/</guid>
+      <guid>code.lol/post/programming/programs-of-length-n/</guid>
       <description>There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.
  1. How many programs have N terms? 2. How fast does the set of programs of length N grow? 3. How many programs of length N converge? 4. What is the longest-running convergent program of length N? 5. How fast does BB(N) grow? 6. What percentage of programs converge?</description>
     </item>
     
     <item>
       <title>Pythagorean Triple Problem in Sub-linear Time</title>
-      <link>/post/algorithms/pythagorean-triple/</link>
+      <link>code.lol/post/algorithms/pythagorean-triple/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
-      <guid>/post/algorithms/pythagorean-triple/</guid>
+      <guid>code.lol/post/algorithms/pythagorean-triple/</guid>
       <description>The Pythagorean triple problem is as follows. Given an input integer \(n\), return integers \(a\), \(b\), \(c\) such that the two following conditions hold:
 $$ a b c = n $$ $$ a^2 + b^2 = c^2 $$
 I was interested in finding a solution to this problem that was both succint and had good asymptotic complexity. The solution I found runs in O(sqrt(n)) time by deconstructing the problem into the well-known 3SUM problem.</description>
@@ -30,10 +30,10 @@ I was interested in finding a solution to this problem that was both succint and
     
     <item>
       <title>Mathematica Steps to LaTeX [WiP]</title>
-      <link>/post/simulation/mathematica-steps-to-latex/</link>
+      <link>code.lol/post/simulation/mathematica-steps-to-latex/</link>
       <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       
-      <guid>/post/simulation/mathematica-steps-to-latex/</guid>
+      <guid>code.lol/post/simulation/mathematica-steps-to-latex/</guid>
       <description>A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
 Mathematica&amp;rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
     </item>
