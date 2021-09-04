@@ -12,7 +12,7 @@
 Let&rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
 type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&lt;string, (number | string) =&gt; any&gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/post/programming/enforcing-function-map-constraints/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/post/programming/enforcing-function-map-constraints/" /><meta property="og:image" content="img/art/riding-digital-waves"/><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2020-12-16T19:41:08-08:00" />
 <meta property="article:modified_time" content="2020-12-16T19:41:08-08:00" />
 
