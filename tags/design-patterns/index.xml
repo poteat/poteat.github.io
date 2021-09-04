@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>design patterns on Code, lol.</title>
-    <link>code.lol/tags/design-patterns/</link>
+    <link>https://code.lol/tags/design-patterns/</link>
     <description>Recent content in design patterns on Code, lol.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 03 May 2020 19:41:57 -0700</lastBuildDate><atom:link href="code.lol/tags/design-patterns/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 03 May 2020 19:41:57 -0700</lastBuildDate><atom:link href="https://code.lol/tags/design-patterns/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Self Modifying Type Predicates in Typescript</title>
-      <link>code.lol/post/programming/self-modifying-type-predicates/</link>
+      <link>https://code.lol/post/programming/self-modifying-type-predicates/</link>
       <pubDate>Sun, 03 May 2020 19:41:57 -0700</pubDate>
       
-      <guid>code.lol/post/programming/self-modifying-type-predicates/</guid>
+      <guid>https://code.lol/post/programming/self-modifying-type-predicates/</guid>
       <description>Typescript&amp;rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
 Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &amp;ldquo;simulate&amp;rdquo; dependent types, a powerful type feature present in Idris.
 Further explanation on type predicates can be found here.

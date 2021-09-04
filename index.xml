@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Code, lol.</title>
-    <link>code.lol/</link>
+    <link>https://code.lol/</link>
     <description>Recent content on Code, lol.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="code.lol/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="https://code.lol/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Programs of Length N: Collatz, Chaitin, and Church</title>
-      <link>code.lol/post/programming/programs-of-length-n/</link>
+      <link>https://code.lol/post/programming/programs-of-length-n/</link>
       <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       
-      <guid>code.lol/post/programming/programs-of-length-n/</guid>
+      <guid>https://code.lol/post/programming/programs-of-length-n/</guid>
       <description>There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.
  1. How many programs have N terms? 2. How fast does the set of programs of length N grow? 3. How many programs of length N converge? 4. What is the longest-running convergent program of length N? 5. How fast does BB(N) grow? 6. What percentage of programs converge?</description>
     </item>
     
     <item>
       <title>Unchained Tuple Types</title>
-      <link>code.lol/post/programming/unchained-tuple-types/</link>
+      <link>https://code.lol/post/programming/unchained-tuple-types/</link>
       <pubDate>Sat, 09 Jan 2021 16:33:40 -0800</pubDate>
       
-      <guid>code.lol/post/programming/unchained-tuple-types/</guid>
+      <guid>https://code.lol/post/programming/unchained-tuple-types/</guid>
       <description>The asserts syntax introduced with TS 3.7 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
 This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
 const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.has(8); // :: true const hasResult2 = set.</description>
@@ -30,30 +30,30 @@ const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.rem
     
     <item>
       <title>String Deduplication on the Type Level</title>
-      <link>code.lol/post/programming/type-level-dedupe/</link>
+      <link>https://code.lol/post/programming/type-level-dedupe/</link>
       <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
       
-      <guid>code.lol/post/programming/type-level-dedupe/</guid>
+      <guid>https://code.lol/post/programming/type-level-dedupe/</guid>
       <description>The string deduplication problem is a canonical one within computer science, serving a similar purpose as fizz-buzz in terms of being an example of a simple problem that a reasonably knowledgable practitioner should be able to solve with minimal effort.
 The problem appears in a few variants, but briefly one such variant is to remove duplicate letters in a given string, such that the string then has only one instance of any given letter.</description>
     </item>
     
     <item>
       <title>Chained Tuple Types</title>
-      <link>code.lol/post/programming/chained-tuple-types/</link>
+      <link>https://code.lol/post/programming/chained-tuple-types/</link>
       <pubDate>Tue, 05 Jan 2021 20:23:23 -0800</pubDate>
       
-      <guid>code.lol/post/programming/chained-tuple-types/</guid>
+      <guid>https://code.lol/post/programming/chained-tuple-types/</guid>
       <description>With Typescript 4.1, it&amp;rsquo;s now possible to use variadic tuple types to construct large types with what appears to be runtime code. The general idea is that we will utilize a chaining pattern, where each operation on the chain returns an expanded version of the chain&amp;rsquo;s type.
 To motivate the example, let us consider a Set class. Our Set is a chaining class, where you may insert, remove, and check for the existence of numbers.</description>
     </item>
     
     <item>
       <title>Enforcing Function Map Constraints</title>
-      <link>code.lol/post/programming/enforcing-function-map-constraints/</link>
+      <link>https://code.lol/post/programming/enforcing-function-map-constraints/</link>
       <pubDate>Wed, 16 Dec 2020 19:41:08 -0800</pubDate>
       
-      <guid>code.lol/post/programming/enforcing-function-map-constraints/</guid>
+      <guid>https://code.lol/post/programming/enforcing-function-map-constraints/</guid>
       <description>Some &amp;ldquo;easy to state&amp;rdquo; problems in Typescript can require somewhat sophisticated type constructs.
 Let&amp;rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
 type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&amp;lt;string, (number | string) =&amp;gt; any&amp;gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.</description>
@@ -61,10 +61,10 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
     
     <item>
       <title>Self Modifying Type Predicates in Typescript</title>
-      <link>code.lol/post/programming/self-modifying-type-predicates/</link>
+      <link>https://code.lol/post/programming/self-modifying-type-predicates/</link>
       <pubDate>Sun, 03 May 2020 19:41:57 -0700</pubDate>
       
-      <guid>code.lol/post/programming/self-modifying-type-predicates/</guid>
+      <guid>https://code.lol/post/programming/self-modifying-type-predicates/</guid>
       <description>Typescript&amp;rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
 Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &amp;ldquo;simulate&amp;rdquo; dependent types, a powerful type feature present in Idris.
 Further explanation on type predicates can be found here.
@@ -73,10 +73,10 @@ The premise of this article is a usage of type predicates I haven&amp;rsquo;t se
     
     <item>
       <title>Dijkstra&#39;s Shunting Yard in Typescript</title>
-      <link>code.lol/post/algorithms/shunting-yard/</link>
+      <link>https://code.lol/post/algorithms/shunting-yard/</link>
       <pubDate>Mon, 23 Dec 2019 16:39:53 -0800</pubDate>
       
-      <guid>code.lol/post/algorithms/shunting-yard/</guid>
+      <guid>https://code.lol/post/algorithms/shunting-yard/</guid>
       <description>The shunting yard algorithm converts infix expressions (i.e. 1+2) into reverse Polish notation, i.e. 1 2 +, which lends itself well to execution on a stack machine.
 An aside: I wanted to revisit this algorithm because it was one of the first I implemented in C during self-study five years ago. In a way, reimplementing it is a way of measuring my progress since then.
 The internal details aren&amp;rsquo;t too complicated - it&amp;rsquo;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm.</description>
@@ -84,20 +84,20 @@ The internal details aren&amp;rsquo;t too complicated - it&amp;rsquo;s based on 
     
     <item>
       <title>Bay Area SSC Meetup</title>
-      <link>code.lol/post/life/ssc-meetup/</link>
+      <link>https://code.lol/post/life/ssc-meetup/</link>
       <pubDate>Mon, 03 Jun 2019 12:37:10 -0700</pubDate>
       
-      <guid>code.lol/post/life/ssc-meetup/</guid>
+      <guid>https://code.lol/post/life/ssc-meetup/</guid>
       <description>I&amp;rsquo;m in SF for the summer, and I was thus able to attend the Slate Star Codex meetup this year in Dolores Park. Met a lot of interesting people, and got to meet Scott. While I&amp;rsquo;m in the Bay Area I hope to get a little more involved in that scene.
 Picture is of the park, not the meetup specifically.</description>
     </item>
     
     <item>
       <title>Pythagorean Triple Problem in Sub-linear Time</title>
-      <link>code.lol/post/algorithms/pythagorean-triple/</link>
+      <link>https://code.lol/post/algorithms/pythagorean-triple/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
-      <guid>code.lol/post/algorithms/pythagorean-triple/</guid>
+      <guid>https://code.lol/post/algorithms/pythagorean-triple/</guid>
       <description>The Pythagorean triple problem is as follows. Given an input integer \(n\), return integers \(a\), \(b\), \(c\) such that the two following conditions hold:
 $$ a b c = n $$ $$ a^2 + b^2 = c^2 $$
 I was interested in finding a solution to this problem that was both succint and had good asymptotic complexity. The solution I found runs in O(sqrt(n)) time by deconstructing the problem into the well-known 3SUM problem.</description>
@@ -105,30 +105,30 @@ I was interested in finding a solution to this problem that was both succint and
     
     <item>
       <title>Mathematica Steps to LaTeX [WiP]</title>
-      <link>code.lol/post/simulation/mathematica-steps-to-latex/</link>
+      <link>https://code.lol/post/simulation/mathematica-steps-to-latex/</link>
       <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       
-      <guid>code.lol/post/simulation/mathematica-steps-to-latex/</guid>
+      <guid>https://code.lol/post/simulation/mathematica-steps-to-latex/</guid>
       <description>A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
 Mathematica&amp;rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
     </item>
     
     <item>
       <title>Quadtree Particle Simulation</title>
-      <link>code.lol/post/simulation/quadtree-particle-simulation/</link>
+      <link>https://code.lol/post/simulation/quadtree-particle-simulation/</link>
       <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
       
-      <guid>code.lol/post/simulation/quadtree-particle-simulation/</guid>
+      <guid>https://code.lol/post/simulation/quadtree-particle-simulation/</guid>
       <description>A small particle simulation was written in JS, utilizing a simplified (constant depth) quadtree structure. The model includes forces between nearby particles, so rather than invoke a O(n^2) operation to compute the net force for each particle, a quadtree is used so each particle may efficiently access its neighbors.
 The forces used are tuned to provide some amount of clustering, but also to provide global homogeneity to prevent too many particles appearing in one quadtree section (which would decrease cpu-time efficiency).</description>
     </item>
     
     <item>
       <title>Contact</title>
-      <link>code.lol/contact/</link>
+      <link>https://code.lol/contact/</link>
       <pubDate>Sat, 26 Jan 2019 12:14:54 -0500</pubDate>
       
-      <guid>code.lol/contact/</guid>
+      <guid>https://code.lol/contact/</guid>
       <description>You can contact me using the below form. If it&amp;rsquo;s more convenient, I can also be contacted on Github or LinkedIn.
 2021 Update: I have no idea if the below form works. YMMV. Best to just email me.
  f = (s) = {return s.replace(/[a-zA-Z]/g,function(c){return String.fromCharCode((c=(c=c.charCodeAt(0)+13)?c:c-26);});} window.onload = () = {document.getElementById(&#34;contact-form&#34;).action += f(&#34;zr@zcbgr.ng&#34;)};  Your Email
@@ -140,10 +140,10 @@ Message
     
     <item>
       <title>Double Pendulum</title>
-      <link>code.lol/post/simulation/double-pendulum/</link>
+      <link>https://code.lol/post/simulation/double-pendulum/</link>
       <pubDate>Fri, 25 Jan 2019 20:58:30 -0500</pubDate>
       
-      <guid>code.lol/post/simulation/double-pendulum/</guid>
+      <guid>https://code.lol/post/simulation/double-pendulum/</guid>
       <description>This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
  
  Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer
@@ -154,20 +154,20 @@ Angle 2</description>
     
     <item>
       <title>Oriented Bounding-Box Heuristic</title>
-      <link>code.lol/post/bioinformatics/oriented-bounding-box-heuristic/</link>
+      <link>https://code.lol/post/bioinformatics/oriented-bounding-box-heuristic/</link>
       <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       
-      <guid>code.lol/post/bioinformatics/oriented-bounding-box-heuristic/</guid>
+      <guid>https://code.lol/post/bioinformatics/oriented-bounding-box-heuristic/</guid>
       <description>The 2-dimensional minimum-area oriented bounding box problem is as follows: Given a set of coplanar points, how can we efficiently find the smallest rectangle which encloses these points? Additionally, that rectangle can be oriented at any angle with respect to the coordinate system.
 One interesting estimate for the solution, which guarantees &amp;ldquo;pretty good&amp;rdquo; results in O(n) time is a natural extension of orthogonal linear regression. Specifically, we assume that the minimum rectangle is aligned to the orthogonal &amp;ldquo;line of best fit&amp;rdquo; of the point set.</description>
     </item>
     
     <item>
       <title>2019 Presidential Luncheon</title>
-      <link>code.lol/post/life/2019-presidential-luncheon/</link>
+      <link>https://code.lol/post/life/2019-presidential-luncheon/</link>
       <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
       
-      <guid>code.lol/post/life/2019-presidential-luncheon/</guid>
+      <guid>https://code.lol/post/life/2019-presidential-luncheon/</guid>
       <description>This last Wednesday I had the honor of attending a luncheon with ODU&amp;rsquo;s current president John R. Broderick. This event was a meetup with the local Tau Beta Pi engineering honor society chapter.
 The food was delicious! We were able to talk to Broderick about current events on campus, and suggestions we had (especially with regard to on-campus parking).
 Group photo included.</description>
@@ -175,20 +175,20 @@ Group photo included.</description>
     
     <item>
       <title>One-Dimensional Linear Regression</title>
-      <link>code.lol/post/bioinformatics/one-dimensional-linear-regression/</link>
+      <link>https://code.lol/post/bioinformatics/one-dimensional-linear-regression/</link>
       <pubDate>Fri, 25 Jan 2019 18:27:02 -0500</pubDate>
       
-      <guid>code.lol/post/bioinformatics/one-dimensional-linear-regression/</guid>
+      <guid>https://code.lol/post/bioinformatics/one-dimensional-linear-regression/</guid>
       <description>The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
  $$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$  Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.</description>
     </item>
     
     <item>
       <title>Quadratic Bezier Curves</title>
-      <link>code.lol/post/bioinformatics/quadratic-bezier-curves/</link>
+      <link>https://code.lol/post/bioinformatics/quadratic-bezier-curves/</link>
       <pubDate>Fri, 25 Jan 2019 17:40:45 -0500</pubDate>
       
-      <guid>code.lol/post/bioinformatics/quadratic-bezier-curves/</guid>
+      <guid>https://code.lol/post/bioinformatics/quadratic-bezier-curves/</guid>
       <description>Quadratic Bézier curves are explicit parametric functions of the following form:
  $$ x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\ y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\ t \in \mathbb R[0,1] $$  These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
 Drag the control points around to see the curve change.</description>
@@ -196,10 +196,10 @@ Drag the control points around to see the curve change.</description>
     
     <item>
       <title>Papers</title>
-      <link>code.lol/papers/</link>
+      <link>https://code.lol/papers/</link>
       <pubDate>Fri, 25 Jan 2019 17:28:08 -0500</pubDate>
       
-      <guid>code.lol/papers/</guid>
+      <guid>https://code.lol/papers/</guid>
       <description>You can find abstracts, figures, citations and more at my ResearchGate profile.
   Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Quantification of Twist from the Central Lines of β-strands&amp;rdquo;, Journal of Computational Biology, January 2018, 25 (1): 114-120
   Poteat, M., He, J. &amp;ldquo;Modeling Beta-sheets using Iterative Bezier Surface Fitting on Cryo-EM Density Maps&amp;rdquo;, Molecular Based Mathematical Biology, Apr 2017; 5:31–39
@@ -208,10 +208,10 @@ Drag the control points around to see the curve change.</description>
     
     <item>
       <title>About Me</title>
-      <link>code.lol/about/</link>
+      <link>https://code.lol/about/</link>
       <pubDate>Fri, 25 Jan 2019 16:24:07 -0500</pubDate>
       
-      <guid>code.lol/about/</guid>
+      <guid>https://code.lol/about/</guid>
       <description>Working in the Bay Area for Volley Inc for the foreseeable future as one of our first ten engineers. I work on core engine development - my prime directive is to do my best every day to support my colleagues.
 My graduate topic of research was linear-temporal logic and its applications in verification of mission correctness in autonomous robotics.
 My interests include machine learning, pure mathematics, programming, programming language design (especially modern languages like NodeJS and Julia), VR gaming/training development, and a whole host of other topics.</description>

@@ -11,7 +11,7 @@
 <meta property="og:description" content="With Typescript 4.1, it&rsquo;s now possible to use variadic tuple types to construct large types with what appears to be runtime code. The general idea is that we will utilize a chaining pattern, where each operation on the chain returns an expanded version of the chain&rsquo;s type.
 To motivate the example, let us consider a Set class. Our Set is a chaining class, where you may insert, remove, and check for the existence of numbers." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="code.lol/post/programming/chained-tuple-types/" /><meta property="og:image" content="code.lol/img/art/riding-digital-waves.png"/><meta property="article:section" content="post" />
+<meta property="og:url" content="https://code.lol/post/programming/chained-tuple-types/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-05T20:23:23-08:00" />
 <meta property="article:modified_time" content="2021-01-05T20:23:23-08:00" />
 
@@ -21,10 +21,10 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
 
-	<link rel="stylesheet" href="/code.lol/css/style.css">
-	<link rel="stylesheet" href="/code.lol/css/custom.css">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
 
-	<link rel="shortcut icon" href="/code.lol/favicon.ico">
+	<link rel="shortcut icon" href="/favicon.ico">
 		
 </head>
 <body class="body">
@@ -33,7 +33,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<div class="container header__container">
 		
 	<div class="logo">
-		<a class="logo__link" href="/code.lol" title="Code, lol." rel="home">
+		<a class="logo__link" href="/" title="Code, lol." rel="home">
 			<div class="logo__item logo__text">
 					<div class="logo__title">Code, lol.</div>
 					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
@@ -47,21 +47,21 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	</button>
 	<ul class="menu__list">
 		<li class="menu__item">
-			<a class="menu__link" href="code.lol/about/">
+			<a class="menu__link" href="/about/">
 				
 				<span class="menu__text">About Me</span>
 				
 			</a>
 		</li>
 		<li class="menu__item">
-			<a class="menu__link" href="code.lol/contact/">
+			<a class="menu__link" href="/contact/">
 				
 				<span class="menu__text">Contact</span>
 				
 			</a>
 		</li>
 		<li class="menu__item">
-			<a class="menu__link" href="code.lol/papers/">
+			<a class="menu__link" href="/papers/">
 				
 				<span class="menu__text">Papers</span>
 				
@@ -258,16 +258,16 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 	<ul class="tags__list">
 		<li class="tags__item">
-			<a class="tags__link btn" href="/code.lol/tags/typescript/" rel="tag">typescript</a>
+			<a class="tags__link btn" href="/tags/typescript/" rel="tag">typescript</a>
 		</li>
 		<li class="tags__item">
-			<a class="tags__link btn" href="/code.lol/tags/programming/" rel="tag">programming</a>
+			<a class="tags__link btn" href="/tags/programming/" rel="tag">programming</a>
 		</li>
 		<li class="tags__item">
-			<a class="tags__link btn" href="/code.lol/tags/tuples/" rel="tag">tuples</a>
+			<a class="tags__link btn" href="/tags/tuples/" rel="tag">tuples</a>
 		</li>
 		<li class="tags__item">
-			<a class="tags__link btn" href="/code.lol/tags/type-system/" rel="tag">type system</a>
+			<a class="tags__link btn" href="/tags/type-system/" rel="tag">type system</a>
 		</li>
 	</ul>
 </div>
@@ -277,7 +277,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 
 <div class="authorbox clearfix">
 	<figure class="authorbox__avatar">
-		<img alt="Michael Poteat avatar" src="/code.lol/img/avatar.png" class="avatar" height="90" width="90">
+		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
 	</figure>
 	<div class="authorbox__header">
 		<span class="authorbox__name"></span>
@@ -296,18 +296,18 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
 		</label>
 		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="code.lol" />
+		<input type="hidden" name="sitesearch" value="https://code.lol" />
 	</form>
 </div>
 <div class="widget-recent widget">
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="code.lol/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
-			<li class="widget__item"><a class="widget__link" href="code.lol/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
-			<li class="widget__item"><a class="widget__link" href="code.lol/post/programming/type-level-dedupe/">String Deduplication on the Type Level</a></li>
-			<li class="widget__item"><a class="widget__link" href="code.lol/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
-			<li class="widget__item"><a class="widget__link" href="code.lol/post/programming/enforcing-function-map-constraints/">Enforcing Function Map Constraints</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-dedupe/">String Deduplication on the Type Level</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/enforcing-function-map-constraints/">Enforcing Function Map Constraints</a></li>
 		</ul>
 	</div>
 </div>
@@ -316,25 +316,25 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item">
-				<a class="widget__link" href="code.lol/categories/algorithms/">algorithms</a>
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
 			</li>
 			<li class="widget__item">
-				<a class="widget__link" href="code.lol/categories/bioinformatics/">bioinformatics</a>
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
 			</li>
 			<li class="widget__item">
-				<a class="widget__link" href="code.lol/categories/life/">life</a>
+				<a class="widget__link" href="/categories/life/">life</a>
 			</li>
 			<li class="widget__item">
-				<a class="widget__link" href="code.lol/categories/mathematics/">mathematics</a>
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a>
 			</li>
 			<li class="widget__item">
-				<a class="widget__link" href="code.lol/categories/programming/">programming</a>
+				<a class="widget__link" href="/categories/programming/">programming</a>
 			</li>
 			<li class="widget__item">
-				<a class="widget__link" href="code.lol/categories/simulation/">simulation</a>
+				<a class="widget__link" href="/categories/simulation/">simulation</a>
 			</li>
 			<li class="widget__item">
-				<a class="widget__link" href="code.lol/categories/typescript/">typescript</a>
+				<a class="widget__link" href="/categories/typescript/">typescript</a>
 			</li>
 		</ul>
 	</div>
@@ -342,29 +342,29 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/algorithms/" title="algorithms">algorithms</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/curves/" title="curves">curves</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/demo/" title="demo">demo</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/design-patterns/" title="design patterns">design patterns</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/dijkstra/" title="dijkstra">dijkstra</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/factorization/" title="factorization">factorization</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/javascript/" title="javascript">javascript</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/latex/" title="latex">latex</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/math/" title="math">math</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/mathematica/" title="mathematica">mathematica</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/number-theory/" title="number theory">number theory</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/parsing/" title="parsing">parsing</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/physics/" title="physics">physics</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/programming/" title="programming">programming</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/rationality/" title="rationality">rationality</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/regression/" title="regression">regression</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/strings/" title="strings">strings</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/tuples/" title="tuples">tuples</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/type-system/" title="type system">type system</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/typescript/" title="typescript">typescript</a>
-		<a class="widget-taglist__link widget__link btn" href="code.lol/tags/wip/" title="wip">wip</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="strings">strings</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="tuples">tuples</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
 	</div>
 </div>
 </aside>
@@ -379,7 +379,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	</div>
 </footer>
 	</div>
-<script async defer src="/code.lol/js/menu.js"></script>
+<script async defer src="/js/menu.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>

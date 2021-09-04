@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>programming on Code, lol.</title>
-    <link>code.lol/categories/programming/</link>
+    <link>https://code.lol/categories/programming/</link>
     <description>Recent content in programming on Code, lol.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="code.lol/categories/programming/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate><atom:link href="https://code.lol/categories/programming/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Programs of Length N: Collatz, Chaitin, and Church</title>
-      <link>code.lol/post/programming/programs-of-length-n/</link>
+      <link>https://code.lol/post/programming/programs-of-length-n/</link>
       <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       
-      <guid>code.lol/post/programming/programs-of-length-n/</guid>
+      <guid>https://code.lol/post/programming/programs-of-length-n/</guid>
       <description>There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.
  1. How many programs have N terms? 2. How fast does the set of programs of length N grow? 3. How many programs of length N converge? 4. What is the longest-running convergent program of length N? 5. How fast does BB(N) grow? 6. What percentage of programs converge?</description>
     </item>

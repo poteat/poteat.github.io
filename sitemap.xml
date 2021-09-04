@@ -2,163 +2,163 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>code.lol/categories/</loc>
+    <loc>https://code.lol/categories/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/</loc>
+    <loc>https://code.lol/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/lambda-calculus/</loc>
+    <loc>https://code.lol/tags/lambda-calculus/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/math/</loc>
+    <loc>https://code.lol/tags/math/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/categories/mathematics/</loc>
+    <loc>https://code.lol/categories/mathematics/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/post/</loc>
+    <loc>https://code.lol/post/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/programming/</loc>
+    <loc>https://code.lol/tags/programming/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/categories/programming/</loc>
+    <loc>https://code.lol/categories/programming/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/post/programming/programs-of-length-n/</loc>
+    <loc>https://code.lol/post/programming/programs-of-length-n/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/</loc>
+    <loc>https://code.lol/tags/</loc>
     <lastmod>2021-09-03T15:12:34-07:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/tuples/</loc>
+    <loc>https://code.lol/tags/tuples/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/type-system/</loc>
+    <loc>https://code.lol/tags/type-system/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/typescript/</loc>
+    <loc>https://code.lol/tags/typescript/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
   </url><url>
-    <loc>code.lol/categories/typescript/</loc>
+    <loc>https://code.lol/categories/typescript/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
   </url><url>
-    <loc>code.lol/post/programming/unchained-tuple-types/</loc>
+    <loc>https://code.lol/post/programming/unchained-tuple-types/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/algorithms/</loc>
+    <loc>https://code.lol/tags/algorithms/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
   </url><url>
-    <loc>code.lol/categories/algorithms/</loc>
+    <loc>https://code.lol/categories/algorithms/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
   </url><url>
-    <loc>code.lol/post/programming/type-level-dedupe/</loc>
+    <loc>https://code.lol/post/programming/type-level-dedupe/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/strings/</loc>
+    <loc>https://code.lol/tags/strings/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
   </url><url>
-    <loc>code.lol/post/programming/chained-tuple-types/</loc>
+    <loc>https://code.lol/post/programming/chained-tuple-types/</loc>
     <lastmod>2021-01-05T20:23:23-08:00</lastmod>
   </url><url>
-    <loc>code.lol/post/programming/enforcing-function-map-constraints/</loc>
+    <loc>https://code.lol/post/programming/enforcing-function-map-constraints/</loc>
     <lastmod>2020-12-16T19:41:08-08:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/design-patterns/</loc>
+    <loc>https://code.lol/tags/design-patterns/</loc>
     <lastmod>2020-05-03T19:41:57-07:00</lastmod>
   </url><url>
-    <loc>code.lol/post/programming/self-modifying-type-predicates/</loc>
+    <loc>https://code.lol/post/programming/self-modifying-type-predicates/</loc>
     <lastmod>2020-05-03T19:41:57-07:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/dijkstra/</loc>
+    <loc>https://code.lol/tags/dijkstra/</loc>
     <lastmod>2019-12-23T16:39:53-08:00</lastmod>
   </url><url>
-    <loc>code.lol/post/algorithms/shunting-yard/</loc>
+    <loc>https://code.lol/post/algorithms/shunting-yard/</loc>
     <lastmod>2019-12-23T16:39:53-08:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/parsing/</loc>
+    <loc>https://code.lol/tags/parsing/</loc>
     <lastmod>2019-12-23T16:39:53-08:00</lastmod>
   </url><url>
-    <loc>code.lol/post/life/ssc-meetup/</loc>
+    <loc>https://code.lol/post/life/ssc-meetup/</loc>
     <lastmod>2019-06-03T12:37:10-07:00</lastmod>
   </url><url>
-    <loc>code.lol/categories/life/</loc>
+    <loc>https://code.lol/categories/life/</loc>
     <lastmod>2019-06-03T12:37:10-07:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/rationality/</loc>
+    <loc>https://code.lol/tags/rationality/</loc>
     <lastmod>2019-06-03T12:37:10-07:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/factorization/</loc>
+    <loc>https://code.lol/tags/factorization/</loc>
     <lastmod>2019-03-10T15:48:49-04:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/number-theory/</loc>
+    <loc>https://code.lol/tags/number-theory/</loc>
     <lastmod>2019-03-10T15:48:49-04:00</lastmod>
   </url><url>
-    <loc>code.lol/post/algorithms/pythagorean-triple/</loc>
+    <loc>https://code.lol/post/algorithms/pythagorean-triple/</loc>
     <lastmod>2019-03-10T15:48:49-04:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/latex/</loc>
+    <loc>https://code.lol/tags/latex/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/mathematica/</loc>
+    <loc>https://code.lol/tags/mathematica/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
   </url><url>
-    <loc>code.lol/post/simulation/mathematica-steps-to-latex/</loc>
+    <loc>https://code.lol/post/simulation/mathematica-steps-to-latex/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
   </url><url>
-    <loc>code.lol/categories/simulation/</loc>
+    <loc>https://code.lol/categories/simulation/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/wip/</loc>
+    <loc>https://code.lol/tags/wip/</loc>
     <lastmod>2019-02-01T15:01:48-05:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/demo/</loc>
+    <loc>https://code.lol/tags/demo/</loc>
     <lastmod>2019-01-28T13:59:19-05:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/javascript/</loc>
+    <loc>https://code.lol/tags/javascript/</loc>
     <lastmod>2019-01-28T13:59:19-05:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/physics/</loc>
+    <loc>https://code.lol/tags/physics/</loc>
     <lastmod>2019-01-28T13:59:19-05:00</lastmod>
   </url><url>
-    <loc>code.lol/post/simulation/quadtree-particle-simulation/</loc>
+    <loc>https://code.lol/post/simulation/quadtree-particle-simulation/</loc>
     <lastmod>2019-01-28T13:59:19-05:00</lastmod>
   </url><url>
-    <loc>code.lol/contact/</loc>
+    <loc>https://code.lol/contact/</loc>
     <lastmod>2019-01-26T12:14:54-05:00</lastmod>
   </url><url>
-    <loc>code.lol/post/simulation/double-pendulum/</loc>
+    <loc>https://code.lol/post/simulation/double-pendulum/</loc>
     <lastmod>2019-01-25T20:58:30-05:00</lastmod>
   </url><url>
-    <loc>code.lol/categories/bioinformatics/</loc>
+    <loc>https://code.lol/categories/bioinformatics/</loc>
     <lastmod>2019-01-25T20:35:20-05:00</lastmod>
   </url><url>
-    <loc>code.lol/post/bioinformatics/oriented-bounding-box-heuristic/</loc>
+    <loc>https://code.lol/post/bioinformatics/oriented-bounding-box-heuristic/</loc>
     <lastmod>2019-01-25T20:35:20-05:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/regression/</loc>
+    <loc>https://code.lol/tags/regression/</loc>
     <lastmod>2019-01-25T20:35:20-05:00</lastmod>
   </url><url>
-    <loc>code.lol/post/life/2019-presidential-luncheon/</loc>
+    <loc>https://code.lol/post/life/2019-presidential-luncheon/</loc>
     <lastmod>2019-01-25T18:58:29-05:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/tau-beta-pi/</loc>
+    <loc>https://code.lol/tags/tau-beta-pi/</loc>
     <lastmod>2019-01-25T18:58:29-05:00</lastmod>
   </url><url>
-    <loc>code.lol/post/bioinformatics/one-dimensional-linear-regression/</loc>
+    <loc>https://code.lol/post/bioinformatics/one-dimensional-linear-regression/</loc>
     <lastmod>2019-01-25T18:27:02-05:00</lastmod>
   </url><url>
-    <loc>code.lol/tags/curves/</loc>
+    <loc>https://code.lol/tags/curves/</loc>
     <lastmod>2019-01-25T17:40:45-05:00</lastmod>
   </url><url>
-    <loc>code.lol/post/bioinformatics/quadratic-bezier-curves/</loc>
+    <loc>https://code.lol/post/bioinformatics/quadratic-bezier-curves/</loc>
     <lastmod>2019-01-25T17:40:45-05:00</lastmod>
   </url><url>
-    <loc>code.lol/papers/</loc>
+    <loc>https://code.lol/papers/</loc>
     <lastmod>2019-01-25T17:28:08-05:00</lastmod>
   </url><url>
-    <loc>code.lol/about/</loc>
+    <loc>https://code.lol/about/</loc>
     <lastmod>2019-01-25T16:24:07-05:00</lastmod>
   </url>
 </urlset>

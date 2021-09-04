@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>wip on Code, lol.</title>
-    <link>code.lol/tags/wip/</link>
+    <link>https://code.lol/tags/wip/</link>
     <description>Recent content in wip on Code, lol.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 01 Feb 2019 15:01:48 -0500</lastBuildDate><atom:link href="code.lol/tags/wip/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Feb 2019 15:01:48 -0500</lastBuildDate><atom:link href="https://code.lol/tags/wip/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Mathematica Steps to LaTeX [WiP]</title>
-      <link>code.lol/post/simulation/mathematica-steps-to-latex/</link>
+      <link>https://code.lol/post/simulation/mathematica-steps-to-latex/</link>
       <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       
-      <guid>code.lol/post/simulation/mathematica-steps-to-latex/</guid>
+      <guid>https://code.lol/post/simulation/mathematica-steps-to-latex/</guid>
       <description>A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
 Mathematica&amp;rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
     </item>
