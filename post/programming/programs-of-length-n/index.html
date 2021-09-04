@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Programs of Length N: Collatz, Chaitin, and Church - Code, lol.</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:title" content="Programs of Length N: Collatz, Chaitin, and Church" />
+<meta property="og:description" content="There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.
+ 1. How many programs have N terms? 2. How fast does the set of programs of length N grow? 3. How many programs of length N converge? 4. What is the longest-running convergent program of length N? 5. How fast does BB(N) grow? 6. What percentage of programs converge?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/programming/programs-of-length-n/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-09-03T15:12:34-07:00" />
+<meta property="article:modified_time" content="2021-09-03T15:12:34-07:00" />
+
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="Code, lol." rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">Code, lol.</div>
+					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">About Me</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/papers/">
+				
+				<span class="menu__text">Papers</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Programs of Length N: Collatz, Chaitin, and Church</h1>
+			
+		</header><div class="content post__content clearfix">
+			<p>There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.</p>
+<ul>
+<li><a href="#1-how-many-programs-have-n-terms">1. How many programs have N terms?</a></li>
+<li><a href="#2-how-fast-does-the-set-of-programs-of-length-n-grow">2. How fast does the set of programs of length N grow?</a></li>
+<li><a href="#3-how-many-programs-of-length-n-converge">3. How many programs of length N converge?</a></li>
+<li><a href="#4-what-is-the-longest-running-convergent-program-of-length-n">4. What is the longest-running convergent program of length N?</a></li>
+<li><a href="#5-how-fast-does-bbn-grow">5. How fast does <code>BB(N)</code> grow?</a></li>
+<li><a href="#6-what-percentage-of-programs-converge">6. What percentage of programs converge?</a></li>
+<li><a href="#7-what-is-the-shortest-program-that-diverges">7. What is the shortest program that diverges?</a></li>
+<li><a href="#8-can-programs-eventually-converge-to-longer-expressions">8. Can programs eventually converge to longer expressions?</a></li>
+<li><a href="#9-what-is-the-shortest-program-which-converges-to-a-given-value">9. What is the shortest program which converges to a given value?</a></li>
+</ul>
+<h1 id="quick-primer-on-the-λ-calculus">Quick Primer on the λ-calculus</h1>
+<p>First, what is a program? Let&rsquo;s assume our language is the untyped lambda calculus. In this form, a program is a lambda expression, which executes via <em>beta reduction</em>.</p>
+<p>For example, here is the identity function in the lambda calculus:</p>
+<pre tabindex="0"><code class="language-lambda" data-lang="lambda">(λx. x)
+</code></pre><p>This term does not reduce - in other words, it&rsquo;s a <em>non-reducible expression</em>, or in other words a <em>value</em>. If we apply the identity function to another term, it does reduce, via <em>beta reduction</em>:</p>
+<pre tabindex="0"><code class="language-lambda" data-lang="lambda">(λx. x) x
+--&gt; x
+</code></pre><p>Expressions may be <em>convergent</em>, or <em>divergent</em>. If a term is <em>divergent</em>, it is reducible, but <em>beta reduction</em> may be applied an arbitrary number of times. A prime example is the <em>omega</em> combinator, which diverges:</p>
+<pre tabindex="0"><code class="language-lambda" data-lang="lambda">(λx. x x) (λx. x x)
+--&gt; (λx. x x) (λx. x x)
+--&gt; (λx. x x) (λx. x x)
+--&gt; ...
+</code></pre><p>For a given expression, we can count how many <em>terms</em> it has. For example, the identity function has two terms: <code>(λx. x)</code> and <code>x</code>. We can then talk about <em>&ldquo;all expressions with N terms&rdquo;`</em>:</p>
+<pre tabindex="0"><code class="language-lambda" data-lang="lambda">1 term:
+  x
+  (λx. x)
+
+2 terms:
+  x x
+  (λx. x x)
+  (λx. x) x
+  (λx. x) (λx. x)
+  x (λx. x)
+  (λx. (λx. x))
+  ...
+
+3 terms:
+  ...
+</code></pre><p>For a convergent expression, we can also talk about <em>how many beta reductions are needed</em> until it is fully reduced.</p>
+<h2 id="1-how-many-programs-have-n-terms">1. How many programs have N terms?</h2>
+<p>This is a straight-forward counting problem. In the untyped lambda calculus, there are only two expressions composed of one term: <code>x</code> and <code>(λx. x)</code>. For two terms, there are more possibilities, and so on.</p>
+<p>One important aspect to note is that the number of possible programs of a given length is always finite.</p>
+<h2 id="2-how-fast-does-the-set-of-programs-of-length-n-grow">2. How fast does the set of programs of length N grow?</h2>
+<p>Because of the recursive nature of lambda calculus, the number of programs should roughly follow the <a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan sequence</a>.</p>
+<p>The Catalan numbers represent, for example, how many different ways to write a well-balanced set of parentheses: <code>()</code>, <code>()()</code>, <code>(())</code>, <code>(()())</code>, <code>((()))</code> etc. In this way, it is analogous to lambda calculus expressions.</p>
+<p>The Catalan sequence grows in proportion to the factorial, i.e. <code>O(n!)</code>.</p>
+<h2 id="3-how-many-programs-of-length-n-converge">3. How many programs of length N converge?</h2>
+<p>Remember, to <em>converge</em> means to eventually reduce to a single value, such that <em>beta reduction</em> can no longer be performed.</p>
+<p>This is actually a non-computable function on N - no matter what technological or mathematical advancements we make, we cannot write a function that computes the number of programs of length N that converge.</p>
+<p>Intuitively, this is because of the <a href="https://en.wikipedia.org/wiki/Halting_problem">halting problem</a>, whereby we cannot write a function that computes whether any given expression is convergent or divergent.</p>
+<p>An intuitive proof of the halting problem is that programs represent proofs. A famous conjecture that is simple to state, but has not been proved is the <a href="https://en.wikipedia.org/wiki/Collatz_conjecture">Collatz conjecture</a>, or the &ldquo;3n + 1&rdquo; problem:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts">collatz(n: <span style="color:#339;font-weight:bold">Integer</span>)
+
+  <span style="color:#080;font-weight:bold">if</span> n <span style="color:#333">==</span> <span style="color:#00d;font-weight:bold">1</span>
+    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00d;font-weight:bold">1</span>
+
+  <span style="color:#080;font-weight:bold">if</span> n <span style="color:#080;font-weight:bold">is</span> even
+    <span style="color:#080;font-weight:bold">return</span> collatz(n <span style="color:#333">/</span> <span style="color:#00d;font-weight:bold">2</span>)
+
+  <span style="color:#080;font-weight:bold">if</span> n <span style="color:#080;font-weight:bold">is</span> odd
+    <span style="color:#080;font-weight:bold">return</span> collatz(<span style="color:#00d;font-weight:bold">3</span>n <span style="color:#333">+</span> <span style="color:#00d;font-weight:bold">1</span>)
+</code></pre></div><p>The Collatz conjecture basically states that the above program will always converge (or <em>halt</em>) for any positive integer.</p>
+<p>The interesting thing about this problem is that it&rsquo;s representation in most programming languages is quite short. Indeed, the fact that humans have thus far been unable to tell if the above program halts or not is intriguing, and gets into the core of why mathematics possesses an intrinsic &ldquo;difficulty&rdquo;.</p>
+<h2 id="4-what-is-the-longest-running-convergent-program-of-length-n">4. What is the longest-running convergent program of length N?</h2>
+<p>We define &ldquo;runtime&rdquo; to be how many <em>beta reductions</em> are needed to reduce a program to a single value. Because we specified that the programs converge, the runtime will be finite.</p>
+<p>This is actually non-computable as well - we cannot write a function that computes the runtime of the longest-running convergent program of length N, nor finds it.</p>
+<p>This is called the <a href="https://en.wikipedia.org/wiki/Busy_beaver">busy beaver</a> problem, and the corresponding function, i.e. the number of <em>beta reductions</em> needed to reduce the longest-running program of length N, is referred to as <code>BB(N)</code>, e.g. <code>BB(1)</code> for the lambda calculus would be 0.</p>
+<p>The concept of longest-running programs is deeply tied to the Collatz conjecture. Indeed, many of the longest-running programs work on a similar basis to the 3n + 1 problem.</p>
+<p>Since it&rsquo;s non-computable to decide whether a program is convergent or divergent, <code>BB(N)</code> is a non-computable function. Indeed, we only know the first few values of <code>BB(N)</code>, and discovering new values requires deep contributions to mathematics.</p>
+<h2 id="5-how-fast-does-bbn-grow">5. How fast does <code>BB(N)</code> grow?</h2>
+<p>The busy beaver function grows <em>faster</em> than <em>any computable function</em>. Effectively, it exists in its own computational complexity class - <code>O(BB(N))</code>. In other words, there is no possible function you could evaluate that would grow faster than <code>BB(N)</code> - it has no upper bound that can be evaluated.</p>
+<p>An intuitive explanation is that <code>BB(N)</code> &ldquo;optimally&rdquo; uses the space given to it to express arbitrarily sophisticated mathematical ideas. For that reason, it grows faster than fast-growing computable functions e.g. <code>Ackermann(N, M)</code>, or <code>TREE(N)</code>, because at some point it will &ldquo;embed&rdquo; them.</p>
+<h2 id="6-what-percentage-of-programs-converge">6. What percentage of programs converge?</h2>
+<p>In other words, for a randomly selected program of any length, what is the likelihood that it converges? We can represent this via a single real number, but notably this number itself is non-computable.</p>
+<p>In other words, there is no algorithm which will generate N bits of the answer. This number is known as <a href="https://en.wikipedia.org/wiki/Chaitin%27s_constant">Chaitin&rsquo;s constant</a>, Ω.</p>
+<p>Notably, you <em>can</em> write a function that, over time, executes in parallel all programs of successively longer lengths, whereby when one converges it is counted towards a running percentage. As the program continues running, this tallied percentage approaches Chaitin&rsquo;s constant - although it may do this so slowly that it&rsquo;s inpracticable.</p>
+<p>In the limit, Chaitin&rsquo;s constant requires <code>O(BB(N))</code> steps to find the first <code>N</code> bits of the answer. Since <code>BB(N)</code> is itself non-computable, we cannot calculate how much time would be needed to find the first <code>N</code> bits.</p>
+<h2 id="7-what-is-the-shortest-program-that-diverges">7. What is the shortest program that diverges?</h2>
+<p>Within the lambda calculus, the shortest expression which diverges is omega, i.e. <code>(λx. x x) (λx. x x)</code>, because it can undergo an arbitrary number of <em>beta reductions</em>.</p>
+<h2 id="8-can-programs-eventually-converge-to-longer-expressions">8. Can programs eventually converge to longer expressions?</h2>
+<p>Yes. Here is an example:</p>
+<pre tabindex="0"><code class="language-lambda" data-lang="lambda">(λm. λn. n m) (λf. λx. f f x) (λf. λx. f f f f f x)
+--&gt; ...
+--&gt; (λf. λx. f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f x)
+</code></pre><p>This is a very tedious process, and I would need to write a program to do it, but the above form is an example of a lambda calculus program that eventually converges to a form longer than itself.</p>
+<p>This example utilizes <a href="https://en.wikipedia.org/wiki/Church_encoding#Calculation_with_Church_numerals">Church encoding</a>. In the above initial expression, the term <code>(λm. λn. n m)</code> represents exponentiation, while the other two terms represent <code>2</code> and <code>5</code> respectively. This expression reduces to the correct result, which is <code>32</code>.</p>
+<p>This is the basis of compression.</p>
+<h2 id="9-what-is-the-shortest-program-which-converges-to-a-given-value">9. What is the shortest program which converges to a given value?</h2>
+<p>By &ldquo;value&rdquo;, we mean a non-reducible expression, i.e. one in which <em>beta reduction</em> cannot be performed.</p>
+<p>This is non-computable - there is no function that computes the shortest program that converges to a given value, nor is there a function which computes the <em>length</em> of the shortest program which converges to a given value.</p>
+<p>This is essentially <a href="https://en.wikipedia.org/wiki/Kolmogorov_complexity">Kolmogorov complexity</a>, which is non-computable for a given value.</p>
+<p>In practice, <a href="https://paperswithcode.com/task/image-compression">neural networks are quite good at compressing data</a>. This is likely due to the <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">universal approximation theorem</a> of neural networks. Finite-size neural networks can represent computable functions, but it&rsquo;s unclear how much they can represent non-computable functions.</p>
+
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/lambda-calculus/" rel="tag">lambda calculus</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/programming/" rel="tag">programming</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/math/" rel="tag">math</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name"></span>
+	</div>
+	<div class="authorbox__description">
+		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
+	</div>
+</div>
+
+
+
+			</div>
+			<aside class="sidebar"><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-dedupe/">String Deduplication on the Type Level</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/enforcing-function-map-constraints/">Enforcing Function Map Constraints</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">life</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/programming/">programming</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">simulation</a>
+			</li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">typescript</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="strings">strings</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="tuples">tuples</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
+	</div>
+</div>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2021 Code, lol..
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>
