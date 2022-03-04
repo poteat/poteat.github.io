@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>life on Code, lol.</title>
+    <title>life on Adventures in Typescript</title>
     <link>https://code.lol/categories/life/</link>
-    <description>Recent content in life on Code, lol.</description>
+    <description>Recent content in life on Adventures in Typescript</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 03 Jun 2019 12:37:10 -0700</lastBuildDate><atom:link href="https://code.lol/categories/life/index.xml" rel="self" type="application/rss+xml" />

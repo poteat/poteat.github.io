@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>typescript on Code, lol.</title>
+    <title>typescript on Adventures in Typescript</title>
     <link>https://code.lol/categories/typescript/</link>
-    <description>Recent content in typescript on Code, lol.</description>
+    <description>Recent content in typescript on Adventures in Typescript</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 14 Nov 2021 12:08:01 -0800</lastBuildDate><atom:link href="https://code.lol/categories/typescript/index.xml" rel="self" type="application/rss+xml" />
@@ -25,7 +25,7 @@
       <guid>https://code.lol/post/programming/unchained-tuple-types/</guid>
       <description>The asserts syntax introduced with TS 3.7 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
 This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
-const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.has(8); // :: true const hasResult2 = set.</description>
+const set: Set = new Set();  set.insert(2); set.insert(4); set.insert(8); set.remove(4);  const hasResult1 = set.</description>
     </item>
     
     <item>
@@ -56,7 +56,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
       <guid>https://code.lol/post/programming/enforcing-function-map-constraints/</guid>
       <description>Some &amp;ldquo;easy to state&amp;rdquo; problems in Typescript can require somewhat sophisticated type constructs.
 Let&amp;rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
-type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&amp;lt;string, (number | string) =&amp;gt; any&amp;gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.</description>
+type PermissibleInput = number | string;  const myFunctionMap = {  foobar(x: number): void;  barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&amp;lt;string, (number | string) =&amp;gt; any&amp;gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.</description>
     </item>
     
     <item>

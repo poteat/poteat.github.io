@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Type Guard Composition - Code, lol.</title>
+	<title>Type Guard Composition - Adventures in Typescript</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 		<meta property="og:title" content="Type Guard Composition" />
@@ -33,10 +33,10 @@
 	<div class="container header__container">
 		
 	<div class="logo">
-		<a class="logo__link" href="/" title="Code, lol." rel="home">
+		<a class="logo__link" href="/" title="Adventures in Typescript" rel="home">
 			<div class="logo__item logo__text">
-					<div class="logo__title">Code, lol.</div>
-					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
+					<div class="logo__title">Adventures in Typescript</div>
+					<div class="logo__tagline">Mike&#39;s code blog.</div>
 				</div>
 		</a>
 	</div>
@@ -80,7 +80,8 @@
 		<header class="post__header">
 			<h1 class="post__title">Type Guard Composition</h1>
 			
-		</header><div class="content post__content clearfix">
+		</header>
+		<div class="content post__content clearfix">
 			<p>Type guards are a powerful tool for type system design. They are used to express
 that a type is only valid if it satisfies a certain condition. For example, we
 can express that a type is only valid if it is a number or a string.</p>
@@ -129,17 +130,17 @@ can express that a type is only valid if it is a number or a string.</p>
 <li><a href="#8-conclusion">8. Conclusion</a></li>
 </ul>
 <p>Here is a naive implementation of a type guard:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isNumber <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>;
-</code></pre></div><p>I am using <code>const</code> function declaration syntax here - this is just like normal function declaration, but eschews the <code>function</code> keyword, and encourages single-expression-style functional programming.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isNumber <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>;
+</span></span></code></pre></div><p>I am using <code>const</code> function declaration syntax here - this is just like normal function declaration, but eschews the <code>function</code> keyword, and encourages single-expression-style functional programming.</p>
 <p>The type guard is a function that takes an unknown value and returns a boolean
 value. The function returns <code>true</code> if the value is a number and <code>false</code> if it
 is not.</p>
 <h1 id="1-union-type-guards">1. Union Type Guards</h1>
 <h2 id="11-naive-union-implementation">1.1. Naive Union Implementation</h2>
 <p>We can also specify that a type is only valid if it is a number or a string.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isNumberOrString <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">=&gt;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span> <span style="color:#333">||</span> <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span>;
-</code></pre></div><ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isNumberOrString <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span> <span style="color:#333">||</span> <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span>;
+</span></span></code></pre></div><ol>
 <li>Here we are using <code>const</code> function declaration syntax again. We check the native type using <code>typeof</code> and then check the type of the value using <code>||</code> to combine the two conditions.</li>
 </ol>
 <h2 id="12-2-adic-union-composition">1.2. 2-adic Union Composition</h2>
@@ -150,15 +151,15 @@ is not.</p>
 composed this type guard out of smaller type guards. To do this, we need a
 function that takes two type guards and returns a new type guard. Let us call
 this function <code>isUnion</code>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
-
-<span style="color:#080;font-weight:bold">const</span> isUnion <span style="color:#333">=</span>
-  &lt;<span style="color:#070">T1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">T2</span>&gt;(isT1: <span style="color:#339;font-weight:bold">Guard</span>&lt;<span style="color:#070">T1</span>&gt;, isT2: <span style="color:#339;font-weight:bold">Guard</span>&lt;<span style="color:#070">T2</span>&gt;) <span style="color:#333">=&gt;</span>
-  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> T1 <span style="color:#333">|</span> T2 <span style="color:#333">=&gt;</span>
-    isT1(x) <span style="color:#333">||</span> isT2(x);
-
-<span style="color:#080;font-weight:bold">const</span> isNumberOrString <span style="color:#333">=</span> isUnion(isNumber, isString);
-</code></pre></div><ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isUnion <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">T1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">T2</span>&gt;(isT1: <span style="color:#339;font-weight:bold">Guard</span>&lt;<span style="color:#070">T1</span>&gt;, isT2: <span style="color:#339;font-weight:bold">Guard</span>&lt;<span style="color:#070">T2</span>&gt;) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> T1 <span style="color:#333">|</span> T2 <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    isT1(x) <span style="color:#333">||</span> isT2(x);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isNumberOrString <span style="color:#333">=</span> isUnion(isNumber, isString);
+</span></span></code></pre></div><ol>
 <li>
 <p>We define a new type <code>Guard</code> that takes a type parameter <code>T</code> and returns a type guard of the specified type.</p>
 </li>
@@ -175,17 +176,17 @@ this function <code>isUnion</code>.</p>
 </blockquote>
 <p>Type guard composition is a way to combine multiple type guards into a single type guard.</p>
 <p>It would be nice if <code>isUnion</code> could be used to combine an arbitrary amount of type guards. This is possible using tuple types.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
-
-<span style="color:#080;font-weight:bold">type</span> GuardReturnType&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> Guard&lt;<span style="color:#070">infer</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">?</span> U : <span style="color:#339;font-weight:bold">never</span>;
-
-<span style="color:#080;font-weight:bold">const</span> isUnion <span style="color:#333">=</span>
-  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span><span style="color:#f00;background-color:#faa">[]</span>&gt;(...guards: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
-  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> GuardReturnType&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">number</span><span style="color:#f00;background-color:#faa">]</span>&gt; <span style="color:#333">=&gt;</span>
-    guards.some((g) <span style="color:#333">=&gt;</span> g(x));
-
-<span style="color:#080;font-weight:bold">const</span> isNumberOrString <span style="color:#333">=</span> isUnion(isNumber, isString);
-</code></pre></div><h3 id="131-guardreturntype">1.3.1. GuardReturnType</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> GuardReturnType&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> Guard&lt;<span style="color:#070">infer</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">?</span> U : <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isUnion <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span><span style="color:#f00;background-color:#faa">[]</span>&gt;(...guards: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> GuardReturnType&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">number</span><span style="color:#f00;background-color:#faa">]</span>&gt; <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    guards.some((g) <span style="color:#333">=&gt;</span> g(x));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isNumberOrString <span style="color:#333">=</span> isUnion(isNumber, isString);
+</span></span></code></pre></div><h3 id="131-guardreturntype">1.3.1. GuardReturnType</h3>
 <p>We define a new type <code>GuardReturnType</code> that takes a current Guard type, and returns the type of the value that the guard returns. This is a way to extract the type that a guard type is checking for.</p>
 <p>We use the <code>infer</code> syntax, which can be a little scary at first. It is a type inference keyword. It allows us to infer the type of a variable. In this case, we are using it to infer the type of the value that the guard returns.</p>
 <p>The phrase <code>infer U</code> within an <code>extends</code> clause creates a new type <code>U</code> that may be used within the truthy branch of the <code>extends</code> clause. The truthy branch will only be used if the guard is true, i.e. that there <em>does exist</em> a type <code>U</code> such that T can possibly extend it.</p>
@@ -212,202 +213,202 @@ this function <code>isUnion</code>.</p>
 <p>One final note is that there are only three type categories that are valid for keys in general: <code>string</code>, <code>number</code>, and <code>symbol</code>.</p>
 <h2 id="22-naive-implementation">2.2. Naive Implementation</h2>
 <p>Let us consider writing a type guard that checks if a value is of type <code>Record&lt;string, string | number&gt;</code>. In other words, for each string attribute, the value must be either a string or a number.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isRecordStringStringOrNumber <span style="color:#333">=</span> (
-  x: <span style="color:#339;font-weight:bold">unknown</span>
-)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">string</span> <span style="color:#f00;background-color:#faa">|</span> <span style="color:#00c">number</span>&gt; <span style="color:#333">=&gt;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
-  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
-  <span style="color:#007020">Object</span>.keys(x).every((key) <span style="color:#333">=&gt;</span>
-    <span style="color:#080;font-weight:bold">typeof</span> key <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span>
-      <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">typeof</span> x[key] <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">||</span> <span style="color:#080;font-weight:bold">typeof</span> x[key] <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>
-      <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">true</span>
-  );
-</code></pre></div><h2 id="23-generic-is-record">2.3. Generic Is-Record</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isRecordStringStringOrNumber <span style="color:#333">=</span> (
+</span></span><span style="display:flex;"><span>  x: <span style="color:#339;font-weight:bold">unknown</span>
+</span></span><span style="display:flex;"><span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">string</span> <span style="color:#f00;background-color:#faa">|</span> <span style="color:#00c">number</span>&gt; <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#007020">Object</span>.keys(x).every((key) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">typeof</span> key <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">typeof</span> x[key] <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">||</span> <span style="color:#080;font-weight:bold">typeof</span> x[key] <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span></code></pre></div><h2 id="23-generic-is-record">2.3. Generic Is-Record</h2>
 <p>The above type guard is a naive implementation of a type guard for records. It is not expressive enough.</p>
 <p>With this in mind, let us make a <code>isRecord</code> type guard that takes a key type guard and a value type guard and returns a new type guard.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
-
-<span style="color:#080;font-weight:bold">type</span> KeyGuard <span style="color:#333">=</span> Guard&lt;<span style="color:#070">string</span> <span style="color:#f00;background-color:#faa">|</span> <span style="color:#00c">number</span> <span style="color:#f00;background-color:#faa">|</span> <span style="color:#00c">symbol</span>&gt;;
-
-<span style="color:#080;font-weight:bold">type</span> GuardReturnType&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> Guard&lt;<span style="color:#070">infer</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">?</span> U : <span style="color:#339;font-weight:bold">never</span>;
-
-<span style="color:#080;font-weight:bold">const</span> isRecord <span style="color:#333">=</span>
-  &lt;<span style="color:#070">K</span> <span style="color:#00c">extends</span> <span style="color:#00c">KeyGuard</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">V</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt;(isK: <span style="color:#339;font-weight:bold">K</span>, isV: <span style="color:#339;font-weight:bold">V</span>) <span style="color:#333">=&gt;</span>
-  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Record&lt;<span style="color:#070">GuardReturnType</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">K</span>&gt;, GuardReturnType&lt;<span style="color:#070">V</span>&gt;<span style="color:#333">&gt;</span> <span style="color:#333">=&gt;</span>
-    <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
-    <span style="color:#007020">Object</span>.entries(x).every(([k, v]) <span style="color:#333">=&gt;</span> (isK(k) <span style="color:#333">?</span> isV(v) <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">true</span>));
-</code></pre></div><p>Now that we have this <code>isRecord</code> utility, we can express the type guard for <code>Record&lt;string, string | number&gt;</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isRecordStringStringOrNumber <span style="color:#333">=</span> isRecord(
-  isString,
-  isUnion(isString, isNumber)
-);
-</code></pre></div><p>In this way, we have true composability. This is much more expressive than the naive implementation.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> KeyGuard <span style="color:#333">=</span> Guard&lt;<span style="color:#070">string</span> <span style="color:#f00;background-color:#faa">|</span> <span style="color:#00c">number</span> <span style="color:#f00;background-color:#faa">|</span> <span style="color:#00c">symbol</span>&gt;;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> GuardReturnType&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> Guard&lt;<span style="color:#070">infer</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">?</span> U : <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isRecord <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">K</span> <span style="color:#00c">extends</span> <span style="color:#00c">KeyGuard</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">V</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt;(isK: <span style="color:#339;font-weight:bold">K</span>, isV: <span style="color:#339;font-weight:bold">V</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Record&lt;<span style="color:#070">GuardReturnType</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">K</span>&gt;, GuardReturnType&lt;<span style="color:#070">V</span>&gt;<span style="color:#333">&gt;</span> <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020">Object</span>.entries(x).every(([k, v]) <span style="color:#333">=&gt;</span> (isK(k) <span style="color:#333">?</span> isV(v) <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">true</span>));
+</span></span></code></pre></div><p>Now that we have this <code>isRecord</code> utility, we can express the type guard for <code>Record&lt;string, string | number&gt;</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isRecordStringStringOrNumber <span style="color:#333">=</span> isRecord(
+</span></span><span style="display:flex;"><span>  isString,
+</span></span><span style="display:flex;"><span>  isUnion(isString, isNumber)
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>In this way, we have true composability. This is much more expressive than the naive implementation.</p>
 <h1 id="3-object-type-guards">3. Object Type Guards</h1>
 <p>To round out the discussion, let us consider the type guard for objects.</p>
 <h2 id="31-naive-implementation">3.1. Naive Implementation</h2>
 <p>Let us assume that we have the following type:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Person <span style="color:#333">=</span> {
-  name: <span style="color:#339;font-weight:bold">string</span>;
-  age: <span style="color:#339;font-weight:bold">number</span>;
-};
-</code></pre></div><p>A naive implementation of a type guard for this Person object would be:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Person <span style="color:#333">=&gt;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
-  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x.name <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">&amp;&amp;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x.age <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>;
-</code></pre></div><h2 id="32-generic-is-object">3.2. Generic Is-Object</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Person <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  name: <span style="color:#339;font-weight:bold">string</span>;
+</span></span><span style="display:flex;"><span>  age: <span style="color:#339;font-weight:bold">number</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>A naive implementation of a type guard for this Person object would be:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Person <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x.name <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x.age <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>;
+</span></span></code></pre></div><h2 id="32-generic-is-object">3.2. Generic Is-Object</h2>
 <p>The above implementation of <code>isPerson</code> is not expressive enough. Instead, let us make a <code>isObject</code> type guard that takes a type guard for each property of the object. It then returns a new type guard.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
-
-<span style="color:#080;font-weight:bold">type</span> GuardReturnType&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> Guard&lt;<span style="color:#070">infer</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">?</span> U : <span style="color:#339;font-weight:bold">never</span>;
-
-<span style="color:#080;font-weight:bold">type</span> Key <span style="color:#333">=</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">symbol</span>;
-
-<span style="color:#080;font-weight:bold">type</span> GuardRecord <span style="color:#333">=</span> Record&lt;<span style="color:#070">Key</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Guard</span>&gt;;
-
-<span style="color:#080;font-weight:bold">const</span> isObject <span style="color:#333">=</span>
-  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">GuardRecord</span>&gt;(guards: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
-  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> { [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> GuardReturnType&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">]</span>&gt; } <span style="color:#333">=&gt;</span>
-    <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
-    x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
-    <span style="color:#007020">Object</span>.entries(x).every(([key, value]) <span style="color:#333">=&gt;</span> guards[key](value));
-</code></pre></div><p>The only novel type mechanism here is the type mapping syntax. We use the <code>key in keyof T</code> syntax to map each key in the object to the corresponding checked type.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> GuardReturnType&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> Guard&lt;<span style="color:#070">infer</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">?</span> U : <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Key <span style="color:#333">=</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">symbol</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> GuardRecord <span style="color:#333">=</span> Record&lt;<span style="color:#070">Key</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Guard</span>&gt;;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isObject <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">GuardRecord</span>&gt;(guards: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> { [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> GuardReturnType&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">]</span>&gt; } <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020">Object</span>.entries(x).every(([key, value]) <span style="color:#333">=&gt;</span> guards[key](value));
+</span></span></code></pre></div><p>The only novel type mechanism here is the type mapping syntax. We use the <code>key in keyof T</code> syntax to map each key in the object to the corresponding checked type.</p>
 <p>At the end, we use the <code>guards[key]</code> syntax to extract the guard for the key. We ensure that for every key, its guard is satisfied by the value.</p>
 <p>With the above implementation, we can express the type guard for <code>Person</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> isObject({
-  name: <span style="color:#339;font-weight:bold">isString</span>,
-  age: <span style="color:#339;font-weight:bold">isNumber</span>,
-});
-</code></pre></div><p>This is a much more expressive type guard than the naive implementation. Additionally, by continuous composition, we can express deep type guards:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> isObject({
-  name: <span style="color:#339;font-weight:bold">isString</span>,
-  age: <span style="color:#339;font-weight:bold">isNumber</span>,
-  address: <span style="color:#339;font-weight:bold">isObject</span>({
-    street: <span style="color:#339;font-weight:bold">isString</span>,
-    city: <span style="color:#339;font-weight:bold">isString</span>,
-    zip: <span style="color:#339;font-weight:bold">isNumber</span>,
-  }),
-});
-</code></pre></div><h1 id="4-array-type-guards">4. Array Type Guards</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> isObject({
+</span></span><span style="display:flex;"><span>  name: <span style="color:#339;font-weight:bold">isString</span>,
+</span></span><span style="display:flex;"><span>  age: <span style="color:#339;font-weight:bold">isNumber</span>,
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>This is a much more expressive type guard than the naive implementation. Additionally, by continuous composition, we can express deep type guards:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> isObject({
+</span></span><span style="display:flex;"><span>  name: <span style="color:#339;font-weight:bold">isString</span>,
+</span></span><span style="display:flex;"><span>  age: <span style="color:#339;font-weight:bold">isNumber</span>,
+</span></span><span style="display:flex;"><span>  address: <span style="color:#339;font-weight:bold">isObject</span>({
+</span></span><span style="display:flex;"><span>    street: <span style="color:#339;font-weight:bold">isString</span>,
+</span></span><span style="display:flex;"><span>    city: <span style="color:#339;font-weight:bold">isString</span>,
+</span></span><span style="display:flex;"><span>    zip: <span style="color:#339;font-weight:bold">isNumber</span>,
+</span></span><span style="display:flex;"><span>  }),
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><h1 id="4-array-type-guards">4. Array Type Guards</h1>
 <p>For completeness sake, let us consider the type guard for arrays. This does not involve any fundamentally new concepts, so we can do away with some of the exposition.</p>
 <p>Let us consider a type guard to check that a value is an array of strings or numbers. We can naively express this as:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isArrayOfStringsOrNumbers <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> (<span style="color:#339;font-weight:bold">string</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">number</span>)[] <span style="color:#333">=&gt;</span>
-  <span style="color:#007020">Array</span>.isArray(x) <span style="color:#333">&amp;&amp;</span>
-  x.every((y) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">typeof</span> y <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">||</span> <span style="color:#080;font-weight:bold">typeof</span> y <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>);
-</code></pre></div><p>Instead, let us attempt to represent this type guard in a more expressive way, with a <code>isArray</code> type guard that takes a type guard for the array elements, and returns a new type guard.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
-
-<span style="color:#080;font-weight:bold">const</span> isArray <span style="color:#333">=</span>
-  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt;(guard: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
-  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> T[] <span style="color:#333">=&gt;</span>
-    <span style="color:#007020">Array</span>.isArray(x) <span style="color:#333">&amp;&amp;</span> x.every((y) <span style="color:#333">=&gt;</span> guard(y));
-</code></pre></div><p>We may now express the type guard for <code>(string | number)[]</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isArrayOfStringsOrNumbers <span style="color:#333">=</span> isArray(isUnion(isString, isNumber));
-</code></pre></div><h1 id="5-tuple-type-guards">5. Tuple Type Guards</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isArrayOfStringsOrNumbers <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> (<span style="color:#339;font-weight:bold">string</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">number</span>)[] <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#007020">Array</span>.isArray(x) <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x.every((y) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">typeof</span> y <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">||</span> <span style="color:#080;font-weight:bold">typeof</span> y <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>);
+</span></span></code></pre></div><p>Instead, let us attempt to represent this type guard in a more expressive way, with a <code>isArray</code> type guard that takes a type guard for the array elements, and returns a new type guard.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isArray <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span>&gt;(guard: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> T[] <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020">Array</span>.isArray(x) <span style="color:#333">&amp;&amp;</span> x.every((y) <span style="color:#333">=&gt;</span> guard(y));
+</span></span></code></pre></div><p>We may now express the type guard for <code>(string | number)[]</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isArrayOfStringsOrNumbers <span style="color:#333">=</span> isArray(isUnion(isString, isNumber));
+</span></span></code></pre></div><h1 id="5-tuple-type-guards">5. Tuple Type Guards</h1>
 <p>Tuple types are used to represent a fixed number of elements of a given type. Let us consider a game engine, whose entities each have a three-dimensional position and a velocity, corresponding to each X, Y, and Z axis.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Coordinate <span style="color:#333">=</span> [<span style="color:#339;font-weight:bold">number</span>, <span style="color:#339;font-weight:bold">number</span>, <span style="color:#339;font-weight:bold">number</span>];
-
-<span style="color:#080;font-weight:bold">type</span> Entity <span style="color:#333">=</span> {
-  id: <span style="color:#339;font-weight:bold">string</span>;
-  position: <span style="color:#339;font-weight:bold">Coordinate</span>;
-  velocity: <span style="color:#339;font-weight:bold">Coordinate</span>;
-};
-</code></pre></div><p>How might we check that an entity is a valid entity?</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Coordinate <span style="color:#333">=</span> [<span style="color:#339;font-weight:bold">number</span>, <span style="color:#339;font-weight:bold">number</span>, <span style="color:#339;font-weight:bold">number</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Entity <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  id: <span style="color:#339;font-weight:bold">string</span>;
+</span></span><span style="display:flex;"><span>  position: <span style="color:#339;font-weight:bold">Coordinate</span>;
+</span></span><span style="display:flex;"><span>  velocity: <span style="color:#339;font-weight:bold">Coordinate</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>How might we check that an entity is a valid entity?</p>
 <h2 id="51-naive-implementation">5.1. Naive Implementation</h2>
 <p>The naive implementation in this case is quite painful and verbose:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isEntity <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Entity <span style="color:#333">=&gt;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
-  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x.id <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">&amp;&amp;</span>
-  <span style="color:#007020">Array</span>.isArray(x.position) <span style="color:#333">&amp;&amp;</span>
-  x.position.length <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">3</span> <span style="color:#333">&amp;&amp;</span>
-  x.position.every((y) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">typeof</span> y <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>) <span style="color:#333">&amp;&amp;</span>
-  <span style="color:#007020">Array</span>.isArray(x.velocity) <span style="color:#333">&amp;&amp;</span>
-  x.velocity.length <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">3</span> <span style="color:#333">&amp;&amp;</span>
-  x.velocity.every((y) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">typeof</span> y <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>);
-</code></pre></div><h2 id="52-generic-is-tuple">5.2. Generic Is-Tuple</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isEntity <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Entity <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x.id <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#007020">Array</span>.isArray(x.position) <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x.position.length <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">3</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x.position.every((y) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">typeof</span> y <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>) <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#007020">Array</span>.isArray(x.velocity) <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x.velocity.length <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">3</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x.velocity.every((y) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">typeof</span> y <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;number&#34;</span>);
+</span></span></code></pre></div><h2 id="52-generic-is-tuple">5.2. Generic Is-Tuple</h2>
 <p>Instead, let us make a <code>isTuple</code> type guard that takes a type guard for each element of the given tuple. It then returns a new type guard.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
-
-<span style="color:#080;font-weight:bold">const</span> isTuple <span style="color:#333">=</span>
-  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span><span style="color:#f00;background-color:#faa">[]</span>&gt;(guards: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
-  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> { [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> GuardReturnType&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">]</span>&gt; } <span style="color:#333">=&gt;</span>
-    <span style="color:#007020">Array</span>.isArray(x) <span style="color:#333">&amp;&amp;</span>
-    x.length <span style="color:#333">===</span> guards.length <span style="color:#333">&amp;&amp;</span>
-    x.every((y, i) <span style="color:#333">=&gt;</span> guards[i](y));
-</code></pre></div><p>We can now express the type guard for <code>Entity</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isEntity <span style="color:#333">=</span> isObject({
-  id: <span style="color:#339;font-weight:bold">isString</span>,
-  position: <span style="color:#339;font-weight:bold">isTuple</span>([isNumber, isNumber, isNumber]),
-  velocity: <span style="color:#339;font-weight:bold">isTuple</span>([isNumber, isNumber, isNumber]),
-});
-</code></pre></div><h1 id="6-optionality">6. Optionality</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Guard&lt;<span style="color:#070">T</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#333">=&gt;</span> x <span style="color:#080;font-weight:bold">is</span> T;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isTuple <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Guard</span><span style="color:#f00;background-color:#faa">[]</span>&gt;(guards: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> { [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> GuardReturnType&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">]</span>&gt; } <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020">Array</span>.isArray(x) <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>    x.length <span style="color:#333">===</span> guards.length <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>    x.every((y, i) <span style="color:#333">=&gt;</span> guards[i](y));
+</span></span></code></pre></div><p>We can now express the type guard for <code>Entity</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isEntity <span style="color:#333">=</span> isObject({
+</span></span><span style="display:flex;"><span>  id: <span style="color:#339;font-weight:bold">isString</span>,
+</span></span><span style="display:flex;"><span>  position: <span style="color:#339;font-weight:bold">isTuple</span>([isNumber, isNumber, isNumber]),
+</span></span><span style="display:flex;"><span>  velocity: <span style="color:#339;font-weight:bold">isTuple</span>([isNumber, isNumber, isNumber]),
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><h1 id="6-optionality">6. Optionality</h1>
 <p>Sometimes, we may want to express a type guard that is optional. For example, not everyone has a middle name.</p>
 <p>Let us consider a <code>Name</code> type:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Name <span style="color:#333">=</span> {
-  first: <span style="color:#339;font-weight:bold">string</span>;
-  middle?: <span style="color:#339;font-weight:bold">string</span>;
-  last: <span style="color:#339;font-weight:bold">string</span>;
-};
-</code></pre></div><p>A naive implementation of a type guard for this type would be:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isName <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Name <span style="color:#333">=&gt;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
-  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x.first <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">&amp;&amp;</span>
-  (<span style="color:#080;font-weight:bold">typeof</span> x.middle <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">||</span> x.middle <span style="color:#333">===</span> <span style="color:#080;font-weight:bold">undefined</span>) <span style="color:#333">&amp;&amp;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x.last <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span>;
-</code></pre></div><p>Luckily, we can express this type guard in a more expressive way:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isOptional <span style="color:#333">=</span>
-  &lt;<span style="color:#070">T</span>&gt;(guard: <span style="color:#339;font-weight:bold">Guard</span>&lt;<span style="color:#070">T</span>&gt;) <span style="color:#333">=&gt;</span>
-  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> T <span style="color:#333">|</span> <span style="color:#080;font-weight:bold">undefined</span> <span style="color:#333">=&gt;</span>
-    x <span style="color:#333">===</span> <span style="color:#080;font-weight:bold">undefined</span> <span style="color:#333">||</span> guard(x);
-</code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isName <span style="color:#333">=</span> isObject({
-  first: <span style="color:#339;font-weight:bold">isString</span>,
-  middle: <span style="color:#339;font-weight:bold">isOptional</span>(isString),
-  last: <span style="color:#339;font-weight:bold">isString</span>,
-});
-</code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Name <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  first: <span style="color:#339;font-weight:bold">string</span>;
+</span></span><span style="display:flex;"><span>  middle?: <span style="color:#339;font-weight:bold">string</span>;
+</span></span><span style="display:flex;"><span>  last: <span style="color:#339;font-weight:bold">string</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>A naive implementation of a type guard for this type would be:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isName <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Name <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x.first <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  (<span style="color:#080;font-weight:bold">typeof</span> x.middle <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">||</span> x.middle <span style="color:#333">===</span> <span style="color:#080;font-weight:bold">undefined</span>) <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x.last <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span>;
+</span></span></code></pre></div><p>Luckily, we can express this type guard in a more expressive way:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isOptional <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">T</span>&gt;(guard: <span style="color:#339;font-weight:bold">Guard</span>&lt;<span style="color:#070">T</span>&gt;) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> T <span style="color:#333">|</span> <span style="color:#080;font-weight:bold">undefined</span> <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#333">===</span> <span style="color:#080;font-weight:bold">undefined</span> <span style="color:#333">||</span> guard(x);
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isName <span style="color:#333">=</span> isObject({
+</span></span><span style="display:flex;"><span>  first: <span style="color:#339;font-weight:bold">isString</span>,
+</span></span><span style="display:flex;"><span>  middle: <span style="color:#339;font-weight:bold">isOptional</span>(isString),
+</span></span><span style="display:flex;"><span>  last: <span style="color:#339;font-weight:bold">isString</span>,
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><blockquote>
 <p>Note: Because the <code>undefined</code> native type only has one value, &ldquo;<code>x === undefined</code>&rdquo; and &ldquo;<code>typeof x === &quot;undefined&quot;</code>&rdquo; are interchangeable.</p>
 </blockquote>
 <h1 id="7-infinite-type-guards">7. Infinite Type Guards</h1>
 <p>We are almost done. Let us consider the problem of representing family trees. In our example, we have a <code>Person</code> type, each of which may optionally have children who are themselves people.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Person <span style="color:#333">=</span> {
-  name: <span style="color:#339;font-weight:bold">string</span>;
-  children?: <span style="color:#339;font-weight:bold">Person</span>[];
-};
-</code></pre></div><h2 id="71-naive-implementation">7.1. Naive Implementation</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Person <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  name: <span style="color:#339;font-weight:bold">string</span>;
+</span></span><span style="display:flex;"><span>  children?: <span style="color:#339;font-weight:bold">Person</span>[];
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h2 id="71-naive-implementation">7.1. Naive Implementation</h2>
 <p>We could certainly implement a specific type guard for this type, using recursion:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Person <span style="color:#333">=&gt;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
-  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
-  <span style="color:#080;font-weight:bold">typeof</span> x.name <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">&amp;&amp;</span>
-  (x.children <span style="color:#333">===</span> <span style="color:#080;font-weight:bold">undefined</span> <span style="color:#333">||</span> x.children.every((y) <span style="color:#333">=&gt;</span> isPerson(y)));
-</code></pre></div><h2 id="72-use-before-define-issue">7.2. Use-before-define Issue</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> Person <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">typeof</span> x.name <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;string&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>  (x.children <span style="color:#333">===</span> <span style="color:#080;font-weight:bold">undefined</span> <span style="color:#333">||</span> x.children.every((y) <span style="color:#333">=&gt;</span> isPerson(y)));
+</span></span></code></pre></div><h2 id="72-use-before-define-issue">7.2. Use-before-define Issue</h2>
 <p>We would want to represent our type guard for <code>Person</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> isObject({
-  name: <span style="color:#339;font-weight:bold">isString</span>,
-  children: <span style="color:#339;font-weight:bold">isOptional</span>(isArray(isPerson)),
-});
-</code></pre></div><p>This doesn&rsquo;t work as <code>isPerson</code> has not been defined where we are using it.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isPerson <span style="color:#333">=</span> isObject({
+</span></span><span style="display:flex;"><span>  name: <span style="color:#339;font-weight:bold">isString</span>,
+</span></span><span style="display:flex;"><span>  children: <span style="color:#339;font-weight:bold">isOptional</span>(isArray(isPerson)),
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>This doesn&rsquo;t work as <code>isPerson</code> has not been defined where we are using it.</p>
 <h2 id="73-lazy-generic-is-object">7.3 Lazy Generic Is-Object</h2>
 <p>The fix is to make <code>isObject</code> an optionally lazy generic type guard:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> LazyGuardRecord <span style="color:#333">=</span> Record&lt;<span style="color:#070">Key</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">()</span> <span style="color:#f00;background-color:#faa">=</span>&gt; Guard<span style="color:#333">&gt;</span>;
-
-<span style="color:#080;font-weight:bold">const</span> isLazyObject <span style="color:#333">=</span>
-  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">LazyGuardRecord</span>&gt;(guards: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
-  (
-    x: <span style="color:#339;font-weight:bold">unknown</span>
-  )<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> { [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> GuardReturnType&lt;<span style="color:#070">ReturnType</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">]</span>&gt;<span style="color:#333">&gt;</span> } <span style="color:#333">=&gt;</span>
-    <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
-    x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
-    <span style="color:#007020">Object</span>.entries(x).every(([key, value]) <span style="color:#333">=&gt;</span> guards[key]()(value));
-</code></pre></div><p>Now we can represent <code>Person</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> isPerson: <span style="color:#339;font-weight:bold">Guard</span>&lt;<span style="color:#070">Person</span>&gt; <span style="color:#333">=</span> isLazyObject({
-  name<span style="color:#333">:</span> () <span style="color:#333">=&gt;</span> isString,
-  children<span style="color:#333">:</span> () <span style="color:#333">=&gt;</span> isOptional(isArray(isPerson)),
-});
-</code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> LazyGuardRecord <span style="color:#333">=</span> Record&lt;<span style="color:#070">Key</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">()</span> <span style="color:#f00;background-color:#faa">=</span>&gt; Guard<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isLazyObject <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">LazyGuardRecord</span>&gt;(guards: <span style="color:#339;font-weight:bold">T</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  (
+</span></span><span style="display:flex;"><span>    x: <span style="color:#339;font-weight:bold">unknown</span>
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> x <span style="color:#080;font-weight:bold">is</span> { [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> GuardReturnType&lt;<span style="color:#070">ReturnType</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">]</span>&gt;<span style="color:#333">&gt;</span> } <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">typeof</span> x <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;object&#34;</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#333">!==</span> <span style="color:#080;font-weight:bold">null</span> <span style="color:#333">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020">Object</span>.entries(x).every(([key, value]) <span style="color:#333">=&gt;</span> guards[key]()(value));
+</span></span></code></pre></div><p>Now we can represent <code>Person</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isPerson: <span style="color:#339;font-weight:bold">Guard</span>&lt;<span style="color:#070">Person</span>&gt; <span style="color:#333">=</span> isLazyObject({
+</span></span><span style="display:flex;"><span>  name<span style="color:#333">:</span> () <span style="color:#333">=&gt;</span> isString,
+</span></span><span style="display:flex;"><span>  children<span style="color:#333">:</span> () <span style="color:#333">=&gt;</span> isOptional(isArray(isPerson)),
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><blockquote>
 <p>Note 1: <code>tsc</code> as of writing cannot determine the type of <code>isPerson</code> due to the recursion used. Instead, you must explicitly type the guard.</p>
 </blockquote>
 <blockquote>
@@ -457,7 +458,7 @@ this function <code>isUnion</code>.</p>
 		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
 	</figure>
 	<div class="authorbox__header">
-		<span class="authorbox__name"></span>
+		<span class="authorbox__name">About Michael Poteat</span>
 	</div>
 	<div class="authorbox__description">
 		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
@@ -480,11 +481,11 @@ this function <code>isUnion</code>.</p>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-dedupe/">String Deduplication on the Type Level</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
 		</ul>
 	</div>
 </div>
@@ -493,26 +494,19 @@ this function <code>isUnion</code>.</p>
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
-			</li>
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
-			</li>
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/life/">life</a>
-			</li>
+				<a class="widget__link" href="/categories/life/">life</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/mathematics/">mathematics</a>
-			</li>
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/programming/">programming</a>
-			</li>
+				<a class="widget__link" href="/categories/programming/">programming</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/simulation/">simulation</a>
-			</li>
+				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/typescript/">typescript</a>
-			</li>
+				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
 		</ul>
 	</div>
 </div>
@@ -552,7 +546,7 @@ this function <code>isUnion</code>.</p>
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2021 Code, lol..
+			&copy; 2022 Adventures in Typescript.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

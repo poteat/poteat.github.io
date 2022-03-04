@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.89.2" />
+	<meta name="generator" content="Hugo 0.93.1" />
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Code, lol.</title>
+	<title>Adventures in Typescript</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="Mike&#39;s code blog about programming, math, and science.">
-		<meta property="og:title" content="Code, lol." />
+		<meta property="og:title" content="Adventures in Typescript" />
 <meta property="og:description" content="Mike&#39;s code blog about programming, math, and science." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://code.lol/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/>
@@ -21,7 +21,7 @@
 
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="/css/custom.css">
-	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="Code, lol.">
+	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="Adventures in Typescript">
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
@@ -32,10 +32,10 @@
 	<div class="container header__container">
 		
 	<div class="logo">
-		<a class="logo__link" href="/" title="Code, lol." rel="home">
+		<a class="logo__link" href="/" title="Adventures in Typescript" rel="home">
 			<div class="logo__item logo__text">
-					<div class="logo__title">Code, lol.</div>
-					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
+					<div class="logo__title">Adventures in Typescript</div>
+					<div class="logo__tagline">Mike&#39;s code blog.</div>
 				</div>
 		</a>
 	</div>
@@ -76,6 +76,25 @@
 			
 <main class="main list" role="main">
 	<article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/post/algorithms/pythagorean-triple/" rel="bookmark">
+			Pythagorean Triple Problem in Sub-linear Time
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		The Pythagorean triple problem is as follows. Given an input integer \(n\), return integers \(a\), \(b\), \(c\) such that the two following conditions hold:
+$$ a b c = n $$ $$ a^2 + b^2 = c^2 $$
+I was interested in finding a solution to this problem that was both succint and had good asymptotic complexity. The solution I found runs in O(sqrt(n)) time by deconstructing the problem into the well-known 3SUM problem.
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/algorithms/pythagorean-triple/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/simulation/mathematica-steps-to-latex/" rel="bookmark">
@@ -92,6 +111,7 @@ Mathematica&rsquo;s internal algorithms for performing various symbolic computat
 		<a class="list__footer-readmore btn" href="/post/simulation/mathematica-steps-to-latex/">Read more…</a>
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/simulation/quadtree-particle-simulation/" rel="bookmark">
@@ -108,6 +128,7 @@ The forces used are tuned to provide some amount of clustering, but also to prov
 		<a class="list__footer-readmore btn" href="/post/simulation/quadtree-particle-simulation/">Read more…</a>
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/simulation/double-pendulum/" rel="bookmark">
@@ -128,6 +149,7 @@ Angle 2
 		<a class="list__footer-readmore btn" href="/post/simulation/double-pendulum/">Read more…</a>
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/bioinformatics/oriented-bounding-box-heuristic/" rel="bookmark">
@@ -144,6 +166,7 @@ One interesting estimate for the solution, which guarantees &ldquo;pretty good&r
 		<a class="list__footer-readmore btn" href="/post/bioinformatics/oriented-bounding-box-heuristic/">Read more…</a>
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/life/2019-presidential-luncheon/" rel="bookmark">
@@ -158,6 +181,7 @@ The food was delicious! We were able to talk to Broderick about current events o
 Group photo included.
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/bioinformatics/one-dimensional-linear-regression/" rel="bookmark">
@@ -174,6 +198,7 @@ Group photo included.
 		<a class="list__footer-readmore btn" href="/post/bioinformatics/one-dimensional-linear-regression/">Read more…</a>
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/bioinformatics/quadratic-bezier-curves/" rel="bookmark">
@@ -212,11 +237,11 @@ Drag the control points around to see the curve change.
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-dedupe/">String Deduplication on the Type Level</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
 		</ul>
 	</div>
 </div>
@@ -225,26 +250,19 @@ Drag the control points around to see the curve change.
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
-			</li>
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
-			</li>
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/life/">life</a>
-			</li>
+				<a class="widget__link" href="/categories/life/">life</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/mathematics/">mathematics</a>
-			</li>
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/programming/">programming</a>
-			</li>
+				<a class="widget__link" href="/categories/programming/">programming</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/simulation/">simulation</a>
-			</li>
+				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/typescript/">typescript</a>
-			</li>
+				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
 		</ul>
 	</div>
 </div>
@@ -284,7 +302,7 @@ Drag the control points around to see the curve change.
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2021 Code, lol..
+			&copy; 2022 Adventures in Typescript.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

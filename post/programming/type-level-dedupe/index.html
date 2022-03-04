@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>String Deduplication on the Type Level - Code, lol.</title>
+	<title>String Deduplication on the Type Level - Adventures in Typescript</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 		<meta property="og:title" content="String Deduplication on the Type Level" />
@@ -33,10 +33,10 @@ The problem appears in a few variants, but briefly one such variant is to remove
 	<div class="container header__container">
 		
 	<div class="logo">
-		<a class="logo__link" href="/" title="Code, lol." rel="home">
+		<a class="logo__link" href="/" title="Adventures in Typescript" rel="home">
 			<div class="logo__item logo__text">
-					<div class="logo__title">Code, lol.</div>
-					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
+					<div class="logo__title">Adventures in Typescript</div>
+					<div class="logo__tagline">Mike&#39;s code blog.</div>
 				</div>
 		</a>
 	</div>
@@ -80,59 +80,60 @@ The problem appears in a few variants, but briefly one such variant is to remove
 		<header class="post__header">
 			<h1 class="post__title">String Deduplication on the Type Level</h1>
 			
-		</header><div class="content post__content clearfix">
+		</header>
+		<div class="content post__content clearfix">
 			<p>The string deduplication problem is a canonical one within computer science, serving a similar purpose as fizz-buzz in terms of being an example of a simple problem that a reasonably knowledgable practitioner should be able to solve with minimal effort.</p>
 <p>The problem appears in a few variants, but briefly one such variant is to remove duplicate letters in a given string, such that the string then has only one instance of any given letter.</p>
 <p>I thought this problem would be a particularly interesting case study into Typescript 4.1&rsquo;s powerful literal string types.</p>
 <h2 id="string-splitting">String Splitting</h2>
 <p>The first step of any string algorithm is to split the string into units that can be processed individually. In this case, we split a given string literal into an array of strings, each of length 1.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Split&lt;<span style="color:#070">S</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt; <span style="color:#333">=</span> S <span style="color:#080;font-weight:bold">extends</span> <span style="background-color:#fff0f0">&#34;&#34;</span>
-  <span style="color:#333">?</span> []
-  <span style="color:#333">:</span> S <span style="color:#080;font-weight:bold">extends</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span><span style="color:#080;font-weight:bold">infer</span> C<span style="background-color:#eee">}${</span><span style="color:#080;font-weight:bold">infer</span> R<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>
-  <span style="color:#333">?</span> [C, ...Split&lt;<span style="color:#070">R</span>&gt;]
-  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
-
-<span style="color:#080;font-weight:bold">type</span> Result <span style="color:#333">=</span> Split<span style="color:#333">&lt;</span><span style="background-color:#fff0f0">&#34;Foobar&#34;</span><span style="color:#333">&gt;</span> <span style="color:#888">// :: [&#34;F&#34;, &#34;o&#34;, &#34;o&#34;, &#34;b&#34;, &#34;a&#34;, &#34;r&#34;]
-</span></code></pre></div><p><code>Split</code> is defined essentially as a nested conditional type (using the ternary syntax), that recurses into itself to define the tuple type. The <code>C</code> type is inferred to be the first character of <code>S</code>, and the <code>R</code> type is inferred to be the rest. (corresponding to <code>Character</code> and <code>Rest</code> respectively).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Split&lt;<span style="color:#070">S</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt; <span style="color:#333">=</span> S <span style="color:#080;font-weight:bold">extends</span> <span style="background-color:#fff0f0">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> S <span style="color:#080;font-weight:bold">extends</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span><span style="color:#080;font-weight:bold">infer</span> C<span style="background-color:#eee">}${</span><span style="color:#080;font-weight:bold">infer</span> R<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> [C, ...Split&lt;<span style="color:#070">R</span>&gt;]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Result <span style="color:#333">=</span> Split<span style="color:#333">&lt;</span><span style="background-color:#fff0f0">&#34;Foobar&#34;</span><span style="color:#333">&gt;</span> <span style="color:#888">// :: [&#34;F&#34;, &#34;o&#34;, &#34;o&#34;, &#34;b&#34;, &#34;a&#34;, &#34;r&#34;]
+</span></span></span></code></pre></div><p><code>Split</code> is defined essentially as a nested conditional type (using the ternary syntax), that recurses into itself to define the tuple type. The <code>C</code> type is inferred to be the first character of <code>S</code>, and the <code>R</code> type is inferred to be the rest. (corresponding to <code>Character</code> and <code>Rest</code> respectively).</p>
 <h2 id="string-joining">String Joining</h2>
 <p>Another important capability when working with strings is the ability to collapse an array of strings into one string, via concatenation. On the type level, we can implement this in a similar fashion as the above <code>Split</code> type.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Join&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
-  <span style="color:#333">?</span> <span style="background-color:#fff0f0">&#34;&#34;</span>
-  <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
-  <span style="color:#333">?</span> Head <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>
-    <span style="color:#333">?</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span>Head<span style="background-color:#eee">}${</span>Join&lt;<span style="color:#070">Tail</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span> <span style="color:#f00;background-color:#faa">?</span> <span style="color:#00c">Tail</span> <span style="color:#f00;background-color:#faa">:</span> <span style="color:#f00;background-color:#faa">[]</span>&gt;<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>
-    <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>
-  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
-</code></pre></div><p>With this pattern, we are essentially performing a <code>reduce</code> operation in a similar manner as you might do when implementing it in a combinator form, e.g. using the Y combinator instead of a reduce function as such.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Join&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> <span style="background-color:#fff0f0">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> Head <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#333">?</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span>Head<span style="background-color:#eee">}${</span>Join&lt;<span style="color:#070">Tail</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span> <span style="color:#f00;background-color:#faa">?</span> <span style="color:#00c">Tail</span> <span style="color:#f00;background-color:#faa">:</span> <span style="color:#f00;background-color:#faa">[]</span>&gt;<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span></code></pre></div><p>With this pattern, we are essentially performing a <code>reduce</code> operation in a similar manner as you might do when implementing it in a combinator form, e.g. using the Y combinator instead of a reduce function as such.</p>
 <p>For example, this is how the equivalent meaning would be written on the value level:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">const</span> join <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">string</span>[])<span style="color:#333">:</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">=&gt;</span>
-  x.length <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">0</span> <span style="color:#333">?</span> <span style="background-color:#fff0f0">&#34;&#34;</span> <span style="color:#333">:</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span>x[<span style="color:#00d;font-weight:bold">0</span>]<span style="background-color:#eee">}${</span>join(x.slice(<span style="color:#00d;font-weight:bold">1</span>))<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>;
-</code></pre></div><h2 id="tuple-uniqueness">Tuple Uniqueness</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> join <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">string</span>[])<span style="color:#333">:</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  x.length <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">0</span> <span style="color:#333">?</span> <span style="background-color:#fff0f0">&#34;&#34;</span> <span style="color:#333">:</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span>x[<span style="color:#00d;font-weight:bold">0</span>]<span style="background-color:#eee">}${</span>join(x.slice(<span style="color:#00d;font-weight:bold">1</span>))<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>;
+</span></span></code></pre></div><h2 id="tuple-uniqueness">Tuple Uniqueness</h2>
 <p>The next feature we need is the ability to enforce tuples to be unique, only allowing the first instance of a given element to exist, and filtering away all others. We do this by keeping track of letters we have already seen (<code>R</code>), and conditionally outputting to an output string tuple type (<code>O</code>).</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> Invert&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Record</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;<span style="color:#333">&gt;</span> <span style="color:#333">=</span> {
-  [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T <span style="color:#080;font-weight:bold">as</span> T[key] <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">?</span> T[key] <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>]<span style="color:#333">:</span> key;
-};
-
-<span style="color:#080;font-weight:bold">type</span> Unique<span style="color:#333">&lt;</span>
-  T <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>[],
-  R <span style="color:#080;font-weight:bold">extends</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">string</span>&gt; <span style="color:#333">=</span> {},
-  O <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>[] <span style="color:#333">=</span> []
-<span style="color:#333">&gt;</span> <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
-  <span style="color:#333">?</span> O
-  : <span style="color:#339;font-weight:bold">T</span> <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
-  <span style="color:#333">?</span> Unique<span style="color:#333">&lt;</span>
-      Tail <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>[] <span style="color:#333">?</span> Tail <span style="color:#333">:</span> [],
-      R <span style="color:#333">&amp;</span> Invert<span style="color:#333">&lt;</span>{ _: <span style="color:#339;font-weight:bold">Head</span> }<span style="color:#333">&gt;</span>,
-      Head <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">?</span> (R[Head] <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">?</span> O <span style="color:#333">:</span> [...O, Head]) <span style="color:#333">:</span> []
-    <span style="color:#333">&gt;</span>
-  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
-</code></pre></div><p>This is somewhat complicated by a limitation of TS 4.1, namely the ability to construct an object with a given key, whereby the key type is a literal type. The way we work around that now is via <code>Invert</code>, which switches the keys and values of an object type.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Invert&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">Record</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;<span style="color:#333">&gt;</span> <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T <span style="color:#080;font-weight:bold">as</span> T[key] <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">?</span> T[key] <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>]<span style="color:#333">:</span> key;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Unique<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>  T <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>[],
+</span></span><span style="display:flex;"><span>  R <span style="color:#080;font-weight:bold">extends</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">string</span>&gt; <span style="color:#333">=</span> {},
+</span></span><span style="display:flex;"><span>  O <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>[] <span style="color:#333">=</span> []
+</span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span> <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> O
+</span></span><span style="display:flex;"><span>  : <span style="color:#339;font-weight:bold">T</span> <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> Unique<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>      Tail <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>[] <span style="color:#333">?</span> Tail <span style="color:#333">:</span> [],
+</span></span><span style="display:flex;"><span>      R <span style="color:#333">&amp;</span> Invert<span style="color:#333">&lt;</span>{ _: <span style="color:#339;font-weight:bold">Head</span> }<span style="color:#333">&gt;</span>,
+</span></span><span style="display:flex;"><span>      Head <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">?</span> (R[Head] <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">?</span> O <span style="color:#333">:</span> [...O, Head]) <span style="color:#333">:</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span></code></pre></div><p>This is somewhat complicated by a limitation of TS 4.1, namely the ability to construct an object with a given key, whereby the key type is a literal type. The way we work around that now is via <code>Invert</code>, which switches the keys and values of an object type.</p>
 <h2 id="putting-it-together">Putting it Together</h2>
 <p>The string deduplication problem is essentially a composition between various simple operations. With the fundamental utilities we&rsquo;ve defined, the actual deduplication type is concise:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#080;font-weight:bold">type</span> DedupeString&lt;<span style="color:#070">S</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt; <span style="color:#333">=</span> Join&lt;<span style="color:#070">Unique</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Split</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">S</span>&gt;<span style="color:#333">&gt;&gt;</span>;
-
-<span style="color:#080;font-weight:bold">type</span> Result <span style="color:#333">=</span> DedupeString<span style="color:#333">&lt;</span><span style="background-color:#fff0f0">&#34;banana&#34;</span><span style="color:#333">&gt;</span>; <span style="color:#888">// &#34;ban&#34;
-</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> DedupeString&lt;<span style="color:#070">S</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt; <span style="color:#333">=</span> Join&lt;<span style="color:#070">Unique</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Split</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">S</span>&gt;<span style="color:#333">&gt;&gt;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Result <span style="color:#333">=</span> DedupeString<span style="color:#333">&lt;</span><span style="background-color:#fff0f0">&#34;banana&#34;</span><span style="color:#333">&gt;</span>; <span style="color:#888">// &#34;ban&#34;
+</span></span></span></code></pre></div>
 		</div>
 		<footer class="post__footer">
 			
@@ -165,7 +166,7 @@ The problem appears in a few variants, but briefly one such variant is to remove
 		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
 	</figure>
 	<div class="authorbox__header">
-		<span class="authorbox__name"></span>
+		<span class="authorbox__name">About Michael Poteat</span>
 	</div>
 	<div class="authorbox__description">
 		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
@@ -188,11 +189,11 @@ The problem appears in a few variants, but briefly one such variant is to remove
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-dedupe/">String Deduplication on the Type Level</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
 		</ul>
 	</div>
 </div>
@@ -201,26 +202,19 @@ The problem appears in a few variants, but briefly one such variant is to remove
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
-			</li>
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
-			</li>
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/life/">life</a>
-			</li>
+				<a class="widget__link" href="/categories/life/">life</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/mathematics/">mathematics</a>
-			</li>
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/programming/">programming</a>
-			</li>
+				<a class="widget__link" href="/categories/programming/">programming</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/simulation/">simulation</a>
-			</li>
+				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/typescript/">typescript</a>
-			</li>
+				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
 		</ul>
 	</div>
 </div>
@@ -260,7 +254,7 @@ The problem appears in a few variants, but briefly one such variant is to remove
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2021 Code, lol..
+			&copy; 2022 Adventures in Typescript.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

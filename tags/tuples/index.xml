@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>tuples on Code, lol.</title>
+    <title>tuples on Adventures in Typescript</title>
     <link>https://code.lol/tags/tuples/</link>
-    <description>Recent content in tuples on Code, lol.</description>
+    <description>Recent content in tuples on Adventures in Typescript</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 09 Jan 2021 16:33:40 -0800</lastBuildDate><atom:link href="https://code.lol/tags/tuples/index.xml" rel="self" type="application/rss+xml" />
@@ -15,7 +15,7 @@
       <guid>https://code.lol/post/programming/unchained-tuple-types/</guid>
       <description>The asserts syntax introduced with TS 3.7 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
 This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
-const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.has(8); // :: true const hasResult2 = set.</description>
+const set: Set = new Set();  set.insert(2); set.insert(4); set.insert(8); set.remove(4);  const hasResult1 = set.</description>
     </item>
     
     <item>

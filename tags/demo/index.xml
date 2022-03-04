@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>demo on Code, lol.</title>
+    <title>demo on Adventures in Typescript</title>
     <link>https://code.lol/tags/demo/</link>
-    <description>Recent content in demo on Code, lol.</description>
+    <description>Recent content in demo on Adventures in Typescript</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 28 Jan 2019 13:59:19 -0500</lastBuildDate><atom:link href="https://code.lol/tags/demo/index.xml" rel="self" type="application/rss+xml" />

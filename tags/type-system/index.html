@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>type system - Code, lol.</title>
+	<title>type system - Adventures in Typescript</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 		<meta property="og:title" content="type system" />
@@ -20,7 +20,7 @@
 
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="/css/custom.css">
-	<link rel="alternate" type="application/rss+xml" href="/tags/type-system/index.xml" title="Code, lol.">
+	<link rel="alternate" type="application/rss+xml" href="/tags/type-system/index.xml" title="Adventures in Typescript">
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
@@ -31,10 +31,10 @@
 	<div class="container header__container">
 		
 	<div class="logo">
-		<a class="logo__link" href="/" title="Code, lol." rel="home">
+		<a class="logo__link" href="/" title="Adventures in Typescript" rel="home">
 			<div class="logo__item logo__text">
-					<div class="logo__title">Code, lol.</div>
-					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
+					<div class="logo__title">Adventures in Typescript</div>
+					<div class="logo__tagline">Mike&#39;s code blog.</div>
 				</div>
 		</a>
 	</div>
@@ -77,6 +77,27 @@
 	<header class="main__header">
 		<h1 class="main__title">type system</h1>
 	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/post/programming/higher-kinded-types/" rel="bookmark">
+			Higher Kinded Types in Typescript
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		HKTs are a powerful abstraction. Just as there are different types of higher-order functions, so are there so-called &lsquo;higher-kinded types&rsquo;.
+Taxonomy This blog post concerns one particular type of HKT - to define the taxonomy, first we will cover a few types, and a way they can be categorized.
+We can classify types in terms of &lsquo;order&rsquo;, a rough level of abstraction.
+Here are a zero-order types that exist:
+ number string 42 (x: number) =&gt; number (f: (.
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/higher-kinded-types/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/programming/type-guard-composition/" rel="bookmark">
@@ -93,6 +114,7 @@
 		<a class="list__footer-readmore btn" href="/post/programming/type-guard-composition/">Read more…</a>
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/programming/unchained-tuple-types/" rel="bookmark">
@@ -104,12 +126,13 @@
 	<div class="content list__excerpt post__content clearfix">
 		The asserts syntax introduced with TS 3.7 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
 This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
-const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.has(8); // :: true const hasResult2 = set.
+const set: Set = new Set();  set.insert(2); set.insert(4); set.insert(8); set.remove(4);  const hasResult1 = set.
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/unchained-tuple-types/">Read more…</a>
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/programming/chained-tuple-types/" rel="bookmark">
@@ -126,6 +149,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 		<a class="list__footer-readmore btn" href="/post/programming/chained-tuple-types/">Read more…</a>
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/programming/enforcing-function-map-constraints/" rel="bookmark">
@@ -137,12 +161,13 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<div class="content list__excerpt post__content clearfix">
 		Some &ldquo;easy to state&rdquo; problems in Typescript can require somewhat sophisticated type constructs.
 Let&rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
-type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&lt;string, (number | string) =&gt; any&gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.
+type PermissibleInput = number | string;  const myFunctionMap = {  foobar(x: number): void;  barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&lt;string, (number | string) =&gt; any&gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/enforcing-function-map-constraints/">Read more…</a>
 	</div>
 </article><article class="list__item post">
+	
 	<header class="list__header">
 		<h2 class="list__title post__title">
 			<a href="/post/programming/self-modifying-type-predicates/" rel="bookmark">
@@ -179,11 +204,11 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-dedupe/">String Deduplication on the Type Level</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
 		</ul>
 	</div>
 </div>
@@ -192,26 +217,19 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
-			</li>
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
-			</li>
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/life/">life</a>
-			</li>
+				<a class="widget__link" href="/categories/life/">life</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/mathematics/">mathematics</a>
-			</li>
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/programming/">programming</a>
-			</li>
+				<a class="widget__link" href="/categories/programming/">programming</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/simulation/">simulation</a>
-			</li>
+				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/typescript/">typescript</a>
-			</li>
+				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
 		</ul>
 	</div>
 </div>
@@ -251,7 +269,7 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2021 Code, lol..
+			&copy; 2022 Adventures in Typescript.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

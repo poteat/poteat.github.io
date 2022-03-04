@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Self Modifying Type Predicates in Typescript - Code, lol.</title>
+	<title>Self Modifying Type Predicates in Typescript - Adventures in Typescript</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 		<meta property="og:title" content="Self Modifying Type Predicates in Typescript" />
@@ -35,10 +35,10 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<div class="container header__container">
 		
 	<div class="logo">
-		<a class="logo__link" href="/" title="Code, lol." rel="home">
+		<a class="logo__link" href="/" title="Adventures in Typescript" rel="home">
 			<div class="logo__item logo__text">
-					<div class="logo__title">Code, lol.</div>
-					<div class="logo__tagline">Mike&#39;s code blog. Come ye all and rejoice!</div>
+					<div class="logo__title">Adventures in Typescript</div>
+					<div class="logo__tagline">Mike&#39;s code blog.</div>
 				</div>
 		</a>
 	</div>
@@ -82,7 +82,8 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 		<header class="post__header">
 			<h1 class="post__title">Self Modifying Type Predicates in Typescript</h1>
 			
-		</header><div class="content post__content clearfix">
+		</header>
+		<div class="content post__content clearfix">
 			<p>Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.</p>
 <p>Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; <a href="https://en.wikipedia.org/wiki/Dependent_type">dependent types</a>, a powerful type feature present in Idris.</p>
 <p>Further explanation on type predicates can be found <a href="https://www.typescriptlang.org/docs/handbook/advanced-types.html#using-type-predicates">here</a>.</p>
@@ -90,21 +91,21 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 <p>Essentially, in the context of an <code>interface</code> or <code>class</code>, you may apply a type predicate which applies additional type constraints on <code>this</code>.  To motivate the example, I&rsquo;ll invoke the common <code>Shape</code> class hierarchy, and try to avoid the corresponding quagmires with the Liskov substitution principle.</p>
 <p>First, we will introduce the type <code>ShapeTypes</code>, which will be a mapping from the type <code>'circle' | 'rectangle'</code> to <code>Circle | Rectangle</code>.  Basically, this type converts a string type into a concrete <code>Shape</code> type.</p>
 <p>Usually, every individual type would be in separate files.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#888">// ShapeTypes.ts
-</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">type</span> ShapeTypes <span style="color:#333">=</span> {
-  circle: <span style="color:#339;font-weight:bold">Circle</span>;
-  rectangle: <span style="color:#339;font-weight:bold">Rectangle</span>;
-};
-</code></pre></div><p>Next, we will define what it means exactly to be a <code>Shape</code> in this model.  The magic here is the <code>is</code> abstract, generic function.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#888">// Shape.ts
-</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">class</span> Shape {
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">get</span> area()<span style="color:#333">:</span> <span style="color:#339;font-weight:bold">number</span>;
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">get</span> perimeter()<span style="color:#333">:</span> <span style="color:#339;font-weight:bold">number</span>;
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">is</span>&lt;<span style="color:#070">ShapeKey</span> <span style="color:#00c">extends</span> <span style="color:#00c">keyof</span> <span style="color:#00c">ShapeTypes</span>&gt;(
-    shapeType: <span style="color:#339;font-weight:bold">ShapeKey</span>
-  )<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">this</span> <span style="color:#080;font-weight:bold">is</span> ShapeTypes[ShapeKey];
-}
-</code></pre></div><p>Let&rsquo;s break down <code>Shape</code>, line-by-line:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// ShapeTypes.ts
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">type</span> ShapeTypes <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  circle: <span style="color:#339;font-weight:bold">Circle</span>;
+</span></span><span style="display:flex;"><span>  rectangle: <span style="color:#339;font-weight:bold">Rectangle</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>Next, we will define what it means exactly to be a <code>Shape</code> in this model.  The magic here is the <code>is</code> abstract, generic function.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// Shape.ts
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">class</span> Shape {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">get</span> area()<span style="color:#333">:</span> <span style="color:#339;font-weight:bold">number</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">get</span> perimeter()<span style="color:#333">:</span> <span style="color:#339;font-weight:bold">number</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">is</span>&lt;<span style="color:#070">ShapeKey</span> <span style="color:#00c">extends</span> <span style="color:#00c">keyof</span> <span style="color:#00c">ShapeTypes</span>&gt;(
+</span></span><span style="display:flex;"><span>    shapeType: <span style="color:#339;font-weight:bold">ShapeKey</span>
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">this</span> <span style="color:#080;font-weight:bold">is</span> ShapeTypes[ShapeKey];
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Let&rsquo;s break down <code>Shape</code>, line-by-line:</p>
 <ol start="2">
 <li>The function declaration, specifying the class is <code>abstract</code> and therefore may possess abstract properties, and cannot be instantiated.</li>
 </ol>
@@ -129,69 +130,69 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 </li>
 </ol>
 <p>In the end, <code>is</code> becomes a type-narrowing function which we can very easily use in our client code.  First though, we have a few more files to define.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#888">// Circle.ts
-</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">class</span> Circle <span style="color:#080;font-weight:bold">extends</span> Shape {
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">constructor</span>(<span style="color:#080;font-weight:bold">private</span> _radius: <span style="color:#339;font-weight:bold">number</span>) {
-    <span style="color:#080;font-weight:bold">super</span>();
-  }
-
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> area() {
-    <span style="color:#080;font-weight:bold">return</span> <span style="color:#007020">Math</span>.PI <span style="color:#333">*</span> <span style="color:#080;font-weight:bold">this</span>._radius <span style="color:#333">**</span> <span style="color:#00d;font-weight:bold">2</span>;
-  }
-
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> perimeter() {
-    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00d;font-weight:bold">2</span> <span style="color:#333">*</span> <span style="color:#007020">Math</span>.PI <span style="color:#333">*</span> <span style="color:#080;font-weight:bold">this</span>._radius;
-  }
-
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> radius() {
-    <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">this</span>._radius;
-  }
-
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">is</span>&lt;<span style="color:#070">ShapeKey</span> <span style="color:#00c">extends</span> <span style="color:#00c">keyof</span> <span style="color:#00c">ShapeTypes</span>&gt;(shapeType: <span style="color:#339;font-weight:bold">ShapeKey</span>) {
-    <span style="color:#080;font-weight:bold">return</span> shapeType <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;circle&#34;</span>;
-  }
-}
-</code></pre></div><p>The definition of <code>Circle</code> is pretty straight-forward: various functions encoding geometric primitives.  However, as part of the contract between <code>Shape</code> and any types which implement it, the <code>is</code> function must exist. So, we define it and specify that the parameter must be equal to <code>'circle'</code>.  Note that we provide additional read-only user-facing properties such as <code>radius</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// Circle.ts
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">class</span> Circle <span style="color:#080;font-weight:bold">extends</span> Shape {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">constructor</span>(<span style="color:#080;font-weight:bold">private</span> _radius: <span style="color:#339;font-weight:bold">number</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">super</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> area() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#007020">Math</span>.PI <span style="color:#333">*</span> <span style="color:#080;font-weight:bold">this</span>._radius <span style="color:#333">**</span> <span style="color:#00d;font-weight:bold">2</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> perimeter() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00d;font-weight:bold">2</span> <span style="color:#333">*</span> <span style="color:#007020">Math</span>.PI <span style="color:#333">*</span> <span style="color:#080;font-weight:bold">this</span>._radius;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> radius() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">this</span>._radius;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">is</span>&lt;<span style="color:#070">ShapeKey</span> <span style="color:#00c">extends</span> <span style="color:#00c">keyof</span> <span style="color:#00c">ShapeTypes</span>&gt;(shapeType: <span style="color:#339;font-weight:bold">ShapeKey</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> shapeType <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;circle&#34;</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The definition of <code>Circle</code> is pretty straight-forward: various functions encoding geometric primitives.  However, as part of the contract between <code>Shape</code> and any types which implement it, the <code>is</code> function must exist. So, we define it and specify that the parameter must be equal to <code>'circle'</code>.  Note that we provide additional read-only user-facing properties such as <code>radius</code>.</p>
 <p>We then have <code>Rectangle</code>, along similar lines:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#888">// Rectangle.ts
-</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">class</span> Rectangle <span style="color:#080;font-weight:bold">extends</span> Shape {
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">constructor</span>(<span style="color:#080;font-weight:bold">private</span> _width: <span style="color:#339;font-weight:bold">number</span>, <span style="color:#080;font-weight:bold">private</span> _height: <span style="color:#339;font-weight:bold">number</span>) {
-    <span style="color:#080;font-weight:bold">super</span>();
-  }
-
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> area() {
-    <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">this</span>._width <span style="color:#333">*</span> <span style="color:#080;font-weight:bold">this</span>._height;
-  }
-
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> perimeter() {
-    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00d;font-weight:bold">2</span> <span style="color:#333">*</span> (<span style="color:#080;font-weight:bold">this</span>._width <span style="color:#333">+</span> <span style="color:#080;font-weight:bold">this</span>._height);
-  }
-
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> height() {
-    <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">this</span>._height;
-  }
-
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> width() {
-    <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">this</span>._width;
-  }
-
-  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">is</span>&lt;<span style="color:#070">ShapeKey</span> <span style="color:#00c">extends</span> <span style="color:#00c">keyof</span> <span style="color:#00c">ShapeTypes</span>&gt;(shapeType: <span style="color:#339;font-weight:bold">ShapeKey</span>) {
-    <span style="color:#080;font-weight:bold">return</span> shapeType <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;rectangle&#34;</span>;
-  }
-}
-</code></pre></div><p>We now have enough context to motivate the problem properly.  Let&rsquo;s say we have a function which somehow acts upon objects of type <code>Shape</code>.  In general, this could be for rendering, additional geometric computation, serialization, etc.  One relevant application would be a logging utility, <code>logShapeData</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// Rectangle.ts
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">class</span> Rectangle <span style="color:#080;font-weight:bold">extends</span> Shape {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">constructor</span>(<span style="color:#080;font-weight:bold">private</span> _width: <span style="color:#339;font-weight:bold">number</span>, <span style="color:#080;font-weight:bold">private</span> _height: <span style="color:#339;font-weight:bold">number</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">super</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> area() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">this</span>._width <span style="color:#333">*</span> <span style="color:#080;font-weight:bold">this</span>._height;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> perimeter() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00d;font-weight:bold">2</span> <span style="color:#333">*</span> (<span style="color:#080;font-weight:bold">this</span>._width <span style="color:#333">+</span> <span style="color:#080;font-weight:bold">this</span>._height);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> height() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">this</span>._height;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">get</span> width() {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#080;font-weight:bold">this</span>._width;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">is</span>&lt;<span style="color:#070">ShapeKey</span> <span style="color:#00c">extends</span> <span style="color:#00c">keyof</span> <span style="color:#00c">ShapeTypes</span>&gt;(shapeType: <span style="color:#339;font-weight:bold">ShapeKey</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> shapeType <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;rectangle&#34;</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>We now have enough context to motivate the problem properly.  Let&rsquo;s say we have a function which somehow acts upon objects of type <code>Shape</code>.  In general, this could be for rendering, additional geometric computation, serialization, etc.  One relevant application would be a logging utility, <code>logShapeData</code>.</p>
 <p><code>logShapeData</code> takes in a <code>Shape</code>, but its behavior depends on internal properties.  This is the quintessential application for type predicates.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#888">// logShapeData.ts
-</span><span style="color:#888"></span><span style="color:#080;font-weight:bold">function</span> logShapeData(shape: <span style="color:#339;font-weight:bold">Shape</span>) {
-  console.log(<span style="background-color:#fff0f0">`P: </span><span style="background-color:#eee">${</span>shape.perimeter<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">, A: </span><span style="background-color:#eee">${</span>shape.area<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>);
-
-  <span style="color:#080;font-weight:bold">if</span> (shape.<span style="color:#080;font-weight:bold">is</span>(<span style="background-color:#fff0f0">&#34;circle&#34;</span>)) {
-    console.log(<span style="background-color:#fff0f0">`  R: </span><span style="background-color:#eee">${</span>shape.radius<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>);
-  } <span style="color:#080;font-weight:bold">else</span> <span style="color:#080;font-weight:bold">if</span> (shape.<span style="color:#080;font-weight:bold">is</span>(<span style="background-color:#fff0f0">&#34;rectangle&#34;</span>)) {
-    console.log(<span style="background-color:#fff0f0">`  W: </span><span style="background-color:#eee">${</span>shape.width<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">, H: </span><span style="background-color:#eee">${</span>shape.height<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>);
-  }
-}
-</code></pre></div><p>In this form, the compiler knows that on line 6, shape is definitely of <code>Circle</code> type, because of the type predicate. We have implemented the ability to check, at run-time, whether or not a particular object is of a type we specify.  Additionally, through the use of generics and type predicates, we have extended that check to compile-time as well.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// logShapeData.ts
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">function</span> logShapeData(shape: <span style="color:#339;font-weight:bold">Shape</span>) {
+</span></span><span style="display:flex;"><span>  console.log(<span style="background-color:#fff0f0">`P: </span><span style="background-color:#eee">${</span>shape.perimeter<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">, A: </span><span style="background-color:#eee">${</span>shape.area<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">if</span> (shape.<span style="color:#080;font-weight:bold">is</span>(<span style="background-color:#fff0f0">&#34;circle&#34;</span>)) {
+</span></span><span style="display:flex;"><span>    console.log(<span style="background-color:#fff0f0">`  R: </span><span style="background-color:#eee">${</span>shape.radius<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>);
+</span></span><span style="display:flex;"><span>  } <span style="color:#080;font-weight:bold">else</span> <span style="color:#080;font-weight:bold">if</span> (shape.<span style="color:#080;font-weight:bold">is</span>(<span style="background-color:#fff0f0">&#34;rectangle&#34;</span>)) {
+</span></span><span style="display:flex;"><span>    console.log(<span style="background-color:#fff0f0">`  W: </span><span style="background-color:#eee">${</span>shape.width<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">, H: </span><span style="background-color:#eee">${</span>shape.height<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>In this form, the compiler knows that on line 6, shape is definitely of <code>Circle</code> type, because of the type predicate. We have implemented the ability to check, at run-time, whether or not a particular object is of a type we specify.  Additionally, through the use of generics and type predicates, we have extended that check to compile-time as well.</p>
 <h2 id="final-notes">Final Notes</h2>
 <p>For this simple example, a similar functionality can be achieved using the <code>instanceof</code> operator. However, this approach has limitations in that it requires leaf types to specifically be implemented as classes, while the type generic approach works just as well for a pure functional paradigm.</p>
 <p>As well, using self-modifying type predicates is applicable beyond the problem of determining whether an object is of a certain type or not.</p>
@@ -227,7 +228,7 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
 	</figure>
 	<div class="authorbox__header">
-		<span class="authorbox__name"></span>
+		<span class="authorbox__name">About Michael Poteat</span>
 	</div>
 	<div class="authorbox__description">
 		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
@@ -250,11 +251,11 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-dedupe/">String Deduplication on the Type Level</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/chained-tuple-types/">Chained Tuple Types</a></li>
 		</ul>
 	</div>
 </div>
@@ -263,26 +264,19 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/algorithms/">algorithms</a>
-			</li>
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a>
-			</li>
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/life/">life</a>
-			</li>
+				<a class="widget__link" href="/categories/life/">life</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/mathematics/">mathematics</a>
-			</li>
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/programming/">programming</a>
-			</li>
+				<a class="widget__link" href="/categories/programming/">programming</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/simulation/">simulation</a>
-			</li>
+				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/typescript/">typescript</a>
-			</li>
+				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
 		</ul>
 	</div>
 </div>
@@ -322,7 +316,7 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2021 Code, lol..
+			&copy; 2022 Adventures in Typescript.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>
