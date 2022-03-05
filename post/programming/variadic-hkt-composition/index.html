@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Variadic HKT Composition - Adventures in Typescript</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:title" content="Variadic HKT Composition" />
+<meta property="og:description" content="In a previous article, Higher Kinded Types in Typescript, we explored how to encode HKTs, as well as some of their applications.
+For example, we could define a value and type-level operation like the following:
+// &#34;hello! hello!&#34; const result = map(double, map(append(&#34;! &#34;), &#34;hello&#34;)); On both the type and value levels, the given string goes through a complex operation. In the end though, the type system can still capture and encode the operations being performed." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.lol/post/programming/variadic-hkt-composition/" /><meta property="og:image" content="https://code.lol/img/art/angel.png" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-03-05T00:17:15-08:00" />
+<meta property="article:modified_time" content="2022-03-05T00:17:15-08:00" />
+
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="Adventures in Typescript" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">Adventures in Typescript</div>
+					<div class="logo__tagline">Mike&#39;s code blog.</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">About Me</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/papers/">
+				
+				<span class="menu__text">Papers</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Variadic HKT Composition</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>In a previous article, <a href="../../programming/higher-kinded-types/">Higher Kinded Types in Typescript</a>, we explored how to encode HKTs, as well as some of their applications.</p>
+<p>For example, we could define a value and type-level operation like the following:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// &#34;hello! hello!&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">const</span> result <span style="color:#333">=</span> map(double, map(append(<span style="background-color:#fff0f0">&#34;! &#34;</span>), <span style="background-color:#fff0f0">&#34;hello&#34;</span>));
+</span></span></code></pre></div><p>On both the type and value levels, the given string goes through a complex operation. In the end though, the type system can still capture and encode the operations being performed.</p>
+<p>However, what if we wanted to more cleanly implement the above operation with via composition, while still retaining type knowledge?</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// &#34;hello! hello!&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">const</span> result <span style="color:#333">=</span> compose(double, append(<span style="background-color:#fff0f0">&#34;! &#34;</span>))(<span style="background-color:#fff0f0">&#34;hello&#34;</span>);
+</span></span></code></pre></div><h2 id="binary-composition">Binary Composition</h2>
+<p>For convenience, we will start off on the type level only, and introduce the value level encodings later.</p>
+<p>First, let&rsquo;s define the type analogues of <code>double</code> and <code>append</code>. For any utility types not explained, see the previous article.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> DoubleString <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span><span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">string</span>&gt;) <span style="color:#333">=&gt;</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span><span style="color:#080;font-weight:bold">typeof</span> x<span style="background-color:#eee">}${</span><span style="color:#080;font-weight:bold">typeof</span> x<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> Append&lt;<span style="color:#070">S</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt; <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span><span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">string</span>&gt;) <span style="color:#333">=&gt;</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span><span style="color:#080;font-weight:bold">typeof</span> x<span style="background-color:#eee">}${</span>S<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The type level analogue of their manual composition would be:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// &#34;hello! hello!&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">type</span> Result <span style="color:#333">=</span> Apply&lt;<span style="color:#070">DoubleString</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Apply</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Append</span><span style="color:#f00;background-color:#faa">&lt;&#34;!</span> <span style="color:#f00;background-color:#faa">&#34;</span>&gt;, <span style="color:#f00;background-color:#faa">&#34;</span>hello<span style="color:#333">&gt;&gt;&gt;</span>
+</span></span></code></pre></div><h3 id="simple-binary-composition">Simple Binary Composition</h3>
+<p>To compose multiple HKTs in a simple way, we can create a first-order type that takes in the two HKTs to be composed, as well as the value type to be applied.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> SimpleCompose&lt;<span style="color:#070">HKT1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">HKT2</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">X</span>&gt; <span style="color:#333">=</span> Apply&lt;<span style="color:#070">HKT1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Apply</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">HKT2</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">X</span>&gt;<span style="color:#333">&gt;</span>;
+</span></span></code></pre></div><p>The issue with this type is that we must provide the type X when composing the actual HKTs - this is not very useful for us.</p>
+<p>Instead, we would like our <code>Compose</code> to <em>itself</em> return a HKT that is then filled with a value at a later stage - in line with how composition normally works for value-level functional programming.</p>
+<h3 id="curried-binary-composition">Curried Binary Composition</h3>
+<p>To provide the &lsquo;value&rsquo; type to be applied at a later step, our <code>SimpleCompose</code> should return a type that takes in a type - i.e. <code>SimpleCompose</code> itself must be a higher-kinded type of the form:</p>
+<ul>
+<li><code>((*) =&gt; (*), (*) =&gt; (*)) =&gt; (*) =&gt; (*)</code></li>
+</ul>
+<p>In other words, <code>SimpleCompose</code> takes in <em>two</em> first-order types, represented by <code>(*) =&gt; (*)</code>, and then returns a first-order type representing the composition of the two input first-order types.</p>
+<p>Since <code>SimpleCompose</code> is <em>parameterized</em> by first-order types, that makes <code>SimpleCompose</code> a second-order type.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> SimpleCompose&lt;<span style="color:#070">_1</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">_2</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span>&gt; <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span><span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">this</span>[<span style="background-color:#fff0f0">&#34;_1&#34;</span>]) <span style="color:#333">=&gt;</span> Apply&lt;<span style="color:#070">_1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Apply</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">_2</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;]</span>&gt;<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> ExclaimThenDouble <span style="color:#333">=</span> SimpleCompose&lt;<span style="color:#070">DoubleString</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Append</span><span style="color:#f00;background-color:#faa">&lt;&#34;!</span> <span style="color:#f00;background-color:#faa">&#34;</span>&gt;<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">// &#34;hello! hello!&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">type</span> SimpleComposeValue <span style="color:#333">=</span> Apply&lt;<span style="color:#070">ExclaimThenDouble</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">&#34;</span><span style="color:#00c">hello</span><span style="color:#f00;background-color:#faa">&#34;</span>&gt;;
+</span></span></code></pre></div><h2 id="variadic-composition">Variadic Composition</h2>
+<p>It would be best if we could encode <code>Compose</code> in a variadic way, so that we can compose 3 or more HKTs without having to nest type applications.</p>
+<p>To facilitate this, we will need a recursive analogue to our <code>Apply</code>, which I will refer to as <code>Reduce</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Reduce&lt;<span style="color:#070">HKTs</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">X</span>&gt; <span style="color:#333">=</span> HKTs <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> X
+</span></span><span style="display:flex;"><span>  : <span style="color:#339;font-weight:bold">HKTs</span> <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> Apply&lt;<span style="color:#070">Assume</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Head</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">HKT</span>&gt;, Reduce&lt;<span style="color:#070">Assume</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Tail</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">[]</span>&gt;, X<span style="color:#333">&gt;&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span></code></pre></div><p>Our base case is when the set of HKTs form an empty tuple, in which case we return the parameter to fill, unmodified.</p>
+<p>The recursive type algorithm continues as follows:</p>
+<ul>
+<li>Extract the <code>Head</code> and <code>Tail</code> of the tuple (the first, and the rest respectively)</li>
+<li><code>Apply</code> X to the result of the recursive <code>Reduce</code> call.</li>
+<li>For the recursive reduce call, pass in the <code>Tail</code> and X types.</li>
+</ul>
+<p>We also use <code>Assume</code> for one of its most powerful applications - Typescript cannot properly infer that <code>Head</code> extends type <code>HKT</code> and that <code>Tail</code> extends type <code>HKT[]</code>, although it can evaluate such structures with some additional hints.</p>
+<p>For the purposes of HKT-level application, we instruct the compiler to <em>assume</em> that <code>Head</code> is a <code>HKT</code>. Amazingly, this does not make the resultant type too generic to be useful - all possible narrowness is maintained.</p>
+<blockquote>
+<p><em>Note:</em> <code>Reduce</code> may be an abuse of terminology - usually reduction is applied to an array of values with one reducer function. In this case, instead a tuple of <em>type functions</em> (i.e. HKTs) are being applied to a single value.</p>
+<p>Alternative names may include <code>Squish</code>, or <code>Onion</code>, or perhaps <code>__Compose</code> - the latter of which I am reserving for the next section.</p>
+</blockquote>
+<p>From <code>Reduce</code>, we can now construct a <code>Compose</code> that properly returns a HKT that can be filled with a HKT-level application in a separate step.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> Compose&lt;<span style="color:#070">HKTs</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span><span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">this</span>[<span style="background-color:#fff0f0">&#34;_1&#34;</span>]) <span style="color:#333">=&gt;</span> Reduce&lt;<span style="color:#070">HKTs</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;]</span>&gt;;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> MyProcess <span style="color:#333">=</span> Compose<span style="color:#333">&lt;</span>[Append<span style="color:#333">&lt;</span><span style="background-color:#fff0f0">&#34;goodbye!&#34;</span><span style="color:#333">&gt;</span>, DoubleString, Append<span style="color:#333">&lt;</span><span style="background-color:#fff0f0">&#34;! &#34;</span><span style="color:#333">&gt;</span>]<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">// &#34;hi! hi! goodbye!&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">type</span> MyProcessResult <span style="color:#333">=</span> Apply&lt;<span style="color:#070">MyProcess</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">&#34;</span><span style="color:#00c">hi</span><span style="color:#f00;background-color:#faa">&#34;</span>&gt;;
+</span></span></code></pre></div><p>We now have a HKT-level Compose operator (that acts purely on types). The type of which is the following:</p>
+<ul>
+<li><code>((*) =&gt; (*)[]) =&gt; (*) =&gt; (*)</code></li>
+</ul>
+<h2 id="left-composition-ie-flow">Left Composition (i.e. Flow)</h2>
+<p>Formal function composition order can be hard to understand, since functions are applied to the argument from <em>left</em> to <em>right</em>. The following is a reformulation of the above code to encode a <code>Flow</code> concept:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Reverse&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> U, ...<span style="color:#080;font-weight:bold">infer</span> Rest]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> [...Reverse&lt;<span style="color:#070">Rest</span>&gt;, U]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> Flow&lt;<span style="color:#070">HKTs</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span><span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">this</span>[<span style="background-color:#fff0f0">&#34;_1&#34;</span>]) <span style="color:#333">=&gt;</span> Reduce&lt;<span style="color:#070">Reverse</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">HKTs</span>&gt;, <span style="color:#080;font-weight:bold">this</span>[<span style="background-color:#fff0f0">&#34;_1&#34;</span>]<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> MyFlow <span style="color:#333">=</span> Flow<span style="color:#333">&lt;</span>[Append<span style="color:#333">&lt;</span><span style="background-color:#fff0f0">&#34;! &#34;</span><span style="color:#333">&gt;</span>, DoubleString, Append<span style="color:#333">&lt;</span><span style="background-color:#fff0f0">&#34;goodbye!&#34;</span><span style="color:#333">&gt;</span>]<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">// &#34;hi! hi! goodbye!&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">type</span> MyFlowResult <span style="color:#333">=</span> Apply&lt;<span style="color:#070">MyFlow</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">&#34;</span><span style="color:#00c">hi</span><span style="color:#f00;background-color:#faa">&#34;</span>&gt;;
+</span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>In the end, we were able to extend our HKT model with support for variadic HKT composition, which facilitates a point-free HKT encoding technique.</p>
+<p>This sophisticated HKT machinery brings us ever closer to the ability to encode value-level effects on the type system.</p>
+
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/typescript/" rel="tag">typescript</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/programming/" rel="tag">programming</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/type-system/" rel="tag">type-system</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Michael Poteat</span>
+	</div>
+	<div class="authorbox__description">
+		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
+	</div>
+</div>
+
+
+
+			</div>
+			<aside class="sidebar"><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://code.lol" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/variadic-hkt-composition/">Variadic HKT Composition</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/unchained-tuple-types/">Unchained Tuple Types</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">life</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/programming/">programming</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/safety/" title="safety">safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="strings">strings</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="tuples">tuples</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-guard/" title="type-guard">type-guard</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
+	</div>
+</div>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2022 Adventures in Typescript.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>
