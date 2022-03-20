@@ -6,7 +6,17 @@
     <description>Recent content on Adventures in Typescript</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 05 Mar 2022 00:17:15 -0800</lastBuildDate><atom:link href="https://code.lol/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 11 Mar 2022 09:34:39 -0800</lastBuildDate><atom:link href="https://code.lol/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Point-free Programming via HKTs</title>
+      <link>https://code.lol/post/programming/hkt-tacit/</link>
+      <pubDate>Fri, 11 Mar 2022 09:34:39 -0800</pubDate>
+      
+      <guid>https://code.lol/post/programming/hkt-tacit/</guid>
+      <description>In Typescript, point-free programming has been traditionally limited due to the difficulty the type system has representing the abstracted types associated with point-free (also called &amp;rsquo;tacit&amp;rsquo;) programming.
+ 1. What is Tacit Programming? 2. Type-Level Programming  2.1. The Hard (Naive) Way 2.2. Tacit Logic via HKTs   3. Addendum: Library  3.1. Basic HKT Abstractions 3.2. HKT Composition 3.3. Narrow Type Inference 3.4. Value-level Apply 3.5. Auto-applyable HKTs 3.</description>
+    </item>
+    
     <item>
       <title>Variadic HKT Composition</title>
       <link>https://code.lol/post/programming/variadic-hkt-composition/</link>
@@ -27,8 +37,7 @@ For example, we could define a value and type-level operation like the following
       <description>HKTs are a powerful abstraction. Just as there are different types of higher-order functions, so are there so-called &amp;lsquo;higher-kinded types&amp;rsquo;.
 Taxonomy This blog post concerns one particular type of HKT - to define the taxonomy, first we will cover a few types, and a way they can be categorized.
 We can classify types in terms of &amp;lsquo;order&amp;rsquo;, a rough level of abstraction.
-Here are a zero-order types that exist:
- number string 42 (x: number) =&amp;gt; number (f: (.</description>
+Here are a few zero-order types that exist:</description>
     </item>
     
     <item>

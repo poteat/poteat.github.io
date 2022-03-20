@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Point-free Programming via HKTs - Adventures in Typescript</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:title" content="Point-free Programming via HKTs" />
+<meta property="og:description" content="In Typescript, point-free programming has been traditionally limited due to the difficulty the type system has representing the abstracted types associated with point-free (also called &rsquo;tacit&rsquo;) programming.
+ 1. What is Tacit Programming? 2. Type-Level Programming  2.1. The Hard (Naive) Way 2.2. Tacit Logic via HKTs   3. Addendum: Library  3.1. Basic HKT Abstractions 3.2. HKT Composition 3.3. Narrow Type Inference 3.4. Value-level Apply 3.5. Auto-applyable HKTs 3." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.lol/post/programming/hkt-tacit/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-03-11T09:34:39-08:00" />
+<meta property="article:modified_time" content="2022-03-11T09:34:39-08:00" />
+
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="Adventures in Typescript" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">Adventures in Typescript</div>
+					<div class="logo__tagline">Mike&#39;s code blog.</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">About Me</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/papers/">
+				
+				<span class="menu__text">Papers</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Point-free Programming via HKTs</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>In Typescript, point-free programming has been traditionally limited due to the difficulty the type system has representing the abstracted types associated with point-free (also called &rsquo;tacit&rsquo;) programming.</p>
+<ul>
+<li><a href="#1-what-is-tacit-programming">1. What is Tacit Programming?</a></li>
+<li><a href="#2-type-level-programming">2. Type-Level Programming</a>
+<ul>
+<li><a href="#21-the-hard-naive-way">2.1. The Hard (Naive) Way</a></li>
+<li><a href="#22-tacit-logic-via-hkts">2.2. Tacit Logic via HKTs</a></li>
+</ul>
+</li>
+<li><a href="#3-addendum-library">3. Addendum: Library</a>
+<ul>
+<li><a href="#31-basic-hkt-abstractions">3.1. Basic HKT Abstractions</a></li>
+<li><a href="#32-hkt-composition">3.2. HKT Composition</a></li>
+<li><a href="#33-narrow-type-inference">3.3. Narrow Type Inference</a></li>
+<li><a href="#34-value-level-apply">3.4. Value-level Apply</a></li>
+<li><a href="#35-auto-applyable-hkts">3.5. Auto-applyable HKTs</a></li>
+<li><a href="#36-hkt-level-flow">3.6. HKT-Level Flow</a></li>
+<li><a href="#37-hkt-level-split">3.7. HKT-level Split</a></li>
+<li><a href="#38-hkt-level-join">3.8. HKT-level join</a></li>
+<li><a href="#hkt-level-includes">HKT-level includes</a></li>
+<li><a href="#hkt-level-array-manipulation">HKT-level Array Manipulation</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h2 id="1-what-is-tacit-programming">1. What is Tacit Programming?</h2>
+<p>In tacit programming, functions are represented via functional composition. Notably, we avoid explicitly representing formal parameters - instead, we compose functions at a higher level that elide the underlying variables.</p>
+<p>For example, let us discuss the program that finds all strings in an array which are solely composed of lowercase letters, and joins them via a newline. We will demonstrate three approaches - the procedural approach, a naive functional approach, and finally a tacit approach.</p>
+<p><strong>Procedural approach</strong></p>
+<p>This code is limited in a number of ways - to draw a starker difference, I avoided language features such as iterator processing, regular expression usage, and string interpolation. My motivation is to show a spectrum of semantic compression across the three approaches.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> extractWords(array: <span style="color:#339;font-weight:bold">string</span>[]) {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> words: <span style="color:#339;font-weight:bold">string</span>[] <span style="color:#333">=</span> [];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">for</span> (<span style="color:#080;font-weight:bold">let</span> i <span style="color:#333">=</span> <span style="color:#00d;font-weight:bold">0</span>; i <span style="color:#333">&lt;</span> words.length; i<span style="color:#333">++</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">const</span> element <span style="color:#333">=</span> words[i];
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">let</span> isLowercaseWord <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">false</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">for</span> (<span style="color:#080;font-weight:bold">let</span> j <span style="color:#333">=</span> <span style="color:#00d;font-weight:bold">0</span>; j <span style="color:#333">&lt;</span> element.length; j<span style="color:#333">++</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">const</span> letter <span style="color:#333">=</span> element[j];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">if</span> (<span style="background-color:#fff0f0">&#34;a&#34;</span> <span style="color:#333">&lt;=</span> letter <span style="color:#333">&amp;&amp;</span> letter <span style="color:#333">&lt;=</span> <span style="background-color:#fff0f0">&#34;z&#34;</span>) {
+</span></span><span style="display:flex;"><span>        isWord <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">true</span>;
+</span></span><span style="display:flex;"><span>      } <span style="color:#080;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>        isWord <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">false</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">if</span> (isLowercaseWord) {
+</span></span><span style="display:flex;"><span>      words.push(element);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">let</span> output <span style="color:#333">=</span> <span style="background-color:#fff0f0">&#34;&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">for</span> (<span style="color:#080;font-weight:bold">let</span> i <span style="color:#333">=</span> <span style="color:#00d;font-weight:bold">0</span>; i <span style="color:#333">&lt;</span> words.length; i<span style="color:#333">++</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">const</span> word <span style="color:#333">=</span> words[i];
+</span></span><span style="display:flex;"><span>    output <span style="color:#333">+=</span> <span style="background-color:#fff0f0">&#34;\n&#34;</span> <span style="color:#333">+</span> word;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> words;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>Naive functional approach</strong></p>
+<p>Here we introduce chaining functional methods, as well as regular expression usage. This greatly compresses the procedure being done on a semantic level - instead of laying out each step, we are building up the approach via smaller building blocks.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> extractWords(array: <span style="color:#339;font-weight:bold">string</span>[]) {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> array.filter((x) <span style="color:#333">=&gt;</span> <span style="color:#000;background-color:#fff0ff">/^[a-z]+$/</span>.matches(x)).join(<span style="background-color:#fff0f0">&#34;\n&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>Tacit approach</strong></p>
+<p>Finally, we arrive at the tacit approach, whereby the method is represented without any explicit reference to any parameters being acted upon. For those unfamiliar, this syntax can be strange and unapproachable - it is based on function composition from mathematics as well as &lsquo;currying&rsquo; to facilitate partial application.</p>
+<p>A staple of this methodology is the use of unbound single-parameter functions, e.g. <code>matches</code> - which first takes in a regular expression, and then takes in the string to attempt to match on.</p>
+<p>In general, to facilitate the approach, functions take in the most likely &lsquo;final&rsquo; parameter last. So in the case of join, the signature is <code>(delimiter) =&gt; (array) =&gt; string</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> extractWords <span style="color:#333">=</span> flow(filter(matches(<span style="color:#000;background-color:#fff0ff">/^[a-z]$/</span>)), join(<span style="background-color:#fff0f0">&#34;\n&#34;</span>));
+</span></span></code></pre></div><p>On a type level, representing <code>flow</code> correctly can be fiendishly difficult - we need to validate that the output of <code>filter</code> matches the input of <code>join</code> - i.e. that each puzzle piece fits together correctly. This is even more difficult if <code>filter</code> is itself a generic.</p>
+<h2 id="2-type-level-programming">2. Type-Level Programming</h2>
+<p>The above implementations of our contrived procedure are of type <code>(string[]) =&gt; string</code>. Believe it or not, we can encode the logic of our procedure on the type level as well, in order to benefit from what approaches proof-level type safety.</p>
+<p>We will first approach this by annotating the <strong>naive functional</strong> approach, doing much of the work via pure types. We will explore why this is the <em>hard way</em>, and the benefits we receive via combining HKTs and tacit programming in terms of more tightly coupling the value and type systems.</p>
+<h3 id="21-the-hard-naive-way">2.1. The Hard (Naive) Way</h3>
+<p>We introduce a tuple generic to the above naive functional code, and then specify the return type in terms of a heretofor undefined parameterized type <code>ExtractWords</code>, in which we will encode our type-level logic.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> extractWords&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span>&gt;(array: <span style="color:#339;font-weight:bold">T</span>)<span style="color:#333">:</span> ExtractWords&lt;<span style="color:#070">T</span>&gt; {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> array.filter((x) <span style="color:#333">=&gt;</span> <span style="color:#000;background-color:#fff0ff">/^[a-z]+$/</span>.matches(x)).join(<span style="background-color:#fff0f0">&#34;\n&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>Naive / hard type-level approach</strong></p>
+<p>Here we define <code>ExtractWords</code> via type-level primitives, recursive type inference, and more. While the fact that Typescript can do this is certainly impressive, there is a better way. A simple aspect is: we had to write all of this additional type-level code separately, in addition to the runtime code.</p>
+<p>As well - by nature, Typescript&rsquo;s type-level syntax encourages (essentially necessitates) a functional approach. However, for example we needed to couple the &lsquo;filtering&rsquo; logic with the &lsquo;is lowercase&rsquo; logic in <code>FilterIsLowercase</code>. If only there was a way to take in a &ldquo;higher level type function&rdquo; into a generic <code>Filter</code> type!</p>
+<p>By being forced to couple filtering logic, we are limited in the degree to which we can semantically compress our &lsquo;proof&rsquo;.</p>
+<p>Finally, the below implementation is functional <em>on the type level</em>, but it&rsquo;s not tacit. With higher-kinded types, tacit type-level logic is possible (and necessitated).</p>
+<p><strong>order 0</strong></p>
+<ul>
+<li>number</li>
+<li>42</li>
+<li>string</li>
+</ul>
+<p><strong>order 1</strong></p>
+<ul>
+<li>Assume&lt;T, U&gt; = T</li>
+<li>Equals</li>
+</ul>
+<p><strong>order 2</strong></p>
+<ul>
+<li>Map</li>
+<li>Filter</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Equals&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> [T, U] <span style="color:#080;font-weight:bold">extends</span> [U, T] <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Assume&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> U <span style="color:#333">?</span> T : <span style="color:#339;font-weight:bold">U</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsLowercase&lt;<span style="color:#070">S</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt; <span style="color:#333">=</span> Equals&lt;<span style="color:#070">S</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Lowercase</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">S</span>&gt;<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> FilterIsLowercase&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> IsLowercase&lt;<span style="color:#070">Assume</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Head</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">string</span>&gt;<span style="color:#333">&gt;</span> <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#333">?</span> [Head, ...FilterIsLowercase&lt;<span style="color:#070">Assume</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Tail</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span>&gt;<span style="color:#333">&gt;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#333">:</span> FilterIsLowercase&lt;<span style="color:#070">Assume</span><span style="color:#f00;background-color:#faa">&lt;[</span><span style="color:#00c">...Tail</span><span style="color:#f00;background-color:#faa">],</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span>&gt;<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Join&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">D</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> <span style="background-color:#fff0f0">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> Head <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#333">?</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span>Head<span style="background-color:#eee">}${</span>D<span style="background-color:#eee">}${</span>Join&lt;<span style="color:#070">Tail</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span> <span style="color:#f00;background-color:#faa">?</span> <span style="color:#00c">Tail</span> <span style="color:#f00;background-color:#faa">:</span> <span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">D</span>&gt;<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> ExtractWords&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> Join&lt;<span style="color:#070">FilterIsLowercase</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">T</span>&gt;, <span style="background-color:#fff0f0">&#34;\n&#34;</span><span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">// &#34;foo\nbar\nqux&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">type</span> Result <span style="color:#333">=</span> ExtractWords<span style="color:#333">&lt;</span>[<span style="background-color:#fff0f0">&#34;foo&#34;</span>, <span style="background-color:#fff0f0">&#34;bar&#34;</span>, <span style="background-color:#fff0f0">&#34;NOPE&#34;</span>, <span style="background-color:#fff0f0">&#34;qux&#34;</span>]<span style="color:#333">&gt;</span>;
+</span></span></code></pre></div><h3 id="22-tacit-logic-via-hkts">2.2. Tacit Logic via HKTs</h3>
+<p>The alternative approach is to more align the type system with the value system using HKTs. In fact, representing functions as expressions allows the type system to fully encode complex type structure - as introduction of lambda expressions without generic type annotations will remove generic type safety.</p>
+<p>In this form, we get the best of <em>all</em> worlds, in that the type-level logic is fully implemented but there is no additional complexity or code required, aside from shared library utilities.</p>
+<p>We will start with constructing the library that encodes the constituent ideas that will be connected to form the overall algorithm.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isLowercaseWord <span style="color:#333">=</span> flow(split(<span style="background-color:#fff0f0">&#34;&#34;</span>), every(includes(lowercaseLetters)));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> extractWords <span style="color:#333">=</span> flow(filter(isLowercaseWord), join(<span style="background-color:#fff0f0">&#34;\n&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">// &#34;foo\nbar\nqux&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">const</span> result <span style="color:#333">=</span> extractWords([<span style="background-color:#fff0f0">&#34;foo&#34;</span>, <span style="background-color:#fff0f0">&#34;bar&#34;</span>, <span style="background-color:#fff0f0">&#34;NOPE&#34;</span>, <span style="background-color:#fff0f0">&#34;qux&#34;</span>]);
+</span></span></code></pre></div><p>With the atomic composable elements used above (e.g. <code>flow</code>, <code>split</code>, <code>every</code>, etc.) we can minimally (and tacitly) define the underlying process in code. Because each function is capable of being composed on the type level (via arbitrarily kinded types), we get the underlying sophisticated type constructs &ldquo;for free&rdquo; in user-land.</p>
+<p>Potential practical applications for this would be type-level parsing for use in embeddable type-safe DSLs - there is safety and usabibility value in having embedded languages connect to their host languages in a type-safe way.</p>
+<h2 id="3-addendum-library">3. Addendum: Library</h2>
+<p>The underlying HKT-level library code that facilitates the above tacit implementation is technically interesting, but slightly verbose. In this section this code will be provided, as well as explanatory annotations.</p>
+<p>Not all runtime code is present - for brevity&rsquo;s sake in some cases only the type declarations themselves are provided.</p>
+<h3 id="31-basic-hkt-abstractions">3.1. Basic HKT Abstractions</h3>
+<p>These are covered in higher detail in my previous article, <a href="https://code.lol/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a>. Suffice to say, these are the fundamental abstractions that facilitate the construction and application of HKTs.</p>
+<p>The underlying approach is to use a field type on a class as a formal parameter, and a class method to act as the operation being performed. We can then &lsquo;apply&rsquo; this operation by supplying the type at a later point.</p>
+<p>We are very fortunate that the class typing system happens to work this way - this allows us arbitrary power in expressing higher-kinded types.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> GenericFunction <span style="color:#333">=</span> (...x: <span style="color:#339;font-weight:bold">never</span>[]) <span style="color:#333">=&gt;</span> <span style="color:#339;font-weight:bold">unknown</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">class</span> HKT {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">readonly</span> _1?: <span style="color:#339;font-weight:bold">unknown</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span><span style="color:#333">!:</span> GenericFunction;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Assume&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> U <span style="color:#333">?</span> T : <span style="color:#339;font-weight:bold">U</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Apply&lt;<span style="color:#070">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">_1</span>&gt; <span style="color:#333">=</span> ReturnType<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>  (F <span style="color:#333">&amp;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">readonly</span> _1: <span style="color:#339;font-weight:bold">_1</span>;
+</span></span><span style="display:flex;"><span>  })[<span style="background-color:#fff0f0">&#34;new&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span>;
+</span></span></code></pre></div><h3 id="32-hkt-composition">3.2. HKT Composition</h3>
+<p>The core concept of composition of the HKT level allows for tacit representation of type-level logic.</p>
+<p>The central implementation is based on <code>Compose</code>, which takes in a variadic amount of HKTs and returns a new HKT that is the composition of the input HKTs. Because function composition between <code>F</code> and <code>G</code> is <code>F(G(x))</code>, the <code>Compose</code> operator executes functions from right to left.</p>
+<p>Because right-to-left logic is a little harder to understand, we use <code>Flow</code> instead which works left-to-right.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Compose&lt;<span style="color:#070">HKTs</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">X</span>&gt; <span style="color:#333">=</span> HKTs <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> X
+</span></span><span style="display:flex;"><span>  : <span style="color:#339;font-weight:bold">HKTs</span> <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> Apply&lt;<span style="color:#070">Assume</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Head</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">HKT</span>&gt;, Compose&lt;<span style="color:#070">Assume</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Tail</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">[]</span>&gt;, X<span style="color:#333">&gt;&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Reverse&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> U, ...<span style="color:#080;font-weight:bold">infer</span> Rest]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> [...Reverse&lt;<span style="color:#070">Rest</span>&gt;, U]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> Flow&lt;<span style="color:#070">HKTs</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span><span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">this</span>[<span style="background-color:#fff0f0">&#34;_1&#34;</span>]) <span style="color:#333">=&gt;</span> Compose&lt;<span style="color:#070">Reverse</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">HKTs</span>&gt;, <span style="color:#080;font-weight:bold">this</span>[<span style="background-color:#fff0f0">&#34;_1&#34;</span>]<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="33-narrow-type-inference">3.3. Narrow Type Inference</h3>
+<p>Implicit type inference can be achieved through a special trick in Typescript. Specifically, this is when literal strings, tuples, and objects are interpreted as if they were annotated with <code>as const</code>, even without that annotation.</p>
+<p>The trick is to define a more or less &lsquo;universal&rsquo; type that we can use to specify a type constraint on parameters.</p>
+<p>This recursive type constraint is checked by the compiler, which results in parameter types being narrowed as much as possible. This is a convenience for the general approach, but not particularly necessary as a fundamental idea.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> InferredType <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">string</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">number</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">|</span> <span style="color:#080;font-weight:bold">boolean</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">|</span> <span style="color:#080;font-weight:bold">undefined</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">|</span> <span style="color:#080;font-weight:bold">null</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">|</span> GenericFunction
+</span></span><span style="display:flex;"><span>  <span style="color:#333">|</span> InferredType[]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">|</span> ReadonlyArray&lt;<span style="color:#070">InferredType</span>&gt;
+</span></span><span style="display:flex;"><span>  <span style="color:#333">|</span> {
+</span></span><span style="display:flex;"><span>      [key: <span style="color:#339;font-weight:bold">string</span>]<span style="color:#333">:</span> InferredType;
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> InferredTuple <span style="color:#333">=</span> InferredType[] <span style="color:#333">|</span> ReadonlyArray&lt;<span style="color:#070">InferredType</span>&gt;;
+</span></span></code></pre></div><h3 id="34-value-level-apply">3.4. Value-level Apply</h3>
+<p>The HKT-level apply represents the actualization of a particular HKT with a given value. As we will see next, this isn&rsquo;t always needed due to other conveniences introduced, but is valuable from a pedaogic perspective.</p>
+<p>The value-level implementation was elided as it&rsquo;s not necessary to show the type-level mechanics of this approach in general. Of course, it has also been written to automatically infer the most narrow interpretation of its parameters possible.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">function</span> apply&lt;<span style="color:#070">H</span> <span style="color:#00c">extends</span> <span style="color:#00c">typeof</span> <span style="color:#00c">HKT</span>&gt;(
+</span></span><span style="display:flex;"><span>  h: <span style="color:#339;font-weight:bold">H</span>
+</span></span><span style="display:flex;"><span>)<span style="color:#333">:</span> &lt;<span style="color:#070">X</span>&gt;(
+</span></span><span style="display:flex;"><span>  x: <span style="color:#339;font-weight:bold">InferredType</span> <span style="color:#333">|</span> Assume&lt;<span style="color:#070">X</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">InferredType</span>&gt; <span style="color:#333">|</span> [...Assume&lt;<span style="color:#070">X</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">InferredTuple</span>&gt;]
+</span></span><span style="display:flex;"><span>) <span style="color:#333">=&gt;</span> Apply&lt;<span style="color:#070">Assume</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">InstanceOf</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">H</span>&gt;, HKT<span style="color:#333">&gt;</span>, X<span style="color:#333">&gt;</span>;
+</span></span></code></pre></div><h3 id="35-auto-applyable-hkts">3.5. Auto-applyable HKTs</h3>
+<p>Normally to &lsquo;apply&rsquo; a type parameter to a corresponding HKT, we would need to explicitly call either <code>Apply</code> (on the type level), or the similar value-level function <code>apply</code>. This is a bit verbose, and can be avoided by annotating each HKT with a &lsquo;callable&rsquo; interface.</p>
+<p>Here, the <code>build</code> function takes in a HKT and makes it directly callable via adding a generic callable interface to its type signature using a type-level intersection.</p>
+<p>Finally, we utilize the inference utilities so that all parameters are narrowed as much as possible.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> InstanceOf&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">new</span> (...args: <span style="color:#339;font-weight:bold">unknown</span>[]) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">infer</span> R <span style="color:#333">?</span> R : <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">function</span> build&lt;<span style="color:#070">H</span> <span style="color:#00c">extends</span> <span style="color:#00c">typeof</span> <span style="color:#00c">HKT</span>&gt;(
+</span></span><span style="display:flex;"><span>  hkt: <span style="color:#339;font-weight:bold">H</span>
+</span></span><span style="display:flex;"><span>)<span style="color:#333">:</span> H <span style="color:#333">&amp;</span> {
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">X</span>&gt;(x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">X</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">InferredType</span>&gt; <span style="color:#333">|</span> [...Assume&lt;<span style="color:#070">X</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">InferredTuple</span>&gt;])<span style="color:#333">:</span> Apply<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>    Assume&lt;<span style="color:#070">InstanceOf</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">H</span>&gt;, HKT<span style="color:#333">&gt;</span>,
+</span></span><span style="display:flex;"><span>    X
+</span></span><span style="display:flex;"><span>  <span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="36-hkt-level-flow">3.6. HKT-Level Flow</h3>
+<p>To facilitate flow-based expressions, we define a value-level function that takes in a variadic amount of HKTs and returns a new HKT that is the right-composition of the input HKTs.</p>
+<p>For now, the value-level runtime code is not provided - although it should be quite simple to implement.</p>
+<p>This is a core engine of the approach, and the basis of implementing larger more complicated type-level logic.</p>
+<blockquote>
+<p>Note: This type-level implementation does not check or account for mismatching HKT functions - i.e. it does not check that the output of parameter N - 1 is a subtype of the input of parameter N.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> MapInstanceOf&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> InstanceOf&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">]</span>&gt;;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> flow <span style="color:#333">=</span> &lt;<span style="color:#070">HKTs</span> <span style="color:#00c">extends</span> <span style="color:#00c">typeof</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">[]</span>&gt;(...hkts: <span style="color:#339;font-weight:bold">HKTs</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  build(
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">class</span> <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">new</span> <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">this</span>[<span style="background-color:#fff0f0">&#34;_1&#34;</span>]) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#080;font-weight:bold">as</span> <span style="color:#339;font-weight:bold">unknown</span> <span style="color:#080;font-weight:bold">as</span> Apply&lt;<span style="color:#070">Flow</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">MapInstanceOf</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">HKTs</span>&gt;<span style="color:#333">&gt;</span>, <span style="color:#080;font-weight:bold">typeof</span> x<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  );
+</span></span></code></pre></div><h3 id="37-hkt-level-split">3.7. HKT-level Split</h3>
+<p>The following code is a simple example of a HKT-level split. The <code>Split</code> type is itself a pretty standard first order type, implemented recursively. The interesting part is the <code>split</code> runtime wrapper, which encodes the type of the split in such a way it can be composed arbitrarily deeply later.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Split<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>  S <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span>,
+</span></span><span style="display:flex;"><span>  Delimiter <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">string</span> <span style="color:#333">=</span> <span style="background-color:#fff0f0">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span> <span style="color:#333">=</span> S <span style="color:#080;font-weight:bold">extends</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span><span style="color:#080;font-weight:bold">infer</span> Head<span style="background-color:#eee">}${</span>Delimiter<span style="background-color:#eee">}${</span><span style="color:#080;font-weight:bold">infer</span> Tail<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> [Head, ...Split&lt;<span style="color:#070">Tail</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Delimiter</span>&gt;]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> S <span style="color:#080;font-weight:bold">extends</span> Delimiter
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> [S];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> split <span style="color:#333">=</span> &lt;<span style="color:#070">D</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt;(d: <span style="color:#339;font-weight:bold">D</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  build(
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">class</span> <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">new</span> <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">string</span>&gt;) <span style="color:#333">=&gt;</span> x.split(d) <span style="color:#080;font-weight:bold">as</span> Split&lt;<span style="color:#070">typeof</span> <span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">D</span>&gt;;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  );
+</span></span></code></pre></div><h3 id="38-hkt-level-join">3.8. HKT-level join</h3>
+<p>Similar to the above, the <code>Join</code> type is itself a first order type, with a corresponding runtime wrapper.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Join&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">D</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> <span style="background-color:#fff0f0">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span>Assume&lt;<span style="color:#070">Head</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">string</span>&gt;<span style="background-color:#eee">}${</span>Tail <span style="color:#080;font-weight:bold">extends</span> [] <span style="color:#333">?</span> <span style="background-color:#fff0f0">&#34;&#34;</span> <span style="color:#333">:</span> D<span style="background-color:#eee">}${</span>Join<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>      Assume&lt;<span style="color:#070">Tail</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span>&gt;,
+</span></span><span style="display:flex;"><span>      D
+</span></span><span style="display:flex;"><span>    <span style="color:#333">&gt;</span><span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> join <span style="color:#333">=</span> &lt;<span style="color:#070">J</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt;(j: <span style="color:#339;font-weight:bold">J</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  build(
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">class</span> <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">new</span> <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">[]</span>&gt;) <span style="color:#333">=&gt;</span> x.join(j) <span style="color:#080;font-weight:bold">as</span> Join&lt;<span style="color:#070">typeof</span> <span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">J</span>&gt;;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  );
+</span></span></code></pre></div><h3 id="hkt-level-includes">HKT-level includes</h3>
+<p>We introduce a &lsquo;includes&rsquo; type-level function. Notably, the <code>Includes</code> method has unique properties, in that it defines a subtype relationship. That is, <code>string[]</code> includes &lsquo;foo&rsquo; in this relationship, because &lsquo;foo&rsquo; is a subtype of <code>string</code>.</p>
+<blockquote>
+<p><strong>Note:</strong> An alternative definition could be provided based on the aspect of string equality (i.e. two types X and Y are equal if and only if X exends Y and Y extends X). This is not necessary in our case however.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Includes&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">X</span>&gt; <span style="color:#333">=</span> X <span style="color:#080;font-weight:bold">extends</span> T[<span style="color:#339;font-weight:bold">number</span>]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> includes <span style="color:#333">=</span> &lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">InferredTuple</span>&gt;(array: <span style="color:#339;font-weight:bold">readonly</span> [...T]) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  build(
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">class</span> <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">new</span> <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">InferredType</span>&gt;) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>        array.includes(x) <span style="color:#080;font-weight:bold">as</span> Includes&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">typeof</span> <span style="color:#00c">x</span>&gt;;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  );
+</span></span></code></pre></div><h3 id="hkt-level-array-manipulation">HKT-level Array Manipulation</h3>
+<p>Below we have a collection of HKTs that are useful for manipulating arrays - <code>map</code>, <code>filter</code>, and <code>every</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> MapTuple&lt;<span style="color:#070">X</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span>&gt; <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  [K <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> X]<span style="color:#333">:</span> Apply&lt;<span style="color:#070">F</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">X</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">K</span><span style="color:#f00;background-color:#faa">]</span>&gt;;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> map <span style="color:#333">=</span> &lt;<span style="color:#070">H</span> <span style="color:#00c">extends</span> <span style="color:#00c">typeof</span> <span style="color:#00c">HKT</span>&gt;(hkt: <span style="color:#339;font-weight:bold">H</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  build(
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">class</span> <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">new</span> <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">InferredTuple</span>&gt;) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>        x.map((x) <span style="color:#333">=&gt;</span> apply(hkt)(x)) <span style="color:#080;font-weight:bold">as</span> <span style="color:#339;font-weight:bold">unknown</span> <span style="color:#080;font-weight:bold">as</span> MapTuple<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#080;font-weight:bold">typeof</span> x,
+</span></span><span style="display:flex;"><span>          Assume&lt;<span style="color:#070">InstanceOf</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">H</span>&gt;, HKT<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> FilterTuple&lt;<span style="color:#070">X</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span>&gt; <span style="color:#333">=</span> X <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> X <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> [
+</span></span><span style="display:flex;"><span>      ...(Apply&lt;<span style="color:#070">F</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Head</span>&gt; <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">?</span> [Head] <span style="color:#333">:</span> []),
+</span></span><span style="display:flex;"><span>      ...FilterTuple&lt;<span style="color:#070">Assume</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Tail</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt;, F<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> filter <span style="color:#333">=</span> &lt;<span style="color:#070">H</span> <span style="color:#00c">extends</span> <span style="color:#00c">typeof</span> <span style="color:#00c">HKT</span>&gt;(hkt: <span style="color:#339;font-weight:bold">H</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  build(
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">class</span> <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">new</span> <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">InferredTuple</span>&gt;) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>        x.filter((x) <span style="color:#333">=&gt;</span> apply(hkt)(x)) <span style="color:#080;font-weight:bold">as</span> FilterTuple<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#080;font-weight:bold">typeof</span> x,
+</span></span><span style="display:flex;"><span>          Assume&lt;<span style="color:#070">InstanceOf</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">H</span>&gt;, HKT<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> EveryTuple&lt;<span style="color:#070">X</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span>&gt; <span style="color:#333">=</span> X <span style="color:#080;font-weight:bold">extends</span> []
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> X <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Tail]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> Apply&lt;<span style="color:#070">F</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Head</span>&gt; <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#333">?</span> EveryTuple&lt;<span style="color:#070">Tail</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">F</span>&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> every <span style="color:#333">=</span> &lt;<span style="color:#070">H</span> <span style="color:#00c">extends</span> <span style="color:#00c">typeof</span> <span style="color:#00c">HKT</span>&gt;(hkt: <span style="color:#339;font-weight:bold">H</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>  build(
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">class</span> <span style="color:#080;font-weight:bold">extends</span> HKT {
+</span></span><span style="display:flex;"><span>      <span style="color:#080;font-weight:bold">new</span> <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">InferredTuple</span>&gt;) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>        x.every((x) <span style="color:#333">=&gt;</span> apply(hkt)(x)) <span style="color:#080;font-weight:bold">as</span> EveryTuple<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#080;font-weight:bold">typeof</span> x,
+</span></span><span style="display:flex;"><span>          Assume&lt;<span style="color:#070">InstanceOf</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">H</span>&gt;, HKT<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  );
+</span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>In this article we have shown an approach where we can define a set of intercomposable functional primitives that combine together to infer a type-level representation of a program.</p>
+
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/typescript/" rel="tag">typescript</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/programming/" rel="tag">programming</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/type-system/" rel="tag">type-system</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/point-free/" rel="tag">point-free</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Michael Poteat</span>
+	</div>
+	<div class="authorbox__description">
+		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
+	</div>
+</div>
+
+
+
+			</div>
+			<aside class="sidebar"><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://code.lol" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/hkt-tacit/">Point-free Programming via HKTs</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/variadic-hkt-composition/">Variadic HKT Composition</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">life</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/programming/">programming</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/point-free/" title="point-free">point-free</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/safety/" title="safety">safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="strings">strings</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="tuples">tuples</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-guard/" title="type-guard">type-guard</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
+	</div>
+</div>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2022 Adventures in Typescript.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

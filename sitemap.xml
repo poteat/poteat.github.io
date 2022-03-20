@@ -3,28 +3,34 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://code.lol/</loc>
-    <lastmod>2022-03-05T00:17:15-08:00</lastmod>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/categories/</loc>
-    <lastmod>2022-03-05T00:17:15-08:00</lastmod>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/point-free/</loc>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/post/programming/hkt-tacit/</loc>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/post/</loc>
-    <lastmod>2022-03-05T00:17:15-08:00</lastmod>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/programming/</loc>
-    <lastmod>2022-03-05T00:17:15-08:00</lastmod>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/categories/programming/</loc>
-    <lastmod>2022-03-05T00:17:15-08:00</lastmod>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/</loc>
-    <lastmod>2022-03-05T00:17:15-08:00</lastmod>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/type-system/</loc>
-    <lastmod>2022-03-05T00:17:15-08:00</lastmod>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/typescript/</loc>
-    <lastmod>2022-03-05T00:17:15-08:00</lastmod>
+    <lastmod>2022-03-11T09:34:39-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/post/programming/variadic-hkt-composition/</loc>
     <lastmod>2022-03-05T00:17:15-08:00</lastmod>

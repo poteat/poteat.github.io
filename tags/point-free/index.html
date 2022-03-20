@@ -4,13 +4,13 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>regression - Adventures in Typescript</title>
+	<title>point-free - Adventures in Typescript</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
-		<meta property="og:title" content="regression" />
+		<meta property="og:title" content="point-free" />
 <meta property="og:description" content="Mike&#39;s code blog about programming, math, and science." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://code.lol/tags/regression/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/>
+<meta property="og:url" content="https://code.lol/tags/point-free/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/>
 
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
 
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="/css/custom.css">
-	<link rel="alternate" type="application/rss+xml" href="/tags/regression/index.xml" title="Adventures in Typescript">
+	<link rel="alternate" type="application/rss+xml" href="/tags/point-free/index.xml" title="Adventures in Typescript">
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
@@ -75,40 +75,23 @@
 			
 <main class="main list" role="main">
 	<header class="main__header">
-		<h1 class="main__title">regression</h1>
+		<h1 class="main__title">point-free</h1>
 	</header><article class="list__item post">
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
-			<a href="/post/bioinformatics/oriented-bounding-box-heuristic/" rel="bookmark">
-			Oriented Bounding-Box Heuristic
+			<a href="/post/programming/hkt-tacit/" rel="bookmark">
+			Point-free Programming via HKTs
 			</a>
 		</h2>
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		The 2-dimensional minimum-area oriented bounding box problem is as follows: Given a set of coplanar points, how can we efficiently find the smallest rectangle which encloses these points? Additionally, that rectangle can be oriented at any angle with respect to the coordinate system.
-One interesting estimate for the solution, which guarantees &ldquo;pretty good&rdquo; results in O(n) time is a natural extension of orthogonal linear regression. Specifically, we assume that the minimum rectangle is aligned to the orthogonal &ldquo;line of best fit&rdquo; of the point set.
+		In Typescript, point-free programming has been traditionally limited due to the difficulty the type system has representing the abstracted types associated with point-free (also called &rsquo;tacit&rsquo;) programming.
+ 1. What is Tacit Programming? 2. Type-Level Programming  2.1. The Hard (Naive) Way 2.2. Tacit Logic via HKTs   3. Addendum: Library  3.1. Basic HKT Abstractions 3.2. HKT Composition 3.3. Narrow Type Inference 3.4. Value-level Apply 3.5. Auto-applyable HKTs 3.
 	</div>
 	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/bioinformatics/oriented-bounding-box-heuristic/">Read more…</a>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/bioinformatics/one-dimensional-linear-regression/" rel="bookmark">
-			One-Dimensional Linear Regression
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
- $$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$  Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/bioinformatics/one-dimensional-linear-regression/">Read more…</a>
+		<a class="list__footer-readmore btn" href="/post/programming/hkt-tacit/">Read more…</a>
 	</div>
 </article>
 </main>
