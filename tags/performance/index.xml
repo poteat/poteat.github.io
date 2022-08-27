@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>performance on Adventures in Typescript</title>
+    <link>https://code.lol/tags/performance/</link>
+    <description>Recent content in performance on Adventures in Typescript</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 27 Aug 2022 16:37:21 -0700</lastBuildDate><atom:link href="https://code.lol/tags/performance/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A non-recursive type-level inclusion operator</title>
+      <link>https://code.lol/post/programming/non-recursive-includes/</link>
+      <pubDate>Sat, 27 Aug 2022 16:37:21 -0700</pubDate>
+      
+      <guid>https://code.lol/post/programming/non-recursive-includes/</guid>
+      <description>type E1&amp;lt;X&amp;gt; = &amp;lt;T&amp;gt;() =&amp;gt; T extends X ? 0 : 1 type E2&amp;lt;X&amp;gt; = &amp;lt;T&amp;gt;() =&amp;gt; T extends X ? 0 : 1  type IsEqual&amp;lt;X, Y&amp;gt; = E1&amp;lt;X&amp;gt; extends E2&amp;lt;Y&amp;gt; ? true : false  /** * Whether or not T includes U as an element. */ type Includes&amp;lt;T extends readonly unknown[], U&amp;gt; = true extends {  [key in keyof T]: IsEqual&amp;lt;T[key], U&amp;gt; }[number] ? true : false A non-recursive type-level Includes operator in Typescript Introduction Includes is a type-level operator that determines whether a given type T includes a given type U as an element.</description>
+    </item>
+    
+  </channel>
+</rss>

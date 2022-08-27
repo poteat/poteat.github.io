@@ -80,6 +80,25 @@
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/programming/self-modifying-type-predicates/" rel="bookmark">
+			Self Modifying Type Predicates in Typescript
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
+Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; dependent types, a powerful type feature present in Idris.
+Further explanation on type predicates can be found here.
+The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on this because it is an implicit argument.
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/self-modifying-type-predicates/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/algorithms/shunting-yard/" rel="bookmark">
 			Dijkstra&#39;s Shunting Yard in Typescript
 			</a>
@@ -230,30 +249,13 @@ Group photo included.
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/bioinformatics/one-dimensional-linear-regression/">Read more…</a>
 	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/bioinformatics/quadratic-bezier-curves/" rel="bookmark">
-			Quadratic Bezier Curves
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		Quadratic Bézier curves are explicit parametric functions of the following form:
- $$ x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\ y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\ t \in \mathbb R[0,1] $$  These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
-Drag the control points around to see the curve change.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/bioinformatics/quadratic-bezier-curves/">Read more…</a>
-	</div>
 </article>
 </main>
 
 <div class="pagination">
 	<a class="pagination__item pagination__item--prev btn" href="/post/">«</a>
-	<span class="pagination__item pagination__item--current">2/2</span>
+	<span class="pagination__item pagination__item--current">2/3</span>
+	<a class="pagination__item pagination__item--next btn" href="/post/page/3/">»</a>
 </div>
 
 			</div>
@@ -271,11 +273,11 @@ Drag the control points around to see the curve change.
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/hkt-tacit/">Point-free Programming via HKTs</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/variadic-hkt-composition/">Variadic HKT Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/programs-of-length-n/">Programs of Length N: Collatz, Chaitin, and Church</a></li>
 		</ul>
 	</div>
 </div>
@@ -308,6 +310,7 @@ Drag the control points around to see the curve change.
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/efficiency/" title="efficiency">efficiency</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
@@ -316,6 +319,7 @@ Drag the control points around to see the curve change.
 		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="performance">performance</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/point-free/" title="point-free">point-free</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
