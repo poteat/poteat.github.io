@@ -80,6 +80,22 @@
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/programming/plugin-architecture/" rel="bookmark">
+			Towards a well-typed plugin architecture
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		declare abstract class EnginePlugin&lt;I = unknown, D = unknown&gt; {  createInterface?(ø: Record&lt;string, unknown&gt;): I  getDependencies?(): D }  type Defined&lt;T&gt; = T extends undefined ? never : T  type ExtractPlugins&lt;T&gt; = T extends Engine&lt;infer PX&gt; ? PX : never  type UnionToIntersection&lt;U&gt; = (  U extends unknown ? (k: U) =&gt; void : never ) extends (k: infer I) =&gt; void  ? I  : never  type MergeInterfaces&lt;  E extends Engine,  K extends keyof EnginePlugin, &gt; = UnionToIntersection&lt;ReturnType&lt;Defined&lt;ExtractPlugins&lt;E&gt;[number][K]&gt;&gt;&gt;  type Assume&lt;T, U&gt; = T extends U ?
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/plugin-architecture/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/programming/non-recursive-includes/" rel="bookmark">
 			A non-recursive type-level inclusion operator
 			</a>
@@ -233,28 +249,13 @@ type PermissibleInput = number | string;  const myFunctionMap = {  foobar(x: num
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/enforcing-function-map-constraints/">Read more…</a>
 	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/programming/self-modifying-type-predicates/" rel="bookmark">
-			Self Modifying Type Predicates in Typescript
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
-Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; dependent types, a powerful type feature present in Idris.
-Further explanation on type predicates can be found here.
-The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on this because it is an implicit argument.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/self-modifying-type-predicates/">Read more…</a>
-	</div>
 </article>
 </main>
 
+<div class="pagination">
+	<span class="pagination__item pagination__item--current">1/2</span>
+	<a class="pagination__item pagination__item--next btn" href="/tags/typescript/page/2/">»</a>
+</div>
 
 			</div>
 			
@@ -264,18 +265,18 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
 		</label>
 		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="https://code.lol" />
+		<input type="hidden" name="sitesearch" value="https://code.lol">
 	</form>
 </div>
 <div class="widget-recent widget">
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/hkt-tacit/">Point-free Programming via HKTs</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/variadic-hkt-composition/">Variadic HKT Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
 		</ul>
 	</div>
 </div>
@@ -304,11 +305,13 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="architecture">architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/efficiency/" title="efficiency">efficiency</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/extensibility/" title="extensibility">extensibility</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>

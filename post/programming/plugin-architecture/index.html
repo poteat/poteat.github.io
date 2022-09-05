@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Towards a well-typed plugin architecture - Adventures in Typescript</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:title" content="Towards a well-typed plugin architecture" />
+<meta property="og:description" content="declare abstract class EnginePlugin&lt;I = unknown, D = unknown&gt; {  createInterface?(ø: Record&lt;string, unknown&gt;): I  getDependencies?(): D }  type Defined&lt;T&gt; = T extends undefined ? never : T  type ExtractPlugins&lt;T&gt; = T extends Engine&lt;infer PX&gt; ? PX : never  type UnionToIntersection&lt;U&gt; = (  U extends unknown ? (k: U) =&gt; void : never ) extends (k: infer I) =&gt; void  ? I  : never  type MergeInterfaces&lt;  E extends Engine,  K extends keyof EnginePlugin, &gt; = UnionToIntersection&lt;ReturnType&lt;Defined&lt;ExtractPlugins&lt;E&gt;[number][K]&gt;&gt;&gt;  type Assume&lt;T, U&gt; = T extends U ?" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.lol/post/programming/plugin-architecture/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-09-05T12:03:54-07:00" />
+<meta property="article:modified_time" content="2022-09-05T12:03:54-07:00" />
+
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="Adventures in Typescript" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">Adventures in Typescript</div>
+					<div class="logo__tagline">Mike&#39;s code blog.</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">About Me</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/papers/">
+				
+				<span class="menu__text">Papers</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Towards a well-typed plugin architecture</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">class</span> EnginePlugin&lt;<span style="color:#070">I</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">D </span><span style="color:#333">=</span> <span style="color:#00c">unknown</span>&gt; {
+</span></span><span style="display:flex;"><span>  createInterface<span style="color:#333">?</span>(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> I
+</span></span><span style="display:flex;"><span>  getDependencies<span style="color:#333">?</span>()<span style="color:#333">:</span> D
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Defined&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">undefined</span> <span style="color:#333">?</span> <span style="color:#339;font-weight:bold">never</span> <span style="color:#333">:</span> T
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> ExtractPlugins&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> Engine&lt;<span style="color:#070">infer</span> <span style="color:#00c">PX</span>&gt; <span style="color:#333">?</span> PX : <span style="color:#339;font-weight:bold">never</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> UnionToIntersection&lt;<span style="color:#070">U</span>&gt; <span style="color:#333">=</span> (
+</span></span><span style="display:flex;"><span>  U <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">unknown</span> <span style="color:#333">?</span> (k: <span style="color:#339;font-weight:bold">U</span>) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">void</span> <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>
+</span></span><span style="display:flex;"><span>) <span style="color:#080;font-weight:bold">extends</span> (k: <span style="color:#339;font-weight:bold">infer</span> I) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">void</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> I
+</span></span><span style="display:flex;"><span>  : <span style="color:#339;font-weight:bold">never</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> MergeInterfaces<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>  E <span style="color:#080;font-weight:bold">extends</span> Engine,
+</span></span><span style="display:flex;"><span>  K <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">keyof</span> EnginePlugin,
+</span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span> <span style="color:#333">=</span> UnionToIntersection&lt;<span style="color:#070">ReturnType</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Defined</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">ExtractPlugins</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">E</span>&gt;[<span style="color:#339;font-weight:bold">number</span>][K]<span style="color:#333">&gt;&gt;&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Assume&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> U <span style="color:#333">?</span> T : <span style="color:#339;font-weight:bold">never</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> GetDependencies&lt;<span style="color:#070">P</span> <span style="color:#00c">extends</span> <span style="color:#00c">EnginePlugin</span>&gt; <span style="color:#333">=</span> Assume<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>  P <span style="color:#080;font-weight:bold">extends</span> EnginePlugin&lt;<span style="color:#070">unknown</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">infer</span> <span style="color:#00c">D</span>&gt; <span style="color:#333">?</span> D : <span style="color:#339;font-weight:bold">never</span>,
+</span></span><span style="display:flex;"><span>  EnginePlugin[]
+</span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> PluginDependencyErrorMessage <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  <span style="background-color:#fff0f0">`Plugin is missing one or more dependencies.`</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> EnforceDependencies<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>  E <span style="color:#080;font-weight:bold">extends</span> Engine,
+</span></span><span style="display:flex;"><span>  P <span style="color:#080;font-weight:bold">extends</span> EnginePlugin,
+</span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span> <span style="color:#333">=</span> GetDependencies&lt;<span style="color:#070">P</span>&gt;[<span style="color:#339;font-weight:bold">number</span>] <span style="color:#080;font-weight:bold">extends</span> ExtractPlugins&lt;<span style="color:#070">E</span>&gt;[<span style="color:#339;font-weight:bold">number</span>]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> P
+</span></span><span style="display:flex;"><span>  : <span style="color:#339;font-weight:bold">PluginDependencyErrorMessage</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">class</span> Engine&lt;<span style="color:#070">PX</span> <span style="color:#00c">extends</span> <span style="color:#00c">EnginePlugin</span><span style="color:#f00;background-color:#faa">[]</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#f00;background-color:#faa">[]</span>&gt; {
+</span></span><span style="display:flex;"><span>  registerPlugin&lt;<span style="color:#070">P</span> <span style="color:#00c">extends</span> <span style="color:#00c">EnginePlugin</span>&gt;(
+</span></span><span style="display:flex;"><span>    plugin: <span style="color:#339;font-weight:bold">EnforceDependencies</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">P</span>&gt;,
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">asserts</span> <span style="color:#080;font-weight:bold">this</span> <span style="color:#080;font-weight:bold">is</span> Engine<span style="color:#333">&lt;</span>[...PX, P]<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  createInterface()<span style="color:#333">:</span> MergeInterfaces&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">&#34;</span><span style="color:#00c">createInterface</span><span style="color:#f00;background-color:#faa">&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> DogInterface {
+</span></span><span style="display:flex;"><span>  bark()<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">void</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> DogPlugin<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> DogInterface
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> DogInterface
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> CatInterface {
+</span></span><span style="display:flex;"><span>  meow(message: <span style="color:#339;font-weight:bold">string</span>)<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">void</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> CatPlugin<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">super</span>()<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">typeof</span> CatPlugin
+</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> CatInterface
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> CatInterface
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> PantherInterface {
+</span></span><span style="display:flex;"><span>  panther<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    roar()<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">void</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> PantherPlugin<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> PantherInterface
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  getDependencies()<span style="color:#333">:</span> [<span style="color:#080;font-weight:bold">typeof</span> CatPlugin]
+</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> PantherInterface
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> engine: <span style="color:#339;font-weight:bold">Engine</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>engine.registerPlugin(<span style="color:#080;font-weight:bold">new</span> DogPlugin())
+</span></span><span style="display:flex;"><span>engine.registerPlugin(<span style="color:#080;font-weight:bold">new</span> CatPlugin())
+</span></span><span style="display:flex;"><span>engine.registerPlugin(<span style="color:#080;font-weight:bold">new</span> PantherPlugin())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#333">=</span> engine.createInterface()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;background-color:#faa">ø</span>.bark()
+</span></span><span style="display:flex;"><span><span style="color:#f00;background-color:#faa">ø</span>.meow(<span style="background-color:#fff0f0">&#34;hello&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f00;background-color:#faa">ø</span>.panther.roar()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;background-color:#faa">ø</span>.meow(<span style="background-color:#fff0f0">&#34;meow&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">if</span> (DogPlugin(<span style="color:#f00;background-color:#faa">ø</span>)) {
+</span></span><span style="display:flex;"><span>  <span style="color:#f00;background-color:#faa">ø</span>.bark()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="towards-a-well-typed-plugin-architecture">Towards a well-typed plugin architecture</h1>
+<h2 id="introduction">Introduction</h2>
+<p>There are many reasons why one might want to develop a plugin architecture.
+First and foremost amongst these is extensibility: the ability to add new
+functionality to a system without having to modify the existing
+codebase. This can be a very powerful tool, allowing developers to ship
+functionality as and when it is ready, rather than being forced to wait for a
+major release.</p>
+<p>A well-designed plugin architecture can also promote code reuse. By encapsulating
+functionality within a plugin, it can be easily reused in other projects.</p>
+<p>However, designing a good plugin architecture is not a trivial task. There are
+many issues to consider, such as how to manage dependencies between plugins, how
+to ensure that plugins can communicate with each other, and how to handle
+upgrades and downgrades.</p>
+<p>In this article, we will explore one approach to designing a plugin architecture
+using the TypeScript programming language. We will see how to use TypeScript&rsquo;s
+static type-checking to enforce dependencies between plugins, and how to
+generate type-safe APIs for communication between plugins.</p>
+<h2 id="an-abstract-engineplugin-definition">An abstract <code>EnginePlugin</code> definition</h2>
+<p>We will start by defining an abstract <code>EnginePlugin</code> class. This class will
+serve as the base class for all plugins that we develop.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">class</span> EnginePlugin&lt;<span style="color:#070">I</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">D </span><span style="color:#333">=</span> <span style="color:#00c">unknown</span>&gt; {
+</span></span><span style="display:flex;"><span>  createInterface<span style="color:#333">?</span>(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> I
+</span></span><span style="display:flex;"><span>  getDependencies<span style="color:#333">?</span>()<span style="color:#333">:</span> D
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The <code>EnginePlugin</code> class defines two abstract methods, <code>createInterface</code> and
+<code>getDependencies</code>. The <code>createInterface</code> method is responsible for creating an
+instance of the plugin&rsquo;s interface. This instance will be used by the
+application to access the functionality provided by the plugin.</p>
+<p>The <code>getDependencies</code> method is responsible for returning an array of
+dependencies that the plugin has on other plugins. These dependencies will be
+used to ensure that the plugin is only loaded if all of its dependencies are
+satisfied.</p>
+<h3 id="why-ø-">Why ø ?</h3>
+<p>We are using ø as a variable identifier to denote the central &lsquo;composite interface&rsquo; as
+a result of total plugin registration. ø is convenient as it&rsquo;s readily accessible on OSX
+keyboards [⌥+o] and is visually unique. Unicode identifiers can be controversial.</p>
+<h2 id="extending-engineplugin">Extending <code>EnginePlugin</code></h2>
+<p>Now that we have defined the <code>EnginePlugin</code> class, we can start to develop
+some concrete plugins. Let&rsquo;s start by developing a plugin that provides a
+<code>DogInterface</code>. This interface will allow us to make a dog bark.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> DogInterface {
+</span></span><span style="display:flex;"><span>  bark()<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">void</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> DogPlugin<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> DogInterface
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> DogInterface
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Our <code>DogPlugin</code> is a simple JavaScript object that contains two properties.
+The first is a constructor function that creates an instance of the plugin&rsquo;s
+interface. The second is a function that allows us to check if an object is an
+instance of the plugin&rsquo;s interface.</p>
+<p>Now that we have developed our plugin, we can use it to create an instance of
+the <code>DogInterface</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> dog <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> DogPlugin().createInterface()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>dog.bark() <span style="color:#888">// &#34;woof!&#34;
+</span></span></span></code></pre></div><h2 id="managing-plugin-dependencies">Managing plugin dependencies</h2>
+<p>Now that we have developed our first plugin, we can start to develop a second
+plugin that depends on the first. Let&rsquo;s develop a plugin that provides a
+<code>CatInterface</code>. This interface will allow us to make a cat meow.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> CatInterface {
+</span></span><span style="display:flex;"><span>  meow(message: <span style="color:#339;font-weight:bold">string</span>)<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">void</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> CatPlugin<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> CatInterface
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> CatInterface
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Our <code>CatPlugin</code> is very similar to our <code>DogPlugin</code>. It is a simple JavaScript
+object that contains a constructor function and a function for checking if an
+object is an instance of the plugin&rsquo;s interface.</p>
+<p>Now that we have developed our <code>CatPlugin</code>, we can use it to create an instance
+of the <code>CatInterface</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> cat <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> CatPlugin().createInterface()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cat.meow(<span style="background-color:#fff0f0">&#34;meow!&#34;</span>) <span style="color:#888">// &#34;meow!&#34;
+</span></span></span></code></pre></div><p>Now let&rsquo;s develop a third plugin that depends on <code>CatPlugin</code>. This plugin will provide
+an interface for a panther.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> PantherInterface {
+</span></span><span style="display:flex;"><span>  panther<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    roar()<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">void</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> PantherPlugin<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> PantherInterface
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  getDependencies()<span style="color:#333">:</span> [<span style="color:#080;font-weight:bold">typeof</span> CatPlugin]
+</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> PantherInterface
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Our <code>PantherPlugin</code> is similar to our other plugins, but it introduces a new
+concept: plugin dependencies. The <code>PantherPlugin</code> declares a dependency on the
+<code>CatPlugin</code> by returning an array containing the <code>CatPlugin</code> from its
+<code>getDependencies</code> method.</p>
+<p>This dependency will be used to ensure that the <code>PantherPlugin</code> is only loaded
+if the <code>CatPlugin</code> is also loaded - otherwise, an error will be omitted if we register
+<code>PantherPlugin</code> without first having registered <code>CatPlugin</code>.</p>
+<p>Now that we have developed our <code>PantherPlugin</code>, we can use it to create an
+instance of the <code>PantherInterface</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> panther <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> PantherPlugin().createInterface()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>panther.panther.roar() <span style="color:#888">// &#34;roar!&#34;
+</span></span></span></code></pre></div><h2 id="defining-an-engine-class">Defining an <code>Engine</code> class</h2>
+<p>Now that we have developed some plugins, we need a way to load them into our
+application. We will do this by defining an <code>Engine</code> class.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">class</span> Engine&lt;<span style="color:#070">PX</span> <span style="color:#00c">extends</span> <span style="color:#00c">EnginePlugin</span><span style="color:#f00;background-color:#faa">[]</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#f00;background-color:#faa">[]</span>&gt; {
+</span></span><span style="display:flex;"><span>  registerPlugin&lt;<span style="color:#070">P</span> <span style="color:#00c">extends</span> <span style="color:#00c">EnginePlugin</span>&gt;(
+</span></span><span style="display:flex;"><span>    plugin: <span style="color:#339;font-weight:bold">EnforceDependencies</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">P</span>&gt;,
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">asserts</span> <span style="color:#080;font-weight:bold">this</span> <span style="color:#080;font-weight:bold">is</span> Engine<span style="color:#333">&lt;</span>[...PX, P]<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  createInterface()<span style="color:#333">:</span> MergeInterfaces&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">&#34;</span><span style="color:#00c">createInterface</span><span style="color:#f00;background-color:#faa">&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Our <code>Engine</code> class is a generic class that takes a type parameter <code>PX</code> which
+represents the set of plugins that have been loaded into the engine. The
+<code>registerPlugin</code> method is used to register a new plugin with the engine. The
+<code>createInterface</code> method is used to create an instance of the engine&rsquo;s
+interface. This instance will be used to access the functionality provided by
+the plugins.</p>
+<h2 id="loading-plugins-into-the-engine">Loading plugins into the <code>Engine</code></h2>
+<p>Now that we have defined our <code>Engine</code> class, we can use it to load our
+plugins.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> engine <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> Engine()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>engine.registerPlugin(<span style="color:#080;font-weight:bold">new</span> DogPlugin())
+</span></span><span style="display:flex;"><span>engine.registerPlugin(<span style="color:#080;font-weight:bold">new</span> CatPlugin())
+</span></span><span style="display:flex;"><span>engine.registerPlugin(<span style="color:#080;font-weight:bold">new</span> PantherPlugin())
+</span></span></code></pre></div><h2 id="accessing-functionality-from-the-engine">Accessing functionality from the <code>Engine</code></h2>
+<p>Now that we have loaded our plugins into the <code>Engine</code>, we can use the
+<code>Engine</code> to access the functionality that they provide.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#333">=</span> engine.createInterface()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00;background-color:#faa">ø</span>.bark()
+</span></span><span style="display:flex;"><span><span style="color:#f00;background-color:#faa">ø</span>.meow(<span style="background-color:#fff0f0">&#34;hello&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f00;background-color:#faa">ø</span>.panther.roar()
+</span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
+<p>In this article, we have seen how to use the TypeScript programming language
+to develop a well-typed plugin architecture. We have seen how to use
+TypeScript&rsquo;s static type-checking to enforce dependencies between plugins, and
+how to generate type-safe APIs for communication between plugins.</p>
+<hr>
+<h1 id="utility-types">Utility Types</h1>
+<p>In the definition of <code>Engine</code>, we have used a number of utility types that are
+defined in the following section.</p>
+<h2 id="extractplugins"><code>ExtractPlugins</code></h2>
+<p>The <code>ExtractPlugins</code> utility type is used to extract the set of plugins from
+an <code>Engine</code> instance.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> ExtractPlugins&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> Engine&lt;<span style="color:#070">infer</span> <span style="color:#00c">PX</span>&gt; <span style="color:#333">?</span> PX : <span style="color:#339;font-weight:bold">never</span>
+</span></span></code></pre></div><h2 id="uniontointersection"><code>UnionToIntersection</code></h2>
+<p>The <code>UnionToIntersection</code> utility type is used to convert a union type to an
+intersection type.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> UnionToIntersection&lt;<span style="color:#070">U</span>&gt; <span style="color:#333">=</span> (
+</span></span><span style="display:flex;"><span>  U <span style="color:#080;font-weight:bold">extends</span> <span style="color:#339;font-weight:bold">unknown</span> <span style="color:#333">?</span> (k: <span style="color:#339;font-weight:bold">U</span>) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">void</span> <span style="color:#333">:</span> <span style="color:#339;font-weight:bold">never</span>
+</span></span><span style="display:flex;"><span>) <span style="color:#080;font-weight:bold">extends</span> (k: <span style="color:#339;font-weight:bold">infer</span> I) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">void</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> I
+</span></span><span style="display:flex;"><span>  : <span style="color:#339;font-weight:bold">never</span>
+</span></span></code></pre></div><h2 id="mergeinterfaces"><code>MergeInterfaces</code></h2>
+<p>The <code>MergeInterfaces</code> utility type is used to merge the interfaces of a set of
+plugins.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> MergeInterfaces<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>  E <span style="color:#080;font-weight:bold">extends</span> Engine,
+</span></span><span style="display:flex;"><span>  K <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">keyof</span> EnginePlugin,
+</span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span> <span style="color:#333">=</span> UnionToIntersection&lt;<span style="color:#070">ReturnType</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Defined</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">ExtractPlugins</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">E</span>&gt;[<span style="color:#339;font-weight:bold">number</span>][K]<span style="color:#333">&gt;&gt;&gt;</span>
+</span></span></code></pre></div><h2 id="defined"><code>Defined</code></h2>
+<p>The <code>Defined</code> utility type is used to remove <code>undefined</code> from a type.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Defined&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">undefined</span> <span style="color:#333">?</span> <span style="color:#339;font-weight:bold">never</span> <span style="color:#333">:</span> T
+</span></span></code></pre></div><h2 id="getdependencies"><code>GetDependencies</code></h2>
+<p>The <code>GetDependencies</code> utility type is used to extract the dependencies of a
+plugin.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> GetDependencies&lt;<span style="color:#070">P</span> <span style="color:#00c">extends</span> <span style="color:#00c">EnginePlugin</span>&gt; <span style="color:#333">=</span> Assume<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>  P <span style="color:#080;font-weight:bold">extends</span> EnginePlugin&lt;<span style="color:#070">unknown</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">infer</span> <span style="color:#00c">D</span>&gt; <span style="color:#333">?</span> D : <span style="color:#339;font-weight:bold">never</span>,
+</span></span><span style="display:flex;"><span>  EnginePlugin[]
+</span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span>
+</span></span></code></pre></div><h2 id="enforcedependencies"><code>EnforceDependencies</code></h2>
+<p>The <code>EnforceDependencies</code> utility type is used to ensure that a plugin&rsquo;s
+dependencies are satisfied.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> EnforceDependencies<span style="color:#333">&lt;</span>
+</span></span><span style="display:flex;"><span>  E <span style="color:#080;font-weight:bold">extends</span> Engine,
+</span></span><span style="display:flex;"><span>  P <span style="color:#080;font-weight:bold">extends</span> EnginePlugin,
+</span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span> <span style="color:#333">=</span> GetDependencies&lt;<span style="color:#070">P</span>&gt;[<span style="color:#339;font-weight:bold">number</span>] <span style="color:#080;font-weight:bold">extends</span> ExtractPlugins&lt;<span style="color:#070">E</span>&gt;[<span style="color:#339;font-weight:bold">number</span>]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> P
+</span></span><span style="display:flex;"><span>  : <span style="color:#339;font-weight:bold">PluginDependencyErrorMessage</span>
+</span></span></code></pre></div><h2 id="plugindependencyerrormessage"><code>PluginDependencyErrorMessage</code></h2>
+<p>The <code>PluginDependencyErrorMessage</code> type is used to provide a helpful error
+message when a plugin&rsquo;s dependencies are not satisfied.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> PluginDependencyErrorMessage <span style="color:#333">=</span>
+</span></span><span style="display:flex;"><span>  <span style="background-color:#fff0f0">`Plugin is missing one or more dependencies.`</span>
+</span></span></code></pre></div>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/typescript/" rel="tag">typescript</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/extensibility/" rel="tag">extensibility</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/type-system/" rel="tag">type-system</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/architecture/" rel="tag">architecture</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Michael Poteat</span>
+	</div>
+	<div class="authorbox__description">
+		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
+	</div>
+</div>
+
+
+
+			</div>
+			<aside class="sidebar"><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://code.lol">
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/hkt-tacit/">Point-free Programming via HKTs</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/variadic-hkt-composition/">Variadic HKT Composition</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">life</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/programming/">programming</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="architecture">architecture</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/efficiency/" title="efficiency">efficiency</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/extensibility/" title="extensibility">extensibility</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="performance">performance</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/point-free/" title="point-free">point-free</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/safety/" title="safety">safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="strings">strings</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="tuples">tuples</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-guard/" title="type-guard">type-guard</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
+	</div>
+</div>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2022 Adventures in Typescript.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

@@ -79,6 +79,22 @@
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/programming/plugin-architecture/" rel="bookmark">
+			Towards a well-typed plugin architecture
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		declare abstract class EnginePlugin&lt;I = unknown, D = unknown&gt; {  createInterface?(ø: Record&lt;string, unknown&gt;): I  getDependencies?(): D }  type Defined&lt;T&gt; = T extends undefined ? never : T  type ExtractPlugins&lt;T&gt; = T extends Engine&lt;infer PX&gt; ? PX : never  type UnionToIntersection&lt;U&gt; = (  U extends unknown ? (k: U) =&gt; void : never ) extends (k: infer I) =&gt; void  ? I  : never  type MergeInterfaces&lt;  E extends Engine,  K extends keyof EnginePlugin, &gt; = UnionToIntersection&lt;ReturnType&lt;Defined&lt;ExtractPlugins&lt;E&gt;[number][K]&gt;&gt;&gt;  type Assume&lt;T, U&gt; = T extends U ?
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/plugin-architecture/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/programming/non-recursive-includes/" rel="bookmark">
 			A non-recursive type-level inclusion operator
 			</a>
@@ -231,24 +247,6 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/chained-tuple-types/">Read more…</a>
 	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/programming/enforcing-function-map-constraints/" rel="bookmark">
-			Enforcing Function Map Constraints
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		Some &ldquo;easy to state&rdquo; problems in Typescript can require somewhat sophisticated type constructs.
-Let&rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
-type PermissibleInput = number | string;  const myFunctionMap = {  foobar(x: number): void;  barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&lt;string, (number | string) =&gt; any&gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/enforcing-function-map-constraints/">Read more…</a>
-	</div>
 </article>
 </main>
 
@@ -264,18 +262,18 @@ type PermissibleInput = number | string;  const myFunctionMap = {  foobar(x: num
 			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
 		</label>
 		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="https://code.lol" />
+		<input type="hidden" name="sitesearch" value="https://code.lol">
 	</form>
 </div>
 <div class="widget-recent widget">
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/hkt-tacit/">Point-free Programming via HKTs</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/variadic-hkt-composition/">Variadic HKT Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/higher-kinded-types/">Higher Kinded Types in Typescript</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/type-guard-composition/">Type Guard Composition</a></li>
 		</ul>
 	</div>
 </div>
@@ -304,11 +302,13 @@ type PermissibleInput = number | string;  const myFunctionMap = {  foobar(x: num
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="architecture">architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/efficiency/" title="efficiency">efficiency</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/extensibility/" title="extensibility">extensibility</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
