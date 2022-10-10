@@ -6,7 +6,43 @@
     <description>Recent content in Tags on Adventures in Typescript</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 05 Sep 2022 12:03:54 -0700</lastBuildDate><atom:link href="https://code.lol/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 09 Oct 2022 16:45:40 -0700</lastBuildDate><atom:link href="https://code.lol/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>functional programming</title>
+      <link>https://code.lol/tags/functional-programming/</link>
+      <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
+      
+      <guid>https://code.lol/tags/functional-programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>type safety</title>
+      <link>https://code.lol/tags/type-safety/</link>
+      <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
+      
+      <guid>https://code.lol/tags/type-safety/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>type system</title>
+      <link>https://code.lol/tags/type-system/</link>
+      <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
+      
+      <guid>https://code.lol/tags/type-system/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>typescript</title>
+      <link>https://code.lol/tags/typescript/</link>
+      <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
+      
+      <guid>https://code.lol/tags/typescript/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>architecture</title>
       <link>https://code.lol/tags/architecture/</link>
@@ -22,24 +58,6 @@
       <pubDate>Mon, 05 Sep 2022 12:03:54 -0700</pubDate>
       
       <guid>https://code.lol/tags/extensibility/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>type system</title>
-      <link>https://code.lol/tags/type-system/</link>
-      <pubDate>Mon, 05 Sep 2022 12:03:54 -0700</pubDate>
-      
-      <guid>https://code.lol/tags/type-system/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>typescript</title>
-      <link>https://code.lol/tags/typescript/</link>
-      <pubDate>Mon, 05 Sep 2022 12:03:54 -0700</pubDate>
-      
-      <guid>https://code.lol/tags/typescript/</guid>
       <description></description>
     </item>
     
