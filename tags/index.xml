@@ -6,13 +6,40 @@
     <description>Recent content in Tags on Adventures in Typescript</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 09 Oct 2022 16:45:40 -0700</lastBuildDate><atom:link href="https://code.lol/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 08 Dec 2022 22:58:35 -0800</lastBuildDate><atom:link href="https://code.lol/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>functional programming</title>
+      <title>functional-programming</title>
       <link>https://code.lol/tags/functional-programming/</link>
-      <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
+      <pubDate>Thu, 08 Dec 2022 22:58:35 -0800</pubDate>
       
       <guid>https://code.lol/tags/functional-programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>number theory</title>
+      <link>https://code.lol/tags/number-theory/</link>
+      <pubDate>Thu, 08 Dec 2022 22:58:35 -0800</pubDate>
+      
+      <guid>https://code.lol/tags/number-theory/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>type system</title>
+      <link>https://code.lol/tags/type-system/</link>
+      <pubDate>Thu, 08 Dec 2022 22:58:35 -0800</pubDate>
+      
+      <guid>https://code.lol/tags/type-system/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>typescript</title>
+      <link>https://code.lol/tags/typescript/</link>
+      <pubDate>Thu, 08 Dec 2022 22:58:35 -0800</pubDate>
+      
+      <guid>https://code.lol/tags/typescript/</guid>
       <description></description>
     </item>
     
@@ -22,24 +49,6 @@
       <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
       
       <guid>https://code.lol/tags/type-safety/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>type system</title>
-      <link>https://code.lol/tags/type-system/</link>
-      <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
-      
-      <guid>https://code.lol/tags/type-system/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>typescript</title>
-      <link>https://code.lol/tags/typescript/</link>
-      <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
-      
-      <guid>https://code.lol/tags/typescript/</guid>
       <description></description>
     </item>
     
@@ -202,15 +211,6 @@
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       
       <guid>https://code.lol/tags/factorization/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>number theory</title>
-      <link>https://code.lol/tags/number-theory/</link>
-      <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
-      
-      <guid>https://code.lol/tags/number-theory/</guid>
       <description></description>
     </item>
     
