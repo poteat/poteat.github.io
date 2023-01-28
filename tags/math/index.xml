@@ -14,7 +14,7 @@
       
       <guid>https://code.lol/post/programming/programs-of-length-n/</guid>
       <description>There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.
- 1. How many programs have N terms? 2. How fast does the set of programs of length N grow? 3. How many programs of length N converge? 4. What is the longest-running convergent program of length N? 5. How fast does BB(N) grow? 6. What percentage of programs converge?</description>
+1. How many programs have N terms? 2. How fast does the set of programs of length N grow? 3. How many programs of length N converge? 4. What is the longest-running convergent program of length N? 5. How fast does BB(N) grow? 6. What percentage of programs converge?</description>
     </item>
     
     <item>

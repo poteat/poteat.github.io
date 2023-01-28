@@ -14,7 +14,7 @@
       
       <guid>https://code.lol/post/programming/hkt-tacit/</guid>
       <description>In Typescript, point-free programming has been traditionally limited due to the difficulty the type system has representing the abstracted types associated with point-free (also called &amp;rsquo;tacit&amp;rsquo;) programming.
- 1. What is Tacit Programming? 2. Type-Level Programming  2.1. The Hard (Naive) Way 2.2. Tacit Logic via HKTs   3. Addendum: Library  3.1. Basic HKT Abstractions 3.2. HKT Composition 3.3. Narrow Type Inference 3.4. Value-level Apply 3.5. Auto-applyable HKTs 3.</description>
+1. What is Tacit Programming? 2. Type-Level Programming 2.1. The Hard (Naive) Way 2.2. Tacit Logic via HKTs 3. Addendum: Library 3.1. Basic HKT Abstractions 3.2. HKT Composition 3.3. Narrow Type Inference 3.4. Value-level Apply 3.5. Auto-applyable HKTs 3.6. HKT-Level Flow 3.7. HKT-level Split 3.</description>
     </item>
     
   </channel>

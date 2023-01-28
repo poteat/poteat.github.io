@@ -13,7 +13,7 @@
       <pubDate>Mon, 05 Sep 2022 12:03:54 -0700</pubDate>
       
       <guid>https://code.lol/post/programming/plugin-architecture/</guid>
-      <description>declare abstract class EnginePlugin&amp;lt;I = unknown, D = unknown&amp;gt; {  createInterface?(ø: Record&amp;lt;string, unknown&amp;gt;): I  getDependencies?(): D }  type Defined&amp;lt;T&amp;gt; = T extends undefined ? never : T  type ExtractPlugins&amp;lt;T&amp;gt; = T extends Engine&amp;lt;infer PX&amp;gt; ? PX : never  type UnionToIntersection&amp;lt;U&amp;gt; = (  U extends unknown ? (k: U) =&amp;gt; void : never ) extends (k: infer I) =&amp;gt; void  ? I  : never  type MergeInterfaces&amp;lt;  E extends Engine,  K extends keyof EnginePlugin, &amp;gt; = UnionToIntersection&amp;lt;ReturnType&amp;lt;Defined&amp;lt;ExtractPlugins&amp;lt;E&amp;gt;[number][K]&amp;gt;&amp;gt;&amp;gt;  type Assume&amp;lt;T, U&amp;gt; = T extends U ?</description>
+      <description>declare abstract class EnginePlugin&amp;lt;I = unknown, D = unknown&amp;gt; { createInterface?(ø: Record&amp;lt;string, unknown&amp;gt;): I getDependencies?(): D } type Defined&amp;lt;T&amp;gt; = T extends undefined ? never : T type ExtractPlugins&amp;lt;T&amp;gt; = T extends Engine&amp;lt;infer PX&amp;gt; ? PX : never type UnionToIntersection&amp;lt;U&amp;gt; = ( U extends unknown ? (k: U) =&amp;gt; void : never ) extends (k: infer I) =&amp;gt; void ? I : never type MergeInterfaces&amp;lt; E extends Engine, K extends keyof EnginePlugin, &amp;gt; = UnionToIntersection&amp;lt;ReturnType&amp;lt;Defined&amp;lt;ExtractPlugins&amp;lt;E&amp;gt;[number][K]&amp;gt;&amp;gt;&amp;gt; type Assume&amp;lt;T, U&amp;gt; = T extends U ?</description>
     </item>
     
   </channel>

@@ -8,12 +8,11 @@
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
 		<meta property="og:title" content="Towards a well-typed plugin architecture" />
-<meta property="og:description" content="declare abstract class EnginePlugin&lt;I = unknown, D = unknown&gt; {  createInterface?(ø: Record&lt;string, unknown&gt;): I  getDependencies?(): D }  type Defined&lt;T&gt; = T extends undefined ? never : T  type ExtractPlugins&lt;T&gt; = T extends Engine&lt;infer PX&gt; ? PX : never  type UnionToIntersection&lt;U&gt; = (  U extends unknown ? (k: U) =&gt; void : never ) extends (k: infer I) =&gt; void  ? I  : never  type MergeInterfaces&lt;  E extends Engine,  K extends keyof EnginePlugin, &gt; = UnionToIntersection&lt;ReturnType&lt;Defined&lt;ExtractPlugins&lt;E&gt;[number][K]&gt;&gt;&gt;  type Assume&lt;T, U&gt; = T extends U ?" />
+<meta property="og:description" content="declare abstract class EnginePlugin&lt;I = unknown, D = unknown&gt; { createInterface?(ø: Record&lt;string, unknown&gt;): I getDependencies?(): D } type Defined&lt;T&gt; = T extends undefined ? never : T type ExtractPlugins&lt;T&gt; = T extends Engine&lt;infer PX&gt; ? PX : never type UnionToIntersection&lt;U&gt; = ( U extends unknown ? (k: U) =&gt; void : never ) extends (k: infer I) =&gt; void ? I : never type MergeInterfaces&lt; E extends Engine, K extends keyof EnginePlugin, &gt; = UnionToIntersection&lt;ReturnType&lt;Defined&lt;ExtractPlugins&lt;E&gt;[number][K]&gt;&gt;&gt; type Assume&lt;T, U&gt; = T extends U ?" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://code.lol/post/programming/plugin-architecture/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-09-05T12:03:54-07:00" />
 <meta property="article:modified_time" content="2022-09-05T12:03:54-07:00" />
-
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -71,24 +70,6 @@
 
 	</div>
 </header>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"/>
-
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
-
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-      renderMathInElement(document.body, {
-          delimiters: [
-              {left: "$$", right: "$$", display: true},
-              {left: "$", right: "$", display: false}
-          ]
-      });
-  });
-</script>
-
 		<div class="wrapper flex">
 			<div class="primary">
 			
@@ -100,7 +81,7 @@
 		</header>
 		<div class="content post__content clearfix">
 			<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">class</span> EnginePlugin&lt;<span style="color:#070">I</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">D </span><span style="color:#333">=</span> <span style="color:#00c">unknown</span>&gt; {
-</span></span><span style="display:flex;"><span>  createInterface<span style="color:#333">?</span>(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> I
+</span></span><span style="display:flex;"><span>  createInterface<span style="color:#333">?</span>(<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> I
 </span></span><span style="display:flex;"><span>  getDependencies<span style="color:#333">?</span>()<span style="color:#333">:</span> D
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
@@ -150,9 +131,9 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> DogPlugin<span style="color:#333">:</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
-</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> DogInterface
+</span></span><span style="display:flex;"><span>    createInterface(<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> DogInterface
 </span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> DogInterface
+</span></span><span style="display:flex;"><span>  (<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> DogInterface
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> CatInterface {
@@ -162,9 +143,9 @@
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> CatPlugin<span style="color:#333">:</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">super</span>()<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">typeof</span> CatPlugin
-</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> CatInterface
+</span></span><span style="display:flex;"><span>    createInterface(<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> CatInterface
 </span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> CatInterface
+</span></span><span style="display:flex;"><span>  (<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> CatInterface
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> PantherInterface {
@@ -175,10 +156,10 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> PantherPlugin<span style="color:#333">:</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
-</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> PantherInterface
+</span></span><span style="display:flex;"><span>    createInterface(<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> PantherInterface
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>  getDependencies()<span style="color:#333">:</span> [<span style="color:#080;font-weight:bold">typeof</span> CatPlugin]
-</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> PantherInterface
+</span></span><span style="display:flex;"><span>  (<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> PantherInterface
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> engine: <span style="color:#339;font-weight:bold">Engine</span>
@@ -220,7 +201,7 @@ generate type-safe APIs for communication between plugins.</p>
 <p>We will start by defining an abstract <code>EnginePlugin</code> class. This class will
 serve as the base class for all plugins that we develop.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">class</span> EnginePlugin&lt;<span style="color:#070">I</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">D </span><span style="color:#333">=</span> <span style="color:#00c">unknown</span>&gt; {
-</span></span><span style="display:flex;"><span>  createInterface<span style="color:#333">?</span>(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> I
+</span></span><span style="display:flex;"><span>  createInterface<span style="color:#333">?</span>(<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> I
 </span></span><span style="display:flex;"><span>  getDependencies<span style="color:#333">?</span>()<span style="color:#333">:</span> D
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>The <code>EnginePlugin</code> class defines two abstract methods, <code>createInterface</code> and
@@ -245,9 +226,9 @@ some concrete plugins. Let&rsquo;s start by developing a plugin that provides a
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> DogPlugin<span style="color:#333">:</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
-</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> DogInterface
+</span></span><span style="display:flex;"><span>    createInterface(<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> DogInterface
 </span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> DogInterface
+</span></span><span style="display:flex;"><span>  (<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> DogInterface
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Our <code>DogPlugin</code> is a simple JavaScript object that contains two properties.
 The first is a constructor function that creates an instance of the plugin&rsquo;s
@@ -268,9 +249,9 @@ plugin that depends on the first. Let&rsquo;s develop a plugin that provides a
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> CatPlugin<span style="color:#333">:</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
-</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> CatInterface
+</span></span><span style="display:flex;"><span>    createInterface(<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> CatInterface
 </span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> CatInterface
+</span></span><span style="display:flex;"><span>  (<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> CatInterface
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Our <code>CatPlugin</code> is very similar to our <code>DogPlugin</code>. It is a simple JavaScript
 object that contains a constructor function and a function for checking if an
@@ -290,10 +271,10 @@ an interface for a panther.</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> PantherPlugin<span style="color:#333">:</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> {
-</span></span><span style="display:flex;"><span>    createInterface(ø: <span style="color:#339;font-weight:bold">Record</span>&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> PantherInterface
+</span></span><span style="display:flex;"><span>    createInterface(<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> Record&lt;<span style="color:#070">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span>&gt;)<span style="color:#333">:</span> PantherInterface
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>  getDependencies()<span style="color:#333">:</span> [<span style="color:#080;font-weight:bold">typeof</span> CatPlugin]
-</span></span><span style="display:flex;"><span>  (ø: <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> PantherInterface
+</span></span><span style="display:flex;"><span>  (<span style="color:#f00;background-color:#faa">ø</span><span style="color:#333">:</span> <span style="color:#339;font-weight:bold">unknown</span>)<span style="color:#333">:</span> <span style="color:#f00;background-color:#faa">ø</span> <span style="color:#080;font-weight:bold">is</span> PantherInterface
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Our <code>PantherPlugin</code> is similar to our other plugins, but it introduces a new
 concept: plugin dependencies. The <code>PantherPlugin</code> declares a dependency on the
@@ -444,11 +425,11 @@ message when a plugin&rsquo;s dependencies are not satisfied.</p>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/life/neurostochastic-panpsychism/">Neurostochastic Panpsychism</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/hkt-tacit/">Point-free Programming via HKTs</a></li>
 		</ul>
 	</div>
 </div>
@@ -478,6 +459,7 @@ message when a plugin&rsquo;s dependencies are not satisfied.</p>
 	<div class="widget__content">
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="architecture">architecture</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/consciousness/" title="consciousness">consciousness</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
@@ -486,14 +468,17 @@ message when a plugin&rsquo;s dependencies are not satisfied.</p>
 		<a class="widget-taglist__link widget__link btn" href="/tags/extensibility/" title="extensibility">extensibility</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/functional-programming/" title="functional-programming">functional-programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/intelligence/" title="intelligence">intelligence</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/life/" title="life">life</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="performance">performance</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/philosophy/" title="philosophy">philosophy</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/point-free/" title="point-free">point-free</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
@@ -516,7 +501,7 @@ message when a plugin&rsquo;s dependencies are not satisfied.</p>
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2022 Adventures in Typescript.
+			&copy; 2023 Adventures in Typescript.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

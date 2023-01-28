@@ -14,7 +14,7 @@
       
       <guid>https://code.lol/post/bioinformatics/quadratic-bezier-curves/</guid>
       <description>Quadratic Bézier curves are explicit parametric functions of the following form:
- $$ x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\ y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\ t \in \mathbb R[0,1] $$  These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
+$$ x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\ y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\ t \in \mathbb R[0,1] $$ These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
 Drag the control points around to see the curve change.</description>
     </item>
     

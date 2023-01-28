@@ -14,7 +14,7 @@
       
       <guid>https://code.lol/post/programming/typesafe-function-composition/</guid>
       <description>Do ya wanna know how to type function composition in Typescript? Read on!
-  1. Background  1.1. Type-theoretic Pseudocode   2. Typescript  2.1. IsComposablePair  2.1.1. Type-based Pattern Matching using infer 2.1.2. IsComposablePair   2.2. Every 2.3. Pair   3. Component Synthesis 4. Function Integration 5. Future Work: Constructive Approach  1. Background Function composition is an operation that takes two functions, $f$ and $g$, and produces a new function $h$ such that $h(x) = g(f(x))$.</description>
+1. Background 1.1. Type-theoretic Pseudocode 2. Typescript 2.1. IsComposablePair 2.1.1. Type-based Pattern Matching using infer 2.1.2. IsComposablePair 2.2. Every 2.3. Pair 3. Component Synthesis 4. Function Integration 5. Future Work: Constructive Approach 1. Background Function composition is an operation that takes two functions, $f$ and $g$, and produces a new function $h$ such that $h(x) = g(f(x))$.</description>
     </item>
     
   </channel>

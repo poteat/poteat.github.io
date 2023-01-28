@@ -3,10 +3,34 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://code.lol/</loc>
-    <lastmod>2022-12-08T22:58:35-08:00</lastmod>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/categories/</loc>
-    <lastmod>2022-12-08T22:58:35-08:00</lastmod>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/consciousness/</loc>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/intelligence/</loc>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/life/</loc>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/categories/life/</loc>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/post/life/neurostochastic-panpsychism/</loc>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/philosophy/</loc>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/post/</loc>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/</loc>
+    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/functional-programming/</loc>
     <lastmod>2022-12-08T22:58:35-08:00</lastmod>
@@ -17,13 +41,7 @@
     <loc>https://code.lol/tags/number-theory/</loc>
     <lastmod>2022-12-08T22:58:35-08:00</lastmod>
   </url><url>
-    <loc>https://code.lol/post/</loc>
-    <lastmod>2022-12-08T22:58:35-08:00</lastmod>
-  </url><url>
     <loc>https://code.lol/categories/programming/</loc>
-    <lastmod>2022-12-08T22:58:35-08:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/tags/</loc>
     <lastmod>2022-12-08T22:58:35-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/type-system/</loc>
@@ -135,9 +153,6 @@
     <lastmod>2019-12-23T16:39:53-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/post/life/ssc-meetup/</loc>
-    <lastmod>2019-06-03T12:37:10-07:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/categories/life/</loc>
     <lastmod>2019-06-03T12:37:10-07:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/rationality/</loc>

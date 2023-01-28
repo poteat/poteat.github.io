@@ -14,7 +14,7 @@
       
       <guid>https://code.lol/post/programming/type-guard-composition/</guid>
       <description>Type guards are a powerful tool for type system design. They are used to express that a type is only valid if it satisfies a certain condition. For example, we can express that a type is only valid if it is a number or a string.
- 1. Union Type Guards  1.1. Naive Union Implementation 1.2. 2-adic Union Composition 1.3. N-adic Union Composition  1.3.1. GuardReturnType 1.3.2. Variadic Is-Union 1.</description>
+1. Union Type Guards 1.1. Naive Union Implementation 1.2. 2-adic Union Composition 1.3. N-adic Union Composition 1.3.1. GuardReturnType 1.3.2. Variadic Is-Union 1.3.3. References for this Section 2.</description>
     </item>
     
     <item>
@@ -25,7 +25,7 @@
       <guid>https://code.lol/post/programming/unchained-tuple-types/</guid>
       <description>The asserts syntax introduced with TS 3.7 allows us to interleave mutative runtime code with type annotations to express type mutations in a powerful way.
 This allows us to do away with the chaining syntax as described in my earlier article, Chained Tuple Types, and express our Set mutations in a much more familiar iterative way:
-const set: Set = new Set();  set.insert(2); set.insert(4); set.insert(8); set.remove(4);  const hasResult1 = set.</description>
+const set: Set = new Set(); set.insert(2); set.insert(4); set.insert(8); set.remove(4); const hasResult1 = set.has(8); // :: true const hasResult2 = set.</description>
     </item>
     
     <item>
@@ -56,7 +56,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
       <guid>https://code.lol/post/programming/enforcing-function-map-constraints/</guid>
       <description>Some &amp;ldquo;easy to state&amp;rdquo; problems in Typescript can require somewhat sophisticated type constructs.
 Let&amp;rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
-type PermissibleInput = number | string;  const myFunctionMap = {  foobar(x: number): void;  barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&amp;lt;string, (number | string) =&amp;gt; any&amp;gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.</description>
+type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&amp;lt;string, (number | string) =&amp;gt; any&amp;gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.</description>
     </item>
     
     <item>
