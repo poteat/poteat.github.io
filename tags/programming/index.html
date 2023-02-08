@@ -79,6 +79,25 @@
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/programming/kind-reification/" rel="bookmark">
+			Kind Reification
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		The hkt-toolbelt now provides a way to &lsquo;reify&rsquo; a higher-order type into a concrete function type. This is useful for representation of point-free code.
+to reify: make (something abstract) more concrete or real.
+Basics of Higher-Order Types For the purposes of hkt-toolbelt, a higher-order type is merely a representation of a type mapping, i.e. an &lsquo;applicable&rsquo; type that maps from an input type to an output type.
+Higher-order types are useful because they can take in higher order types, or return higher order types.
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/kind-reification/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/programming/hkt-tacit/" rel="bookmark">
 			Point-free Programming via HKTs
 			</a>
@@ -233,28 +252,13 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/enforcing-function-map-constraints/">Read more…</a>
 	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/programming/self-modifying-type-predicates/" rel="bookmark">
-			Self Modifying Type Predicates in Typescript
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
-Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; dependent types, a powerful type feature present in Idris.
-Further explanation on type predicates can be found here.
-The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on this because it is an implicit argument.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/self-modifying-type-predicates/">Read more…</a>
-	</div>
 </article>
 </main>
 
+<div class="pagination">
+	<span class="pagination__item pagination__item--current">1/2</span>
+	<a class="pagination__item pagination__item--next btn" href="/tags/programming/page/2/">»</a>
+</div>
 
 			</div>
 			
@@ -271,11 +275,11 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/life/neurostochastic-panpsychism/">Neurostochastic Panpsychism</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>

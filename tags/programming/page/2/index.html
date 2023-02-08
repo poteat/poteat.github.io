@@ -4,20 +4,13 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Double Pendulum - Adventures in Typescript</title>
+	<title>programming - Adventures in Typescript</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="">
-		<meta property="og:title" content="Double Pendulum" />
-<meta property="og:description" content="This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
-Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer
-Simulation parameters:
-Angle 1
-Angle 2
-Radial Velocity 1" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://code.lol/post/simulation/double-pendulum/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2019-01-25T20:58:30-05:00" />
-<meta property="article:modified_time" content="2019-01-25T20:58:30-05:00" />
+		<meta property="og:title" content="programming" />
+<meta property="og:description" content="Mike&#39;s code blog about programming, math, and science." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://code.lol/tags/programming/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/>
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -26,6 +19,7 @@ Radial Velocity 1" />
 
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="alternate" type="application/rss+xml" href="/tags/programming/index.xml" title="Adventures in Typescript">
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
@@ -78,90 +72,39 @@ Radial Velocity 1" />
 		<div class="wrapper flex">
 			<div class="primary">
 			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">Double Pendulum</h1>
-			
-		</header>
-		<div class="content post__content clearfix">
-			<p>This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a
-central pivot under the force of uniform gravity. In addition to being the
-motivating example for chaotic systems (in addition to the Lorenz system, its
-fluid mechanics counterpart), the double pendulum represents some interesting
-challenges.</p>
-<p><canvas id="canvas" width="500" height="500" style="position: absolute; margin-bottom: 0"></canvas>
-<canvas id="tracer" width="500" height="500" style="margin-bottom: 0"></canvas></p>
-<script type="text/javascript" src="/js/simulation/double-pendulum.js"></script>
-<div id="controls">
-  <input type="checkbox" id="circlebounds" onclick="circlebounds = document.getElementById('circlebounds').checked"> Draw circle bounds
-  <input type="checkbox" id="cherrytracer" onclick="cherrytracer = document.getElementById('cherrytracer').checked"> Draw cherry tracer
-  <input type="checkbox" id="connections" checked="true" onclick="connections = document.getElementById('connections').checked"> Draw connections
-  <input type="checkbox" id="paused" onclick="paused = document.getElementById('paused').checked"> Pause
-  <br>
-  <button type="button" onclick="ctx_tracer.clearRect(0, 0, cvs_tracer.width, cvs_tracer.height);">Clear cherry tracer</button><br>
-  Simulation parameters:<br>
-  <input type="number" id="ang1" value="90"> Angle 1<br>
-  <input type="number" id="ang2" value="180"> Angle 2<br>
-  <input type="number" id="vang1" value="0"> Radial Velocity 1<br>
-  <input type="number" id="vang2" value="0"> Radial Velocity 2<br>
-  <input type="number" id="L1" value="10"> Length 1<br>
-  <input type="number" id="L2" value="10"> Length 2<br>
-  <input type="number" id="M1" value="1"> Mass 1<br>
-  <input type="number" id="M2" value="1"> Mass 2<br>
-  <button type="button" onclick="reinitialize();">Begin new simulation</button><br>
-  Advanced options:<br>
-  <input type="number" id="g" value="98.0"> Gravity<br>
-  <input type="number" id ="fps_in" value="60"> Frames per second<br>
-  <input type="number" id ="steps" value="10"> Steps per frame<br>
-</div>
-<div id="fps"></div>
-<br>
-One challenge is that when end mass is much larger than central mass, the
-problem becomes stiff, and consequently the step-size must decrease quite a bit.
-Thus a RK8 numerical integrator called [Verner's
-Method](http://www.mymathlib.com/diffeq/runge-kutta/runge_kutta_verner.html) is 
-used, which was manually ported from C to Javascript.
-<p>The system is modeled directly from the equations of motion, which were derived
-using Mathematica (via the Euler-Lagrange formula).</p>
-
-		</div>
-		<footer class="post__footer">
-			
-<div class="post__tags tags clearfix">
-	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-	<ul class="tags__list">
-		<li class="tags__item">
-			<a class="tags__link btn" href="/tags/javascript/" rel="tag">javascript</a>
-		</li>
-		<li class="tags__item">
-			<a class="tags__link btn" href="/tags/demo/" rel="tag">demo</a>
-		</li>
-		<li class="tags__item">
-			<a class="tags__link btn" href="/tags/physics/" rel="tag">physics</a>
-		</li>
-	</ul>
-</div>
-		</footer>
-	</article>
+<main class="main list" role="main">
+	<header class="main__header">
+		<h1 class="main__title">programming</h1>
+	</header><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/post/programming/self-modifying-type-predicates/" rel="bookmark">
+			Self Modifying Type Predicates in Typescript
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
+Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; dependent types, a powerful type feature present in Idris.
+Further explanation on type predicates can be found here.
+The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on this because it is an implicit argument.
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/self-modifying-type-predicates/">Read more…</a>
+	</div>
+</article>
 </main>
 
-<div class="authorbox clearfix">
-	<figure class="authorbox__avatar">
-		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
-	</figure>
-	<div class="authorbox__header">
-		<span class="authorbox__name">About Michael Poteat</span>
-	</div>
-	<div class="authorbox__description">
-		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
-	</div>
+<div class="pagination">
+	<a class="pagination__item pagination__item--prev btn" href="/tags/programming/">«</a>
+	<span class="pagination__item pagination__item--current">2/2</span>
 </div>
 
-
-
 			</div>
-			<aside class="sidebar"><div class="widget-search widget">
+			
+<aside class="sidebar"><div class="widget-search widget">
 	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
 		<label>
 			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
@@ -257,7 +200,5 @@ using Mathematica (via the Euler-Lagrange formula).</p>
 </footer>
 	</div>
 <script async defer src="/js/menu.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
 </body>
 </html>

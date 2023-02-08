@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Kind Reification - Adventures in Typescript</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:title" content="Kind Reification" />
+<meta property="og:description" content="The hkt-toolbelt now provides a way to &lsquo;reify&rsquo; a higher-order type into a concrete function type. This is useful for representation of point-free code.
+to reify: make (something abstract) more concrete or real.
+Basics of Higher-Order Types For the purposes of hkt-toolbelt, a higher-order type is merely a representation of a type mapping, i.e. an &lsquo;applicable&rsquo; type that maps from an input type to an output type.
+Higher-order types are useful because they can take in higher order types, or return higher order types." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://code.lol/post/programming/kind-reification/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-02-07T23:17:12-08:00" />
+<meta property="article:modified_time" content="2023-02-07T23:17:12-08:00" />
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="Adventures in Typescript" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">Adventures in Typescript</div>
+					<div class="logo__tagline">Mike&#39;s code blog.</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">About Me</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/papers/">
+				
+				<span class="menu__text">Papers</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Kind Reification</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>The <code>hkt-toolbelt</code> now provides a way to &lsquo;reify&rsquo; a higher-order type into a concrete function type. This is useful for representation of point-free code.</p>
+<blockquote>
+<p>to <strong>reify:</strong> make (something abstract) more concrete or real.</p>
+</blockquote>
+<h2 id="basics-of-higher-order-types">Basics of Higher-Order Types</h2>
+<p>For the purposes of <code>hkt-toolbelt</code>, a higher-order type is merely a representation of a type <em>mapping</em>, i.e. an &lsquo;applicable&rsquo; type that maps from an input type to an output type.</p>
+<p>Higher-order types are useful because they can <em>take in</em> higher order types, or <em>return</em> higher order types. Through this mechanism, higher-order types are partially applicable, and can be used to represent sophisticated type relationships.</p>
+<h2 id="reification">Reification</h2>
+<p><code>hkt-toolbelt</code> now provides the <code>Kind.Reify</code> type, which takes a higher-order type and returns a concrete function type.</p>
+<p>In the below example, we reify a few type-level operations into their runtime counterparts. We can then use these reified types to represent point-free code.</p>
+<p>Notably, the point-free code retains the type-level guarantees of the original type-level operations.</p>
+<blockquote>
+<p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgEgDRwNLAHYBN0AywAzjOgMoxQ4DmcAvnAGZQQhwBEAFgNYwC0MCBAA2AIwCmImBwDcAWABQS3BIDGIgIZQJcNRGyk4ITWABcKADxY8AOgBKE4EwCehEjFsBZUwD4Fiqoa2rr6hvCmYBJ4FsjWOLgOTq4UVLS2AIJgUXj+KupaOnoGRgBWEDix8XaOzm5wlNTYNLYAUhXYeYEFIcXhcGDAUVU2ibUpmAm2AApDEl1KYUZMcAC8A3MAFADaJmCbkdG4mxwAhBwAlBfo5TgnnBcAuhcBiyXwAB5rzDvcUiIQDjoDgAd2gIlwHGesjgAHpYXAAORcf4QU5wMFQCGnRFAA">TS Playground Link</a></p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">import</span> { $, Kind, List, <span style="color:#007020">String</span> } <span style="color:#080;font-weight:bold">from</span> <span style="background-color:#fff0f0">&#34;hkt-toolbelt&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> map: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">List.Map</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> append: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">String.Append</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> join: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">String.Join</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> pipe: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Kind.Pipe</span>&gt;;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> f <span style="color:#333">=</span> pipe([map(append(<span style="background-color:#fff0f0">&#34;!&#34;</span>)), join(<span style="background-color:#fff0f0">&#34; &#34;</span>)]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> x <span style="color:#333">=</span> f([<span style="background-color:#fff0f0">&#34;hello&#34;</span>, <span style="background-color:#fff0f0">&#34;world&#34;</span>]); <span style="color:#888">// &#39;hello! world!&#39;
+</span></span></span></code></pre></div><blockquote>
+<p>The above code maps over an array of strings, appending the character <code>!</code> to each string, and then joins the resulting array of strings into a single string, separated by a space.</p>
+</blockquote>
+<p>This allows generic functions to written <em>without</em> the need for explicit type annotations, which can be a significant improvement in readability.</p>
+<h2 id="reification-process">Reification Process</h2>
+<p>The reification process is fairly straightforward. The <code>Kind.Reify</code> type takes a higher-order type and returns a concrete function type.</p>
+<p>As a higher-order type which obeys the <code>Kind</code> interface, the <code>Kind.Reify</code> type is itself a higher-order type. So it can reify itself, and so on.</p>
+<p>The underlying process is the addition of a function interface to the original higher-order type. This function interface is used to represent the application operation (via <code>$</code>). Finally, if the <em>result</em> of the application operation is itself a higher-order type, the reification process is repeated.</p>
+<p>The current implementation of <code>Kind.Reify</code> is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">import</span> { $, Kind, Type } <span style="color:#080;font-weight:bold">from</span> <span style="background-color:#fff0f0">&#34;..&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">type</span> _$reify&lt;<span style="color:#070">K</span> <span style="color:#00c">extends</span> <span style="color:#00c">Kind.Kind</span>&gt; <span style="color:#333">=</span> K <span style="color:#333">&amp;</span> {
+</span></span><span style="display:flex;"><span>  &lt;<span style="color:#070">X</span> <span style="color:#00c">extends</span> <span style="color:#00c">Kind._</span><span style="color:#f00;background-color:#faa">$</span><span style="color:#00c">inputOf</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">K</span>&gt;<span style="color:#333">&gt;</span>(x: <span style="color:#339;font-weight:bold">Type._$infer</span>&lt;<span style="color:#070">X</span>&gt;)<span style="color:#333">:</span> $&lt;<span style="color:#070">K</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">X</span>&gt; <span style="color:#080;font-weight:bold">extends</span> Kind.Kind
+</span></span><span style="display:flex;"><span>    <span style="color:#333">?</span> _$reify<span style="color:#333">&lt;</span>$&lt;<span style="color:#070">K</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">X</span>&gt;<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#333">:</span> $&lt;<span style="color:#070">K</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">X</span>&gt;;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">interface</span> Reify <span style="color:#080;font-weight:bold">extends</span> Kind.Kind {
+</span></span><span style="display:flex;"><span>  f(x: <span style="color:#339;font-weight:bold">Type._$cast</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">Kind._</span><span style="color:#f00;background-color:#faa">],</span> <span style="color:#00c">Kind.Kind</span>&gt;)<span style="color:#333">:</span> _$reify&lt;<span style="color:#070">typeof</span> <span style="color:#00c">x</span>&gt;;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="application">Application</h2>
+<p>The most likely application of this reification technique is in the context of writing pure functional utilities that possess arbitrary type-level composability.</p>
+<p>A large limitation of current functional programming libraries (e.g. <a href="https://www.npmjs.com/package/lodash">lodash</a>, <a href="https://www.npmjs.com/package/ramda">ramda</a>) is that they are not composable at the type-level. This means that the type-level guarantees of the library are lost when composing functions.</p>
+<h2 id="fun-example-collatz-sequence">Fun Example: Collatz Sequence</h2>
+<p>The following example demonstrates the use of <code>Kind.Reify</code> to write a point-free implementation of the <a href="https://en.wikipedia.org/wiki/Collatz_conjecture">Collatz sequence</a>.</p>
+<p>This was a fun exercise in writing point-free code, and also in using <code>Kind.Reify</code> to represent the type-level guarantees of the original type-level operations.</p>
+<blockquote>
+<p><a href="https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgEgDRwNLAHYBN0DCEIARjgIYzSER7AzC3kA26AYgK7YDGDt6AOUocoLAR1IBTKHAC+cAGZRicAEQALANYwAtFQjMSk5jFUBYAFCXck7s3JRJcbrQDO8AJIKAXCgA8WHgAdABKksAKAJ40dHzYLEFeAHwA3Na29o7Obp6uAKIAbpLYvsgBOLih4VGCwqLM4lJQiflF2Knpdg5OLtjucAAiwAXANgBCkaXlwWER0XBCMCJiEkbNQyPjkR0WNl1Zvf0ACsBgklOBlbM1mBVBJ2c7e5k9OXAAshwmp8yT-pdVOa1Jb1RprIKfb5gX5PDLdbJ9Tw8RwgYowC53a7zRbLBqraSJZGSVHYGCw-avRFwNjAAAeAGVJABHDjFbjnf6Y6rzIikChUZo0hnM1k8STkl4I-p5FksVwYmbcmK4eiMeLMIIyjhyiXww7wIiI8ikhVXJXUri8NVBQ3uY1ktJWCz6uBEZj2GAALzgAF44F4ABQeVrFACUAY2o0kEwDACZQ+GHpIAwBtSEMaGRAMAZlD6A8RJJMAAugnHZYXW6PZ7GSy2U4-ULa6L2UGFAGtXKAwBGBMB20we09vtVyiesuWCtvRyuL7wP2jr3N+sBgCsAAZQ5YAPTbuD7uAAPQA-Du9weXTO574Uxv0LHV+gAOwANnQ2YAHOhuwBOdCrr84FjP84A-QCABZwPvWNv27d8oLgbsn1QM8DzQ9CMLgVcYKAt9EOzdBwPXe9iMQ0jH0QvCIPvb9iyAA"><strong>Try it Out:</strong> Typescript Playground Link</a></p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">import</span> {
+</span></span><span style="display:flex;"><span>  $,
+</span></span><span style="display:flex;"><span>  Kind,
+</span></span><span style="display:flex;"><span>  Combinator,
+</span></span><span style="display:flex;"><span>  Conditional,
+</span></span><span style="display:flex;"><span>  <span style="color:#007020">Function</span>,
+</span></span><span style="display:flex;"><span>  NaturalNumber,
+</span></span><span style="display:flex;"><span>} <span style="color:#080;font-weight:bold">from</span> <span style="background-color:#fff0f0">&#34;hkt-toolbelt&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> If: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Conditional.If</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> IsEven: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">NaturalNumber.IsEven</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> DivideBy: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">NaturalNumber.DivideBy</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> Pipe: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Kind.Pipe</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> Multiply: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">NaturalNumber.Multiply</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> Increment: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">NaturalNumber.Increment</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> FixSequence: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Combinator.FixSequence</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> Equals: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Conditional.Equals</span>&gt;;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">const</span> Constant: <span style="color:#339;font-weight:bold">$</span>&lt;<span style="color:#070">Kind.Reify</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Function.Constant</span>&gt;;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> Collatz <span style="color:#333">=</span> If(IsEven)(DivideBy(<span style="color:#00d;font-weight:bold">2</span>))(Pipe([Multiply(<span style="color:#00d;font-weight:bold">3</span>), Increment]));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> CollatzSequence <span style="color:#333">=</span> FixSequence(If(Equals(<span style="color:#00d;font-weight:bold">1</span>))(Constant(<span style="color:#00d;font-weight:bold">1</span>))(Collatz));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> result <span style="color:#333">=</span> CollatzSequence(<span style="color:#00d;font-weight:bold">50</span>);
+</span></span><span style="display:flex;"><span><span style="color:#888">//    ^?
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//    const result: [50, 25, 76, 38, 19, 58, 29, 88, 44, 22, 11, 34, 17,
+</span></span></span><span style="display:flex;"><span><span style="color:#888">//                   52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1]
+</span></span></span></code></pre></div><blockquote>
+<p>To get this to work with <code>FixSequence</code>, I had to solve an obscure issue with &lsquo;reductive&rsquo; types that I don&rsquo;t yet completely understand. As a brief mention, when doing tail-optimized generic recursion, all of the associated parameters must be conditionally reduced to <code>never</code> on a halt condition. Otherwise, the compiler will try to &lsquo;greedily&rsquo; evaluate the type, and will fail to terminate.</p>
+</blockquote>
+
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/typescript/" rel="tag">typescript</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/programming/" rel="tag">programming</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/type-system/" rel="tag">type-system</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/point-free/" rel="tag">point-free</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Michael Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Michael Poteat</span>
+	</div>
+	<div class="authorbox__description">
+		Software engineer and researcher in SF. Interests in machine learning, programming, pure mathematics and many other topics.
+	</div>
+</div>
+
+
+
+			</div>
+			<aside class="sidebar"><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH…" value="" name="q" aria-label="SEARCH…">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://code.lol">
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/life/neurostochastic-panpsychism/">Neurostochastic Panpsychism</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">life</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/programming/">programming</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="architecture">architecture</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/consciousness/" title="consciousness">consciousness</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/efficiency/" title="efficiency">efficiency</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/extensibility/" title="extensibility">extensibility</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/functional-programming/" title="functional-programming">functional-programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/intelligence/" title="intelligence">intelligence</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/life/" title="life">life</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="performance">performance</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/philosophy/" title="philosophy">philosophy</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/point-free/" title="point-free">point-free</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/safety/" title="safety">safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="strings">strings</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="tuples">tuples</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-guard/" title="type-guard">type-guard</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-safety/" title="type safety">type safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
+	</div>
+</div>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2023 Adventures in Typescript.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>
