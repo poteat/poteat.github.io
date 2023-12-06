@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>parsing on Adventures in Typescript</title>
+    <title>parsing on Codeless Code</title>
     <link>https://code.lol/tags/parsing/</link>
-    <description>Recent content in parsing on Adventures in Typescript</description>
+    <description>Recent content in parsing on Codeless Code</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 23 Dec 2019 16:39:53 -0800</lastBuildDate><atom:link href="https://code.lol/tags/parsing/index.xml" rel="self" type="application/rss+xml" />

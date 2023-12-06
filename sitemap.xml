@@ -2,10 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://code.lol/</loc>
+    <loc>https://code.lol/categories/</loc>
     <lastmod>2023-02-07T23:17:12-08:00</lastmod>
   </url><url>
-    <loc>https://code.lol/categories/</loc>
+    <loc>https://code.lol/</loc>
     <lastmod>2023-02-07T23:17:12-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/post/programming/kind-reification/</loc>
@@ -223,9 +223,6 @@
   </url><url>
     <loc>https://code.lol/post/bioinformatics/quadratic-bezier-curves/</loc>
     <lastmod>2019-01-25T17:40:45-05:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/papers/</loc>
-    <lastmod>2019-01-25T17:28:08-05:00</lastmod>
   </url><url>
     <loc>https://code.lol/about/</loc>
     <lastmod>2019-01-25T16:24:07-05:00</lastmod>

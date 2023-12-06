@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Adventures in Typescript</title>
+    <title>Codeless Code</title>
     <link>https://code.lol/</link>
-    <description>Recent content on Adventures in Typescript</description>
+    <description>Recent content on Codeless Code</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 07 Feb 2023 23:17:12 -0800</lastBuildDate><atom:link href="https://code.lol/index.xml" rel="self" type="application/rss+xml" />
@@ -233,11 +233,7 @@ The forces used are tuned to provide some amount of clustering, but also to prov
       <pubDate>Sat, 26 Jan 2019 12:14:54 -0500</pubDate>
       
       <guid>https://code.lol/contact/</guid>
-      <description>You can contact me using the below form. If it&amp;rsquo;s more convenient, I can also be contacted on Github or LinkedIn.
-2021 Update: I have no idea if the below form works. YMMV. Best to just email me.
-Your Email
-Your Name
-Message</description>
+      <description>LinkedIn</description>
     </item>
     
     <item>
@@ -298,26 +294,14 @@ Drag the control points around to see the curve change.</description>
     </item>
     
     <item>
-      <title>Papers</title>
-      <link>https://code.lol/papers/</link>
-      <pubDate>Fri, 25 Jan 2019 17:28:08 -0500</pubDate>
-      
-      <guid>https://code.lol/papers/</guid>
-      <description>You can find abstracts, figures, citations and more at my ResearchGate profile.
-Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Quantification of Twist from the Central Lines of β-strands&amp;rdquo;, Journal of Computational Biology, January 2018, 25 (1): 114-120
-Poteat, M., He, J. &amp;ldquo;Modeling Beta-sheets using Iterative Bezier Surface Fitting on Cryo-EM Density Maps&amp;rdquo;, Molecular Based Mathematical Biology, Apr 2017; 5:31–39
-Tunazzina Islam, Michael Poteat, Jing He, &amp;ldquo;Analysis of ß-strand Twist from the 3-dimensional Image of a Protein&amp;rdquo;, Computational Structural Bioinformatics Workshop 2017 in conjunction with ACM-BCB 2017, Pages 650-654.</description>
-    </item>
-    
-    <item>
-      <title>About Me</title>
+      <title>about</title>
       <link>https://code.lol/about/</link>
       <pubDate>Fri, 25 Jan 2019 16:24:07 -0500</pubDate>
       
       <guid>https://code.lol/about/</guid>
-      <description>Working in the Bay Area for Volley Inc for the foreseeable future as one of our first ten engineers. I work on core engine development - my prime directive is to do my best every day to support my colleagues.
-My graduate topic of research was linear-temporal logic and its applications in verification of mission correctness in autonomous robotics.
-My interests include machine learning, pure mathematics, programming, programming language design (especially modern languages like NodeJS and Julia), VR gaming/training development, and a whole host of other topics.</description>
+      <description>This is the blog of Alice Poteat. I&amp;rsquo;m a staff software engineer at volley - where I facilitate the dreams of our wonderful product team - and help unlock our shared vision for the future of &amp;ldquo;Netflix-style&amp;rdquo; interactive entertainment.
+Among my current professional responsibilities are:
+Coding. Acting as technical project manager of various multi-team confidential projects. Auditing hiring, team practices, and technical architecture across five engineering teams composed of 40+ engineers.</description>
     </item>
     
   </channel>
