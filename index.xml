@@ -6,7 +6,20 @@
     <description>Recent content on Codeless Code</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Feb 2023 23:17:12 -0800</lastBuildDate><atom:link href="https://code.lol/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Feb 2024 12:45:00 -0500</lastBuildDate><atom:link href="https://code.lol/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Progress and Understanding</title>
+      <link>https://code.lol/post/life/progress-and-understanding/</link>
+      <pubDate>Sun, 18 Feb 2024 12:45:00 -0500</pubDate>
+      
+      <guid>https://code.lol/post/life/progress-and-understanding/</guid>
+      <description>A few philosophical musings on my path and the symbols that guide me.
+Symbols Gaia - Γ Yggdrasil - Ψ Phi - 𝛟 My Path Symbols Gaia - Γ The female divinity, beauty, love, higher truth.
+Yggdrasil - Ψ The world tree. Groundedness, the Earth, physical reality. Male nature.
+Phi - 𝛟 The divine, the transcendent, the higher truth.
+My Path $ \boxed{\Phi \Gamma \Psi \rightarrow \emptyset \rightarrow \Phi} $</description>
+    </item>
+    
     <item>
       <title>Kind Reification</title>
       <link>https://code.lol/post/programming/kind-reification/</link>

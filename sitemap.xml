@@ -2,11 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://code.lol/tags/beauty/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
     <loc>https://code.lol/categories/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
   </url><url>
     <loc>https://code.lol/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/life/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/categories/life/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/meaning/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/philosophy/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/categories/philosophy/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/post/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/post/life/progress-and-understanding/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/categories/spirituality/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/categories/transcendence/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/truth/</loc>
+    <lastmod>2024-02-18T12:45:00-05:00</lastmod>
   </url><url>
     <loc>https://code.lol/post/programming/kind-reification/</loc>
     <lastmod>2023-02-07T23:17:12-08:00</lastmod>
@@ -14,16 +50,10 @@
     <loc>https://code.lol/tags/point-free/</loc>
     <lastmod>2023-02-07T23:17:12-08:00</lastmod>
   </url><url>
-    <loc>https://code.lol/post/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
-  </url><url>
     <loc>https://code.lol/tags/programming/</loc>
     <lastmod>2023-02-07T23:17:12-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/categories/programming/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/tags/</loc>
     <lastmod>2023-02-07T23:17:12-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/type-system/</loc>
@@ -38,16 +68,7 @@
     <loc>https://code.lol/tags/intelligence/</loc>
     <lastmod>2023-01-28T12:41:58-08:00</lastmod>
   </url><url>
-    <loc>https://code.lol/tags/life/</loc>
-    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/categories/life/</loc>
-    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
-  </url><url>
     <loc>https://code.lol/post/life/neurostochastic-panpsychism/</loc>
-    <lastmod>2023-01-28T12:41:58-08:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/tags/philosophy/</loc>
     <lastmod>2023-01-28T12:41:58-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/functional-programming/</loc>
