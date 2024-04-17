@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-	<meta name="generator" content="Hugo 0.110.0">
+	<meta name="generator" content="Hugo 0.125.0">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Codeless Code</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
 	<meta name="description" content="Alice&#39;s personal blog about programming, math, and science.">
-		<meta property="og:title" content="Codeless Code" />
-<meta property="og:description" content="Alice&#39;s personal blog about programming, math, and science." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://code.lol/" /><meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png"/>
+		<meta property="og:url" content="https://code.lol/">
+  <meta property="og:site_name" content="Codeless Code">
+  <meta property="og:title" content="Codeless Code">
+  <meta property="og:description" content="Alice&#39;s personal blog about programming, math, and science.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="website">
+    <meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png">
 
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -23,6 +26,9 @@
 
 	<link rel="shortcut icon" href="/favicon.ico">
 		
+  
+
+
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -67,23 +73,6 @@
 			
 <main class="main list" role="main">
 	<article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/programming/type-guard-composition/" rel="bookmark">
-			Type Guard Composition
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		Type guards are a powerful tool for type system design. They are used to express that a type is only valid if it satisfies a certain condition. For example, we can express that a type is only valid if it is a number or a string.
-1. Union Type Guards 1.1. Naive Union Implementation 1.2. 2-adic Union Composition 1.3. N-adic Union Composition 1.3.1. GuardReturnType 1.3.2. Variadic Is-Union 1.3.3. References for this Section 2.
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/type-guard-composition/">Read more…</a>
-	</div>
-</article><article class="list__item post">
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
@@ -239,6 +228,23 @@ I was interested in finding a solution to this problem that was both succint and
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/algorithms/pythagorean-triple/">Read more…</a>
 	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
+			<a href="/post/simulation/mathematica-steps-to-latex/" rel="bookmark">
+			Mathematica Steps to LaTeX [WiP]
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
+Mathematica&rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/simulation/mathematica-steps-to-latex/">Read more…</a>
+	</div>
 </article>
 </main>
 
@@ -253,18 +259,18 @@ I was interested in finding a solution to this problem that was both succint and
 	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
 		<input class="widget-search__field" type="search" placeholder="Search…" value="" name="q" aria-label="Search…">
 		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="https://code.lol">
+		<input type="hidden" name="sitesearch" value="https://code.lol/">
 	</form>
 </div>
 <div class="widget-recent widget">
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/post/life/progress-and-understanding/">Progress and Understanding</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/life/neurostochastic-panpsychism/">Neurostochastic Panpsychism</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
 		</ul>
 	</div>
 </div>
@@ -273,70 +279,61 @@ I was interested in finding a solution to this problem that was both succint and
 	<div class="widget__content">
 		<ul class="widget__list">
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/algorithms/">algorithms</a></li>
+				<a class="widget__link" href="/categories/algorithms/">Algorithms</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/bioinformatics/">bioinformatics</a></li>
+				<a class="widget__link" href="/categories/bioinformatics/">Bioinformatics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/life/">life</a></li>
+				<a class="widget__link" href="/categories/life/">Life</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/mathematics/">mathematics</a></li>
+				<a class="widget__link" href="/categories/mathematics/">Mathematics</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/philosophy/">philosophy</a></li>
+				<a class="widget__link" href="/categories/programming/">Programming</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/programming/">programming</a></li>
+				<a class="widget__link" href="/categories/simulation/">Simulation</a></li>
 			<li class="widget__item">
-				<a class="widget__link" href="/categories/simulation/">simulation</a></li>
-			<li class="widget__item">
-				<a class="widget__link" href="/categories/spirituality/">spirituality</a></li>
-			<li class="widget__item">
-				<a class="widget__link" href="/categories/transcendence/">transcendence</a></li>
-			<li class="widget__item">
-				<a class="widget__link" href="/categories/typescript/">typescript</a></li>
+				<a class="widget__link" href="/categories/typescript/">Typescript</a></li>
 		</ul>
 	</div>
 </div>
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
-		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="algorithms">algorithms</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="architecture">architecture</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/beauty/" title="beauty">beauty</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/consciousness/" title="consciousness">consciousness</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="curves">curves</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="demo">demo</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="design patterns">design patterns</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="dijkstra">dijkstra</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/efficiency/" title="efficiency">efficiency</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/extensibility/" title="extensibility">extensibility</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="factorization">factorization</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/functional-programming/" title="functional-programming">functional-programming</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/intelligence/" title="intelligence">intelligence</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="javascript">javascript</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="lambda calculus">lambda calculus</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="latex">latex</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/life/" title="life">life</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="math">math</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="mathematica">mathematica</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/meaning/" title="meaning">meaning</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="number theory">number theory</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="parsing">parsing</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="performance">performance</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/philosophy/" title="philosophy">philosophy</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="physics">physics</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/point-free/" title="point-free">point-free</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="programming">programming</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="rationality">rationality</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="regression">regression</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/safety/" title="safety">safety</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="strings">strings</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="tau-beta-pi">tau-beta-pi</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/truth/" title="truth">truth</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="tuples">tuples</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/type-guard/" title="type-guard">type-guard</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/type-safety/" title="type safety">type safety</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="type system">type system</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="typescript">typescript</a>
-		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="wip">wip</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/consciousness/" title="Consciousness">Consciousness</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/efficiency/" title="Efficiency">Efficiency</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/extensibility/" title="Extensibility">Extensibility</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="Factorization">Factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/functional-programming/" title="Functional Programming">Functional Programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/intelligence/" title="Intelligence">Intelligence</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="Javascript">Javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="Lambda Calculus">Lambda Calculus</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="Latex">Latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/life/" title="Life">Life</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="Math">Math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="Mathematica">Mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="Number-Theory">Number-Theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="Parsing">Parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="Performance">Performance</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/philosophy/" title="Philosophy">Philosophy</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="Physics">Physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/point-free/" title="Point-Free">Point-Free</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="Programming">Programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="Rationality">Rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="Regression">Regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/safety/" title="Safety">Safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="Strings">Strings</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="Tau-Beta-Pi">Tau-Beta-Pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="Tuples">Tuples</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-safety/" title="Type Safety">Type Safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-guard/" title="Type-Guard">Type-Guard</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="Type-System">Type-System</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="Typescript">Typescript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="Wip">Wip</a>
 	</div>
 </div>
 </aside>

@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>physics on Codeless Code</title>
+    <title>Physics on Codeless Code</title>
     <link>https://code.lol/tags/physics/</link>
-    <description>Recent content in physics on Codeless Code</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Physics on Codeless Code</description>
+    <generator>Hugo 0.125.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 28 Jan 2019 13:59:19 -0500</lastBuildDate><atom:link href="https://code.lol/tags/physics/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 28 Jan 2019 13:59:19 -0500</lastBuildDate>
+    <atom:link href="https://code.lol/tags/physics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Quadtree Particle Simulation</title>
       <link>https://code.lol/post/simulation/quadtree-particle-simulation/</link>
       <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
-      
       <guid>https://code.lol/post/simulation/quadtree-particle-simulation/</guid>
-      <description>A small particle simulation was written in JS, utilizing a simplified (constant depth) quadtree structure. The model includes forces between nearby particles, so rather than invoke a O(n^2) operation to compute the net force for each particle, a quadtree is used so each particle may efficiently access its neighbors.
-The forces used are tuned to provide some amount of clustering, but also to provide global homogeneity to prevent too many particles appearing in one quadtree section (which would decrease cpu-time efficiency).</description>
+      <description>A small particle simulation was written in JS, utilizing a simplified (constant depth) quadtree structure. The model includes forces between nearby particles, so rather than invoke a O(n^2) operation to compute the net force for each particle, a quadtree is used so each particle may efficiently access its neighbors.&#xA;The forces used are tuned to provide some amount of clustering, but also to provide global homogeneity to prevent too many particles appearing in one quadtree section (which would decrease cpu-time efficiency).</description>
     </item>
-    
     <item>
       <title>Double Pendulum</title>
       <link>https://code.lol/post/simulation/double-pendulum/</link>
       <pubDate>Fri, 25 Jan 2019 20:58:30 -0500</pubDate>
-      
       <guid>https://code.lol/post/simulation/double-pendulum/</guid>
-      <description>This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
-Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer
-Simulation parameters:
-Angle 1
-Angle 2
-Radial Velocity 1</description>
+      <description>This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.&#xA;Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer&#xA;Simulation parameters:&#xA;Angle 1&#xA;Angle 2&#xA;Radial Velocity 1</description>
     </item>
-    
   </channel>
 </rss>

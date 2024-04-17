@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>type-guard on Codeless Code</title>
+    <title>Type-Guard on Codeless Code</title>
     <link>https://code.lol/tags/type-guard/</link>
-    <description>Recent content in type-guard on Codeless Code</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Type-Guard on Codeless Code</description>
+    <generator>Hugo 0.125.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 14 Nov 2021 12:08:01 -0800</lastBuildDate><atom:link href="https://code.lol/tags/type-guard/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 14 Nov 2021 12:08:01 -0800</lastBuildDate>
+    <atom:link href="https://code.lol/tags/type-guard/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Type Guard Composition</title>
       <link>https://code.lol/post/programming/type-guard-composition/</link>
       <pubDate>Sun, 14 Nov 2021 12:08:01 -0800</pubDate>
-      
       <guid>https://code.lol/post/programming/type-guard-composition/</guid>
-      <description>Type guards are a powerful tool for type system design. They are used to express that a type is only valid if it satisfies a certain condition. For example, we can express that a type is only valid if it is a number or a string.
-1. Union Type Guards 1.1. Naive Union Implementation 1.2. 2-adic Union Composition 1.3. N-adic Union Composition 1.3.1. GuardReturnType 1.3.2. Variadic Is-Union 1.3.3. References for this Section 2.</description>
+      <description>Type guards are a powerful tool for type system design. They are used to express that a type is only valid if it satisfies a certain condition. For example, we can express that a type is only valid if it is a number or a string.&#xA;1. Union Type Guards 1.1. Naive Union Implementation 1.2. 2-adic Union Composition 1.3. N-adic Union Composition 1.3.1. GuardReturnType 1.3.2. Variadic Is-Union 1.3.3. References for this Section 2.</description>
     </item>
-    
   </channel>
 </rss>

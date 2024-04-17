@@ -1,56 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>life on Codeless Code</title>
+    <title>Life on Codeless Code</title>
     <link>https://code.lol/categories/life/</link>
-    <description>Recent content in life on Codeless Code</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Life on Codeless Code</description>
+    <generator>Hugo 0.125.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Feb 2024 12:45:00 -0500</lastBuildDate><atom:link href="https://code.lol/categories/life/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Progress and Understanding</title>
-      <link>https://code.lol/post/life/progress-and-understanding/</link>
-      <pubDate>Sun, 18 Feb 2024 12:45:00 -0500</pubDate>
-      
-      <guid>https://code.lol/post/life/progress-and-understanding/</guid>
-      <description>A few philosophical musings on my path and the symbols that guide me.
-Symbols Gaia - Γ Yggdrasil - Ψ Phi - 𝛟 My Path Symbols Gaia - Γ The female divinity, beauty, love, higher truth.
-Yggdrasil - Ψ The world tree. Groundedness, the Earth, physical reality. Male nature.
-Phi - 𝛟 The divine, the transcendent, the higher truth.
-My Path $$ \boxed{\Phi \Gamma \Psi \rightarrow \emptyset \rightarrow \Phi} $$</description>
-    </item>
-    
+    <lastBuildDate>Sat, 28 Jan 2023 12:41:58 -0800</lastBuildDate>
+    <atom:link href="https://code.lol/categories/life/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Neurostochastic Panpsychism</title>
       <link>https://code.lol/post/life/neurostochastic-panpsychism/</link>
       <pubDate>Sat, 28 Jan 2023 12:41:58 -0800</pubDate>
-      
       <guid>https://code.lol/post/life/neurostochastic-panpsychism/</guid>
-      <description>Is the universe purely physical in nature? Assume &amp;lsquo;physicalism&amp;rsquo;, the non-dualist philosophical view that all things are physical, including the mind - in the style of D. Dennett.
-As follows, we can infer that there is nothing intrinsically supernatural about human consciousness, and that it is a mere product of the physical world and its laws.
-If the underlying physical processes may be replicated by other systems, then it is reasonable to infer that other systems may in principle possess qualia.</description>
+      <description>Is the universe purely physical in nature? Assume &amp;lsquo;physicalism&amp;rsquo;, the non-dualist philosophical view that all things are physical, including the mind - in the style of D. Dennett.&#xA;As follows, we can infer that there is nothing intrinsically supernatural about human consciousness, and that it is a mere product of the physical world and its laws.&#xA;If the underlying physical processes may be replicated by other systems, then it is reasonable to infer that other systems may in principle possess qualia.</description>
     </item>
-    
     <item>
       <title>Bay Area SSC Meetup</title>
       <link>https://code.lol/post/life/ssc-meetup/</link>
       <pubDate>Mon, 03 Jun 2019 12:37:10 -0700</pubDate>
-      
       <guid>https://code.lol/post/life/ssc-meetup/</guid>
-      <description>I&amp;rsquo;m in SF for the summer, and I was thus able to attend the Slate Star Codex meetup this year in Dolores Park. Met a lot of interesting people, and got to meet Scott. While I&amp;rsquo;m in the Bay Area I hope to get a little more involved in that scene.
-Picture is of the park, not the meetup specifically.</description>
+      <description>I&amp;rsquo;m in SF for the summer, and I was thus able to attend the Slate Star Codex meetup this year in Dolores Park. Met a lot of interesting people, and got to meet Scott. While I&amp;rsquo;m in the Bay Area I hope to get a little more involved in that scene.&#xA;Picture is of the park, not the meetup specifically.</description>
     </item>
-    
     <item>
       <title>2019 Presidential Luncheon</title>
       <link>https://code.lol/post/life/2019-presidential-luncheon/</link>
       <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
-      
       <guid>https://code.lol/post/life/2019-presidential-luncheon/</guid>
-      <description>This last Wednesday I had the honor of attending a luncheon with ODU&amp;rsquo;s current president John R. Broderick. This event was a meetup with the local Tau Beta Pi engineering honor society chapter.
-The food was delicious! We were able to talk to Broderick about current events on campus, and suggestions we had (especially with regard to on-campus parking).
-Group photo included.</description>
+      <description>This last Wednesday I had the honor of attending a luncheon with ODU&amp;rsquo;s current president John R. Broderick. This event was a meetup with the local Tau Beta Pi engineering honor society chapter.&#xA;The food was delicious! We were able to talk to Broderick about current events on campus, and suggestions we had (especially with regard to on-campus parking).&#xA;Group photo included.</description>
     </item>
-    
   </channel>
 </rss>
