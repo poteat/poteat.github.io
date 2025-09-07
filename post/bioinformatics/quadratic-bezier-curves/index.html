@@ -9,12 +9,10 @@
 		<meta property="og:url" content="https://code.lol/post/bioinformatics/quadratic-bezier-curves/">
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="Quadratic Bezier Curves">
-  <meta property="og:description" content="Quadratic Bézier curves are explicit parametric functions of the following form:
-$$ x(t) = (1-t)^2 x_0 &#43; 2t(1-t) x_1 &#43; t^2 x_2\\ y(t) = (1-t)^2 y_0 &#43; 2t(1-t) y_1 &#43; t^2 y_2\\ t \in \mathbb R[0,1] $$ These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
-Drag the control points around to see the curve change.">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:description" content="An interactive visualization of quadratic Bézier curves, demonstrating how three control points define smooth parametric curves commonly used in computer graphics and design.">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
-  <meta property="article:section" content="post">
+    <meta property="article:section" content="post">
     <meta property="article:published_time" content="2019-01-25T17:40:45-05:00">
     <meta property="article:modified_time" content="2019-01-25T17:40:45-05:00">
     <meta property="article:tag" content="Javascript">
@@ -33,9 +31,6 @@ Drag the control points around to see the curve change.">
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -85,7 +80,8 @@ Drag the control points around to see the curve change.">
 			
 		</header>
 		<div class="content post__content clearfix">
-			<p>Quadratic Bézier curves are explicit parametric functions of the following form:</p>
+			<p>An interactive visualization of quadratic Bézier curves, demonstrating how three control points define smooth parametric curves commonly used in computer graphics and design.</p>
+<p>Quadratic Bézier curves are explicit parametric functions of the following form:</p>
 <div>
 $$
 x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\
@@ -123,7 +119,6 @@ between t and arc-length, the mapping approximation perhaps being in the form of
 a Bézier curve itself.</p>
 <p>I use the &ldquo;table of arc-lengths&rdquo; method here, which is rebuilt every time the
 curve&rsquo;s control points are moved. The units of length are pixels.</p>
-
 		</div>
 		<footer class="post__footer">
 			
@@ -171,11 +166,11 @@ curve&rsquo;s control points are moved. The units of length are pixels.</p>
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -203,9 +198,11 @@ curve&rsquo;s control points are moved. The units of length are pixels.</p>
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -243,7 +240,7 @@ curve&rsquo;s control points are moved. The units of length are pixels.</p>
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

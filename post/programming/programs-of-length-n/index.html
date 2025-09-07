@@ -9,11 +9,10 @@
 		<meta property="og:url" content="https://code.lol/post/programming/programs-of-length-n/">
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="Programs of Length N: Collatz, Chaitin, and Church">
-  <meta property="og:description" content="There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.
-1. How many programs have N terms? 2. How fast does the set of programs of length N grow? 3. How many programs of length N converge? 4. What is the longest-running convergent program of length N? 5. How fast does BB(N) grow? 6. What percentage of programs converge?">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:description" content="How many lambda calculus programs exist with exactly $N$ terms? This exploration dives into deep questions about computational complexity, from counting programs like (λx. x x) (λx. x x) to analyzing the non-computable BB(N) busy beaver function that grows faster than any computable sequence. We examine Chaitin’s constant $Ω$ and why determining program convergence connects to unsolved problems like the Collatz conjecture collatz(3n &#43; 1).">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
-  <meta property="article:section" content="post">
+    <meta property="article:section" content="post">
     <meta property="article:published_time" content="2021-09-03T15:12:34-07:00">
     <meta property="article:modified_time" content="2021-09-03T15:12:34-07:00">
     <meta property="article:tag" content="Lambda Calculus">
@@ -32,9 +31,6 @@
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -84,7 +80,8 @@
 			
 		</header>
 		<div class="content post__content clearfix">
-			<p>There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.</p>
+			<p>How many lambda calculus programs exist with exactly $N$ terms? This exploration dives into deep questions about computational complexity, from counting programs like <code>(λx. x x) (λx. x x)</code> to analyzing the non-computable <code>BB(N)</code> busy beaver function that grows faster than any computable sequence. We examine Chaitin&rsquo;s constant $Ω$ and why determining program convergence connects to unsolved problems like the Collatz conjecture <code>collatz(3n + 1)</code>.</p>
+<p>There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.</p>
 <ul>
 <li><a href="#1-how-many-programs-have-n-terms">1. How many programs have N terms?</a></li>
 <li><a href="#2-how-fast-does-the-set-of-programs-of-length-n-grow">2. How fast does the set of programs of length N grow?</a></li>
@@ -178,7 +175,6 @@
 <p>This is non-computable - there is no function that computes the shortest program that converges to a given value, nor is there a function which computes the <em>length</em> of the shortest program which converges to a given value.</p>
 <p>This is essentially <a href="https://en.wikipedia.org/wiki/Kolmogorov_complexity">Kolmogorov complexity</a>, which is non-computable for a given value.</p>
 <p>In practice, <a href="https://paperswithcode.com/task/image-compression">neural networks are quite good at compressing data</a>. This is likely due to the <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">universal approximation theorem</a> of neural networks. Finite-size neural networks can represent computable functions, but it&rsquo;s unclear how much they can represent non-computable functions.</p>
-
 		</div>
 		<footer class="post__footer">
 			
@@ -226,11 +222,11 @@
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -258,9 +254,11 @@
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -298,7 +296,7 @@
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

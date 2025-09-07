@@ -4,7 +4,7 @@
     <title>Algorithms on Codeless Code</title>
     <link>https://code.lol/tags/algorithms/</link>
     <description>Recent content in Algorithms on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 09 Jan 2021 15:18:24 -0800</lastBuildDate>
     <atom:link href="https://code.lol/tags/algorithms/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,7 @@
       <link>https://code.lol/post/programming/type-level-dedupe/</link>
       <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
       <guid>https://code.lol/post/programming/type-level-dedupe/</guid>
-      <description>The string deduplication problem is a canonical one within computer science, serving a similar purpose as fizz-buzz in terms of being an example of a simple problem that a reasonably knowledgable practitioner should be able to solve with minimal effort.&#xA;The problem appears in a few variants, but briefly one such variant is to remove duplicate letters in a given string, such that the string then has only one instance of any given letter.</description>
+      <description>&lt;p&gt;Solving the classic string deduplication algorithm entirely within TypeScript&amp;rsquo;s type system using literal string types and recursive type manipulation.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

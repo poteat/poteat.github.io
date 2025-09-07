@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ai on Codeless Code</title>
+    <link>https://code.lol/tags/ai/</link>
+    <description>Recent content in Ai on Codeless Code</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 23 Aug 2025 13:58:16 -0700</lastBuildDate>
+    <atom:link href="https://code.lol/tags/ai/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Stub: Variational Selector Text Stenography</title>
+      <link>https://code.lol/post/programming/llm-injection/</link>
+      <pubDate>Sat, 23 Aug 2025 13:58:16 -0700</pubDate>
+      <guid>https://code.lol/post/programming/llm-injection/</guid>
+      <description>&lt;p&gt;This interactive tool demonstrates a steganographic technique using Unicode variation selectors (&lt;code&gt;U+E0100&lt;/code&gt;-&lt;code&gt;U+E017F&lt;/code&gt;) to encode hidden text within visible strings. By mapping ASCII characters to these invisible codepoints, messages can be embedded undetected - a potential vector for prompt injection attacks where LLMs may process hidden instructions.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

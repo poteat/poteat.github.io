@@ -4,7 +4,7 @@
     <title>Design Patterns on Codeless Code</title>
     <link>https://code.lol/tags/design-patterns/</link>
     <description>Recent content in Design Patterns on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 03 May 2020 19:41:57 -0700</lastBuildDate>
     <atom:link href="https://code.lol/tags/design-patterns/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,7 @@
       <link>https://code.lol/post/programming/self-modifying-type-predicates/</link>
       <pubDate>Sun, 03 May 2020 19:41:57 -0700</pubDate>
       <guid>https://code.lol/post/programming/self-modifying-type-predicates/</guid>
-      <description>Typescript&amp;rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.&#xA;Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &amp;ldquo;simulate&amp;rdquo; dependent types, a powerful type feature present in Idris.&#xA;Further explanation on type predicates can be found here.&#xA;The premise of this article is a usage of type predicates I haven&amp;rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on this because it is an implicit argument.</description>
+      <description>&lt;p&gt;TypeScript&amp;rsquo;s type predicates can modify the type of &lt;code&gt;this&lt;/code&gt; itself, enabling self-modifying type behavior that approaches dependent types. By implementing &lt;code&gt;is&amp;lt;K extends keyof ShapeTypes&amp;gt;(type: K): this is ShapeTypes[K]&lt;/code&gt; on abstract classes, we achieve compile-time type narrowing where &lt;code&gt;shape.is(&#39;circle&#39;)&lt;/code&gt; transforms the &lt;code&gt;shape&lt;/code&gt; variable&amp;rsquo;s type from &lt;code&gt;Shape&lt;/code&gt; to &lt;code&gt;Circle&lt;/code&gt;, unlocking properties like &lt;code&gt;shape.radius&lt;/code&gt; within conditional blocks.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

@@ -4,7 +4,7 @@
     <title>Dijkstra on Codeless Code</title>
     <link>https://code.lol/tags/dijkstra/</link>
     <description>Recent content in Dijkstra on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 23 Dec 2019 16:39:53 -0800</lastBuildDate>
     <atom:link href="https://code.lol/tags/dijkstra/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,7 @@
       <link>https://code.lol/post/algorithms/shunting-yard/</link>
       <pubDate>Mon, 23 Dec 2019 16:39:53 -0800</pubDate>
       <guid>https://code.lol/post/algorithms/shunting-yard/</guid>
-      <description>The shunting yard algorithm converts infix expressions (i.e. 1+2) into reverse Polish notation, i.e. 1 2 +, which lends itself well to execution on a stack machine.&#xA;An aside: I wanted to revisit this algorithm because it was one of the first I implemented in C during self-study five years ago. In a way, reimplementing it is a way of measuring my progress since then.&#xA;The internal details aren&amp;rsquo;t too complicated - it&amp;rsquo;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm.</description>
+      <description>&lt;p&gt;A functional TypeScript implementation of Dijkstra&amp;rsquo;s classic algorithm for parsing mathematical expressions, converting infix notation to reverse Polish notation for stack-based evaluation.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

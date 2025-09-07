@@ -4,7 +4,7 @@
     <title>Math on Codeless Code</title>
     <link>https://code.lol/tags/math/</link>
     <description>Recent content in Math on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 03 Sep 2021 15:12:34 -0700</lastBuildDate>
     <atom:link href="https://code.lol/tags/math/index.xml" rel="self" type="application/rss+xml" />
@@ -13,21 +13,21 @@
       <link>https://code.lol/post/programming/programs-of-length-n/</link>
       <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       <guid>https://code.lol/post/programming/programs-of-length-n/</guid>
-      <description>There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.&#xA;1. How many programs have N terms? 2. How fast does the set of programs of length N grow? 3. How many programs of length N converge? 4. What is the longest-running convergent program of length N? 5. How fast does BB(N) grow? 6. What percentage of programs converge?</description>
+      <description>&lt;p&gt;How many lambda calculus programs exist with exactly $N$ terms? This exploration dives into deep questions about computational complexity, from counting programs like &lt;code&gt;(λx. x x) (λx. x x)&lt;/code&gt; to analyzing the non-computable &lt;code&gt;BB(N)&lt;/code&gt; busy beaver function that grows faster than any computable sequence. We examine Chaitin&amp;rsquo;s constant $Ω$ and why determining program convergence connects to unsolved problems like the Collatz conjecture &lt;code&gt;collatz(3n + 1)&lt;/code&gt;.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Pythagorean Triple Problem in Sub-linear Time</title>
       <link>https://code.lol/post/algorithms/pythagorean-triple/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       <guid>https://code.lol/post/algorithms/pythagorean-triple/</guid>
-      <description>The Pythagorean triple problem is as follows. Given an input integer \(n\), return integers \(a\), \(b\), \(c\) such that the two following conditions hold:&#xA;$$ a b c = n $$ $$ a^2 + b^2 = c^2 $$&#xA;I was interested in finding a solution to this problem that was both succint and had good asymptotic complexity. The solution I found runs in O(sqrt(n)) time by deconstructing the problem into the well-known 3SUM problem.</description>
+      <description>&lt;p&gt;We explore a solution to finding Pythagorean triples with a product constraint, achieving O(√n) time complexity by reducing the problem to the well-known 3SUM problem.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Mathematica Steps to LaTeX [WiP]</title>
       <link>https://code.lol/post/simulation/mathematica-steps-to-latex/</link>
       <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       <guid>https://code.lol/post/simulation/mathematica-steps-to-latex/</guid>
-      <description>A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.&#xA;Mathematica&amp;rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.</description>
+      <description>&lt;p&gt;Exploring methods to extract human-readable step-by-step solutions from Mathematica&amp;rsquo;s symbolic computation, addressing the black-box problem in automated mathematical derivation.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

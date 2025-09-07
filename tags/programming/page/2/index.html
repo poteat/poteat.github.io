@@ -10,7 +10,7 @@
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="Programming">
   <meta property="og:description" content="Alice&#39;s personal blog about programming, math, and science.">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="website">
     <meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png">
 
@@ -26,9 +26,6 @@
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -78,6 +75,22 @@
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/programming/enforcing-function-map-constraints/" rel="bookmark">
+			Enforcing Function Map Constraints
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>Exploring how to enforce type constraints across function maps in TypeScript, where every function must accept a specific parameter type.</p>
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/enforcing-function-map-constraints/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/programming/self-modifying-type-predicates/" rel="bookmark">
 			Self Modifying Type Predicates in Typescript
 			</a>
@@ -85,10 +98,7 @@
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		Typescript&rsquo;s type system is uniquely powerful among mainstream programming languages, approximating the expressive power of Haskell or Idris, while also remaining flexible enough for production applications.
-Type predicates are a useful tool in building a well-typed software framework. Essentially, they allow you to &ldquo;simulate&rdquo; dependent types, a powerful type feature present in Idris.
-Further explanation on type predicates can be found here.
-The premise of this article is a usage of type predicates I haven&rsquo;t seen discussed online - most type predicates just modify one of their arguments, but you can actually form a predicate on this because it is an implicit argument.
+		<p>TypeScript&rsquo;s type predicates can modify the type of <code>this</code> itself, enabling self-modifying type behavior that approaches dependent types. By implementing <code>is&lt;K extends keyof ShapeTypes&gt;(type: K): this is ShapeTypes[K]</code> on abstract classes, we achieve compile-time type narrowing where <code>shape.is('circle')</code> transforms the <code>shape</code> variable&rsquo;s type from <code>Shape</code> to <code>Circle</code>, unlocking properties like <code>shape.radius</code> within conditional blocks.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/self-modifying-type-predicates/">Read more…</a>
@@ -114,11 +124,11 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -146,9 +156,11 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -186,7 +198,7 @@ The premise of this article is a usage of type predicates I haven&rsquo;t seen d
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

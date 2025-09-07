@@ -2,28 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://code.lol/tags/ai/</loc>
+    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
+  </url><url>
     <loc>https://code.lol/categories/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
+    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
   </url><url>
     <loc>https://code.lol/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
+    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/cybersecurity/</loc>
+    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/post/</loc>
+    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/categories/programming/</loc>
+    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/programming/</loc>
+    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/post/programming/llm-injection/</loc>
+    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/</loc>
+    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
   </url><url>
     <loc>https://code.lol/post/programming/kind-reification/</loc>
     <lastmod>2023-02-07T23:17:12-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/point-free/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/post/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/tags/programming/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/categories/programming/</loc>
-    <lastmod>2023-02-07T23:17:12-08:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/tags/</loc>
     <lastmod>2023-02-07T23:17:12-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/tags/type-system/</loc>
@@ -104,10 +113,10 @@
     <loc>https://code.lol/post/programming/unchained-tuple-types/</loc>
     <lastmod>2021-01-09T16:33:40-08:00</lastmod>
   </url><url>
-    <loc>https://code.lol/tags/algorithms/</loc>
+    <loc>https://code.lol/categories/algorithms/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
   </url><url>
-    <loc>https://code.lol/categories/algorithms/</loc>
+    <loc>https://code.lol/tags/algorithms/</loc>
     <lastmod>2021-01-09T15:18:24-08:00</lastmod>
   </url><url>
     <loc>https://code.lol/post/programming/type-level-dedupe/</loc>

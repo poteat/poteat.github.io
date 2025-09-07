@@ -9,13 +9,10 @@
 		<meta property="og:url" content="https://code.lol/post/programming/higher-kinded-types/">
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="Higher Kinded Types in Typescript">
-  <meta property="og:description" content="HKTs are a powerful abstraction. Just as there are different types of higher-order functions, so are there so-called &amp;lsquo;higher-kinded types&amp;rsquo;.
-Taxonomy This blog post concerns one particular type of HKT - to define the taxonomy, first we will cover a few types, and a way they can be categorized.
-We can classify types in terms of &amp;lsquo;order&amp;rsquo;, a rough level of abstraction.
-Here are a few zero-order types that exist:">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:description" content="A comprehensive introduction to Higher Kinded Types in TypeScript, exploring how to encode and utilize these powerful abstractions from functional programming. HKTs enable type constructors that take other type constructors as arguments - imagine Functor&lt;F&gt; that works for any F&lt;T&gt; whether it’s Array&lt;T&gt;, Promise&lt;T&gt;, or Option&lt;T&gt;. Through encoding techniques using interface augmentation and symbol keys, we can simulate HKTs in TypeScript, making possible advanced functional patterns like monadic composition and type-safe algebraic structures previously impossible in the language.">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
-  <meta property="article:section" content="post">
+    <meta property="article:section" content="post">
     <meta property="article:published_time" content="2022-03-03T22:18:42-08:00">
     <meta property="article:modified_time" content="2022-03-03T22:18:42-08:00">
     <meta property="article:tag" content="Typescript">
@@ -34,9 +31,6 @@ Here are a few zero-order types that exist:">
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -86,7 +80,8 @@ Here are a few zero-order types that exist:">
 			
 		</header>
 		<div class="content post__content clearfix">
-			<p>HKTs are a powerful abstraction. Just as there are different types of higher-order functions, so are there so-called &lsquo;higher-kinded types&rsquo;.</p>
+			<p>A comprehensive introduction to Higher Kinded Types in TypeScript, exploring how to encode and utilize these powerful abstractions from functional programming. HKTs enable type constructors that take other type constructors as arguments - imagine <code>Functor&lt;F&gt;</code> that works for any <code>F&lt;T&gt;</code> whether it&rsquo;s <code>Array&lt;T&gt;</code>, <code>Promise&lt;T&gt;</code>, or <code>Option&lt;T&gt;</code>. Through encoding techniques using interface augmentation and symbol keys, we can simulate HKTs in TypeScript, making possible advanced functional patterns like monadic composition and type-safe algebraic structures previously impossible in the language.</p>
+<p>HKTs are a powerful abstraction. Just as there are different types of higher-order functions, so are there so-called &lsquo;higher-kinded types&rsquo;.</p>
 <h2 id="taxonomy">Taxonomy</h2>
 <p>This blog post concerns one particular type of HKT - to define the taxonomy, first we will cover a few types, and a way they can be categorized.</p>
 <p>We can classify types in terms of &lsquo;order&rsquo;, a rough level of abstraction.</p>
@@ -107,8 +102,7 @@ Here are a few zero-order types that exist:">
 <li><code>_&lt;T&gt; = &lt;U&gt;(x: U) =&gt; T</code></li>
 </ul>
 <blockquote>
-<p><em>Note</em>: types associated with generic functions (e.g. <code>&lt;T&gt;(x: T) =&gt; T</code>) do not count as a type parameter. These parameters are &lsquo;bound&rsquo; such that the type level cannot act on them.</p>
-</blockquote>
+<p><em>Note</em>: types associated with generic functions (e.g. <code>&lt;T&gt;(x: T) =&gt; T</code>) do not count as a type parameter. These parameters are &lsquo;bound&rsquo; such that the type level cannot act on them.</p></blockquote>
 <p>When we get to second-order types, we run into a problem. In Typescript, it is neither possible to directly encode either types that <em>return</em> parameterized types (i.e. types that return types, that themselves take in types), nor other variants.</p>
 <p>Here are ways it <em>could</em> work, based on various active proposals.</p>
 <ul>
@@ -133,7 +127,7 @@ Here are a few zero-order types that exist:">
 </span></span></code></pre></div><h2 id="stepping-back-apply">Stepping Back: <code>Apply</code></h2>
 <p>A more reasonable initial goal may be to implement an Apply function - i.e. one that takes in a type, and a type that can take in that type.</p>
 <p>That is, we&rsquo;re looking to implement roughly the following (if we could do it directly):</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Apply&lt;<span style="color:#070">X</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">F</span><span style="color:#f00;background-color:#faa">&lt;~</span>&gt;<span style="color:#333">&gt;</span> <span style="color:#333">=</span> F&lt;<span style="color:#070">X</span>&gt;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Apply&lt;<span style="color:#070">X</span>, <span style="color:#00c">F</span><span style="color:#f00;background-color:#faa">&lt;~</span>&gt;<span style="color:#333">&gt;</span> <span style="color:#333">=</span> F&lt;<span style="color:#070">X</span>&gt;
 </span></span></code></pre></div><h3 id="preamble">Preamble</h3>
 <p>Let&rsquo;s introduce a few utilities we&rsquo;ll need, with explanation for each.</p>
 <h4 id="generic-functions">Generic Functions</h4>
@@ -142,8 +136,7 @@ Here are a few zero-order types that exist:">
 </span></span></code></pre></div><h4 id="abstract-class-hkt">Abstract Class: HKT</h4>
 <p>First we&rsquo;ll need the abstract representation for our HKTs in general - our high-level approach will be to utilize classes - the &ldquo;_1&rdquo; field will represent the first and only parameter to our type.</p>
 <blockquote>
-<p><em>Note</em>: This method can be expanded to more than one parameter, and even a variadic number of parameters. For now, we will only consider one type parameter.</p>
-</blockquote>
+<p><em>Note</em>: This method can be expanded to more than one parameter, and even a variadic number of parameters. For now, we will only consider one type parameter.</p></blockquote>
 <p>The &rsquo;new&rsquo; field represents the actual type function that will be executed. It is specified in the most permissive way. (such that any function is applicable).</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">abstract</span> <span style="color:#080;font-weight:bold">class</span> HKT {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">readonly</span> _1?: <span style="color:#339;font-weight:bold">unknown</span>;
@@ -151,15 +144,14 @@ Here are a few zero-order types that exist:">
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h4 id="type-level-assumptions">Type-level Assumptions</h4>
 <p>We&rsquo;ll also need <code>Assume</code> - this is a common utility I use that&rsquo;s invaluable for many situations. Fundamentally, it&rsquo;s telling the compiler to <em>assume</em> that a given type is correct, and is very helpful as a hint.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Assume&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> U <span style="color:#333">?</span> T : <span style="color:#339;font-weight:bold">U</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Assume&lt;<span style="color:#070">T</span>, <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> U <span style="color:#333">?</span> T : <span style="color:#339;font-weight:bold">U</span>;
 </span></span></code></pre></div><h4 id="apply">Apply</h4>
 <p>Finally, we get to our definition of <code>Apply</code>. This type takes in a &lsquo;HKT&rsquo;, as well as a type to apply, and returns the result.</p>
 <p>Stepping in, what we&rsquo;re actually doing is &lsquo;setting&rsquo; the _1 parameter using an intersection. Quite amazingly, this actually results in the type of <code>new</code> updating dynamically, in a way that the return type can be cleanly extracted.</p>
 <blockquote>
 <p><em>Note</em>: Technically, what is being typed as a &lsquo;HKT&rsquo; isn&rsquo;t actually the higher-kinded type, despite the abuse of terminology. Rather, &ldquo;Apply&rdquo; itself is actually the HKT. A better name for what&rsquo;s typed as HKT here may be &lsquo;HktParameter&rsquo; or such - although it&rsquo;s less concise.</p>
-<p>In other words, F is a first-order type, and Apply is a second-order type.</p>
-</blockquote>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Apply&lt;<span style="color:#070">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">_1</span>&gt; <span style="color:#333">=</span> ReturnType<span style="color:#333">&lt;</span>
+<p>In other words, F is a first-order type, and Apply is a second-order type.</p></blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Apply&lt;<span style="color:#070">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span>, <span style="color:#00c">_1</span>&gt; <span style="color:#333">=</span> ReturnType<span style="color:#333">&lt;</span>
 </span></span><span style="display:flex;"><span>  (F <span style="color:#333">&amp;</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">readonly</span> _1: <span style="color:#339;font-weight:bold">_1</span>;
 </span></span><span style="display:flex;"><span>  })[<span style="background-color:#fff0f0">&#34;new&#34;</span>]
@@ -168,16 +160,16 @@ Here are a few zero-order types that exist:">
 <p>Now that we have Apply, we can use it: let us consider a <code>DoubleString</code> type function, that duplicates a literal string type.</p>
 <p>We refer to the type parameter via <code>this[&quot;_1&quot;]</code>, and we assert an additional type constraint via a type assumption.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">interface</span> DoubleString <span style="color:#080;font-weight:bold">extends</span> HKT {
-</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span><span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">string</span>&gt;) <span style="color:#333">=&gt;</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span><span style="color:#080;font-weight:bold">typeof</span> x<span style="background-color:#eee">}${</span><span style="color:#080;font-weight:bold">typeof</span> x<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span><span style="color:#333">:</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[</span><span style="background-color:#fff0f0">&#34;_1&#34;</span><span style="color:#f00;background-color:#faa">]</span>, <span style="color:#00c">string</span>&gt;) <span style="color:#333">=&gt;</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span><span style="color:#080;font-weight:bold">typeof</span> x<span style="background-color:#eee">}${</span><span style="color:#080;font-weight:bold">typeof</span> x<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#888">// &#34;hi!hi!&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">type</span> Result <span style="color:#333">=</span> Apply&lt;<span style="color:#070">DoubleString</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">&#34;</span><span style="color:#00c">hi</span><span style="color:#f00;background-color:#faa">!&#34;</span>&gt;;
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">type</span> Result <span style="color:#333">=</span> Apply&lt;<span style="color:#070">DoubleString</span>, <span style="background-color:#fff0f0">&#34;hi!&#34;</span>&gt;;
 </span></span></code></pre></div><p>This works, but since DoubleString is a first-order type, this is nothing we couldn&rsquo;t do with the base Typescript language.</p>
 <h2 id="stepping-forward-a-kilometre-map">Stepping Forward a Kilometre: <code>Map</code></h2>
 <p>Now that we have <code>Apply</code>, it&rsquo;s not much work at all to implement first-order type-level tuple mapping:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> MapTuple&lt;<span style="color:#070">X</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span>&gt; <span style="color:#333">=</span> {
-</span></span><span style="display:flex;"><span>  [K <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> X]<span style="color:#333">:</span> Apply&lt;<span style="color:#070">F</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">X</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">K</span><span style="color:#f00;background-color:#faa">]</span>&gt;;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> MapTuple&lt;<span style="color:#070">X</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>, <span style="color:#00c">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">HKT</span>&gt; <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  [K <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> X]<span style="color:#333">:</span> Apply&lt;<span style="color:#070">F</span>, <span style="color:#00c">X</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">K</span><span style="color:#f00;background-color:#faa">]</span>&gt;;
 </span></span><span style="display:flex;"><span>};
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#888">// [&#34;hellohello&#34;, &#34;worldworld&#34;]
@@ -199,17 +191,17 @@ Here are a few zero-order types that exist:">
 </span></span></code></pre></div><h3 id="value-level-map">Value-level Map</h3>
 <p>This is the value-level definition (sans body) of a <code>map</code> function whose interface is compliant with <code>MapTuple</code> defined above. To allow for passing in HKT definitions directly, we end up doing a bit of interesting assumptions in the return type.</p>
 <p>The <code>readonly [...X]</code> bit is not a typo - this is part of what forces the compiler to interpret parameters in the most narrow possible form, without requiring <code>as const</code>. Very useful as well!</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">function</span> map&lt;<span style="color:#070">X</span> <span style="color:#00c">extends</span> <span style="color:#00c">InferredTuple</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">typeof</span> <span style="color:#00c">HKT</span>&gt;(
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">function</span> map&lt;<span style="color:#070">X</span> <span style="color:#00c">extends</span> <span style="color:#00c">InferredTuple</span>, <span style="color:#00c">F</span> <span style="color:#00c">extends</span> <span style="color:#00c">typeof</span> <span style="color:#00c">HKT</span>&gt;(
 </span></span><span style="display:flex;"><span>  x: <span style="color:#339;font-weight:bold">readonly</span> [...X],
 </span></span><span style="display:flex;"><span>  f: <span style="color:#339;font-weight:bold">F</span>
-</span></span><span style="display:flex;"><span>)<span style="color:#333">:</span> MapTuple&lt;<span style="color:#070">X</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Assume</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">InstanceOf</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">F</span>&gt;, HKT<span style="color:#333">&gt;&gt;</span>;
+</span></span><span style="display:flex;"><span>)<span style="color:#333">:</span> MapTuple&lt;<span style="color:#070">X</span>, <span style="color:#00c">Assume</span>&lt;<span style="color:#070">InstanceOf</span>&lt;<span style="color:#070">F</span>&gt;, <span style="color:#00c">HKT</span>&gt;&gt;;
 </span></span></code></pre></div><h3 id="closing-out-user-level-code">Closing out: User-Level Code</h3>
 <p>At this point, end-users can more-or-less succintly define new HKTs and compose them in interesting ways.</p>
 <p>At the end, we append a string across a tuple of strings on the type level, while preserving order. Doing this manually in Typescript can be pretty fraught and require advanced knowledge, but with our HKT utilities it becomes easier (assuming <code>append</code> already exists).</p>
 <p>In the end, this whole operation is encoded as a third-order type. We&rsquo;re passing in the type <code>!!!</code>, which returns the &ldquo;curried&rdquo; HKT, which is then passed into <code>map</code>, and finally applied to each literal string in the tuple.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> append <span style="color:#333">=</span> &lt;<span style="color:#070">S</span> <span style="color:#00c">extends</span> <span style="color:#00c">string</span>&gt;(s: <span style="color:#339;font-weight:bold">S</span>) <span style="color:#333">=&gt;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">class</span> <span style="color:#080;font-weight:bold">extends</span> HKT {
-</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">new</span> <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[&#34;</span><span style="color:#00c">_1</span><span style="color:#f00;background-color:#faa">&#34;],</span> <span style="color:#00c">string</span>&gt;) <span style="color:#333">=&gt;</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span>x<span style="background-color:#eee">}${</span>s<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span> <span style="color:#080;font-weight:bold">as</span> <span style="color:#080;font-weight:bold">const</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">new</span> <span style="color:#333">=</span> (x: <span style="color:#339;font-weight:bold">Assume</span>&lt;<span style="color:#070">this</span><span style="color:#f00;background-color:#faa">[</span><span style="background-color:#fff0f0">&#34;_1&#34;</span><span style="color:#f00;background-color:#faa">]</span>, <span style="color:#00c">string</span>&gt;) <span style="color:#333">=&gt;</span> <span style="background-color:#fff0f0">`</span><span style="background-color:#eee">${</span>x<span style="background-color:#eee">}${</span>s<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span> <span style="color:#080;font-weight:bold">as</span> <span style="color:#080;font-weight:bold">const</span>;
 </span></span><span style="display:flex;"><span>  };
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#888">// [&#34;hello!!!&#34;, &#34;world!!!&#34;]
@@ -217,7 +209,6 @@ Here are a few zero-order types that exist:">
 </span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>Did you ever wish Lodash&rsquo;s types were a bit smarter? Techniques like those described in this article can be utilized to increase the power of the type system and allow it to infer more from our code.</p>
 <p>We covered HKT taxonomy from the bottom-up, all the way to defining complex type-level string manipulation routines. I hope this helps folks with their Typescript!</p>
-
 		</div>
 		<footer class="post__footer">
 			
@@ -265,11 +256,11 @@ Here are a few zero-order types that exist:">
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -297,9 +288,11 @@ Here are a few zero-order types that exist:">
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -337,7 +330,7 @@ Here are a few zero-order types that exist:">
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

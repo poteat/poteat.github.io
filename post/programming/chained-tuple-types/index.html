@@ -9,11 +9,10 @@
 		<meta property="og:url" content="https://code.lol/post/programming/chained-tuple-types/">
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="Chained Tuple Types">
-  <meta property="og:description" content="With Typescript 4.1, it&amp;rsquo;s now possible to use variadic tuple types to construct large types with what appears to be runtime code. The general idea is that we will utilize a chaining pattern, where each operation on the chain returns an expanded version of the chain&amp;rsquo;s type.
-To motivate the example, let us consider a Set class. Our Set is a chaining class, where you may insert, remove, and check for the existence of numbers.">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:description" content="TypeScript 4.1’s variadic tuple types enable building complex type-safe data structures through method chaining, where each operation expands the chain’s type signature at compile time.">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
-  <meta property="article:section" content="post">
+    <meta property="article:section" content="post">
     <meta property="article:published_time" content="2021-01-05T20:23:23-08:00">
     <meta property="article:modified_time" content="2021-01-05T20:23:23-08:00">
     <meta property="article:tag" content="Typescript">
@@ -33,9 +32,6 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -85,20 +81,17 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 			
 		</header>
 		<div class="content post__content clearfix">
-			<p>With Typescript 4.1, it&rsquo;s now possible to use variadic tuple types to construct large types with what appears to be runtime code. The general idea is that we will utilize a chaining pattern, where each operation on the chain returns an expanded version of the chain&rsquo;s type.</p>
+			<p>TypeScript 4.1&rsquo;s variadic tuple types enable building complex type-safe data structures through method chaining, where each operation expands the chain&rsquo;s type signature at compile time.</p>
+<p>With Typescript 4.1, it&rsquo;s now possible to use variadic tuple types to construct large types with what appears to be runtime code. The general idea is that we will utilize a chaining pattern, where each operation on the chain returns an expanded version of the chain&rsquo;s type.</p>
 <p>To motivate the example, let us consider a <code>Set</code> class. Our <code>Set</code> is a chaining class, where you may insert, remove, and check for the existence of numbers. To end the chain, you call <code>.value()</code> which returns an array of numbers.</p>
 <p>Here is an example of how you might use <code>Set</code>:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> <span style="color:#080;font-weight:bold">set</span> <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> Set()
-</span></span><span style="display:flex;"><span>  .insert(<span style="color:#00d;font-weight:bold">2</span>)
-</span></span><span style="display:flex;"><span>  .insert(<span style="color:#00d;font-weight:bold">4</span>)
-</span></span><span style="display:flex;"><span>  .insert(<span style="color:#00d;font-weight:bold">8</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> <span style="color:#080;font-weight:bold">set</span> <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> Set().insert(<span style="color:#00d;font-weight:bold">2</span>).insert(<span style="color:#00d;font-weight:bold">4</span>).insert(<span style="color:#00d;font-weight:bold">8</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> hasTwo <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">set</span>.has(<span style="color:#00d;font-weight:bold">2</span>) <span style="color:#888">// true
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> hasTwo <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">set</span>.has(<span style="color:#00d;font-weight:bold">2</span>); <span style="color:#888">// true
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> value <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">set</span>.remove(<span style="color:#00d;font-weight:bold">2</span>).value() <span style="color:#888">// [4, 8]
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> value <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">set</span>.remove(<span style="color:#00d;font-weight:bold">2</span>).value(); <span style="color:#888">// [4, 8]
 </span></span></span></code></pre></div><blockquote>
-<p><a href="https://www.typescriptlang.org/play?#code/PQKgBApgzgNglgOwC4FoAmcoEMBGMKSyKoDGA9gLYUTJTAbZ4Qo274oAOWcATmCMABQoMAHUCaMggDkSMFhJIArlhgwAnpAAeSGmjBIAFgQDmMMjlVgAyhDkWAVhEUAaMFDJgAZqqjMOZFBwSHAAbhAAXPxCItDwyOiYbAQIZChKfiw6eigIWCHhwKnpmRDZCGi5+WEEAoLCICCC-GAAYnAwunxkSnIQ4TyaEPjUyGAU+SSGiCZgAHJgiAbGBkoc+GAAKgB0zXVI6hwE7Z0QPAA8m9q6FVBgSggA1qkA7ggA2gC6bnMAfGAAXi21z0dy+zTAAH4wOCwGAolcyjc0GDEF4zmAABJuba4tEYgBKnwh0MxINu8whcOhJy65wJP1+VPhMOxYFx21pZ3pjOJcIRAG56qAmi0ACJ2M4URAEF7GIwYrAIIYjGhIO4TJBTGbzbSYORLBWrdYEHZgACSXjALwIXkQaD2YCkEDcPDsSh4CEgWB4Gm2YAAFFBDGQeKReCQlMEAJR7IQHI5gACiWn1UEu5JR9yerw+33m-yBiPKWdhUO8vggEIRmdRCHRfDZHPxfCJJKxtcpcOpBh4Sir3ZZKbTPIL1bAODIZHwSqFDVF4E2K2IZzyMAMhwIWCgHhIcHyEH0L2ChnkXsQUCQSpIBDIVqwNjsu2igjKATDG8TtiQ5oQl+vEDnEmqq0J2CBKBQOBnF8gIwp8hZgAA3hCF5nEg5zWEce52iQABqqj9mBEFQTwvwBsyWhRJhzhwDh+EwP2ELRlRdi-v+CA3uc7wclyFzARAozqm41HYXAeEERAvzCVhtFifR-bwXOcJuhQZDhBhMl0RJRGQWcZEUVRmlyRJTEsT+f5XhxgG8UBIFCTYRniQxkm-EpYCGNuGk0Vpzk6SR+mDpRDnecZzmmcmqaXum-GCVA0khU5-aufUcKhBJAbMcmdlQEKAC+c4io6S4EN+YDkBZfaKKGn4QP64jWjwWAcMsBAXpZN41YsXqhmgGJIJ4HBuuEyCOqEmBwDgHTBJod7jHYIb6F4DyKHAUg1XcUFeKGBDlZelUhGtHl3GQJCRjwbpoM+dRvqGcgJiVdiwchcIIBALyBpl35se1EB5QVjRFSspV9sgcDUGVMDbncYMmoJ1RSG4vWhGQcD6LN0wmMYPAoPg4Trvd0PdTwvU8I6-XjFgjwEEaIMhOD5C9fIdwkDOfDbmAAQ7hNGzk26WCXXGgi7XIpVAgGLNQ0hEKDWEB7uHYUTgbpPAwUCXxuRwSh4GJXV+GGAZBUrJHRlLg5GJg2x+HIascubUCW0+dqnDwAYBuoJsAv8mgAIQAkCWjRm4WifEKg5usonrLJgodgLlKUc1r8AkGAKlqRABuK8RZwm893Z2w71tR-bVvbE7XSu+7gJe2Avv+9GMfKe6kd2zHcfS4nOtHRnYBG9npt59MxdPogLNKL1UAG-XzLhx6XotxCbdwpr2vJ2lzkZf3jcR163G4vnVshwvgi5Uz2bPGQbwm+z37-QuYAoA-j9P8-L+v2-78f5-b+OnCKZYBQJo7jADAGKHgNQ+AAGEyC9UdF-OB8CEGIKfnUecjo-4AI2AARgRGsDYbE0KrQQILe6EVMEAH0ADyYCTCICsGrAATG4AALG4AAHIfEhKZyFzDejFNUsFMEAAYhQ3Q-JwrQ5CCTQCUJ0JUSAACC50sCaBtriLhlDqG0JgG4dRPCXh8OQIfVBLR0EmjAPQhEm4cb9GGI+OQ+CwyEMFqIuQwsIr0Ngq9d634MrbFQvreh0Y-F-jQgGJhQS179gyrfNBWh-5mIAMw4LMVI1Sa9iGbgigkjRcAaFrlgu8RhYAWFgHYSIrQ747qZJTNkqRUAZGWQUUolRbQOh0hqTkvJqg3D0OSsY8ApiNhMMsUcaxeM7FgFSWpVQziKm3TKlIS8EUmGeLenY3x-ikABkCcEvWWzwnbFTuEbZET0pT36RFeJGwACsIzmC41sQYuQw5Lw0A6hA4wJBHhQAyYmFM1yyGYIKUUkpZTXxzLEdUrQALyGYm3K0HofAgQvPVEBaFgLmGuTAMAYBSA+xVnBZUzq-yyEeKBL3FWh8XHEvRfQshcKoAIo9LBFF0V0WYMxQKbFwDJzTggEqYUAMTFxIwQQAAbHcsZtjSooreQQD5zhHgzEFm4klQLyVrJ8UEzZJzdmhIOTq1hQSu7hK5Ti3sjFqWqtpas7xdgNkhICUEo56cdld0CWa4BPgYB+EEEAA">Note: all of this code is on <strong>TS Playground</strong> :)</a></p>
-</blockquote>
+<p><a href="https://www.typescriptlang.org/play?#code/PQKgBApgzgNglgOwC4FoAmcoEMBGMKSyKoDGA9gLYUTJTAbZ4Qo274oAOWcATmCMABQoMAHUCaMggDkSMFhJIArlhgwAnpAAeSGmjBIAFgQDmMMjlVgAyhDkWAVhEUAaMFDJgAZqqjMOZFBwSHAAbhAAXPxCItDwyOiYbAQIZChKfiw6eigIWCHhwKnpmRDZCGi5+WEEAoLCICCC-GAAYnAwunxkSnIQ4TyaEPjUyGAU+SSGiCZgAHJgiAbGBkoc+GAAKgB0zXVI6hwE7Z0QPAA8m9q6FVBgSggA1qkA7ggA2gC6bnMAfGAAXi21z0dy+zTAAH4wOCwGAolcyjc0GDEF4zmAABJuba4tEYgBKnwh0MxINu8whcOhJy65wJP1+VPhMOxYFx21pZ3pjOJcIRAG56qAmi0ACJ2M4URAEF7GIwYrAIIYjGhIO4TJBTGbzbSYORLBWrdYEHZgACSXjALwIXkQaD2YCkEDcPDsSh4CEgWB4Gm2YAAFFBDGQeKReCQlMEAJR7IQHI5gACiWn1UEu5JR9yerw+33m-yBiPKWdhUO8vggEIRmdRCHRfDZHPxfCJJKxtcpcOpBh4Sir3ZZKbTPIL1bAODIZHwSqFDVF4E2K2IZzyMAMhwIWCgHhIcHyEH0L2ChnkXsQUCQSpIBDIVqwNjsu2igjKATDG8TtiQ5oQl+vEDnEmqq0J2CBKBQOBnF8gIwp8hZgAA3hCF5nEg5zWEce52iQABqqj9mBEFQTwvwBsyWhRJhzhwDh+EwP2ELRlRdi-v+CA3uc7wclyFzARAozqm41HYXAeEERAvzCVhtFifR-bwXOcJuhQZDhBhMl0RJRGQWcZEUVRmlyRJTEsT+f5XhxgG8UBIFCTYRniQxkm-EpYCGNuGk0Vpzk6SR+mDpRDnecZzmmcmqaXum-GCVA0khU5-aufUcKhBJAbMcmdlQEKAC+c4io6S4EN+YDkBZfaKKGn4QP64jWjwWAcMsBAXpZN41YsXqhmgGJIJ4HBuuEyCOqEmBwDgHTBJod7jHYIb6F4DyKHAUg1XcUFeKGBDlZelUhGtHl3GQJCRjwbpoM+dRvqGcgJiVdiwchcIIBALyBpl35se1EB5QVjRFSspV9sgcDUGVMDbncYMmoJ1RSG4vWhGQcD6LN0wmMYPAoPg4Trvd0PdTwvU8I6-XjFgjwEEaIMhOD5C9fIdwkDOfDbmAAQ7hNGzk26WCXXGgi7XIpVAgGLNQ0hEKDWEB7uHYUTgbpPAwUCXxuRwSh4GJXV+GGAZBUrJHRlLg5GJg2x+HIascubUCW0+dqnDwAYBuoJsAv8mgAIQAkCWjRm4WifEKg5usonrLJgodgLlKUc1r8AkGAKlqRABuK8RZwm893Z2w71tR-bVvbE7XSu+7gJe2Avv+9GMfKe6kd2zHcfS4nOtHRnYBG9npt59MxdPogLNKL1UAG-XzLhx6XotxCbdwpr2vJ2lzkZf3jcR163G4vnVshwvgi5Uz2bPGQbwm+z37-QuYAoA-j9P8-L+v2-78f5-b+OnCKZYBQJo7jADAGKHgNQ+AAGEyC9UdF-OB8CEGIKfnUecjo-4AI2AARgRGsDYbE0KrQQILe6EVMEAH0ADyYCTCICsGrAATG4AALG4AAHIfEhKZyFzDejFNUsFMEAAYhQ3Q-JwrQ5CCTQCUJ0JUSAACC50sCaBtriLhlDqG0JgG4dRPCXh8OQIfVBLR0EmjAPQhEm4cb9GGI+OQ+CwyEMFqIuQwsIr0Ngq9d634MrbFQvreh0Y-F-jQgGJhQS179gyrfNBWh-5mIAMw4LMVI1Sa9iGbgigkjRcAaFrlgu8RhYAWFgHYSIrQ747qZJTNkqRUAZGWQUUolRbQOh0hqTkvJqg3D0OSsY8ApiNhMMsUcaxeM7FgFSWpVQziKm3TKlIS8EUmGeLenY3x-ikABkCcEvWWzwnbFTuEbZET0pT36RFeJGwACsIzmC41sQYuQw5Lw0A6hA4wJBHhQAyYmFM1yyGYIKUUkpZTXxzLEdUrQALyGYm3K0HofAgQvPVEBaFgLmGuTAMAYBSA+xVnBZUzq-yyEeKBL3FWh8XHEvRfQshcKoAIo9LBFF0V0WYMxQKbFwDJzTggEqYUAMTFxIwQQAAbHcsZtjSooreQQD5zhHgzEFm4klQLyVrJ8UEzZJzdmhIOTq1hQSu7hK5Ti3sjFqWqtpas7xdgNkhICUEo56cdld0CWa4BPgYB+EEEAA">Note: all of this code is on <strong>TS Playground</strong> :)</a></p></blockquote>
 <p>It would be interesting to have a version of <code>Set</code> which can infer that the final <code>value</code> type is the tuple type <code>[4, 8]</code>. This is what we will attempt to do.</p>
 <h2 id="baldis-basics">Baldi&rsquo;s Basics</h2>
 <p>Let&rsquo;s begin with a specification of the <code>Set</code> type which obeys our chaining constraints, such that the <code>insert</code> and <code>remove</code> method returns an instance of <code>Set</code>:</p>
@@ -107,7 +100,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 </span></span><span style="display:flex;"><span>  insert(x: <span style="color:#339;font-weight:bold">number</span>)<span style="color:#333">:</span> Set;
 </span></span><span style="display:flex;"><span>  remove(x: <span style="color:#339;font-weight:bold">number</span>)<span style="color:#333">:</span> Set;
 </span></span><span style="display:flex;"><span>  has(x: <span style="color:#339;font-weight:bold">number</span>)<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">boolean</span>;
-</span></span><span style="display:flex;"><span>  value()<span style="color:#333">:</span> <span style="color:#339;font-weight:bold">number</span>[]
+</span></span><span style="display:flex;"><span>  value()<span style="color:#333">:</span> <span style="color:#339;font-weight:bold">number</span>[];
 </span></span><span style="display:flex;"><span>};
 </span></span></code></pre></div><p>The <code>new (): T</code> syntax specifies a constructor, and allows the <code>new</code> keyword to be used, which in this case is an ergonomic choice.</p>
 <p>The next improvement we will make is to add a tuple type parameter to <code>Set</code>, which extends an array of numbers. We will additionally make the default value of that type parameter the empty array. This type parameter represents the current contents of <code>Set</code>.</p>
@@ -116,7 +109,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 </span></span><span style="display:flex;"><span>  insert(x: <span style="color:#339;font-weight:bold">number</span>)<span style="color:#333">:</span> Set&lt;<span style="color:#070">Elements</span>&gt;;
 </span></span><span style="display:flex;"><span>  remove(x: <span style="color:#339;font-weight:bold">number</span>)<span style="color:#333">:</span> Set&lt;<span style="color:#070">Elements</span>&gt;;
 </span></span><span style="display:flex;"><span>  has(x: <span style="color:#339;font-weight:bold">number</span>)<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">boolean</span>;
-</span></span><span style="display:flex;"><span>  value()<span style="color:#333">:</span> Elements
+</span></span><span style="display:flex;"><span>  value()<span style="color:#333">:</span> Elements;
 </span></span><span style="display:flex;"><span>};
 </span></span></code></pre></div><p>In preparation, let us next specify that each member function which takes in a number, additionally takes in an inferred type based on the value which it is passed. Each of these types represent the specific value which was passed in.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">type</span> Set&lt;<span style="color:#070">Elements</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span><span style="color:#f00;background-color:#faa">[]</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> {
@@ -149,16 +142,16 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> Ex2_Array <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> Set().insert(<span style="color:#00d;font-weight:bold">2</span>).insert(<span style="color:#00d;font-weight:bold">4</span>).value(); <span style="color:#888">// [2, 4]
 </span></span></span></code></pre></div><h2 id="tuple-removal">Tuple Removal</h2>
 <p>As of yet, there is no built-in operation for tuple removal. However, it can be implemented using a recursive loop on the type level, the mechanics of which would detract from this article. Of note - at the time of writing, <code>ts-toolbelt</code> uses a less modern variant than the following, and will not work. I may attempt to explain tuple type loops in another article.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Filter&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">N</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Filter&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>, <span style="color:#00c">N</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> []
 </span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> []
 </span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> H, ...<span style="color:#080;font-weight:bold">infer</span> R]
 </span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> H <span style="color:#080;font-weight:bold">extends</span> N
-</span></span><span style="display:flex;"><span>    <span style="color:#333">?</span> Filter&lt;<span style="color:#070">R</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">N</span>&gt;
-</span></span><span style="display:flex;"><span>    <span style="color:#333">:</span> [H, ...Filter&lt;<span style="color:#070">R</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">N</span>&gt;]
+</span></span><span style="display:flex;"><span>    <span style="color:#333">?</span> Filter&lt;<span style="color:#070">R</span>, <span style="color:#00c">N</span>&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#333">:</span> [H, ...Filter&lt;<span style="color:#070">R</span>, <span style="color:#00c">N</span>&gt;]
 </span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> T;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Ex3_Original <span style="color:#333">=</span> [<span style="color:#00d;font-weight:bold">2</span>, <span style="color:#00d;font-weight:bold">4</span>, <span style="color:#00d;font-weight:bold">8</span>];
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Ex3_ResultantArray <span style="color:#333">=</span> Filter&lt;<span style="color:#070">Ex3_Original</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">2</span>&gt;; <span style="color:#888">// [4, 8]
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Ex3_ResultantArray <span style="color:#333">=</span> Filter&lt;<span style="color:#070">Ex3_Original</span>, <span style="color:#00c">2</span>&gt;; <span style="color:#888">// [4, 8]
 </span></span></span></code></pre></div><p>We can deputize this ability to empower our <code>remove</code> method to remove the corresponding element types from our tuple type.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">type</span> Set&lt;<span style="color:#070">Elements</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span><span style="color:#f00;background-color:#faa">[]</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> Set&lt;<span style="color:#070">Elements</span>&gt;;
@@ -169,7 +162,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  remove&lt;<span style="color:#070">SpecificValue</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span>&gt;(
 </span></span><span style="display:flex;"><span>    x: <span style="color:#339;font-weight:bold">SpecificValue</span>
-</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set&lt;<span style="color:#070">Filter</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Elements</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">SpecificValue</span>&gt;<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set&lt;<span style="color:#070">Filter</span>&lt;<span style="color:#070">Elements</span>, <span style="color:#00c">SpecificValue</span>&gt;&gt;;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  has&lt;<span style="color:#070">SpecificValue</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span>&gt;(x: <span style="color:#339;font-weight:bold">SpecificValue</span>)<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">boolean</span>;
 </span></span><span style="display:flex;"><span>
@@ -185,11 +178,11 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  insert&lt;<span style="color:#070">SpecificValue</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span>&gt;(
 </span></span><span style="display:flex;"><span>    x: <span style="color:#339;font-weight:bold">SpecificValue</span>
-</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set<span style="color:#333">&lt;</span>[...Filter&lt;<span style="color:#070">Elements</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">SpecificValue</span>&gt;, SpecificValue]<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set<span style="color:#333">&lt;</span>[...Filter&lt;<span style="color:#070">Elements</span>, <span style="color:#00c">SpecificValue</span>&gt;, SpecificValue]<span style="color:#333">&gt;</span>;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  remove&lt;<span style="color:#070">SpecificValue</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span>&gt;(
 </span></span><span style="display:flex;"><span>    x: <span style="color:#339;font-weight:bold">SpecificValue</span>
-</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set&lt;<span style="color:#070">Filter</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Elements</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">SpecificValue</span>&gt;<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set&lt;<span style="color:#070">Filter</span>&lt;<span style="color:#070">Elements</span>, <span style="color:#00c">SpecificValue</span>&gt;&gt;;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  has&lt;<span style="color:#070">SpecificValue</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span>&gt;(x: <span style="color:#339;font-weight:bold">SpecificValue</span>)<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">boolean</span>;
 </span></span><span style="display:flex;"><span>
@@ -199,28 +192,28 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 <p>As well, any given type specification will have multiple possible representations, with differing efficiency, albeit with respect to compilation time and memory in lieu of runtime cost.</p>
 <h2 id="tuple-existence-checks">Tuple Existence Checks</h2>
 <p>For existence check, we can utilize <code>extends</code> - we convert the tuple to a union and perform an extends check to determine whether or not the given element is present in the tuple.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Has&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">X</span>&gt; <span style="color:#333">=</span> X <span style="color:#080;font-weight:bold">extends</span> T[<span style="color:#339;font-weight:bold">number</span>] <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Has&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>, <span style="color:#00c">X</span>&gt; <span style="color:#333">=</span> X <span style="color:#080;font-weight:bold">extends</span> T[<span style="color:#339;font-weight:bold">number</span>] <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Ex5_1 <span style="color:#333">=</span> [<span style="color:#00d;font-weight:bold">2</span>, <span style="color:#00d;font-weight:bold">4</span>, <span style="color:#00d;font-weight:bold">8</span>];
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Ex5_1_HasFour <span style="color:#333">=</span> Has&lt;<span style="color:#070">Ex5_1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">4</span>&gt;; <span style="color:#888">// true
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Ex5_1_HasFour <span style="color:#333">=</span> Has&lt;<span style="color:#070">Ex5_1</span>, <span style="color:#00c">4</span>&gt;; <span style="color:#888">// true
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Ex5_2 <span style="color:#333">=</span> <span style="color:#339;font-weight:bold">number</span>[];
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Ex5_2_HasFour <span style="color:#333">=</span> Has&lt;<span style="color:#070">Ex5_1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">4</span>&gt;; <span style="color:#888">// boolean
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Ex5_2_HasFour <span style="color:#333">=</span> Has&lt;<span style="color:#070">Ex5_1</span>, <span style="color:#00c">4</span>&gt;; <span style="color:#888">// boolean
 </span></span></span></code></pre></div><p>We now have enough code to finish our type specification of <code>Set</code>, complete with a type-safe existence check.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">type</span> Set&lt;<span style="color:#070">Elements</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span><span style="color:#f00;background-color:#faa">[]</span> <span style="color:#f00;background-color:#faa">=</span> <span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">new</span> ()<span style="color:#333">:</span> Set&lt;<span style="color:#070">Elements</span>&gt;;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  insert&lt;<span style="color:#070">SpecificValue</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span>&gt;(
 </span></span><span style="display:flex;"><span>    x: <span style="color:#339;font-weight:bold">SpecificValue</span>
-</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set<span style="color:#333">&lt;</span>[...Filter&lt;<span style="color:#070">Elements</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">SpecificValue</span>&gt;, SpecificValue]<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set<span style="color:#333">&lt;</span>[...Filter&lt;<span style="color:#070">Elements</span>, <span style="color:#00c">SpecificValue</span>&gt;, SpecificValue]<span style="color:#333">&gt;</span>;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  remove&lt;<span style="color:#070">SpecificValue</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span>&gt;(
 </span></span><span style="display:flex;"><span>    x: <span style="color:#339;font-weight:bold">SpecificValue</span>
-</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set&lt;<span style="color:#070">Filter</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Elements</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">SpecificValue</span>&gt;<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Set&lt;<span style="color:#070">Filter</span>&lt;<span style="color:#070">Elements</span>, <span style="color:#00c">SpecificValue</span>&gt;&gt;;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  has&lt;<span style="color:#070">SpecificValue</span> <span style="color:#00c">extends</span> <span style="color:#00c">number</span>&gt;(
 </span></span><span style="display:flex;"><span>    x: <span style="color:#339;font-weight:bold">SpecificValue</span>
-</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Has&lt;<span style="color:#070">Elements</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">SpecificValue</span>&gt;;
+</span></span><span style="display:flex;"><span>  )<span style="color:#333">:</span> Has&lt;<span style="color:#070">Elements</span>, <span style="color:#00c">SpecificValue</span>&gt;;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  value()<span style="color:#333">:</span> Elements;
 </span></span><span style="display:flex;"><span>};
@@ -229,7 +222,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">const</span> Ex5_2 <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> Set().insert(<span style="color:#00d;font-weight:bold">2</span>).remove(<span style="color:#00d;font-weight:bold">2</span>).has(<span style="color:#00d;font-weight:bold">2</span>); <span style="color:#888">// false
 </span></span></span></code></pre></div><h2 id="value-level">Value-Level</h2>
 <p>A value-level implementation of <code>Set</code> is provided below, mostly to demonstrate the separation between value-level implementation and type-level specification, which is sometimes wise with more involved types.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> Set <span style="color:#333">=</span> (<span style="color:#080;font-weight:bold">class</span> {
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> Set <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">class</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">private</span> <span style="color:#080;font-weight:bold">set</span><span style="color:#333">:</span> <span style="color:#339;font-weight:bold">number</span>[] <span style="color:#333">=</span> [];
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> insert(x: <span style="color:#339;font-weight:bold">number</span>) {
@@ -250,11 +243,10 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">public</span> value() {
 </span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> [...<span style="color:#080;font-weight:bold">this</span>.<span style="color:#080;font-weight:bold">set</span>];
 </span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>} <span style="color:#080;font-weight:bold">as</span> <span style="color:#339;font-weight:bold">unknown</span>) <span style="color:#080;font-weight:bold">as</span> Set;
+</span></span><span style="display:flex;"><span>} <span style="color:#080;font-weight:bold">as</span> <span style="color:#339;font-weight:bold">unknown</span> <span style="color:#080;font-weight:bold">as</span> Set;
 </span></span></code></pre></div><p>The downside is that we now are not doing any compile-checks against the implementation of <code>Set</code> - namely, we are not checking that <code>Set</code> actually does what the types says it will do. The issue with attempting that is that while that approach is possible, it would require every sub-function e.g. <code>includes</code>, etc. to also be just as type-safe. Essentially, for libraries in Typescript it&rsquo;s my opinion that it&rsquo;s safer and more readable to keep the type specification and the value-level separate. Application-side code should endeavor to do the opposite however.</p>
 <p>It may be possible to automatically extract a simplified type of <code>Set</code> which we can validate our runtime implementation against, but it would be hard.</p>
 <p>Final note: For pedagogic reasons, I have glossed over some nuance with respect to <code>new ()</code> - really, a wrapper type is needed to hide the member functions until the class is actually constructed, which is demonstrated on the TS Playground version of the code.</p>
-
 		</div>
 		<footer class="post__footer">
 			
@@ -305,11 +297,11 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -337,9 +329,11 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -377,7 +371,7 @@ To motivate the example, let us consider a Set class. Our Set is a chaining clas
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

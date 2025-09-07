@@ -9,10 +9,10 @@
 		<meta property="og:url" content="https://code.lol/post/programming/non-recursive-includes/">
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="A non-recursive type-level inclusion operator">
-  <meta property="og:description" content="type E1&amp;lt;X&amp;gt; = &amp;lt;T&amp;gt;() =&amp;gt; T extends X ? 0 : 1 type E2&amp;lt;X&amp;gt; = &amp;lt;T&amp;gt;() =&amp;gt; T extends X ? 0 : 1 type IsEqual&amp;lt;X, Y&amp;gt; = E1&amp;lt;X&amp;gt; extends E2&amp;lt;Y&amp;gt; ? true : false /** * Whether or not T includes U as an element. */ type Includes&amp;lt;T extends readonly unknown[], U&amp;gt; = true extends { [key in keyof T]: IsEqual&amp;lt;T[key], U&amp;gt; }[number] ? true : false A non-recursive type-level Includes operator in Typescript Introduction Includes is a type-level operator that determines whether a given type T includes a given type U as an element.">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:description" content="A performance-optimized, non-recursive implementation of a type-level array inclusion operator in TypeScript. By leveraging tuple spread syntax and conditional types instead of recursive patterns, we achieve Includes&lt;[1, 2, 3], 2&gt; evaluation in O(1) type instantiation depth rather than O(n). This technique improves compile-time performance for large tuple operations, avoiding TypeScript’s recursion depth limits while maintaining the same type-level guarantees.">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
-  <meta property="article:section" content="post">
+    <meta property="article:section" content="post">
     <meta property="article:published_time" content="2022-08-27T16:37:21-07:00">
     <meta property="article:modified_time" content="2022-08-27T16:37:21-07:00">
     <meta property="article:tag" content="Typescript">
@@ -32,9 +32,6 @@
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -84,17 +81,20 @@
 			
 		</header>
 		<div class="content post__content clearfix">
-			<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> E1&lt;<span style="color:#070">X</span>&gt; <span style="color:#333">=</span> &lt;<span style="color:#070">T</span>&gt;() <span style="color:#333">=&gt;</span> T <span style="color:#080;font-weight:bold">extends</span> X <span style="color:#333">?</span> 0 : <span style="color:#339;font-weight:bold">1</span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> E2&lt;<span style="color:#070">X</span>&gt; <span style="color:#333">=</span> &lt;<span style="color:#070">T</span>&gt;() <span style="color:#333">=&gt;</span> T <span style="color:#080;font-weight:bold">extends</span> X <span style="color:#333">?</span> 0 : <span style="color:#339;font-weight:bold">1</span>
+			<p>A performance-optimized, non-recursive implementation of a type-level array inclusion operator in TypeScript. By leveraging tuple spread syntax and conditional types instead of recursive patterns, we achieve <code>Includes&lt;[1, 2, 3], 2&gt;</code> evaluation in O(1) type instantiation depth rather than O(n). This technique improves compile-time performance for large tuple operations, avoiding TypeScript&rsquo;s recursion depth limits while maintaining the same type-level guarantees.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> E1&lt;<span style="color:#070">X</span>&gt; <span style="color:#333">=</span> &lt;<span style="color:#070">T</span>&gt;() <span style="color:#333">=&gt;</span> T <span style="color:#080;font-weight:bold">extends</span> X <span style="color:#333">?</span> 0 : <span style="color:#339;font-weight:bold">1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> E2&lt;<span style="color:#070">X</span>&gt; <span style="color:#333">=</span> &lt;<span style="color:#070">T</span>&gt;() <span style="color:#333">=&gt;</span> T <span style="color:#080;font-weight:bold">extends</span> X <span style="color:#333">?</span> 0 : <span style="color:#339;font-weight:bold">1</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsEqual&lt;<span style="color:#070">X</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Y</span>&gt; <span style="color:#333">=</span> E1&lt;<span style="color:#070">X</span>&gt; <span style="color:#080;font-weight:bold">extends</span> E2&lt;<span style="color:#070">Y</span>&gt; <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsEqual&lt;<span style="color:#070">X</span>, <span style="color:#00c">Y</span>&gt; <span style="color:#333">=</span> E1&lt;<span style="color:#070">X</span>&gt; <span style="color:#080;font-weight:bold">extends</span> E2&lt;<span style="color:#070">Y</span>&gt; <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#888">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#888"> * Whether or not T includes U as an element.
 </span></span></span><span style="display:flex;"><span><span style="color:#888"> */</span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Includes&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#080;font-weight:bold">extends</span> {
-</span></span><span style="display:flex;"><span>  [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> IsEqual&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">],</span> <span style="color:#00c">U</span>&gt;
-</span></span><span style="display:flex;"><span>}[<span style="color:#339;font-weight:bold">number</span>] <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Includes&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>, <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#080;font-weight:bold">extends</span> {
+</span></span><span style="display:flex;"><span>  [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> IsEqual&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">]</span>, <span style="color:#00c">U</span>&gt;;
+</span></span><span style="display:flex;"><span>}[<span style="color:#339;font-weight:bold">number</span>]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
 </span></span></code></pre></div><h1 id="a-non-recursive-type-level-includes-operator-in-typescript">A non-recursive type-level <code>Includes</code> operator in Typescript</h1>
 <h2 id="introduction">Introduction</h2>
 <p><code>Includes</code> is a type-level operator that determines whether a given type <code>T</code> includes a given type <code>U</code> as an element. In other words, it returns <code>true</code> if <code>T</code> is a subtype of <code>U</code>.</p>
@@ -107,15 +107,17 @@
 <p>Thus, <code>IsEqual&lt;X, Y&gt;</code> returns <code>true</code> if <code>E1&lt;X&gt;</code> is equal to <code>E2&lt;Y&gt;</code>, and <code>false</code> otherwise.</p>
 <h4 id="e1-and-e2">E1 and E2</h4>
 <p>The <code>E1</code> and <code>E2</code> functions are implemented as follows:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> E1&lt;<span style="color:#070">X</span>&gt; <span style="color:#333">=</span> &lt;<span style="color:#070">T</span>&gt;() <span style="color:#333">=&gt;</span> T <span style="color:#080;font-weight:bold">extends</span> X <span style="color:#333">?</span> 0 : <span style="color:#339;font-weight:bold">1</span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> E2&lt;<span style="color:#070">X</span>&gt; <span style="color:#333">=</span> &lt;<span style="color:#070">T</span>&gt;() <span style="color:#333">=&gt;</span> T <span style="color:#080;font-weight:bold">extends</span> X <span style="color:#333">?</span> 0 : <span style="color:#339;font-weight:bold">1</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> E1&lt;<span style="color:#070">X</span>&gt; <span style="color:#333">=</span> &lt;<span style="color:#070">T</span>&gt;() <span style="color:#333">=&gt;</span> T <span style="color:#080;font-weight:bold">extends</span> X <span style="color:#333">?</span> 0 : <span style="color:#339;font-weight:bold">1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> E2&lt;<span style="color:#070">X</span>&gt; <span style="color:#333">=</span> &lt;<span style="color:#070">T</span>&gt;() <span style="color:#333">=&gt;</span> T <span style="color:#080;font-weight:bold">extends</span> X <span style="color:#333">?</span> 0 : <span style="color:#339;font-weight:bold">1</span>;
 </span></span></code></pre></div><p>These functions take a type <code>T</code> and return <code>0</code> if <code>T</code> is equal to <code>X</code>, and <code>1</code> otherwise. These functions exploit deep behavior around generics to implement a &ldquo;true type-level equality check&rdquo;, which will even distinguish readonly attributes from non-readonly attributes.</p>
 <p>The deep behavior needed to distinguish readonly attributes does not work without <em>both</em> type declarations, despite the equivalence. The internal type-checking behavior seems to depend on comparing two <em>separate</em> type identifiers.</p>
 <h3 id="includes">Includes</h3>
 <p>The <code>Includes</code> function is implemented as follows:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Includes&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[],</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#080;font-weight:bold">extends</span> {
-</span></span><span style="display:flex;"><span>  [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> IsEqual&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">],</span> <span style="color:#00c">U</span>&gt;
-</span></span><span style="display:flex;"><span>}[<span style="color:#339;font-weight:bold">number</span>] <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Includes&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">readonly</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>, <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#080;font-weight:bold">extends</span> {
+</span></span><span style="display:flex;"><span>  [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> IsEqual&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">]</span>, <span style="color:#00c">U</span>&gt;;
+</span></span><span style="display:flex;"><span>}[<span style="color:#339;font-weight:bold">number</span>]
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
 </span></span></code></pre></div><p>First, note that <code>Includes</code> takes two type parameters: <code>T</code>, which is a <em>readonly</em> array type, and <code>U</code>, which is the element type that we want to check for inclusion in <code>T</code>. We do not introduce a constraint whereby U must be an element of T, since the whole purpose of the function is to determine whether or not U is an element of T.</p>
 <p>Next, we define a helper type, <code>R</code>, which is a <em>mapped type</em>. This is a type whose properties are determined by mapping a given type <code>T</code> to another type <code>U</code>. In this case, we are mapping each element of <code>T</code> to the result of <code>IsEqual&lt;T[key], U&gt;</code>.</p>
 <p>Thus, <code>R</code> is a type with one property for each element of <code>T</code>, whose value is <code>true</code> if the element is equal to <code>U</code>, and <code>false</code> otherwise.</p>
@@ -127,7 +129,6 @@
 <p>Third, it is <em>efficient</em>. This means that it will not introduce <em>unnecessary</em> type-checking constraints. Other implementations may introduce such constraints, which can lead to <em>slow</em> type-checking.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>The <code>Includes</code> operator is a simple, efficient, and type-safe way to determine whether a given type <code>T</code> includes a given type <code>U</code> as an element.</p>
-
 		</div>
 		<footer class="post__footer">
 			
@@ -178,11 +179,11 @@
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -210,9 +211,11 @@
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -250,7 +253,7 @@
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

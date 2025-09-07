@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Stub: Variational Selector Text Stenography - Codeless Code</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:url" content="https://code.lol/post/programming/llm-injection/">
+  <meta property="og:site_name" content="Codeless Code">
+  <meta property="og:title" content="Stub: Variational Selector Text Stenography">
+  <meta property="og:description" content="This interactive tool demonstrates a steganographic technique using Unicode variation selectors (U&#43;E0100-U&#43;E017F) to encode hidden text within visible strings. By mapping ASCII characters to these invisible codepoints, messages can be embedded undetected - a potential vector for prompt injection attacks where LLMs may process hidden instructions.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-08-23T13:58:16-07:00">
+    <meta property="article:modified_time" content="2025-08-23T13:58:16-07:00">
+    <meta property="article:tag" content="Programming">
+    <meta property="article:tag" content="Cybersecurity">
+    <meta property="article:tag" content="Ai">
+    <meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="Codeless Code" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">Codeless Code</div>
+					<div class="logo__tagline">Blog of Alice Poteat</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Stub: Variational Selector Text Stenography</h1>
+			
+		</header>
+		<div class="content post__content clearfix">
+			<p>This interactive tool demonstrates a steganographic technique using Unicode variation selectors (<code>U+E0100</code>-<code>U+E017F</code>) to encode hidden text within visible strings. By mapping ASCII characters to these invisible codepoints, messages can be embedded undetected - a potential vector for prompt injection attacks where LLMs may process hidden instructions.</p>
+<div id="surrogate-converter">
+  <div style="margin-bottom: 15px;">
+    <input type="text" id="textInput" placeholder="Enter text here" style="width: 300px; padding: 5px;">
+    <button id="convertBtn" style="padding: 5px 10px; margin-left: 10px;">Convert Selected</button>
+  </div>
+  <div style="margin-bottom: 15px;">
+    <textarea id="textOutput" readonly style="width: 400px; height: 100px; padding: 5px; font-family: monospace;"></textarea>
+  </div>
+<p><button id="copyBtn" style="padding: 5px 10px;">Copy Output</button>
+<span id="copyStatus" style="margin-left: 10px; color: green; display: none;">Copied!</span></p>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const textInput = document.getElementById('textInput');
+  const convertBtn = document.getElementById('convertBtn');
+  const textOutput = document.getElementById('textOutput');
+  const copyBtn = document.getElementById('copyBtn');
+  const copyStatus = document.getElementById('copyStatus');
+  
+  convertBtn.addEventListener('click', function() {
+    const input = textInput.value;
+    const selectionStart = textInput.selectionStart;
+    const selectionEnd = textInput.selectionEnd;
+    
+    let result = '';
+    
+    if (selectionStart !== selectionEnd) {
+      // Process with selection: keep unselected parts, convert selected part
+      let beforeStart = selectionStart;
+      let afterEnd = selectionEnd;
+      
+      // Prefer trimming space after selection, else trim before
+      if (afterEnd < input.length && input[afterEnd] === ' ') {
+        afterEnd++;
+      } else if (beforeStart > 0 && input[beforeStart - 1] === ' ') {
+        beforeStart--;
+      }
+      
+      result += input.substring(0, beforeStart); // Before selection (possibly trimmed)
+      
+      // Convert selected text (plus trimmed spaces) to variation selectors
+      const selectedText = input.substring(beforeStart, afterEnd);
+
+      let internal = ``
+
+      // Encode text as variation selectors
+      for (let i = 0; i < selectedText.length; i++) {
+        const charCode = selectedText.charCodeAt(i);
+        // Map to variation selectors (U+E0100+)
+        if (charCode >= 0x20 && charCode <= 0x7E) {
+          result += String.fromCodePoint(0xE0100 + charCode);
+          internal += String.fromCodePoint(0xE0100 + charCode);
+        }
+      }
+      
+      result += input.substring(afterEnd); // After selection (possibly trimmed)
+
+      console.log("before selection", input.substring(0, selectionStart))
+      console.log("after selection", input.substring(selectionEnd))
+      console.log("internal", internal)
+    } else {
+      // Convert entire input if nothing selected
+      for (let i = 0; i < input.length; i++) {
+        const charCode = input.charCodeAt(i);
+        if (charCode >= 0x20 && charCode <= 0x7E) {
+          result += String.fromCodePoint(0xE0100 + charCode);
+        }
+      }
+    }
+    
+    textOutput.value = result;
+  });
+  
+  copyBtn.addEventListener('click', function() {
+    textOutput.select();
+    navigator.clipboard.writeText(textOutput.value).then(function() {
+      copyStatus.style.display = 'inline';
+      setTimeout(function() {
+        copyStatus.style.display = 'none';
+      }, 2000);
+    });
+  });
+});
+</script>
+<h2 id="theory">Theory</h2>
+<p>The basic idea is to assume an LLM is smart enough to decode this text even if
+its immediately invisible, due to the hex codes at the end being &lsquo;aligned&rsquo; on a
+hex boundary with ASCII, and otherwise being essentially unused for any other
+purpose.</p>
+<h2 id="effects">Effects</h2>
+<p>In my testing at the time of writing, ChatGPT can inspect or &lsquo;see&rsquo; the secret
+values, but I haven&rsquo;t really had any luck crafting a sufficiently convincing
+hidden prompt that will saliently &lsquo;override&rsquo; the visible portions of the prompt.</p>
+<p>In the attack scenario that a person is copy/pasting directly into the prompt
+text box, it may also be worth obfuscating the visible prompt text with
+homoglyphs or intersperse it with no-width spaces, to decrease the corresponding
+weight of the visible prompt relative to the hidden one.</p>
+<h2 id="countermeasures">Countermeasures</h2>
+<p>During post-training, LLM developers should probably be hardening the LLM
+against a variety of stenography attacks by giving examples of refusals,
+disclosures, or ignores - in addition to checks using traditional code to detect
+malformed or suspicious Unicode.</p>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/programming/" rel="tag">programming</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/cybersecurity/" rel="tag">cybersecurity</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/ai/" rel="tag">ai</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Alice Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Alice Poteat</span>
+	</div>
+	<div class="authorbox__description">
+		software engineer and flawed human being
+	</div>
+</div>
+
+
+
+			</div>
+			<aside class="sidebar"><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<input class="widget-search__field" type="search" placeholder="Search…" value="" name="q" aria-label="Search…">
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://code.lol/">
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">Algorithms</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">Bioinformatics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">Life</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/mathematics/">Mathematics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/programming/">Programming</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">Simulation</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">Typescript</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/efficiency/" title="Efficiency">Efficiency</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/extensibility/" title="Extensibility">Extensibility</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="Factorization">Factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/functional-programming/" title="Functional Programming">Functional Programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="Javascript">Javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="Lambda Calculus">Lambda Calculus</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="Latex">Latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="Math">Math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="Mathematica">Mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="Number-Theory">Number-Theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="Parsing">Parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="Performance">Performance</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="Physics">Physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/point-free/" title="Point-Free">Point-Free</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="Programming">Programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="Rationality">Rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="Regression">Regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/safety/" title="Safety">Safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="Strings">Strings</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="Tau-Beta-Pi">Tau-Beta-Pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="Tuples">Tuples</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-safety/" title="Type Safety">Type Safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-guard/" title="Type-Guard">Type-Guard</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="Type-System">Type-System</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="Typescript">Typescript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="Wip">Wip</a>
+	</div>
+</div>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2025 Codeless Code.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

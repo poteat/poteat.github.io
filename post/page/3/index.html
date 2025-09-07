@@ -10,7 +10,7 @@
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="Posts">
   <meta property="og:description" content="Alice&#39;s personal blog about programming, math, and science.">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="website">
     <meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png">
 
@@ -26,9 +26,6 @@
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -78,6 +75,22 @@
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/simulation/quadtree-particle-simulation/" rel="bookmark">
+			Quadtree Particle Simulation
+			</a>
+		</h2>
+		
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>A JavaScript particle physics simulation using a quadtree spatial data structure to efficiently compute inter-particle forces, optimizing from O(n²) to near-linear complexity.</p>
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/simulation/quadtree-particle-simulation/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/simulation/double-pendulum/" rel="bookmark">
 			Double Pendulum
 			</a>
@@ -85,12 +98,7 @@
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		This is a simulation of 2 bobs, connected by massless, perfectly rigid rods to a central pivot under the force of uniform gravity. In addition to being the motivating example for chaotic systems (in addition to the Lorenz system, its fluid mechanics counterpart), the double pendulum represents some interesting challenges.
-Draw circle bounds Draw cherry tracer Draw connections Pause Clear cherry tracer
-Simulation parameters:
-Angle 1
-Angle 2
-Radial Velocity 1
+		<p>An interactive JavaScript simulation demonstrating the chaotic behavior of a double pendulum system, showcasing how small changes in initial conditions lead to dramatically different outcomes.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/simulation/double-pendulum/">Read more…</a>
@@ -106,8 +114,7 @@ Radial Velocity 1
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		The 2-dimensional minimum-area oriented bounding box problem is as follows: Given a set of coplanar points, how can we efficiently find the smallest rectangle which encloses these points? Additionally, that rectangle can be oriented at any angle with respect to the coordinate system.
-One interesting estimate for the solution, which guarantees &ldquo;pretty good&rdquo; results in O(n) time is a natural extension of orthogonal linear regression. Specifically, we assume that the minimum rectangle is aligned to the orthogonal &ldquo;line of best fit&rdquo; of the point set.
+		<p>A fast O(n) heuristic for finding near-optimal oriented bounding boxes around point sets, using orthogonal linear regression to align rectangles with the natural orientation of the data.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/bioinformatics/oriented-bounding-box-heuristic/">Read more…</a>
@@ -123,9 +130,10 @@ One interesting estimate for the solution, which guarantees &ldquo;pretty good&r
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		This last Wednesday I had the honor of attending a luncheon with ODU&rsquo;s current president John R. Broderick. This event was a meetup with the local Tau Beta Pi engineering honor society chapter.
-The food was delicious! We were able to talk to Broderick about current events on campus, and suggestions we had (especially with regard to on-campus parking).
-Group photo included.
+		<p>A memorable meeting with ODU&rsquo;s president as part of a Tau Beta Pi engineering honor society event.</p>
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/life/2019-presidential-luncheon/">Read more…</a>
 	</div>
 </article><article class="list__item post">
 	
@@ -138,9 +146,7 @@ Group photo included.
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.
-$$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$ Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.
-In this problem, the least-squared distance considered includes only the vertical component.
+		<p>An interactive demonstration of simple linear regression, showing how the least-squares method finds the best-fitting line through a set of data points by minimizing vertical distances.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/bioinformatics/one-dimensional-linear-regression/">Read more…</a>
@@ -156,9 +162,7 @@ In this problem, the least-squared distance considered includes only the vertica
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		Quadratic Bézier curves are explicit parametric functions of the following form:
-$$ x(t) = (1-t)^2 x_0 + 2t(1-t) x_1 + t^2 x_2\\ y(t) = (1-t)^2 y_0 + 2t(1-t) y_1 + t^2 y_2\\ t \in \mathbb R[0,1] $$ These curves are perhaps the simplest class of parametric curves, but useful in their own right. This is a small demo of such curves.
-Drag the control points around to see the curve change.
+		<p>An interactive visualization of quadratic Bézier curves, demonstrating how three control points define smooth parametric curves commonly used in computer graphics and design.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/bioinformatics/quadratic-bezier-curves/">Read more…</a>
@@ -184,11 +188,11 @@ Drag the control points around to see the curve change.
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -216,9 +220,11 @@ Drag the control points around to see the curve change.
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -256,7 +262,7 @@ Drag the control points around to see the curve change.
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

@@ -4,231 +4,245 @@
     <title>Tags on Codeless Code</title>
     <link>https://code.lol/tags/</link>
     <description>Recent content in Tags on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Feb 2023 23:17:12 -0800</lastBuildDate>
+    <lastBuildDate>Sat, 23 Aug 2025 13:58:16 -0700</lastBuildDate>
     <atom:link href="https://code.lol/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Point-Free</title>
-      <link>https://code.lol/tags/point-free/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://code.lol/tags/point-free/</guid>
+      <title>Ai</title>
+      <link>https://code.lol/tags/ai/</link>
+      <pubDate>Sat, 23 Aug 2025 13:58:16 -0700</pubDate>
+      <guid>https://code.lol/tags/ai/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cybersecurity</title>
+      <link>https://code.lol/tags/cybersecurity/</link>
+      <pubDate>Sat, 23 Aug 2025 13:58:16 -0700</pubDate>
+      <guid>https://code.lol/tags/cybersecurity/</guid>
       <description></description>
     </item>
     <item>
       <title>Programming</title>
       <link>https://code.lol/tags/programming/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 23 Aug 2025 13:58:16 -0700</pubDate>
       <guid>https://code.lol/tags/programming/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Point-Free</title>
+      <link>https://code.lol/tags/point-free/</link>
+      <pubDate>Tue, 07 Feb 2023 23:17:12 -0800</pubDate>
+      <guid>https://code.lol/tags/point-free/</guid>
       <description></description>
     </item>
     <item>
       <title>Type-System</title>
       <link>https://code.lol/tags/type-system/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 07 Feb 2023 23:17:12 -0800</pubDate>
       <guid>https://code.lol/tags/type-system/</guid>
       <description></description>
     </item>
     <item>
       <title>Typescript</title>
       <link>https://code.lol/tags/typescript/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 07 Feb 2023 23:17:12 -0800</pubDate>
       <guid>https://code.lol/tags/typescript/</guid>
       <description></description>
     </item>
     <item>
       <title>Functional Programming</title>
       <link>https://code.lol/tags/functional-programming/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 08 Dec 2022 22:58:35 -0800</pubDate>
       <guid>https://code.lol/tags/functional-programming/</guid>
       <description></description>
     </item>
     <item>
       <title>Number-Theory</title>
       <link>https://code.lol/tags/number-theory/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 08 Dec 2022 22:58:35 -0800</pubDate>
       <guid>https://code.lol/tags/number-theory/</guid>
       <description></description>
     </item>
     <item>
       <title>Type Safety</title>
       <link>https://code.lol/tags/type-safety/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
       <guid>https://code.lol/tags/type-safety/</guid>
       <description></description>
     </item>
     <item>
       <title>Architecture</title>
       <link>https://code.lol/tags/architecture/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 05 Sep 2022 12:03:54 -0700</pubDate>
       <guid>https://code.lol/tags/architecture/</guid>
       <description></description>
     </item>
     <item>
       <title>Extensibility</title>
       <link>https://code.lol/tags/extensibility/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 05 Sep 2022 12:03:54 -0700</pubDate>
       <guid>https://code.lol/tags/extensibility/</guid>
       <description></description>
     </item>
     <item>
       <title>Efficiency</title>
       <link>https://code.lol/tags/efficiency/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 27 Aug 2022 16:37:21 -0700</pubDate>
       <guid>https://code.lol/tags/efficiency/</guid>
       <description></description>
     </item>
     <item>
       <title>Performance</title>
       <link>https://code.lol/tags/performance/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 27 Aug 2022 16:37:21 -0700</pubDate>
       <guid>https://code.lol/tags/performance/</guid>
       <description></description>
     </item>
     <item>
       <title>Safety</title>
       <link>https://code.lol/tags/safety/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Nov 2021 12:08:01 -0800</pubDate>
       <guid>https://code.lol/tags/safety/</guid>
       <description></description>
     </item>
     <item>
       <title>Type-Guard</title>
       <link>https://code.lol/tags/type-guard/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 14 Nov 2021 12:08:01 -0800</pubDate>
       <guid>https://code.lol/tags/type-guard/</guid>
       <description></description>
     </item>
     <item>
       <title>Lambda Calculus</title>
       <link>https://code.lol/tags/lambda-calculus/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       <guid>https://code.lol/tags/lambda-calculus/</guid>
       <description></description>
     </item>
     <item>
       <title>Math</title>
       <link>https://code.lol/tags/math/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 03 Sep 2021 15:12:34 -0700</pubDate>
       <guid>https://code.lol/tags/math/</guid>
       <description></description>
     </item>
     <item>
       <title>Tuples</title>
       <link>https://code.lol/tags/tuples/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 09 Jan 2021 16:33:40 -0800</pubDate>
       <guid>https://code.lol/tags/tuples/</guid>
       <description></description>
     </item>
     <item>
       <title>Algorithms</title>
       <link>https://code.lol/tags/algorithms/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
       <guid>https://code.lol/tags/algorithms/</guid>
       <description></description>
     </item>
     <item>
       <title>Strings</title>
       <link>https://code.lol/tags/strings/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
       <guid>https://code.lol/tags/strings/</guid>
       <description></description>
     </item>
     <item>
       <title>Design Patterns</title>
       <link>https://code.lol/tags/design-patterns/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 03 May 2020 19:41:57 -0700</pubDate>
       <guid>https://code.lol/tags/design-patterns/</guid>
       <description></description>
     </item>
     <item>
       <title>Dijkstra</title>
       <link>https://code.lol/tags/dijkstra/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 23 Dec 2019 16:39:53 -0800</pubDate>
       <guid>https://code.lol/tags/dijkstra/</guid>
       <description></description>
     </item>
     <item>
       <title>Parsing</title>
       <link>https://code.lol/tags/parsing/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 23 Dec 2019 16:39:53 -0800</pubDate>
       <guid>https://code.lol/tags/parsing/</guid>
       <description></description>
     </item>
     <item>
       <title>Rationality</title>
       <link>https://code.lol/tags/rationality/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 03 Jun 2019 12:37:10 -0700</pubDate>
       <guid>https://code.lol/tags/rationality/</guid>
       <description></description>
     </item>
     <item>
       <title>Factorization</title>
       <link>https://code.lol/tags/factorization/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       <guid>https://code.lol/tags/factorization/</guid>
       <description></description>
     </item>
     <item>
       <title>Latex</title>
       <link>https://code.lol/tags/latex/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       <guid>https://code.lol/tags/latex/</guid>
       <description></description>
     </item>
     <item>
       <title>Mathematica</title>
       <link>https://code.lol/tags/mathematica/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       <guid>https://code.lol/tags/mathematica/</guid>
       <description></description>
     </item>
     <item>
       <title>Wip</title>
       <link>https://code.lol/tags/wip/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Feb 2019 15:01:48 -0500</pubDate>
       <guid>https://code.lol/tags/wip/</guid>
       <description></description>
     </item>
     <item>
       <title>Demo</title>
       <link>https://code.lol/tags/demo/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
       <guid>https://code.lol/tags/demo/</guid>
       <description></description>
     </item>
     <item>
       <title>Javascript</title>
       <link>https://code.lol/tags/javascript/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
       <guid>https://code.lol/tags/javascript/</guid>
       <description></description>
     </item>
     <item>
       <title>Physics</title>
       <link>https://code.lol/tags/physics/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 28 Jan 2019 13:59:19 -0500</pubDate>
       <guid>https://code.lol/tags/physics/</guid>
       <description></description>
     </item>
     <item>
       <title>Regression</title>
       <link>https://code.lol/tags/regression/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       <guid>https://code.lol/tags/regression/</guid>
       <description></description>
     </item>
     <item>
       <title>Tau-Beta-Pi</title>
       <link>https://code.lol/tags/tau-beta-pi/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 25 Jan 2019 18:58:29 -0500</pubDate>
       <guid>https://code.lol/tags/tau-beta-pi/</guid>
       <description></description>
     </item>
     <item>
       <title>Curves</title>
       <link>https://code.lol/tags/curves/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 25 Jan 2019 17:40:45 -0500</pubDate>
       <guid>https://code.lol/tags/curves/</guid>
       <description></description>
     </item>

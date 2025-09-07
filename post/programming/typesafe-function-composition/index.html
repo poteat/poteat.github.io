@@ -9,11 +9,10 @@
 		<meta property="og:url" content="https://code.lol/post/programming/typesafe-function-composition/">
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="Typesafe Function Composition">
-  <meta property="og:description" content="Do ya wanna know how to type function composition in Typescript? Read on!
-1. Background 1.1. Type-theoretic Pseudocode 2. Typescript 2.1. IsComposablePair 2.1.1. Type-based Pattern Matching using infer 2.1.2. IsComposablePair 2.2. Every 2.3. Pair 3. Component Synthesis 4. Function Integration 5. Future Work: Constructive Approach 1. Background Function composition is an operation that takes two functions, $f$ and $g$, and produces a new function $h$ such that $h(x) = g(f(x))$.">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:description" content="This deep dive explores implementing mathematically-correct function composition with full type safety. We’ll build a compose function where compose&lt;A, B, C&gt;(f: B→C, g: A→B): A→C validates type compatibility at compile time, handle variadic arguments through recursive types, and ensure composed pipelines like compose(toString, Math.sqrt, parseInt) automatically infer as (s: string) =&gt; string while preventing invalid compositions from compiling.">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
-  <meta property="article:section" content="post">
+    <meta property="article:section" content="post">
     <meta property="article:published_time" content="2022-10-09T16:45:40-07:00">
     <meta property="article:modified_time" content="2022-10-09T16:45:40-07:00">
     <meta property="article:tag" content="Type Safety">
@@ -33,9 +32,6 @@
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -85,9 +81,7 @@
 			
 		</header>
 		<div class="content post__content clearfix">
-			<blockquote>
-<p>Do ya wanna know how to type function composition in Typescript? Read on!</p>
-</blockquote>
+			<p>This deep dive explores implementing mathematically-correct function composition with full type safety. We&rsquo;ll build a <code>compose</code> function where <code>compose&lt;A, B, C&gt;(f: B→C, g: A→B): A→C</code> validates type compatibility at compile time, handle variadic arguments through recursive types, and ensure composed pipelines like <code>compose(toString, Math.sqrt, parseInt)</code> automatically infer as <code>(s: string) =&gt; string</code> while preventing invalid compositions from compiling.</p>
 <ul>
 <li><a href="#1-background">1. Background</a>
 <ul>
@@ -128,34 +122,33 @@
 <p>To begin writing the implementation of this specification, we can identify some common components to abstract out, that will make the implementation of our type easier.</p>
 <p>By inspection, we can identity three components to start with:</p>
 <table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>IsComposablePair</td>
-<td>Takes in two functions, returning whether they may be validly composed.</td>
-</tr>
-<tr>
-<td>Every</td>
-<td>Takes an tuple of boolean types, returning <code>true</code> iff all tuple elements are <code>true</code>, else returns <code>false</code>.</td>
-</tr>
-<tr>
-<td>Pair</td>
-<td>Takes in a tuple, returning a tuple composed of all pairwise elements. e.g. $(a, b, c)$ becomes $((a, b), (b, c))$.</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Name</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>IsComposablePair</td>
+          <td>Takes in two functions, returning whether they may be validly composed.</td>
+      </tr>
+      <tr>
+          <td>Every</td>
+          <td>Takes an tuple of boolean types, returning <code>true</code> iff all tuple elements are <code>true</code>, else returns <code>false</code>.</td>
+      </tr>
+      <tr>
+          <td>Pair</td>
+          <td>Takes in a tuple, returning a tuple composed of all pairwise elements. e.g. $(a, b, c)$ becomes $((a, b), (b, c))$.</td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="21-iscomposablepair">2.1. IsComposablePair</h2>
 <p>To implement IsComposable, we need two more utility types: <code>InputOf</code> and <code>OutputOf</code>. We can implement both of these types using pattern matching.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> InputOf&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> (x: <span style="color:#339;font-weight:bold">infer</span> X) <span style="color:#333">=&gt;</span> <span style="color:#339;font-weight:bold">unknown</span> <span style="color:#333">?</span> X : <span style="color:#339;font-weight:bold">never</span>;
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> OutputOf&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> (x: <span style="color:#339;font-weight:bold">never</span>) <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">infer</span> X <span style="color:#333">?</span> X : <span style="color:#339;font-weight:bold">never</span>;
 </span></span></code></pre></div><blockquote>
-<p>These types can also be constructed via built-ins <code>Parameters</code> and <code>ReturnType</code>, but this is a convenient lesson on type-based pattern matching. See the associated section below.</p>
-</blockquote>
+<p>These types can also be constructed via built-ins <code>Parameters</code> and <code>ReturnType</code>, but this is a convenient lesson on type-based pattern matching. See the associated section below.</p></blockquote>
 <h3 id="211-type-based-pattern-matching-using-infer">2.1.1. Type-based Pattern Matching using <code>infer</code></h3>
 <p>A conditional type in Typescript is composed of four clauses:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span>&lt;<span style="color:#070">operand</span>&gt; <span style="color:#080;font-weight:bold">extends</span> &lt;<span style="color:#070">matcher</span>&gt; <span style="color:#333">?</span> &lt;<span style="color:#070">true_val</span>&gt; <span style="color:#333">:</span> &lt;<span style="color:#070">false_val</span>&gt;
@@ -163,14 +156,14 @@
 <p>Typescript will attempt to find the narrowest type possible that makes the <code>&lt;operand&gt;</code> a subtype of the <code>&lt;matcher&gt;</code> expression. If it can find a type such that <code>&lt;operand&gt;</code> is a subtype of <code>&lt;matcher&gt;</code>, the <code>&lt;true_val&gt;</code> expression will be returned, else the <code>&lt;false_val&gt;</code> expression will be returned.</p>
 <h3 id="212-iscomposablepair">2.1.2. IsComposablePair</h3>
 <p>For <code>IsComposable</code>, it&rsquo;s straightforward to use a conditional type (without <code>infer</code>) to represent the subtype condition that we encoded in the specification above.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsComposablePair&lt;<span style="color:#070">F1</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">F2</span>&gt; <span style="color:#333">=</span> InputOf&lt;<span style="color:#070">F1</span>&gt; <span style="color:#080;font-weight:bold">extends</span> OutputOf&lt;<span style="color:#070">F2</span>&gt; <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsComposablePair&lt;<span style="color:#070">F1</span>, <span style="color:#00c">F2</span>&gt; <span style="color:#333">=</span> InputOf&lt;<span style="color:#070">F1</span>&gt; <span style="color:#080;font-weight:bold">extends</span> OutputOf&lt;<span style="color:#070">F2</span>&gt; <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
 </span></span></code></pre></div><h2 id="22-every">2.2. Every</h2>
 <p>The <code>Every</code> type will take in a tuple of boolean types and return <code>true</code> if and only if every element in its input is <code>true</code>.</p>
 <p>First though, we need an additional helper type, which will be a type-level analogue of &lsquo;and&rsquo;:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> And&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> [T, U] <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">true</span>, <span style="color:#080;font-weight:bold">true</span>] <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> And&lt;<span style="color:#070">T</span>, <span style="color:#00c">U</span>&gt; <span style="color:#333">=</span> [T, U] <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">true</span>, <span style="color:#080;font-weight:bold">true</span>] <span style="color:#333">?</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">false</span>;
 </span></span></code></pre></div><p>To implement this in Typescript, we now need to use tuple-level recursion, which takes the following form:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Every&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> T <span style="color:#080;font-weight:bold">extends</span> [<span style="color:#080;font-weight:bold">infer</span> Head, ...<span style="color:#080;font-weight:bold">infer</span> Rest]
-</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> And&lt;<span style="color:#070">Head</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">Every</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Rest</span>&gt;<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#333">?</span> And&lt;<span style="color:#070">Head</span>, <span style="color:#00c">Every</span>&lt;<span style="color:#070">Rest</span>&gt;&gt;
 </span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> <span style="color:#080;font-weight:bold">true</span>;
 </span></span></code></pre></div><p>We infer the &lsquo;head&rsquo; of the tuple (a functional programming term referring to the first element), as well as the &lsquo;rest&rsquo; of the tuple. We then define <code>Every</code> recursively.</p>
 <h2 id="23-pair">2.3. Pair</h2>
@@ -180,20 +173,20 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#333">:</span> [];
 </span></span></code></pre></div><h1 id="3-component-synthesis">3. Component Synthesis</h1>
 <p>With these utility functions, in the optimal case we could represent our type with something like the following (matching our pseudocode implementation):</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsComposable&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> Every&lt;<span style="color:#070">Map</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Pair</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">T</span>&gt;, IsComposablePair<span style="color:#333">&gt;&gt;</span>; <span style="color:#888">// wrong
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsComposable&lt;<span style="color:#070">T</span>&gt; <span style="color:#333">=</span> Every&lt;<span style="color:#070">Map</span>&lt;<span style="color:#070">Pair</span>&lt;<span style="color:#070">T</span>&gt;, <span style="color:#00c">IsComposablePair</span>&gt;&gt;; <span style="color:#888">// wrong
 </span></span></span></code></pre></div><p>Unfortunately, this representation is not directly available because Typescript has no built-in support for <em>Higher-Kinded Types</em> (or HKTs). In this case, the higher-kinded type I am trying to invoke above is <em>Map</em>.</p>
 <p>Instead, we need to create our own alias type to implement the mapping operation:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsComposablePairMap&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">][]</span>&gt; <span style="color:#333">=</span> {
-</span></span><span style="display:flex;"><span>  [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> IsComposablePair&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">][</span><span style="color:#00c">0</span><span style="color:#f00;background-color:#faa">],</span> <span style="color:#00c">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">][</span><span style="color:#00c">1</span><span style="color:#f00;background-color:#faa">]</span>&gt;;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsComposablePairMap&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">unknown</span>, <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">][]</span>&gt; <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  [key <span style="color:#080;font-weight:bold">in</span> <span style="color:#080;font-weight:bold">keyof</span> T]<span style="color:#333">:</span> IsComposablePair&lt;<span style="color:#070">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">][</span><span style="color:#00c">0</span><span style="color:#f00;background-color:#faa">]</span>, <span style="color:#00c">T</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">key</span><span style="color:#f00;background-color:#faa">][</span><span style="color:#00c">1</span><span style="color:#f00;background-color:#faa">]</span>&gt;;
 </span></span><span style="display:flex;"><span>};
 </span></span></code></pre></div><p>Now, utilizing this type, we can finally create our <code>IsComposable</code> type.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsComposable&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> Every&lt;<span style="color:#070">IsComposablePairMap</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">Pair</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">T</span>&gt;<span style="color:#333">&gt;&gt;</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> IsComposable&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> Every&lt;<span style="color:#070">IsComposablePairMap</span>&lt;<span style="color:#070">Pair</span>&lt;<span style="color:#070">T</span>&gt;&gt;&gt;;
 </span></span></code></pre></div><p>This type <em>checks</em> if a given tuple type represents a variadic number of composable functions. However, it&rsquo;s not immediately clear how to use this in a function signature in a useful way.</p>
 <h1 id="4-function-integration">4. Function Integration</h1>
 <p>To fully integrate this type into a <code>compose</code> function declaration, we need a few more utility types:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Enforce&lt;<span style="color:#070">B</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#00c">X</span>&gt; <span style="color:#333">=</span> B <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">?</span> X : <span style="color:#339;font-weight:bold">never</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Enforce&lt;<span style="color:#070">B</span>, <span style="color:#00c">X</span>&gt; <span style="color:#333">=</span> B <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span> <span style="color:#333">?</span> X : <span style="color:#339;font-weight:bold">never</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Composable&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> Enforce&lt;<span style="color:#070">IsComposable</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">T</span>&gt;, T<span style="color:#333">&gt;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Composable&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> Enforce&lt;<span style="color:#070">IsComposable</span>&lt;<span style="color:#070">T</span>&gt;, <span style="color:#00c">T</span>&gt;;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> First&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> T[<span style="color:#00d;font-weight:bold">0</span>];
 </span></span><span style="display:flex;"><span>
@@ -202,11 +195,10 @@
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> Resolve&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span>&gt; <span style="color:#333">=</span> T;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> ComposedFunction&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt; <span style="color:#333">=</span> Resolve<span style="color:#333">&lt;</span>
-</span></span><span style="display:flex;"><span>  (x: <span style="color:#339;font-weight:bold">InputOf</span>&lt;<span style="color:#070">First</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">T</span>&gt;<span style="color:#333">&gt;</span>) <span style="color:#333">=&gt;</span> OutputOf&lt;<span style="color:#070">Last</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">T</span>&gt;<span style="color:#333">&gt;</span>
+</span></span><span style="display:flex;"><span>  (x: <span style="color:#339;font-weight:bold">InputOf</span>&lt;<span style="color:#070">First</span>&lt;<span style="color:#070">T</span>&gt;&gt;) <span style="color:#333">=&gt;</span> OutputOf&lt;<span style="color:#070">Last</span>&lt;<span style="color:#070">T</span>&gt;&gt;
 </span></span><span style="display:flex;"><span><span style="color:#333">&gt;</span>;
 </span></span></code></pre></div><blockquote>
-<p>The <code>Resolve</code> type&rsquo;s purpose is to ensure that the return type of <code>compose</code> is ultimately rendered (on hover) as the most resolved possible type.</p>
-</blockquote>
+<p>The <code>Resolve</code> type&rsquo;s purpose is to ensure that the return type of <code>compose</code> is ultimately rendered (on hover) as the most resolved possible type.</p></blockquote>
 <p>With these, we can declare <code>compose</code> as the following:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">declare</span> <span style="color:#080;font-weight:bold">function</span> compose&lt;<span style="color:#070">T</span> <span style="color:#00c">extends</span> <span style="color:#00c">unknown</span><span style="color:#f00;background-color:#faa">[]</span>&gt;(
 </span></span><span style="display:flex;"><span>  ...fx: <span style="color:#339;font-weight:bold">Composable</span>&lt;<span style="color:#070">T</span>&gt;
@@ -215,7 +207,6 @@
 <h1 id="5-future-work-constructive-approach">5. Future Work: Constructive Approach</h1>
 <p>It may be possible to slightly modify this implementation to improve type errors - instead of returning a boolean, <em>search</em> for the first non-compliant function, and transform its type into a compliant one.</p>
 <p>That way, only the non-compliant function will be squiggled, and the error message will be of a more understandable form (i.e. not involving <code>never</code>).</p>
-
 		</div>
 		<footer class="post__footer">
 			
@@ -266,11 +257,11 @@
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -298,9 +289,11 @@
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -338,7 +331,7 @@
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

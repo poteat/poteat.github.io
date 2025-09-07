@@ -4,7 +4,7 @@
     <title>Type Safety on Codeless Code</title>
     <link>https://code.lol/tags/type-safety/</link>
     <description>Recent content in Type Safety on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 09 Oct 2022 16:45:40 -0700</lastBuildDate>
     <atom:link href="https://code.lol/tags/type-safety/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,7 @@
       <link>https://code.lol/post/programming/typesafe-function-composition/</link>
       <pubDate>Sun, 09 Oct 2022 16:45:40 -0700</pubDate>
       <guid>https://code.lol/post/programming/typesafe-function-composition/</guid>
-      <description>Do ya wanna know how to type function composition in Typescript? Read on!&#xA;1. Background 1.1. Type-theoretic Pseudocode 2. Typescript 2.1. IsComposablePair 2.1.1. Type-based Pattern Matching using infer 2.1.2. IsComposablePair 2.2. Every 2.3. Pair 3. Component Synthesis 4. Function Integration 5. Future Work: Constructive Approach 1. Background Function composition is an operation that takes two functions, $f$ and $g$, and produces a new function $h$ such that $h(x) = g(f(x))$.</description>
+      <description>&lt;p&gt;This deep dive explores implementing mathematically-correct function composition with full type safety. We&amp;rsquo;ll build a &lt;code&gt;compose&lt;/code&gt; function where &lt;code&gt;compose&amp;lt;A, B, C&amp;gt;(f: B→C, g: A→B): A→C&lt;/code&gt; validates type compatibility at compile time, handle variadic arguments through recursive types, and ensure composed pipelines like &lt;code&gt;compose(toString, Math.sqrt, parseInt)&lt;/code&gt; automatically infer as &lt;code&gt;(s: string) =&amp;gt; string&lt;/code&gt; while preventing invalid compositions from compiling.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

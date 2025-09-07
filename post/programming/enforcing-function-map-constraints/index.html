@@ -9,12 +9,10 @@
 		<meta property="og:url" content="https://code.lol/post/programming/enforcing-function-map-constraints/">
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="Enforcing Function Map Constraints">
-  <meta property="og:description" content="Some &amp;ldquo;easy to state&amp;rdquo; problems in Typescript can require somewhat sophisticated type constructs.
-Let&amp;rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:
-type PermissibleInput = number | string; const myFunctionMap = { foobar(x: number): void; barfoo(y: string): void; } If you do this in the naive way, as e.g. Record&amp;lt;string, (number | string) =&amp;gt; any&amp;gt;, you will discover that this type actually encodes the requirements that every function must support both input types - which is a problem, as myFunctionMap is not actually composed of such functions.">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:description" content="Exploring how to enforce type constraints across function maps in TypeScript, where every function must accept a specific parameter type.">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
-  <meta property="article:section" content="post">
+    <meta property="article:section" content="post">
     <meta property="article:published_time" content="2020-12-16T19:41:08-08:00">
     <meta property="article:modified_time" content="2020-12-16T19:41:08-08:00">
     <meta property="article:tag" content="Typescript">
@@ -33,9 +31,6 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -85,7 +80,8 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 			
 		</header>
 		<div class="content post__content clearfix">
-			<p>Some &ldquo;easy to state&rdquo; problems in Typescript can require somewhat sophisticated type constructs.</p>
+			<p>Exploring how to enforce type constraints across function maps in TypeScript, where every function must accept a specific parameter type.</p>
+<p>Some &ldquo;easy to state&rdquo; problems in Typescript can require somewhat sophisticated type constructs.</p>
 <p>Let&rsquo;s say you want to enforce that every function in a particular map takes in as its first parameter, either a number or a string:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> PermissibleInput <span style="color:#333">=</span> <span style="color:#339;font-weight:bold">number</span> <span style="color:#333">|</span> <span style="color:#339;font-weight:bold">string</span>;
 </span></span><span style="display:flex;"><span>
@@ -135,7 +131,7 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 </span></span></code></pre></div><p>Again, if our condition represented by <code>IsPermissibleFunction</code> passes, then we define <code>f</code> to be of type <code>T</code> - if not, we define it to be <code>never</code>, which no value can possibly meet. Because the compiler automatically infers the narrowest type available, <code>T</code> will correspond to the narrowest interpretation of the type we pass in.</p>
 <h2 id="multiple-function-map-case">Multiple-Function Map Case</h2>
 <p>Reusing our <code>IsPermissibleFunction</code> type along with the previously discussed <code>T[keyof T]</code> trick to convert an object type into a union type, we can devise the following function which demonstrates an attribute-level function parameter constraint:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> applyMap&lt;<span style="color:#070">FunctionMap</span> <span style="color:#00c">extends</span> <span style="color:#00c">Record</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">(</span><span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">:</span> <span style="color:#00c">any</span><span style="color:#f00;background-color:#faa">)</span> <span style="color:#f00;background-color:#faa">=</span>&gt; <span style="color:#339;font-weight:bold">any</span><span style="color:#333">&gt;&gt;</span>(
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> applyMap&lt;<span style="color:#070">FunctionMap</span> <span style="color:#00c">extends</span> <span style="color:#00c">Record</span>&lt;<span style="color:#070">string</span>, <span style="color:#f00;background-color:#faa">(</span><span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">:</span> <span style="color:#00c">any</span><span style="color:#f00;background-color:#faa">)</span> <span style="color:#f00;background-color:#faa">=</span>&gt; <span style="color:#00c">any</span>&gt;<span style="color:#333">&gt;</span>(
 </span></span><span style="display:flex;"><span>  fMap: <span style="color:#339;font-weight:bold">IsPermissibleFunction</span>&lt;<span style="color:#070">FunctionMap</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">keyof</span> <span style="color:#00c">FunctionMap</span><span style="color:#f00;background-color:#faa">]</span>&gt; <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#333">?</span> FunctionMap
 </span></span><span style="display:flex;"><span>    : <span style="color:#339;font-weight:bold">never</span>
@@ -163,7 +159,7 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 <p>With a bit more work, we can at least display a message to the library-user denoting that something was wrong with the function map passed in. A useful trick common in strongly-typed linear algebra code is error types with particular names, like <code>MATRIX_SIZE_MISMATCH</code>. We can take a similar philosophy here:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">type</span> FUNCTION_MAP_MEMBER_HAS_WRONG_PARAMETER_TYPE <span style="color:#333">=</span> { _: <span style="color:#339;font-weight:bold">never</span> };
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> applyMap&lt;<span style="color:#070">FunctionMap</span> <span style="color:#00c">extends</span> <span style="color:#00c">Record</span><span style="color:#f00;background-color:#faa">&lt;</span><span style="color:#00c">string</span><span style="color:#f00;background-color:#faa">,</span> <span style="color:#f00;background-color:#faa">(</span><span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">:</span> <span style="color:#00c">any</span><span style="color:#f00;background-color:#faa">)</span> <span style="color:#f00;background-color:#faa">=</span>&gt; <span style="color:#339;font-weight:bold">any</span><span style="color:#333">&gt;&gt;</span>(
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> applyMap&lt;<span style="color:#070">FunctionMap</span> <span style="color:#00c">extends</span> <span style="color:#00c">Record</span>&lt;<span style="color:#070">string</span>, <span style="color:#f00;background-color:#faa">(</span><span style="color:#00c">x</span><span style="color:#f00;background-color:#faa">:</span> <span style="color:#00c">any</span><span style="color:#f00;background-color:#faa">)</span> <span style="color:#f00;background-color:#faa">=</span>&gt; <span style="color:#00c">any</span>&gt;<span style="color:#333">&gt;</span>(
 </span></span><span style="display:flex;"><span>  fMap: <span style="color:#339;font-weight:bold">IsPermissibleFunction</span>&lt;<span style="color:#070">FunctionMap</span><span style="color:#f00;background-color:#faa">[</span><span style="color:#00c">keyof</span> <span style="color:#00c">FunctionMap</span><span style="color:#f00;background-color:#faa">]</span>&gt; <span style="color:#080;font-weight:bold">extends</span> <span style="color:#080;font-weight:bold">true</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#333">?</span> FunctionMap
 </span></span><span style="display:flex;"><span>    : <span style="color:#339;font-weight:bold">FUNCTION_MAP_MEMBER_HAS_WRONG_PARAMETER_TYPE</span>
@@ -191,7 +187,6 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 <h2 id="advanced-error-messages">Advanced Error Messages</h2>
 <p>It&rsquo;s possible to specifically extract those attribute keys which contain non-compliant function types, allowing the downstream user to identify more quickly which part of their application has a problem.</p>
 <p>With the advent of Typescript 4.2, it is even possible to serialize these extracted types into their own unique error message string type, allowing us to more closely simulate built-in compiler errors. However, this blog post is getting to be long - so that will have to be an exercise for the reader for now.</p>
-
 		</div>
 		<footer class="post__footer">
 			
@@ -239,11 +234,11 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -271,9 +266,11 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -311,7 +308,7 @@ type PermissibleInput = number | string; const myFunctionMap = { foobar(x: numbe
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

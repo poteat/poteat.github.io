@@ -10,7 +10,7 @@
   <meta property="og:site_name" content="Codeless Code">
   <meta property="og:title" content="Math">
   <meta property="og:description" content="Alice&#39;s personal blog about programming, math, and science.">
-  <meta property="og:locale" content="en-us">
+  <meta property="og:locale" content="en_us">
   <meta property="og:type" content="website">
     <meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png">
 
@@ -26,9 +26,6 @@
 	<link rel="shortcut icon" href="/favicon.ico">
 		
 		
-  
-
-
 </head>
 <body class="body">
 	<div class="container container--outer">
@@ -85,8 +82,7 @@
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		There are a few interesting questions about the nature of programs, and specifically about sets of programs, as represented by lambda calculus expressions.
-1. How many programs have N terms? 2. How fast does the set of programs of length N grow? 3. How many programs of length N converge? 4. What is the longest-running convergent program of length N? 5. How fast does BB(N) grow? 6. What percentage of programs converge?
+		<p>How many lambda calculus programs exist with exactly $N$ terms? This exploration dives into deep questions about computational complexity, from counting programs like <code>(λx. x x) (λx. x x)</code> to analyzing the non-computable <code>BB(N)</code> busy beaver function that grows faster than any computable sequence. We examine Chaitin&rsquo;s constant $Ω$ and why determining program convergence connects to unsolved problems like the Collatz conjecture <code>collatz(3n + 1)</code>.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/programs-of-length-n/">Read more…</a>
@@ -102,9 +98,7 @@
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		The Pythagorean triple problem is as follows. Given an input integer \(n\), return integers \(a\), \(b\), \(c\) such that the two following conditions hold:
-$$ a b c = n $$ $$ a^2 + b^2 = c^2 $$
-I was interested in finding a solution to this problem that was both succint and had good asymptotic complexity. The solution I found runs in O(sqrt(n)) time by deconstructing the problem into the well-known 3SUM problem.
+		<p>We explore a solution to finding Pythagorean triples with a product constraint, achieving O(√n) time complexity by reducing the problem to the well-known 3SUM problem.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/algorithms/pythagorean-triple/">Read more…</a>
@@ -120,8 +114,7 @@ I was interested in finding a solution to this problem that was both succint and
 		
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		A common problem when using Mathematica to derive expressions is similar to a big problem plaguing machine learning algorithms today: It is difficult or impossible to explain the result due to the internal complexity of the black-box which generates it.
-Mathematica&rsquo;s internal algorithms for performing various symbolic computation are built for speed, not simplicity, and in many cases the method Mathematica uses is nothing like the manual way humans would find the solution.
+		<p>Exploring methods to extract human-readable step-by-step solutions from Mathematica&rsquo;s symbolic computation, addressing the black-box problem in automated mathematical derivation.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/simulation/mathematica-steps-to-latex/">Read more…</a>
@@ -143,11 +136,11 @@ Mathematica&rsquo;s internal algorithms for performing various symbolic computat
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Stub: Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/non-recursive-includes/">A non-recursive type-level inclusion operator</a></li>
 		</ul>
 	</div>
 </div>
@@ -175,9 +168,11 @@ Mathematica&rsquo;s internal algorithms for performing various symbolic computat
 <div class="widget-taglist widget">
 	<h4 class="widget__title">Tags</h4>
 	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
@@ -215,7 +210,7 @@ Mathematica&rsquo;s internal algorithms for performing various symbolic computat
 	<div class="container footer__container flex">
 		
 		<div class="footer__copyright">
-			&copy; 2024 Codeless Code.
+			&copy; 2025 Codeless Code.
 			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
 		</div>
 	</div>

@@ -4,7 +4,7 @@
     <title>Algorithms on Codeless Code</title>
     <link>https://code.lol/categories/algorithms/</link>
     <description>Recent content in Algorithms on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 09 Jan 2021 15:18:24 -0800</lastBuildDate>
     <atom:link href="https://code.lol/categories/algorithms/index.xml" rel="self" type="application/rss+xml" />
@@ -13,21 +13,21 @@
       <link>https://code.lol/post/programming/type-level-dedupe/</link>
       <pubDate>Sat, 09 Jan 2021 15:18:24 -0800</pubDate>
       <guid>https://code.lol/post/programming/type-level-dedupe/</guid>
-      <description>The string deduplication problem is a canonical one within computer science, serving a similar purpose as fizz-buzz in terms of being an example of a simple problem that a reasonably knowledgable practitioner should be able to solve with minimal effort.&#xA;The problem appears in a few variants, but briefly one such variant is to remove duplicate letters in a given string, such that the string then has only one instance of any given letter.</description>
+      <description>&lt;p&gt;Solving the classic string deduplication algorithm entirely within TypeScript&amp;rsquo;s type system using literal string types and recursive type manipulation.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Dijkstra&#39;s Shunting Yard in Typescript</title>
       <link>https://code.lol/post/algorithms/shunting-yard/</link>
       <pubDate>Mon, 23 Dec 2019 16:39:53 -0800</pubDate>
       <guid>https://code.lol/post/algorithms/shunting-yard/</guid>
-      <description>The shunting yard algorithm converts infix expressions (i.e. 1+2) into reverse Polish notation, i.e. 1 2 +, which lends itself well to execution on a stack machine.&#xA;An aside: I wanted to revisit this algorithm because it was one of the first I implemented in C during self-study five years ago. In a way, reimplementing it is a way of measuring my progress since then.&#xA;The internal details aren&amp;rsquo;t too complicated - it&amp;rsquo;s based on the simple pseudo-code of the Wikipedia article describing the shunting yard algorithm.</description>
+      <description>&lt;p&gt;A functional TypeScript implementation of Dijkstra&amp;rsquo;s classic algorithm for parsing mathematical expressions, converting infix notation to reverse Polish notation for stack-based evaluation.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Pythagorean Triple Problem in Sub-linear Time</title>
       <link>https://code.lol/post/algorithms/pythagorean-triple/</link>
       <pubDate>Sun, 10 Mar 2019 15:48:49 -0400</pubDate>
       <guid>https://code.lol/post/algorithms/pythagorean-triple/</guid>
-      <description>The Pythagorean triple problem is as follows. Given an input integer \(n\), return integers \(a\), \(b\), \(c\) such that the two following conditions hold:&#xA;$$ a b c = n $$ $$ a^2 + b^2 = c^2 $$&#xA;I was interested in finding a solution to this problem that was both succint and had good asymptotic complexity. The solution I found runs in O(sqrt(n)) time by deconstructing the problem into the well-known 3SUM problem.</description>
+      <description>&lt;p&gt;We explore a solution to finding Pythagorean triples with a product constraint, achieving O(√n) time complexity by reducing the problem to the well-known 3SUM problem.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

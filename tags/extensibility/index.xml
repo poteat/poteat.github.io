@@ -4,7 +4,7 @@
     <title>Extensibility on Codeless Code</title>
     <link>https://code.lol/tags/extensibility/</link>
     <description>Recent content in Extensibility on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 05 Sep 2022 12:03:54 -0700</lastBuildDate>
     <atom:link href="https://code.lol/tags/extensibility/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,7 @@
       <link>https://code.lol/post/programming/plugin-architecture/</link>
       <pubDate>Mon, 05 Sep 2022 12:03:54 -0700</pubDate>
       <guid>https://code.lol/post/programming/plugin-architecture/</guid>
-      <description>declare abstract class EnginePlugin&amp;lt;I = unknown, D = unknown&amp;gt; { createInterface?(ø: Record&amp;lt;string, unknown&amp;gt;): I getDependencies?(): D } type Defined&amp;lt;T&amp;gt; = T extends undefined ? never : T type ExtractPlugins&amp;lt;T&amp;gt; = T extends Engine&amp;lt;infer PX&amp;gt; ? PX : never type UnionToIntersection&amp;lt;U&amp;gt; = ( U extends unknown ? (k: U) =&amp;gt; void : never ) extends (k: infer I) =&amp;gt; void ? I : never type MergeInterfaces&amp;lt; E extends Engine, K extends keyof EnginePlugin, &amp;gt; = UnionToIntersection&amp;lt;ReturnType&amp;lt;Defined&amp;lt;ExtractPlugins&amp;lt;E&amp;gt;[number][K]&amp;gt;&amp;gt;&amp;gt; type Assume&amp;lt;T, U&amp;gt; = T extends U ?</description>
+      <description>&lt;p&gt;Designing a type-safe plugin system in TypeScript that maintains strong typing guarantees while allowing extensible functionality. Using discriminated unions and generic constraints, we can build plugin architectures where &lt;code&gt;registerPlugin&amp;lt;T extends Plugin&amp;gt;()&lt;/code&gt; enforces interface contracts at compile time. This approach enables dynamic feature extension while preserving full IDE support and preventing runtime type errors - useful for maintaining large-scale extensible applications.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

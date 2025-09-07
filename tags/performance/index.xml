@@ -4,7 +4,7 @@
     <title>Performance on Codeless Code</title>
     <link>https://code.lol/tags/performance/</link>
     <description>Recent content in Performance on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 27 Aug 2022 16:37:21 -0700</lastBuildDate>
     <atom:link href="https://code.lol/tags/performance/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,7 @@
       <link>https://code.lol/post/programming/non-recursive-includes/</link>
       <pubDate>Sat, 27 Aug 2022 16:37:21 -0700</pubDate>
       <guid>https://code.lol/post/programming/non-recursive-includes/</guid>
-      <description>type E1&amp;lt;X&amp;gt; = &amp;lt;T&amp;gt;() =&amp;gt; T extends X ? 0 : 1 type E2&amp;lt;X&amp;gt; = &amp;lt;T&amp;gt;() =&amp;gt; T extends X ? 0 : 1 type IsEqual&amp;lt;X, Y&amp;gt; = E1&amp;lt;X&amp;gt; extends E2&amp;lt;Y&amp;gt; ? true : false /** * Whether or not T includes U as an element. */ type Includes&amp;lt;T extends readonly unknown[], U&amp;gt; = true extends { [key in keyof T]: IsEqual&amp;lt;T[key], U&amp;gt; }[number] ? true : false A non-recursive type-level Includes operator in Typescript Introduction Includes is a type-level operator that determines whether a given type T includes a given type U as an element.</description>
+      <description>&lt;p&gt;A performance-optimized, non-recursive implementation of a type-level array inclusion operator in TypeScript. By leveraging tuple spread syntax and conditional types instead of recursive patterns, we achieve &lt;code&gt;Includes&amp;lt;[1, 2, 3], 2&amp;gt;&lt;/code&gt; evaluation in O(1) type instantiation depth rather than O(n). This technique improves compile-time performance for large tuple operations, avoiding TypeScript&amp;rsquo;s recursion depth limits while maintaining the same type-level guarantees.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

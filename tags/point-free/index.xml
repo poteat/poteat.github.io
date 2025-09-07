@@ -4,7 +4,7 @@
     <title>Point-Free on Codeless Code</title>
     <link>https://code.lol/tags/point-free/</link>
     <description>Recent content in Point-Free on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 07 Feb 2023 23:17:12 -0800</lastBuildDate>
     <atom:link href="https://code.lol/tags/point-free/index.xml" rel="self" type="application/rss+xml" />
@@ -13,14 +13,14 @@
       <link>https://code.lol/post/programming/kind-reification/</link>
       <pubDate>Tue, 07 Feb 2023 23:17:12 -0800</pubDate>
       <guid>https://code.lol/post/programming/kind-reification/</guid>
-      <description>The hkt-toolbelt now provides a way to &amp;lsquo;reify&amp;rsquo; a higher-order type into a concrete function type. This is useful for representation of point-free code.&#xA;to reify: make (something abstract) more concrete or real.&#xA;Basics of Higher-Order Types For the purposes of hkt-toolbelt, a higher-order type is merely a representation of a type mapping, i.e. an &amp;lsquo;applicable&amp;rsquo; type that maps from an input type to an output type.&#xA;Higher-order types are useful because they can take in higher order types, or return higher order types.</description>
+      <description>&lt;p&gt;The &lt;code&gt;hkt-toolbelt&lt;/code&gt; library introduces kind reification - transforming abstract type-level functions into concrete runtime signatures. This enables point-free programming where compositions like &lt;code&gt;Pipe&amp;lt;[Map&amp;lt;Inc&amp;gt;, Filter&amp;lt;IsEven&amp;gt;, Reduce&amp;lt;Add&amp;gt;]&amp;gt;&lt;/code&gt; become executable functions with 1:1 corresponding types. By bridging TypeScript&amp;rsquo;s type system with runtime code, we can write type-level pipelines that are both type-safe and actually invokable.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;to &lt;strong&gt;reify:&lt;/strong&gt; make (something abstract) more concrete or real.&lt;/p&gt;&lt;/blockquote&gt;</description>
     </item>
     <item>
       <title>Point-free Programming via HKTs</title>
       <link>https://code.lol/post/programming/hkt-tacit/</link>
       <pubDate>Fri, 11 Mar 2022 09:34:39 -0800</pubDate>
       <guid>https://code.lol/post/programming/hkt-tacit/</guid>
-      <description>In Typescript, point-free programming has been traditionally limited due to the difficulty the type system has representing the abstracted types associated with point-free (also called &amp;rsquo;tacit&amp;rsquo;) programming.&#xA;1. What is Tacit Programming? 2. Type-Level Programming 2.1. The Hard (Naive) Way 2.2. Tacit Logic via HKTs 3. Addendum: Library 3.1. Basic HKT Abstractions 3.2. HKT Composition 3.3. Narrow Type Inference 3.4. Value-level Apply 3.5. Auto-applyable HKTs 3.6. HKT-Level Flow 3.7. HKT-level Split 3.</description>
+      <description>&lt;p&gt;Implementing point-free (tacit) programming patterns in TypeScript using Higher Kinded Types to overcome traditional type system limitations. Point-free style eliminates explicit arguments, composing functions like &lt;code&gt;pipe(map(inc), filter(isEven), reduce(add))&lt;/code&gt; instead of &lt;code&gt;x =&amp;gt; x.map(inc).filter(isEven).reduce(add)&lt;/code&gt;. Through HKT encodings, we achieve true tacit programming where type inference flows through the entire pipeline, enabling cleaner functional abstractions without sacrificing TypeScript&amp;rsquo;s type safety.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

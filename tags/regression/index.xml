@@ -4,7 +4,7 @@
     <title>Regression on Codeless Code</title>
     <link>https://code.lol/tags/regression/</link>
     <description>Recent content in Regression on Codeless Code</description>
-    <generator>Hugo 0.125.0</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 25 Jan 2019 20:35:20 -0500</lastBuildDate>
     <atom:link href="https://code.lol/tags/regression/index.xml" rel="self" type="application/rss+xml" />
@@ -13,14 +13,14 @@
       <link>https://code.lol/post/bioinformatics/oriented-bounding-box-heuristic/</link>
       <pubDate>Fri, 25 Jan 2019 20:35:20 -0500</pubDate>
       <guid>https://code.lol/post/bioinformatics/oriented-bounding-box-heuristic/</guid>
-      <description>The 2-dimensional minimum-area oriented bounding box problem is as follows: Given a set of coplanar points, how can we efficiently find the smallest rectangle which encloses these points? Additionally, that rectangle can be oriented at any angle with respect to the coordinate system.&#xA;One interesting estimate for the solution, which guarantees &amp;ldquo;pretty good&amp;rdquo; results in O(n) time is a natural extension of orthogonal linear regression. Specifically, we assume that the minimum rectangle is aligned to the orthogonal &amp;ldquo;line of best fit&amp;rdquo; of the point set.</description>
+      <description>&lt;p&gt;A fast O(n) heuristic for finding near-optimal oriented bounding boxes around point sets, using orthogonal linear regression to align rectangles with the natural orientation of the data.&lt;/p&gt;</description>
     </item>
     <item>
       <title>One-Dimensional Linear Regression</title>
       <link>https://code.lol/post/bioinformatics/one-dimensional-linear-regression/</link>
       <pubDate>Fri, 25 Jan 2019 18:27:02 -0500</pubDate>
       <guid>https://code.lol/post/bioinformatics/one-dimensional-linear-regression/</guid>
-      <description>The simple linear regression algorithm is a closed-form solution to a least-squared distance minimization problem. Here is demonstrated the one-dimensional case of simple linear regression.&#xA;$$ \min_{\alpha,\beta} \sum_{i=1}^{n} (y_i - \alpha - \beta x_i)^2 $$ Click and drag the black points to affect the regression. Double click to add or remove points. The blue point in the center represents the geometric average, through which the fit always passes through.&#xA;In this problem, the least-squared distance considered includes only the vertical component.</description>
+      <description>&lt;p&gt;An interactive demonstration of simple linear regression, showing how the least-squares method finds the best-fitting line through a set of data points by minimizing vertical distances.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
