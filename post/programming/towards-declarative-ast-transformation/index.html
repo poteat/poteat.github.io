@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Towards type-aware declarative codemods via unification - Codeless Code</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+		<meta property="og:url" content="https://code.lol/post/programming/towards-declarative-ast-transformation/">
+  <meta property="og:site_name" content="Codeless Code">
+  <meta property="og:title" content="Towards type-aware declarative codemods via unification">
+  <meta property="og:description" content="I’ve been playing with codemod transformations for TypeScript using jscodeshift (from Facebook) and ts-pattern. Working closely with these has made me want a declarative type-aware codemod engine for TypeScript, which I haven’t yet been able to find.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-09-07T11:13:46-07:00">
+    <meta property="article:modified_time" content="2025-09-07T11:13:46-07:00">
+    <meta property="article:tag" content="Programming">
+    <meta property="article:tag" content="Ast">
+    <meta property="article:tag" content="Meta">
+    <meta property="article:tag" content="Codemod">
+    <meta property="og:image" content="https://code.lol/img/art/riding-digital-waves.png">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+		
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container header__container">
+		
+	<div class="logo">
+		<a class="logo__link" href="/" title="Codeless Code" rel="home">
+			<div class="logo__item logo__text">
+					<div class="logo__title">Codeless Code</div>
+					<div class="logo__tagline">Blog of Alice Poteat</div>
+				</div>
+		</a>
+	</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">
+				
+				<span class="menu__text">about</span>
+				
+			</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/contact/">
+				
+				<span class="menu__text">Contact</span>
+				
+			</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Towards type-aware declarative codemods via unification</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2025-09-07T11:13:46-07:00">September 07, 2025</time></div></div>
+		</header>
+		<div class="content post__content clearfix">
+			<p>I&rsquo;ve been playing with codemod transformations for TypeScript using
+<a href="https://github.com/facebook/jscodeshift"><code>jscodeshift</code></a> (from Facebook) and
+<a href="https://github.com/gvergnaud/ts-pattern"><code>ts-pattern</code></a>. Working closely with
+these has made me want a declarative type-aware codemod engine for TypeScript,
+which I haven&rsquo;t yet been able to find.</p>
+<p>The basic structure of these codemods follows a pattern matching approach:</p>
+<details>
+<summary>Show codemod template</summary>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">import</span> <span style="color:#080;font-weight:bold">type</span> { Transform, FileInfo, API, ASTPath } <span style="color:#080;font-weight:bold">from</span> <span style="background-color:#fff0f0">&#34;jscodeshift&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">import</span> { match, P } <span style="color:#080;font-weight:bold">from</span> <span style="background-color:#fff0f0">&#34;ts-pattern&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> pattern <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#888">/* Some AST pattern to match against with extracted selectors */</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isEligible <span style="color:#333">=</span> (path: <span style="color:#339;font-weight:bold">ASTPath</span>) <span style="color:#333">=&gt;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> match(path.node)
+</span></span><span style="display:flex;"><span>    .<span style="color:#080;font-weight:bold">with</span>(pattern, () <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">true</span>)
+</span></span><span style="display:flex;"><span>    .otherwise(() <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">false</span>);
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> transform: <span style="color:#339;font-weight:bold">Transform</span> <span style="color:#333">=</span> (fileInfo, api) <span style="color:#333">=&gt;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> j <span style="color:#333">=</span> api.jscodeshift;
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> root <span style="color:#333">=</span> j(fileInfo.source);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  root
+</span></span><span style="display:flex;"><span>    .find(<span style="color:#888">/* Some particular node type */</span>)
+</span></span><span style="display:flex;"><span>    .filter(isEligible)
+</span></span><span style="display:flex;"><span>    .replaceWith((path: <span style="color:#339;font-weight:bold">ASTPath</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>      match(path.node)
+</span></span><span style="display:flex;"><span>        .<span style="color:#080;font-weight:bold">with</span>(pattern, ({ test, <span style="color:#888">/* Some set of selected fragments */</span> }) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#888">/* Some AST builder using jscodeshift utils */</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        .otherwise(() <span style="color:#333">=&gt;</span> path.node)
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> root.toSource();
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> matches <span style="color:#333">=</span> (fileInfo: <span style="color:#339;font-weight:bold">FileInfo</span>, api: <span style="color:#339;font-weight:bold">API</span>)<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">boolean</span> <span style="color:#333">=&gt;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> j <span style="color:#333">=</span> api.jscodeshift;
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> root <span style="color:#333">=</span> j(fileInfo.source);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> matching <span style="color:#333">=</span> root
+</span></span><span style="display:flex;"><span>    .find(<span style="color:#888">/* Some particular node type */</span>)
+</span></span><span style="display:flex;"><span>    .filter(isEligible);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> matching.length <span style="color:#333">&gt;</span> <span style="color:#00d;font-weight:bold">0</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">default</span> transform;
+</span></span></code></pre></div></details>
+<p>As a more concrete example, let&rsquo;s take the simple case of a if-else condition
+whose consequent and alternate are both immediate returns:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> renderPetName(pet) {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">if</span> (pet.<span style="color:#080;font-weight:bold">type</span> <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;dog&#34;</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="background-color:#fff0f0">`Woof: </span><span style="background-color:#eee">${</span>pet.name<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>;
+</span></span><span style="display:flex;"><span>  } <span style="color:#080;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> pet.name;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>We could distribute the conditional into the branches, resulting in the
+following alternative more terse implementation:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> renderPetName(pet) {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> pet.<span style="color:#080;font-weight:bold">type</span> <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;dog&#34;</span> <span style="color:#333">?</span> <span style="background-color:#fff0f0">`Woof: </span><span style="background-color:#eee">${</span>pet.name<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span> <span style="color:#333">:</span> pet.name;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>An example codemod using the aforementioned jscodeshift and ts-pattern would
+look like this:</p>
+<details>
+<summary>Show complete codemod 'if-to-ternary-return' example</summary>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#888"> * Transform if-else statements with returns into ternary expressions
+</span></span></span><span style="display:flex;"><span><span style="color:#888"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">import</span> <span style="color:#080;font-weight:bold">type</span> { Transform, FileInfo, API, ASTPath } <span style="color:#080;font-weight:bold">from</span> <span style="background-color:#fff0f0">&#34;jscodeshift&#34;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">import</span> { match, P } <span style="color:#080;font-weight:bold">from</span> <span style="background-color:#fff0f0">&#34;ts-pattern&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> ifWithReturnsPattern <span style="color:#333">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">type</span><span style="color:#333">:</span> <span style="background-color:#fff0f0">&#34;IfStatement&#34;</span>,
+</span></span><span style="display:flex;"><span>  test: <span style="color:#339;font-weight:bold">P.select</span>(<span style="background-color:#fff0f0">&#34;test&#34;</span>),
+</span></span><span style="display:flex;"><span>  consequent<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">type</span><span style="color:#333">:</span> <span style="background-color:#fff0f0">&#34;BlockStatement&#34;</span>,
+</span></span><span style="display:flex;"><span>    body<span style="color:#333">:</span> [
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">type</span><span style="color:#333">:</span> <span style="background-color:#fff0f0">&#34;ReturnStatement&#34;</span>,
+</span></span><span style="display:flex;"><span>        argument: <span style="color:#339;font-weight:bold">P.select</span>(<span style="background-color:#fff0f0">&#34;consequentArg&#34;</span>),
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  alternate<span style="color:#333">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">type</span><span style="color:#333">:</span> <span style="background-color:#fff0f0">&#34;BlockStatement&#34;</span>,
+</span></span><span style="display:flex;"><span>    body<span style="color:#333">:</span> [
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#080;font-weight:bold">type</span><span style="color:#333">:</span> <span style="background-color:#fff0f0">&#34;ReturnStatement&#34;</span>,
+</span></span><span style="display:flex;"><span>        argument: <span style="color:#339;font-weight:bold">P.select</span>(<span style="background-color:#fff0f0">&#34;alternateArg&#34;</span>),
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>} <span style="color:#080;font-weight:bold">as</span> <span style="color:#080;font-weight:bold">const</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#888"> * Check if a node is an if-statement eligible for transformation to ternary
+</span></span></span><span style="display:flex;"><span><span style="color:#888"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> isTransformableIfStatement <span style="color:#333">=</span> (path: <span style="color:#339;font-weight:bold">ASTPath</span>) <span style="color:#333">=&gt;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> match(path.node)
+</span></span><span style="display:flex;"><span>    .<span style="color:#080;font-weight:bold">with</span>(ifWithReturnsPattern, () <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">true</span>)
+</span></span><span style="display:flex;"><span>    .otherwise(() <span style="color:#333">=&gt;</span> <span style="color:#080;font-weight:bold">false</span>);
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> transform: <span style="color:#339;font-weight:bold">Transform</span> <span style="color:#333">=</span> (fileInfo, api) <span style="color:#333">=&gt;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> j <span style="color:#333">=</span> api.jscodeshift;
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> root <span style="color:#333">=</span> j(fileInfo.source);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  root
+</span></span><span style="display:flex;"><span>    .find(j.IfStatement)
+</span></span><span style="display:flex;"><span>    .filter(isTransformableIfStatement)
+</span></span><span style="display:flex;"><span>    .replaceWith((path: <span style="color:#339;font-weight:bold">ASTPath</span>) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>      match(path.node)
+</span></span><span style="display:flex;"><span>        .<span style="color:#080;font-weight:bold">with</span>(ifWithReturnsPattern, ({ test, consequentArg, alternateArg }) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>          j.returnStatement(
+</span></span><span style="display:flex;"><span>            j.conditionalExpression(test, consequentArg, alternateArg)
+</span></span><span style="display:flex;"><span>          )
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        .otherwise(() <span style="color:#333">=&gt;</span> path.node)
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> root.toSource();
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#888">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#888"> * Check if the selected code can be transformed
+</span></span></span><span style="display:flex;"><span><span style="color:#888"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">const</span> matches <span style="color:#333">=</span> (fileInfo: <span style="color:#339;font-weight:bold">FileInfo</span>, api: <span style="color:#339;font-weight:bold">API</span>)<span style="color:#333">:</span> <span style="color:#080;font-weight:bold">boolean</span> <span style="color:#333">=&gt;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> j <span style="color:#333">=</span> api.jscodeshift;
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> root <span style="color:#333">=</span> j(fileInfo.source);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">const</span> matchingIfStatements <span style="color:#333">=</span> root
+</span></span><span style="display:flex;"><span>    .find(j.IfStatement)
+</span></span><span style="display:flex;"><span>    .filter(isTransformableIfStatement);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">return</span> matchingIfStatements.length <span style="color:#333">&gt;</span> <span style="color:#00d;font-weight:bold">0</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">default</span> transform;
+</span></span></code></pre></div></details>
+<p>The above transform is pretty nice - it abstracts away source text and only
+deals with recognition and transformation on AST structures. However, there are
+a few core flaws in this representation:</p>
+<ol>
+<li><code>jscodeshift</code> has no affordance to inspect the type of an expression.</li>
+<li>There is no ability to avoid recomputing certain steps between the match and
+transform.</li>
+<li>Most critically, we must use different semantics for representing two
+elements:
+<ul>
+<li>The structure to <em>match</em>.</li>
+<li>The structure to replace the match with.</li>
+</ul>
+</li>
+</ol>
+<h1 id="towards-unification">Towards unification</h1>
+<p>The concept of unification - at least how I&rsquo;m using it - refers to the idea of
+using equivalent semantics between the matched structure and the structure-
+builder to replace with. There are some tools which do a limited* form of this
+via pattern codes (e.g. Comby, ast-grep). My umbrage is two-fold:</p>
+<ul>
+<li>these tools also don&rsquo;t allow type-semantic analysis.</li>
+<li>and also don&rsquo;t <em>really</em> support algebraic parser-combinator-esque
+structures, like match [this] OR [that], MAYBE [this], etc., in my opinion.</li>
+</ul>
+<p>So, I think there&rsquo;s space for a tool that uses direct-ish AST pattern matching
+<em>embedded</em> in TypeScript, that also supports type-level semantics. It would use
+the same semantics for matching as it does replacing, based on a pattern-
+matching, declarative philosophy.</p>
+<p>For the above rule, it would look something like this:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> ifToTernary <span style="color:#333">=</span> transform({
+</span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">from</span><span style="color:#333">:</span> U.ifStatement({
+</span></span><span style="display:flex;"><span>    test: <span style="color:#339;font-weight:bold">$</span>(<span style="background-color:#fff0f0">&#34;test&#34;</span>),
+</span></span><span style="display:flex;"><span>    consequent: <span style="color:#339;font-weight:bold">U.block</span>({
+</span></span><span style="display:flex;"><span>      body<span style="color:#333">:</span> [U.returnStatement({ argument: <span style="color:#339;font-weight:bold">$</span>(<span style="background-color:#fff0f0">&#34;consequent&#34;</span>) })],
+</span></span><span style="display:flex;"><span>    }),
+</span></span><span style="display:flex;"><span>    alternate: <span style="color:#339;font-weight:bold">U.block</span>({
+</span></span><span style="display:flex;"><span>      body<span style="color:#333">:</span> [U.returnStatement({ argument: <span style="color:#339;font-weight:bold">$</span>(<span style="background-color:#fff0f0">&#34;alternate&#34;</span>) })],
+</span></span><span style="display:flex;"><span>    }),
+</span></span><span style="display:flex;"><span>  }),
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  to<span style="color:#333">:</span> ({ test, consequent, alternate }) <span style="color:#333">=&gt;</span>
+</span></span><span style="display:flex;"><span>    U.returnStatement({
+</span></span><span style="display:flex;"><span>      argument: <span style="color:#339;font-weight:bold">U.conditional</span>({
+</span></span><span style="display:flex;"><span>        test,
+</span></span><span style="display:flex;"><span>        consequent,
+</span></span><span style="display:flex;"><span>        alternate,
+</span></span><span style="display:flex;"><span>      }),
+</span></span><span style="display:flex;"><span>    }),
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><details>
+<summary>ast-grep comparison for fairness sake</summary>
+<p>To be fair, <code>ast-grep</code> is quite terse! Still, there&rsquo;s no hope of either
+inspecting types, or doing complex actions like &ldquo;find common subexpressions&rdquo;.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>rule:
+</span></span><span style="display:flex;"><span>  pattern: |
+</span></span><span style="display:flex;"><span>    if ($TEST) {
+</span></span><span style="display:flex;"><span>      return $CONSEQUENT;
+</span></span><span style="display:flex;"><span>    } else {
+</span></span><span style="display:flex;"><span>      return $ALTERNATE;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>fix: |
+</span></span><span style="display:flex;"><span>  return $TEST ? $CONSEQUENT : $ALTERNATE;
+</span></span></code></pre></div></details>
+<p>There&rsquo;s a few things going on here - introduced into the scope are <code>transform</code>,
+<code>U</code>, and <code>$</code>:</p>
+<ul>
+<li><code>transform</code>: specify a transformation via <code>from</code> and <code>to</code> AST structures.</li>
+<li><code>U</code>: namespace of AST matcher / builders.</li>
+<li><code>$</code>: wildcard operator for pattern-matching and captured names.</li>
+</ul>
+<p>A few design choices:</p>
+<ol>
+<li>All functions are unary, taking in objects (except for $).</li>
+<li>Code is represented as an explicit AST, not with code-pattern wildcards.</li>
+<li>Captures come through the context passed into <code>to</code>.</li>
+</ol>
+<p>Although it&rsquo;s not really within scope of this article, as a hint towards type
+awareness, I&rsquo;m thinking expressions, captures could have a jest-like building
+pattern syntax that specifies type constraints, probably with its own pattern-
+matching syntax to match against more complicated types (like generics).</p>
+<p>As far as type <em>safety</em> of the actual transformation goes, I&rsquo;m thinking capture
+names can be type-level captured such that downstream usage is known.</p>
+<h1 id="data-flow-semantics">Data-flow semantics</h1>
+<p>A core piece of this is a &ldquo;context data-flow&rdquo; using this $ concept. In the
+initial step, $ gets populated with matched fragments. I will elide this for
+now; instead, I want to explicate the <code>.with</code> builder that is a core piece of
+this design.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// { port: 3000, host: &#34;localhost&#34;, ...url, isSecure: false }
+</span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">const</span> result <span style="color:#333">=</span> scope({ port: <span style="color:#339;font-weight:bold">3000</span> })
+</span></span><span style="display:flex;"><span>  .<span style="color:#080;font-weight:bold">with</span>(() <span style="color:#333">=&gt;</span> ({ host<span style="color:#333">:</span> <span style="background-color:#fff0f0">&#34;localhost&#34;</span> }))
+</span></span><span style="display:flex;"><span>  .<span style="color:#080;font-weight:bold">with</span>(({ port, host }) <span style="color:#333">=&gt;</span> ({ url<span style="color:#333">:</span> <span style="background-color:#fff0f0">`http://</span><span style="background-color:#eee">${</span>host<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">:</span><span style="background-color:#eee">${</span>port<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span> }))
+</span></span><span style="display:flex;"><span>  .<span style="color:#080;font-weight:bold">with</span>(({ port }) <span style="color:#333">=&gt;</span> ({ isSecure: <span style="color:#339;font-weight:bold">port</span> <span style="color:#333">===</span> <span style="color:#00d;font-weight:bold">443</span> }))
+</span></span><span style="display:flex;"><span>  .value();
+</span></span></code></pre></div><p>This isn&rsquo;t used in the parser above, but it&rsquo;s a core piece - the ability to
+type-safely &lsquo;merge&rsquo; / &lsquo;overwrite&rsquo; keys into a shared context which then
+eventually gets used.</p>
+<p>I have a small demonstration of the type-level semantics for the data-flow
+pattern here:</p>
+<ul>
+<li><a href="https://tsplay.dev/mMkzkw">TS Playground Link</a></li>
+</ul>
+<h1 id="next-steps">Next steps</h1>
+<p>I think the next step would be to come up with a type definition for
+<code>transform</code>, <code>U</code>, and <code>$</code> - and then make up some &ldquo;fantasy&rdquo; codemods that could
+form the basis of a test suite / requirement set to build towards.</p>
+		</div>
+		<footer class="post__footer">
+			
+<div class="post__tags tags clearfix">
+	<svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M4 0h8s2 0 4 2l15 15s2 2 0 4L21 31s-2 2-4 0L2 16s-2-2-2-4V3s0-3 4-3m3 10a3 3 0 0 0 0-6 3 3 0 0 0 0 6"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/programming/" rel="tag">programming</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/ast/" rel="tag">ast</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/meta/" rel="tag">meta</a>
+		</li>
+		<li class="tags__item">
+			<a class="tags__link btn" href="/tags/codemod/" rel="tag">codemod</a>
+		</li>
+	</ul>
+</div>
+		</footer>
+	</article>
+</main>
+
+<div class="authorbox clearfix">
+	<figure class="authorbox__avatar">
+		<img alt="Alice Poteat avatar" src="/img/avatar.png" class="avatar" height="90" width="90">
+	</figure>
+	<div class="authorbox__header">
+		<span class="authorbox__name">About Alice Poteat</span>
+	</div>
+	<div class="authorbox__description">
+		software engineer and flawed human being
+	</div>
+</div>
+
+
+
+			</div>
+			<aside class="sidebar"><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<input class="widget-search__field" type="search" placeholder="Search…" value="" name="q" aria-label="Search…">
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://code.lol/">
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/towards-declarative-ast-transformation/">Towards type-aware declarative codemods via unification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Variational Selector Text Stenography</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
+			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-categories widget">
+	<h4 class="widget__title">Categories</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/algorithms/">Algorithms</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/bioinformatics/">Bioinformatics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/life/">Life</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/mathematics/">Mathematics</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/programming/">Programming</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/simulation/">Simulation</a></li>
+			<li class="widget__item">
+				<a class="widget__link" href="/categories/typescript/">Typescript</a></li>
+		</ul>
+	</div>
+</div>
+<div class="widget-taglist widget">
+	<h4 class="widget__title">Tags</h4>
+	<div class="widget__content">
+		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/ast/" title="Ast">Ast</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/codemod/" title="Codemod">Codemod</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/design-patterns/" title="Design Patterns">Design Patterns</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/dijkstra/" title="Dijkstra">Dijkstra</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/efficiency/" title="Efficiency">Efficiency</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/extensibility/" title="Extensibility">Extensibility</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/factorization/" title="Factorization">Factorization</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/functional-programming/" title="Functional Programming">Functional Programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/javascript/" title="Javascript">Javascript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/lambda-calculus/" title="Lambda Calculus">Lambda Calculus</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="Latex">Latex</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="Math">Math</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="Mathematica">Mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/meta/" title="Meta">Meta</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="Number-Theory">Number-Theory</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="Parsing">Parsing</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="Performance">Performance</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/physics/" title="Physics">Physics</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/point-free/" title="Point-Free">Point-Free</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/programming/" title="Programming">Programming</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/rationality/" title="Rationality">Rationality</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/regression/" title="Regression">Regression</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/safety/" title="Safety">Safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/strings/" title="Strings">Strings</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tau-beta-pi/" title="Tau-Beta-Pi">Tau-Beta-Pi</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/tuples/" title="Tuples">Tuples</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-safety/" title="Type Safety">Type Safety</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-guard/" title="Type-Guard">Type-Guard</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/type-system/" title="Type-System">Type-System</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/typescript/" title="Typescript">Typescript</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/wip/" title="Wip">Wip</a>
+	</div>
+</div>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy; 2025 Codeless Code.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+	</div>
+<script async defer src="/js/menu.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+</body>
+</html>

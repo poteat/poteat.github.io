@@ -75,11 +75,31 @@
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/programming/type-guard-composition/" rel="bookmark">
+			Type Guard Composition
+			</a>
+		</h2>
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2021-11-14T12:08:01-08:00">November 14, 2021</time></div></div>
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>Building composable type guard systems in TypeScript where runtime validation seamlessly integrates with compile-time type narrowing. Type guards like <code>isString(x): x is string</code> enable safe runtime checks, but composing them requires careful design. This explores combinators for union guards <code>or(isNumber, isString): x is number | string</code>, intersection guards <code>and(hasName, hasAge): x is Person</code>, and variadic patterns that preserve type inference. The result: elegant runtime validation that TypeScript&rsquo;s control flow fully understands.</p>
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/type-guard-composition/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/programming/programs-of-length-n/" rel="bookmark">
 			Programs of Length N: Collatz, Chaitin, and Church
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2021-09-03T15:12:34-07:00">September 03, 2021</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>How many lambda calculus programs exist with exactly $N$ terms? This exploration dives into deep questions about computational complexity, from counting programs like <code>(λx. x x) (λx. x x)</code> to analyzing the non-computable <code>BB(N)</code> busy beaver function that grows faster than any computable sequence. We examine Chaitin&rsquo;s constant $Ω$ and why determining program convergence connects to unsolved problems like the Collatz conjecture <code>collatz(3n + 1)</code>.</p>
@@ -95,7 +115,9 @@
 			Unchained Tuple Types
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2021-01-09T16:33:40-08:00">January 09, 2021</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>Using TypeScript&rsquo;s <code>asserts</code> syntax to create imperative-style type mutations, moving beyond method chaining to more familiar iterative patterns for complex type operations.</p>
@@ -111,7 +133,9 @@
 			String Deduplication on the Type Level
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2021-01-09T15:18:24-08:00">January 09, 2021</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>Solving the classic string deduplication algorithm entirely within TypeScript&rsquo;s type system using literal string types and recursive type manipulation.</p>
@@ -127,7 +151,9 @@
 			Chained Tuple Types
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2021-01-05T20:23:23-08:00">January 05, 2021</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>TypeScript 4.1&rsquo;s variadic tuple types enable building complex type-safe data structures through method chaining, where each operation expands the chain&rsquo;s type signature at compile time.</p>
@@ -143,7 +169,9 @@
 			Enforcing Function Map Constraints
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2020-12-16T19:41:08-08:00">December 16, 2020</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>Exploring how to enforce type constraints across function maps in TypeScript, where every function must accept a specific parameter type.</p>
@@ -159,7 +187,9 @@
 			Self Modifying Type Predicates in Typescript
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2020-05-03T19:41:57-07:00">May 03, 2020</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>TypeScript&rsquo;s type predicates can modify the type of <code>this</code> itself, enabling self-modifying type behavior that approaches dependent types. By implementing <code>is&lt;K extends keyof ShapeTypes&gt;(type: K): this is ShapeTypes[K]</code> on abstract classes, we achieve compile-time type narrowing where <code>shape.is('circle')</code> transforms the <code>shape</code> variable&rsquo;s type from <code>Shape</code> to <code>Circle</code>, unlocking properties like <code>shape.radius</code> within conditional blocks.</p>
@@ -175,7 +205,9 @@
 			Dijkstra&#39;s Shunting Yard in Typescript
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2019-12-23T16:39:53-08:00">December 23, 2019</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>A functional TypeScript implementation of Dijkstra&rsquo;s classic algorithm for parsing mathematical expressions, converting infix notation to reverse Polish notation for stack-based evaluation.</p>
@@ -191,7 +223,9 @@
 			Bay Area SSC Meetup
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2019-06-03T12:37:10-07:00">June 03, 2019</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>Attending the annual Slate Star Codex meetup in San Francisco&rsquo;s Dolores Park, connecting with the rationalist community during my first summer in the Bay Area.</p>
@@ -207,29 +241,15 @@
 			Pythagorean Triple Problem in Sub-linear Time
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2019-03-10T15:48:49-04:00">March 10, 2019</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>We explore a solution to finding Pythagorean triples with a product constraint, achieving O(√n) time complexity by reducing the problem to the well-known 3SUM problem.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/algorithms/pythagorean-triple/">Read more…</a>
-	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/simulation/mathematica-steps-to-latex/" rel="bookmark">
-			Mathematica Steps to LaTeX [WiP]
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<p>Exploring methods to extract human-readable step-by-step solutions from Mathematica&rsquo;s symbolic computation, addressing the black-box problem in automated mathematical derivation.</p>
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/simulation/mathematica-steps-to-latex/">Read more…</a>
 	</div>
 </article>
 </main>
@@ -253,11 +273,11 @@
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/towards-declarative-ast-transformation/">Towards type-aware declarative codemods via unification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
 		</ul>
 	</div>
 </div>
@@ -288,6 +308,8 @@
 		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/ast/" title="Ast">Ast</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/codemod/" title="Codemod">Codemod</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
@@ -302,6 +324,7 @@
 		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="Latex">Latex</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="Math">Math</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="Mathematica">Mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/meta/" title="Meta">Meta</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="Number-Theory">Number-Theory</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="Parsing">Parsing</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="Performance">Performance</a>

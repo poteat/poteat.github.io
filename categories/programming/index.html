@@ -75,14 +75,38 @@
 	
 	<header class="list__header">
 		<h2 class="list__title post__title">
+			<a href="/post/programming/towards-declarative-ast-transformation/" rel="bookmark">
+			Towards type-aware declarative codemods via unification
+			</a>
+		</h2>
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2025-09-07T11:13:46-07:00">September 07, 2025</time></div></div>
+	</header>
+	<div class="content list__excerpt post__content clearfix">
+		<p>I&rsquo;ve been playing with codemod transformations for TypeScript using
+<a href="https://github.com/facebook/jscodeshift"><code>jscodeshift</code></a> (from Facebook) and
+<a href="https://github.com/gvergnaud/ts-pattern"><code>ts-pattern</code></a>. Working closely with
+these has made me want a declarative type-aware codemod engine for TypeScript,
+which I haven&rsquo;t yet been able to find.</p>
+	</div>
+	<div class="list__footer clearfix">
+		<a class="list__footer-readmore btn" href="/post/programming/towards-declarative-ast-transformation/">Read more…</a>
+	</div>
+</article><article class="list__item post">
+	
+	<header class="list__header">
+		<h2 class="list__title post__title">
 			<a href="/post/programming/llm-injection/" rel="bookmark">
 			Variational Selector Text Stenography
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2025-08-23T13:58:16-07:00">August 23, 2025</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
-		<p>This interactive tool demonstrates a steganographic technique using Unicode variation selectors (<code>U+E0100</code>-<code>U+E017F</code>) to encode hidden text within visible strings. By mapping ASCII characters to these invisible codepoints, messages can be embedded undetected - a potential vector for prompt injection attacks where LLMs may process hidden instructions.</p>
+		<p>This interactive tool demonstrates a steganographic technique using Unicode variation selectors (<code>U+E0100</code>-<code>U+E017F</code>) to encode hidden text within visible strings. By mapping ASCII characters to these invisible codepoints, messages can be embedded undetected - a potential vector for prompt injection attacks whereby LLMs may process hidden instructions.</p>
 	</div>
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/llm-injection/">Read more…</a>
@@ -95,7 +119,9 @@
 			Kind Reification
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2023-02-07T23:17:12-08:00">February 07, 2023</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>The <code>hkt-toolbelt</code> library introduces kind reification - transforming abstract type-level functions into concrete runtime signatures. This enables point-free programming where compositions like <code>Pipe&lt;[Map&lt;Inc&gt;, Filter&lt;IsEven&gt;, Reduce&lt;Add&gt;]&gt;</code> become executable functions with 1:1 corresponding types. By bridging TypeScript&rsquo;s type system with runtime code, we can write type-level pipelines that are both type-safe and actually invokable.</p>
@@ -113,7 +139,9 @@
 			Type-level Collatz Sequence
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2022-12-08T22:58:35-08:00">December 08, 2022</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>Implementing the famous Collatz conjecture entirely within TypeScript&rsquo;s type system, demonstrating type-level arithmetic and recursive computation. The sequence follows $n \rightarrow n/2$ if even, $n \rightarrow 3n+1$ if odd, conjecturing all positive integers reach 1. Using template literal types and conditional type recursion, we can compute <code>Collatz&lt;27&gt;</code> yielding the 111-step sequence purely at compile time - pushing TypeScript&rsquo;s type system to perform actual mathematical computation.</p>
@@ -129,7 +157,9 @@
 			Typesafe Function Composition
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2022-10-09T16:45:40-07:00">October 09, 2022</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>This deep dive explores implementing mathematically-correct function composition with full type safety. We&rsquo;ll build a <code>compose</code> function where <code>compose&lt;A, B, C&gt;(f: B→C, g: A→B): A→C</code> validates type compatibility at compile time, handle variadic arguments through recursive types, and ensure composed pipelines like <code>compose(toString, Math.sqrt, parseInt)</code> automatically infer as <code>(s: string) =&gt; string</code> while preventing invalid compositions from compiling.</p>
@@ -145,7 +175,9 @@
 			Towards a well-typed plugin architecture
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2022-09-05T12:03:54-07:00">September 05, 2022</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>Designing a type-safe plugin system in TypeScript that maintains strong typing guarantees while allowing extensible functionality. Using discriminated unions and generic constraints, we can build plugin architectures where <code>registerPlugin&lt;T extends Plugin&gt;()</code> enforces interface contracts at compile time. This approach enables dynamic feature extension while preserving full IDE support and preventing runtime type errors - useful for maintaining large-scale extensible applications.</p>
@@ -161,7 +193,9 @@
 			A non-recursive type-level inclusion operator
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2022-08-27T16:37:21-07:00">August 27, 2022</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>A performance-optimized, non-recursive implementation of a type-level array inclusion operator in TypeScript. By leveraging tuple spread syntax and conditional types instead of recursive patterns, we achieve <code>Includes&lt;[1, 2, 3], 2&gt;</code> evaluation in O(1) type instantiation depth rather than O(n). This technique improves compile-time performance for large tuple operations, avoiding TypeScript&rsquo;s recursion depth limits while maintaining the same type-level guarantees.</p>
@@ -177,7 +211,9 @@
 			Point-free Programming via HKTs
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2022-03-11T09:34:39-08:00">March 11, 2022</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>Implementing point-free (tacit) programming patterns in TypeScript using Higher Kinded Types to overcome traditional type system limitations. Point-free style eliminates explicit arguments, composing functions like <code>pipe(map(inc), filter(isEven), reduce(add))</code> instead of <code>x =&gt; x.map(inc).filter(isEven).reduce(add)</code>. Through HKT encodings, we achieve true tacit programming where type inference flows through the entire pipeline, enabling cleaner functional abstractions without sacrificing TypeScript&rsquo;s type safety.</p>
@@ -193,7 +229,9 @@
 			Variadic HKT Composition
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2022-03-05T00:17:15-08:00">March 05, 2022</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>Extending Higher Kinded Types with variadic composition patterns, enabling clean functional composition while preserving complete type information. Building on HKT foundations, this explores variadic compositions where <code>Compose&lt;[F, G, H, ...]&gt;</code> handles arbitrary function chains with full type inference. Using advanced tuple manipulation and distributive conditional types, we achieve compositions like <code>pipe(map, flatten, filter, reduce)</code> that maintain type safety across any number of transformations - a significant advancement in TypeScript&rsquo;s functional programming capabilities.</p>
@@ -209,7 +247,9 @@
 			Higher Kinded Types in Typescript
 			</a>
 		</h2>
-		
+		<div class="list__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0a14 14 0 1 1 0 28 1 1 0 0 1 0-28m0 3a3 3 0 1 0 0 22 3 3 0 0 0 0-22m1 4h-2v8.4l6.8 4.4L22 18l-6-3.8z"/></svg><time class="meta__text" datetime="2022-03-03T22:18:42-08:00">March 03, 2022</time></div></div>
 	</header>
 	<div class="content list__excerpt post__content clearfix">
 		<p>A comprehensive introduction to Higher Kinded Types in TypeScript, exploring how to encode and utilize these powerful abstractions from functional programming. HKTs enable type constructors that take other type constructors as arguments - imagine <code>Functor&lt;F&gt;</code> that works for any <code>F&lt;T&gt;</code> whether it&rsquo;s <code>Array&lt;T&gt;</code>, <code>Promise&lt;T&gt;</code>, or <code>Option&lt;T&gt;</code>. Through encoding techniques using interface augmentation and symbol keys, we can simulate HKTs in TypeScript, making possible advanced functional patterns like monadic composition and type-safe algebraic structures previously impossible in the language.</p>
@@ -217,25 +257,13 @@
 	<div class="list__footer clearfix">
 		<a class="list__footer-readmore btn" href="/post/programming/higher-kinded-types/">Read more…</a>
 	</div>
-</article><article class="list__item post">
-	
-	<header class="list__header">
-		<h2 class="list__title post__title">
-			<a href="/post/programming/programs-of-length-n/" rel="bookmark">
-			Programs of Length N: Collatz, Chaitin, and Church
-			</a>
-		</h2>
-		
-	</header>
-	<div class="content list__excerpt post__content clearfix">
-		<p>How many lambda calculus programs exist with exactly $N$ terms? This exploration dives into deep questions about computational complexity, from counting programs like <code>(λx. x x) (λx. x x)</code> to analyzing the non-computable <code>BB(N)</code> busy beaver function that grows faster than any computable sequence. We examine Chaitin&rsquo;s constant $Ω$ and why determining program convergence connects to unsolved problems like the Collatz conjecture <code>collatz(3n + 1)</code>.</p>
-	</div>
-	<div class="list__footer clearfix">
-		<a class="list__footer-readmore btn" href="/post/programming/programs-of-length-n/">Read more…</a>
-	</div>
 </article>
 </main>
 
+<div class="pagination">
+	<span class="pagination__item pagination__item--current">1/2</span>
+	<a class="pagination__item pagination__item--next btn" href="/categories/programming/page/2/">»</a>
+</div>
 
 			</div>
 			
@@ -250,11 +278,11 @@
 	<h4 class="widget__title">Recent Posts</h4>
 	<div class="widget__content">
 		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/post/programming/towards-declarative-ast-transformation/">Towards type-aware declarative codemods via unification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/llm-injection/">Variational Selector Text Stenography</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/kind-reification/">Kind Reification</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/type-level-collatz/">Type-level Collatz Sequence</a></li>
 			<li class="widget__item"><a class="widget__link" href="/post/programming/typesafe-function-composition/">Typesafe Function Composition</a></li>
-			<li class="widget__item"><a class="widget__link" href="/post/programming/plugin-architecture/">Towards a well-typed plugin architecture</a></li>
 		</ul>
 	</div>
 </div>
@@ -285,6 +313,8 @@
 		<a class="widget-taglist__link widget__link btn" href="/tags/ai/" title="Ai">Ai</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/algorithms/" title="Algorithms">Algorithms</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/architecture/" title="Architecture">Architecture</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/ast/" title="Ast">Ast</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/codemod/" title="Codemod">Codemod</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/curves/" title="Curves">Curves</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/cybersecurity/" title="Cybersecurity">Cybersecurity</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/demo/" title="Demo">Demo</a>
@@ -299,6 +329,7 @@
 		<a class="widget-taglist__link widget__link btn" href="/tags/latex/" title="Latex">Latex</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/math/" title="Math">Math</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/mathematica/" title="Mathematica">Mathematica</a>
+		<a class="widget-taglist__link widget__link btn" href="/tags/meta/" title="Meta">Meta</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/number-theory/" title="Number-Theory">Number-Theory</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/parsing/" title="Parsing">Parsing</a>
 		<a class="widget-taglist__link widget__link btn" href="/tags/performance/" title="Performance">Performance</a>

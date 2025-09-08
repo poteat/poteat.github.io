@@ -9,3 +9,46 @@ canvas {
   font-family: monospace;
   white-space: pre;
 }
+
+/* Collapsible code sections */
+details {
+  margin: 1em 0;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  padding: 0.5em;
+  background: #f9f9f9;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0.5em;
+  margin: -0.5em;
+  user-select: none;
+}
+
+details summary:hover {
+  background: #f0f0f0;
+}
+
+details[open] summary {
+  border-bottom: 1px solid #e6e6e6;
+  margin-bottom: 0.5em;
+}
+
+details pre {
+  margin-top: 1em;
+}
+
+/* Date styling in post listings */
+.list__meta {
+  position: absolute;
+  bottom: 1.4rem;
+  left: 0;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.list__item {
+  position: relative;
+}

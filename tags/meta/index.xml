@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Meta on Codeless Code</title>
+    <link>https://code.lol/tags/meta/</link>
+    <description>Recent content in Meta on Codeless Code</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 07 Sep 2025 11:13:46 -0700</lastBuildDate>
+    <atom:link href="https://code.lol/tags/meta/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Towards type-aware declarative codemods via unification</title>
+      <link>https://code.lol/post/programming/towards-declarative-ast-transformation/</link>
+      <pubDate>Sun, 07 Sep 2025 11:13:46 -0700</pubDate>
+      <guid>https://code.lol/post/programming/towards-declarative-ast-transformation/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been playing with codemod transformations for TypeScript using&#xA;&lt;a href=&#34;https://github.com/facebook/jscodeshift&#34;&gt;&lt;code&gt;jscodeshift&lt;/code&gt;&lt;/a&gt; (from Facebook) and&#xA;&lt;a href=&#34;https://github.com/gvergnaud/ts-pattern&#34;&gt;&lt;code&gt;ts-pattern&lt;/code&gt;&lt;/a&gt;. Working closely with&#xA;these has made me want a declarative type-aware codemod engine for TypeScript,&#xA;which I haven&amp;rsquo;t yet been able to find.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

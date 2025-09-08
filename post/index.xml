@@ -6,14 +6,21 @@
     <description>Recent content in Posts on Codeless Code</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 23 Aug 2025 13:58:16 -0700</lastBuildDate>
+    <lastBuildDate>Sun, 07 Sep 2025 11:13:46 -0700</lastBuildDate>
     <atom:link href="https://code.lol/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Towards type-aware declarative codemods via unification</title>
+      <link>https://code.lol/post/programming/towards-declarative-ast-transformation/</link>
+      <pubDate>Sun, 07 Sep 2025 11:13:46 -0700</pubDate>
+      <guid>https://code.lol/post/programming/towards-declarative-ast-transformation/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been playing with codemod transformations for TypeScript using&#xA;&lt;a href=&#34;https://github.com/facebook/jscodeshift&#34;&gt;&lt;code&gt;jscodeshift&lt;/code&gt;&lt;/a&gt; (from Facebook) and&#xA;&lt;a href=&#34;https://github.com/gvergnaud/ts-pattern&#34;&gt;&lt;code&gt;ts-pattern&lt;/code&gt;&lt;/a&gt;. Working closely with&#xA;these has made me want a declarative type-aware codemod engine for TypeScript,&#xA;which I haven&amp;rsquo;t yet been able to find.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Variational Selector Text Stenography</title>
       <link>https://code.lol/post/programming/llm-injection/</link>
       <pubDate>Sat, 23 Aug 2025 13:58:16 -0700</pubDate>
       <guid>https://code.lol/post/programming/llm-injection/</guid>
-      <description>&lt;p&gt;This interactive tool demonstrates a steganographic technique using Unicode variation selectors (&lt;code&gt;U+E0100&lt;/code&gt;-&lt;code&gt;U+E017F&lt;/code&gt;) to encode hidden text within visible strings. By mapping ASCII characters to these invisible codepoints, messages can be embedded undetected - a potential vector for prompt injection attacks where LLMs may process hidden instructions.&lt;/p&gt;</description>
+      <description>&lt;p&gt;This interactive tool demonstrates a steganographic technique using Unicode variation selectors (&lt;code&gt;U+E0100&lt;/code&gt;-&lt;code&gt;U+E017F&lt;/code&gt;) to encode hidden text within visible strings. By mapping ASCII characters to these invisible codepoints, messages can be embedded undetected - a potential vector for prompt injection attacks whereby LLMs may process hidden instructions.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Kind Reification</title>

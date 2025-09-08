@@ -2,28 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://code.lol/tags/ast/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/categories/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/codemod/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/meta/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/post/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/categories/programming/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/programming/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/tags/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
+    <loc>https://code.lol/post/programming/towards-declarative-ast-transformation/</loc>
+    <lastmod>2025-09-07T11:13:46-07:00</lastmod>
+  </url><url>
     <loc>https://code.lol/tags/ai/</loc>
     <lastmod>2025-08-23T13:58:16-07:00</lastmod>
   </url><url>
-    <loc>https://code.lol/categories/</loc>
-    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/</loc>
-    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
-  </url><url>
     <loc>https://code.lol/tags/cybersecurity/</loc>
-    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/post/</loc>
-    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/categories/programming/</loc>
-    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/tags/programming/</loc>
-    <lastmod>2025-08-23T13:58:16-07:00</lastmod>
-  </url><url>
-    <loc>https://code.lol/tags/</loc>
     <lastmod>2025-08-23T13:58:16-07:00</lastmod>
   </url><url>
     <loc>https://code.lol/post/programming/llm-injection/</loc>
