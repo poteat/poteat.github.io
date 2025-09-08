@@ -88,7 +88,10 @@
 <a href="https://github.com/gvergnaud/ts-pattern"><code>ts-pattern</code></a>. Working closely with
 these has made me want a declarative type-aware codemod engine for TypeScript,
 which I haven&rsquo;t yet been able to find.</p>
-<p>The basic structure of these codemods follows a pattern matching approach:</p>
+<p>The basic structure of these codemods follows a pattern matching approach, a
+matcher against an AST
+(<a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">abstract syntax tree</a>),
+i.e. a parsed representation of code into a tree structure.</p>
 <details>
 <summary>Show codemod template</summary>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">import</span> <span style="color:#080;font-weight:bold">type</span> { Transform, FileInfo, API, ASTPath } <span style="color:#080;font-weight:bold">from</span> <span style="background-color:#fff0f0">&#34;jscodeshift&#34;</span>;
@@ -246,7 +249,7 @@ elements:
 <h1 id="towards-unification">Towards unification</h1>
 <p>The concept of unification - at least how I&rsquo;m using it - refers to the idea of
 using equivalent semantics between the matched structure and the structure-
-builder to replace with. There are some tools which do a limited* form of this
+builder to replace with. There are some tools which do a limited form of this
 via pattern codes (e.g. Comby, ast-grep). My umbrage is two-fold:</p>
 <ul>
 <li>these tools also don&rsquo;t allow type-semantic analysis.</li>
@@ -255,8 +258,8 @@ structures, like match [this] OR [that], MAYBE [this], etc., in my opinion.</li>
 </ul>
 <p>So, I think there&rsquo;s space for a tool that uses direct-ish AST pattern matching
 <em>embedded</em> in TypeScript, that also supports type-level semantics. It would use
-the same semantics for matching as it does replacing, based on a pattern-
-matching, declarative philosophy.</p>
+the same semantics for matching as it does replacing, based on a
+pattern-matching, declarative philosophy.</p>
 <p>For the above rule, it would look something like this:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">const</span> ifToTernary <span style="color:#333">=</span> transform({
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">from</span><span style="color:#333">:</span> U.ifStatement({
