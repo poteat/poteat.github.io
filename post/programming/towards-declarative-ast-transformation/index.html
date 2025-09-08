@@ -136,7 +136,8 @@ which I haven&rsquo;t yet been able to find.</p>
 </span></span><span style="display:flex;"><span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">default</span> transform;
 </span></span></code></pre></div></details>
 <p>As a more concrete example, let&rsquo;s take the simple case of a if-else condition
-whose consequent and alternate are both immediate returns:</p>
+whose consequent (truthy branch) and alternate (falsey branch) are both
+immediate returns:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#080;font-weight:bold">function</span> renderPetName(pet) {
 </span></span><span style="display:flex;"><span>  <span style="color:#080;font-weight:bold">if</span> (pet.<span style="color:#080;font-weight:bold">type</span> <span style="color:#333">===</span> <span style="background-color:#fff0f0">&#34;dog&#34;</span>) {
 </span></span><span style="display:flex;"><span>    <span style="color:#080;font-weight:bold">return</span> <span style="background-color:#fff0f0">`Woof: </span><span style="background-color:#eee">${</span>pet.name<span style="background-color:#eee">}</span><span style="background-color:#fff0f0">`</span>;
