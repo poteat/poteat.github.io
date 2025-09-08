@@ -318,7 +318,8 @@ names can be type-level captured such that downstream usage is known.</p>
 <p>A core piece of this is a &ldquo;context data-flow&rdquo; using this $ concept. In the
 initial step, $ gets populated with matched fragments. I will elide this for
 now; instead, I want to explicate the <code>.with</code> builder that is a core piece of
-this design.</p>
+this design - essentially, it merges the output of each <code>with</code> expression with
+the current &lsquo;context&rsquo; or &lsquo;scope&rsquo; value internal to the chain.</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#888">// { port: 3000, host: &#34;localhost&#34;, ...url, isSecure: false }
 </span></span></span><span style="display:flex;"><span><span style="color:#888"></span><span style="color:#080;font-weight:bold">const</span> result <span style="color:#333">=</span> scope({ port: <span style="color:#339;font-weight:bold">3000</span> })
 </span></span><span style="display:flex;"><span>  .<span style="color:#080;font-weight:bold">with</span>(() <span style="color:#333">=&gt;</span> ({ host<span style="color:#333">:</span> <span style="background-color:#fff0f0">&#34;localhost&#34;</span> }))
@@ -327,7 +328,7 @@ this design.</p>
 </span></span><span style="display:flex;"><span>  .value();
 </span></span></code></pre></div><p>This isn&rsquo;t used in the parser above, but it&rsquo;s a core piece - the ability to
 type-safely &lsquo;merge&rsquo; / &lsquo;overwrite&rsquo; keys into a shared context which then
-eventually gets used.</p>
+eventually gets used. It&rsquo;s very nearly identical to lodash <em>thru</em>.</p>
 <p>I have a small demonstration of the type-level semantics for the data-flow
 pattern here:</p>
 <ul>
